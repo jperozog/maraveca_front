@@ -1,0 +1,63 @@
+<md-toolbar>
+  <md-form-field>
+  <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer"></span>
+  <button md-raised-button (click)="this.myService.refresh()" >
+    <md-icon>cached</md-icon> Actualizar Lista
+  </button>
+  <button md-raised-button (click)="openDialog()" >
+    <md-icon>group_add</md-icon> Aperturar Ticket
+  </button>
+
+</md-toolbar>
+
+<table class=addClient [md2Data]="data | dataPipe: { ip_ap: search, nombre_ap: search}" #md2="md2DataTable" [rowsPerPage]="15">
+  <thead>
+    <tr>
+      <td colspan="6">
+        <md2-pagination [rowsPerPageSet]="[5,10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+      </td>
+    </tr>
+    <tr>
+      <th style="width: 15%">Ticket</th>
+      <th style="width: 15%">Cliente</th>
+      <th style="width: 15%">Problema</th>
+      <th style="width: 15%">Zona</th>
+      <th style="width: 15%">Estado</th>
+      <th style="width: 15%">Usuario</th>
+      <th style="width: 10%">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let i of md2.data">
+      <td style="width: 15%">{{i.id_soporte}}</td>
+      <td *ngIf="(i.nombre != null) && (i.apellido != null) && (i.social==''||i.social==null)" style="width: 15%">{{i.nombre+" "+i.apellido}}</td>
+      <td *ngIf="(i.nombre != null) && (i.apellido == null) && (i.social==''||i.social==null)" style="width: 15%">{{i.nombre}}</td>
+      <td *ngIf="(i.nombre == null) && (i.apellido != null) && (i.social==''||i.social==null)" style="width: 15%">{{i.apellido}}</td>
+      <td *ngIf="(i.social!=''||i.social!=null)" style="width: 15%">{{i.social}}</td>
+      <td style="width: 15%">{{i.problema_soporte}}</td>
+      <td style="width: 15%">{{i.nombre_srvidor}}</td>
+      <td *ngIf="i.status_soporte == 1" style="width: 15%">Abierto</td>
+      <td *ngIf="i.status_soporte == 2" style="width: 15%">Cerrado</td>
+      <td *ngIf="i.status_soporte == 3" style="width: 15%">Anulado</td>
+      <td *ngIf="(i.nombre_user == null) && (i.apellido_user != null)" style="width: 15%">{{i.apellido_user}}</td>
+      <td *ngIf="(i.nombre_user != null) && (i.apellido_user == null)" style="width: 15%">{{i.nombre_user}}</td>
+      <td *ngIf="(i.nombre_user != null) && (i.apellido_user != null)" style="width: 15%">{{i.nombre_user+ " " +i.apellido_user}}</td>
+      <td style="width: 15%">
+        <button md-icon-button color="primary" (click)="show(i)">
+        <md-icon class="md-24" aria-label="Editar AP" >mode_edit</md-icon>
+      </button>
+      <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)"-->
+      <button md-icon-button color="warn"(click)="deleteDialog(i)">
+            <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
+      </button>
+
+
+    </td>
+    </tr>
+  </tbody>
+  <tfoot>
+
+  </tfoot>
+</table>

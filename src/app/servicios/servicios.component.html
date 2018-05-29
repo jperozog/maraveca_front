@@ -1,0 +1,160 @@
+<md-toolbar class="submenu">
+  <md-form-field floatPlaceholder="never">
+    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer" style="text-align: center;">Servicios</span>
+  <button md-raised-button (click)="this.myService.refresh()" >
+    <md-icon>cached</md-icon> Actualizar Lista
+  </button>
+  <button md-raised-button (click)="openDialog()" >
+    <md-icon>group_add</md-icon> Agregar Servicio
+  </button>
+
+</md-toolbar>
+<div >
+   <md-accordion>
+  <md-expansion-panel *ngIf="this.installs && this.installs.length >= 1" hideToggle="true">
+    <md-expansion-panel-header style="background-color: lightpink;">
+      <md-panel-title>
+        Instalaciones
+      </md-panel-title>
+      <md-panel-description>
+        {{ this.installs.length }} instalaciones Cerradas con Servicios Pendientes
+      </md-panel-description>
+    </md-expansion-panel-header>
+
+    <!-- contenido del desplegable de instalaciones -->
+    <table class=addClient [md2Data]="installs | dataPipe: { nombre: search, name_plan: search, nombre_celda: search, social: search, nombre_ap: search}" #md2="md2DataTable" [rowsPerPage]="10">
+      <thead>
+        <tr>
+          <td colspan="6">
+            <md2-pagination [rowsPerPageSet]="[5,10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 20%" md2SortBy="nombre">Cliente</th>
+          <th style="width: 20%" md2SortBy="nombre_celda">IP</th>
+          <th style="width: 20%">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of md2.data">
+          <td *ngIf="i.kind.toUpperCase() == 'V'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'E'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.social|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.social|capitalize)}}</td>
+          <td style="width: 20%">{{i.ip}}</td>
+          <td style="width: 20%">
+            <!--botones de acciones-->
+
+            <button md-icon-button color="primary" (click)="register(i)">
+              <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
+            </button>
+            <button md-icon-button color="warn"(click)="delete(i.id_srv)">
+                <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
+            </button>
+            <button md-icon-button color="primary"(click)="openLINK(i.ip_srv)" >
+              <md-icon class="md-24" aria-label="Ubiquiti Admin">language</md-icon>
+            </button>
+            <button md-icon-button color="primary">
+              <md-icon class="md-24" aria-label="Mostrar Detalles">turned_in</md-icon>
+            </button>
+            <button md-icon-button *ngIf="i.stat_srv == 1" >
+              <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+            </button>
+            <button md-icon-button *ngIf="i.stat_srv == 2" >
+              <md-icon class="md-24" style="color:yellow;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+            </button>
+            <button md-icon-button *ngIf="i.stat_srv == 3" >
+              <md-icon class="md-24" style="color:red;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+            </button>
+            <!--terminan los botones-->
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+
+      </tfoot>
+    </table>
+    <!-- final contenido del desplegable de instalaciones -->
+  </md-expansion-panel>
+  <md-expansion-panel hideToggle="true" expanded="true">
+    <md-expansion-panel-header>
+      <md-panel-title>
+        Servicios
+      </md-panel-title>
+      <md-panel-description>
+        Servicios Registrados
+      </md-panel-description>
+    </md-expansion-panel-header>
+    <!-- contenido del desplegable de servicios -->
+    <table class=addClient [md2Data]="data | dataPipe: { nombre: search, name_plan: search, nombre_celda: search, social: search, nombre_ap: search}" #md2="md2DataTable" [rowsPerPage]="10">
+      <thead>
+        <tr>
+          <td colspan="6">
+            <md2-pagination [rowsPerPageSet]="[5,10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 20%" md2SortBy="nombre">Cliente</th>
+          <th style="width: 20%" md2SortBy="name_plan">Plan</th>
+          <th style="width: 20%" md2SortBy="nombre_celda">Zona</th>
+          <th style="width: 20%" md2SortBy="stat_srv">Estado</th>
+          <th style="width: 20%">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of md2.data">
+          <td *ngIf="i.kind.toUpperCase() == 'V'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'E'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.social|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.social|capitalize)}}</td>
+          <td style="width: 20%">{{i.name_plan}}</td>
+          <td style="width: 20%">{{i.nombre_ap}}</td>
+          <td style="width: 20%">
+            <button md-icon-button *ngIf="i.stat_srv == 1" >
+              <span>Activo</span>
+            </button>
+            <button md-icon-button *ngIf="i.stat_srv == 2" >
+              <span>Moroso</span>
+            </button>
+            <button md-icon-button *ngIf="i.stat_srv == 3" >
+              <span>Suspendido</span>
+            </button>
+          </td>
+          <td style="width: 20%">
+            <!--botones de acciones-->
+
+            <button md-icon-button color="primary" (click)="show(i)">
+              <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
+            </button>
+            <button md-icon-button color="warn"(click)="delete(i.id_srv)">
+                <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
+            </button>
+            <button md-icon-button color="primary"(click)="openLINK(i.ip_srv)" >
+              <md-icon class="md-24" aria-label="Ubiquiti Admin">language</md-icon>
+            </button>
+            <button md-icon-button color="primary">
+              <md-icon class="md-24" aria-label="Mostrar Detalles">turned_in</md-icon>
+            </button>
+            <button md-icon-button *ngIf="i.stat_srv == 1" >
+              <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+            </button>
+            <button md-icon-button *ngIf="i.stat_srv == 2" >
+              <md-icon class="md-24" style="color:yellow;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+            </button>
+            <button md-icon-button *ngIf="i.stat_srv == 3" >
+              <md-icon class="md-24" style="color:red;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+            </button>
+            <!--terminan los botones-->
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+
+      </tfoot>
+    </table>
+    <!-- final contenido del desplegable de servicios -->
+  </md-expansion-panel>
+</md-accordion>
+</div>

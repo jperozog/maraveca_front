@@ -1,0 +1,52 @@
+<md-toolbar>
+  <md-form-field floatPlaceholder="never">
+  <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer"></span>
+  <button md-raised-button (click)="this.myService.refresh()" >
+    <md-icon>cached</md-icon> Actualizar Lista
+  </button>
+  <button md-raised-button (click)="openDialog()" >
+    <md-icon>group_add</md-icon> Agregar AP
+  </button>
+
+</md-toolbar>
+
+<table class=addClient [md2Data]="data | dataPipe: { ip_ap: search, nombre_ap: search}" #md2="md2DataTable" [rowsPerPage]="15">
+  <thead>
+    <tr>
+      <td colspan="6">
+        <md2-pagination [rowsPerPageSet]="[5,10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+      </td>
+    </tr>
+    <tr>
+      <th style="width: 20%" md2SortBy="ip_srvidor">IP</th>
+      <th style="width: 20%" md2SortBy="nombre_srvidor">Nombre</th>
+      <th style="width: 20%" md2SortBy="user_srvidor">Usuario</th>
+      <th style="width: 20%" md2SortBy="password_srvidor">Password</th>
+      <th style="width: 20%">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let i of md2.data">
+      <td style="width: 20%">{{i.ip_ap}}</td>
+      <td style="width: 20%">{{i.nombre_ap}}</td>
+      <td style="width: 20%">{{i.user_ap}}</td>
+      <td style="width: 20%">{{i.password_ap}}</td>
+      <td style="width: 20%">
+        <button md-icon-button color="primary" (click)="show(i)">
+        <md-icon class="md-24" aria-label="Editar AP" >mode_edit</md-icon>
+      </button>
+      <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)"-->
+      <button md-icon-button color="warn"(click)="deleteDialog(i)">
+            <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
+      </button>
+
+
+    </td>
+    </tr>
+  </tbody>
+  <tfoot>
+
+  </tfoot>
+</table>

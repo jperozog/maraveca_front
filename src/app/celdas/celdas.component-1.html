@@ -1,0 +1,76 @@
+<md-toolbar>
+  <span class="example-spacer"></span>
+  <button md-raised-button (click)="this.CC.refresh()" >
+    <md-icon>cached</md-icon> Actualizar Lista
+  </button>
+  <button md-raised-button (click)="openDialog()" >
+    <md-icon>group_add</md-icon> Agregar Celda
+  </button>
+
+</md-toolbar>
+<!--md-card
+  *ngFor="let data of (myData ? myData.slice(0, 10): []); let i = index">
+  <md-card-header>
+    <md-card-title>
+      {{data.dni}} => {{data.nombre}} {{data.apellido}} \ {{data.day_of_birth}}
+    </md-card-title>
+  </md-card-header>
+
+  <md-card-actions>
+    <button md-button>
+      <md-icon>heart-pulse</md-icon> LIKE
+    </button>
+    <button md-button>
+      <md-icon>share-variant</md-icon> SHARE
+    </button>
+  </md-card-actions>
+</md-card-->
+  <md-table #table [dataSource]="dataSource">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- DNI Column -->
+    <ng-container mdColumnDef="ip">
+      <md-header-cell *mdHeaderCellDef> IP </md-header-cell>
+      <md-cell *mdCellDef="let row"> {{row.ip}} </md-cell>
+    </ng-container>
+
+    <!-- NAME Column -->
+    <ng-container mdColumnDef="nombre">
+      <md-header-cell *mdHeaderCellDef> Nombre </md-header-cell>
+      <md-cell *mdCellDef="let row"> {{row.nombre}} </md-cell>
+    </ng-container>
+
+    <!-- LAST NAME Column -->
+    <ng-container mdColumnDef="usuario">
+      <md-header-cell *mdHeaderCellDef> Usuario </md-header-cell>
+      <md-cell *mdCellDef="let row"> {{row.usuario}} </md-cell>
+    </ng-container>
+
+    <!-- PHONE Column-->
+    <ng-container mdColumnDef="password">
+      <md-header-cell *mdHeaderCellDef> Password </md-header-cell>
+      <md-cell *mdCellDef="let row"> {{row.password}} </md-cell>
+    </ng-container>
+
+    <!-- Acciones Colimn -->
+    <ng-container mdColumnDef="acciones">
+      <md-header-cell *mdHeaderCellDef> Acciones </md-header-cell>
+      <md-cell *mdCellDef="let row">
+        <button md-icon-button color="primary" (click)="show(row)">
+          <md-icon class="md-24" aria-label="Editar Celda" >mode_edit</md-icon>
+        </button>
+        <button md-icon-button color="warn"(click)="delete(row.id)">
+            <md-icon class="md-24" aria-label="Eliminar Celda">delete</md-icon>
+        </button>
+       </md-cell>
+    </ng-container>
+
+    <md-header-row *mdHeaderRowDef="displayedColumns" ></md-header-row>
+    <md-row
+      *mdRowDef="let row; columns: displayedColumns;"
+      >
+
+    ></md-row>
+  </md-table>

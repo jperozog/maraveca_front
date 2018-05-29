@@ -1,0 +1,78 @@
+<md-toolbar>
+  <span class="example-spacer"></span>
+  <button md-raised-button (click)="openDialog()" >
+    <md-icon>group_add</md-icon> Agregar Servicio
+  </button>
+
+</md-toolbar>
+
+<md-table #table [dataSource]="dataSource">
+
+<!-- Columna de Clientes -->
+<ng-container mdColumnDef='Clientes'>
+<md-header-cell *mdHeaderCellDef>Cliente</md-header-cell>
+<md-cell *mdCellDef="let row">{{row.kind+row.dni+" / "+row.nombre + " " + row.apellido}}</md-cell>
+</ng-container>
+
+<!-- Columna de planes -->
+<ng-container mdColumnDef='Plan'>
+<md-header-cell *mdHeaderCellDef>Plan</md-header-cell>
+<md-cell *mdCellDef="let row">{{row.name_plan}}</md-cell>
+</ng-container>
+
+<!-- Columna de zona -->
+<ng-container mdColumnDef='Zona'>
+<md-header-cell *mdHeaderCellDef>Zona</md-header-cell>
+<md-cell *mdCellDef="let row">{{row.nombre_celda}}</md-cell>
+</ng-container>
+
+<ng-container mdColumnDef='Acciones'>
+<md-header-cell *mdHeaderCellDef>Acciones</md-header-cell>
+<md-cell *mdCellDef="let row">
+<!--botones de acciones-->
+
+<button md-icon-button color="primary" >
+  <md-icon class="md-24" aria-label="Ubiquiti Admin">language</md-icon>
+</button>
+<button md-icon-button color="primary">
+  <md-icon class="md-24" aria-label="Mostrar Detalles">turned_in</md-icon>
+</button>
+  <button md-icon-button *ngIf="row.status == 1" >
+    <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+  </button>
+  <button md-icon-button *ngIf="row.status == 2" >
+    <md-icon class="md-24" style="color:yellow;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+  </button>
+  <button md-icon-button *ngIf="row.status == 3" >
+    <md-icon class="md-24" style="color:red;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+  </button>
+<!--terminan los botones-->
+</md-cell>
+</ng-container>
+
+<ng-container mdColumnDef='Estado'>
+<md-header-cell *mdHeaderCellDef>Estado</md-header-cell>
+<md-cell *mdCellDef="let row">
+<!--botones de acciones-->
+
+  <button md-icon-button *ngIf="row.status == 1" >
+    <span>Activo</span>
+  </button>
+  <button md-icon-button *ngIf="row.status == 2" >
+    <span>Moroso</span>
+  </button>
+  <button md-icon-button *ngIf="row.status == 3" >
+    <span>Suspendido</span>
+  </button>
+<!--terminan los botones-->
+</md-cell>
+</ng-container>
+
+
+<md-header-row *mdHeaderRowDef="displayedColumns" ></md-header-row>
+<md-row
+  *mdRowDef="let row; columns: displayedColumns;"
+  >
+
+></md-row>
+</md-table>

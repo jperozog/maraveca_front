@@ -1,0 +1,249 @@
+<form class="example-form" id="client" name="clientForm" [formGroup]="addClient" ng-submit="ok(clientForm)" novalidate>
+  <table class="example-full-width" cellspacing="0"><tr>
+    <td>
+      <md-form-field class="example-full-width">
+        <input type="text" name="nombre"
+        class="form-control"
+        formControlName="nombre"
+        placeholder="Nombres"
+        autocomplete="off"
+        required
+        mdInput
+        >
+      </md-form-field>
+
+    </td>
+    <td>
+
+      <md-form-field class="example-full-width">
+        <input type="text" name="last"
+        class="form-control"
+        placeholder="Apellidos"
+        formControlName="apellido"
+        autocomplete="off"
+        required
+        mdInput
+        >
+      </md-form-field>
+
+    </td>
+
+    </tr>
+
+
+    <td>
+      <md-input-container class="example-full-width">
+        <input mdInput placeholder="Tipo:" maxlength="1" required formControlName="kind" [mdAutocomplete]="tipo" />
+        <md-autocomplete #tipo="mdAutocomplete">
+          <md-option value="E">E</md-option>
+          <md-option value="V">V</md-option>
+          <md-option value="J">J</md-option>
+          <md-option value="G">G</md-option>
+        </md-autocomplete>
+      </md-input-container>
+    </td>
+    <td>
+      <md-form-field class="example-full-width">
+        <input type="text" name="dni"
+        class="form-control"
+        formControlName="dni"
+        placeholder="Cedula o Rif"
+        autocomplete="off"
+        required
+        mdInput>
+      </md-form-field>
+    </td>
+    <tr >
+      <td colspan="2">
+        <md-error *ngIf="!addClient.controls.kind.valid">Por favor ingrese un tipo valido de identificacion</md-error>
+      </td>
+    </tr>
+  <tr>
+    <th colspan="2">
+
+      <md-form-field class="example-full-width">
+        <input id="validation-email"
+        name="email"
+        formControlName="email"
+        placeholder="Email"
+        mdInput
+        autocomplete="off">
+        <md-error *ngIf="!addClient.controls.email.valid">Por favor ingrese un correo valido</md-error>
+
+      </md-form-field>
+
+
+    </th>
+  </tr>
+
+
+
+
+  <tr *ngIf="addClient.value.kind == 'J'">
+    <td >
+      <md-form-field class="example-full-width">
+        <input name="nombre"
+        class="form-control"
+        placeholder="Razon Social"
+        mdInput
+        formControlName="social"
+        autocomplete="off"
+        required
+        >
+      </md-form-field>
+    </td>
+    <td>
+      <md-form-field class="example-full-width">
+        <input name="phone"
+        placeholder="Telefono"
+        mdInput
+        formControlName="phone1"
+        autocomplete="off"
+        required
+        >
+        <md-error *ngIf="!addClient.controls.phone1.valid">El numero ingresado no es valido</md-error>
+
+      </md-form-field>
+    </td>
+  </tr>
+  <tr *ngIf="addClient.value.kind == 'G'">
+    <td >
+      <md-form-field class="example-full-width">
+        <input name="nombre"
+        class="form-control"
+        placeholder="Razon Social"
+        mdInput
+        formControlName="social"
+        autocomplete="off"
+        required
+        >
+      </md-form-field>
+    </td>
+    <td>
+      <md-form-field class="example-full-width">
+        <input name="phone"
+        placeholder="Telefono"
+        mdInput
+        formControlName="phone1"
+        autocomplete="off"
+        required
+        >
+        <md-error *ngIf="!addClient.controls.phone1.valid">El numero ingresado no es valido</md-error>
+
+      </md-form-field>
+    </td>
+  </tr>
+  <tr *ngIf="addClient.value.kind == 'V'">
+    <td colspan="2">
+      <md-form-field class="example-full-width">
+        <input name="phone"
+        placeholder="Telefono"
+        mdInput
+        formControlName="phone1"
+        autocomplete="off"
+        required
+        >
+        <md-error *ngIf="!addClient.controls.phone1.valid">El numero ingresado no es valido</md-error>
+
+      </md-form-field>
+    </td>
+  </tr>
+  <tr *ngIf="addClient.value.kind == 'E'">
+    <td colspan="2">
+      <md-form-field class="example-full-width">
+        <input name="phone"
+        placeholder="Telefono"
+        mdInput
+        formControlName="phone1"
+        autocomplete="off"
+        required
+        >
+        <md-error *ngIf="!addClient.controls.phone1.valid">El numero ingresado no es valido</md-error>
+
+      </md-form-field>
+    </td>
+  </tr>
+
+
+
+
+  <tr>
+  </tr><tr>
+    <td>
+      <md-form-field class="example-full-width">
+        <input type="date" name="birthdate" data-ng-model="user.birthdate"
+        class="form-control"
+
+        formControlName="day_of_birth"
+        placeholder="Fecha de nacimiento"
+        required mdInput>
+      </md-form-field>
+    </td>
+
+    <td>
+      <md-form-field class="example-full-width">
+        <input mdInput placeholder="Serie" formControlName="serie" required [mdAutocomplete]="serie" autocomplete="off"/>
+
+        <md-autocomplete #serie="mdAutocomplete">
+          <md-option value="Sin Impuesto">Sin Impuesto</md-option>
+          <md-option value="Con Impuesto">Con Impuesto</md-option>
+        </md-autocomplete>
+
+      </md-form-field>
+    </td>
+  </tr>
+  <tr>
+    <th colspan="2">
+      <md-form-field class="example-full-width">
+        <input type="text" name="phone2" formControlName="phone2" data-ng-model="user.phone2"
+        mdInput
+        class="form-control"
+        autocomplete="off"
+        placeholder="Otros Telefonos De Contacto"
+        required>
+      </md-form-field>
+    </th>
+  </tr><tr>
+    <td>
+
+      <md-form-field class="example-full-width">
+        <textarea name="address"
+        data-ng-model="user.contact_people.description"
+        mdInput
+        formControlName="direccion"
+        #address
+        class="form-control"
+        placeholder="Direccion"
+        maxlength="256"
+        required></textarea>
+        <md-hint align="end">{{address.value.length}} / 256</md-hint>
+      </md-form-field>
+    </td><td>
+      <md-form-field class="example-full-width">
+        <textarea mdInput name="address" data-ng-model="user.comments"
+        class="form-control"
+        maxlength="256"
+        formControlName="comment"
+        placeholder="Comentarios"></textarea>
+        <md-hint align="end">{{address.value.length}} / 256</md-hint>
+      </md-form-field>
+    </td>
+  </tr><tr>
+    <td>
+
+
+      <button md-raised-button class="example-half-width btn btn-success pull-left" (click)="sendSMS()" type="button"><i class="fa fa-envelope" aria-hidden="true"></i> Enviar SMS</button>
+      <div >
+        <button *ngIf="row == null" md-raised-button color="primary" class="example-half-width btn btn-primary" [disabled]="!addClient.valid" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+        <button *ngIf="row != null"md-raised-button color="primary" class="example-half-width btn btn-primary" [disabled]="!addClient.valid" (click)="Editar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+      </div>
+    </td><td>
+      <button md-raised-button class=" example-half-width btn btn-warning pull-left" type="button"><i class="fa fa-envelope" aria-hidden="true"></i> Enviar Email</button>
+
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
+    </td>
+  </tr>
+
+</table>
+</form>
+<!--<input name="date" type="text" (focus)="focusFunction()" (focusout)="focusOutFunction()">-->

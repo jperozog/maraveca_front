@@ -1,0 +1,85 @@
+<form class="example-form" id="client" name="clientForm" [formGroup]="addFact" ng-submit="ok(clientForm)" novalidate>
+  <table class="example-full-width" cellspacing="0">
+    <tr>
+    <td>
+      <md-form-field class="example-full-width">
+        <input type="text" name="latitud"
+        class="form-control"
+        formControlName="coordenadaslat"
+        placeholder="Latitud"
+        required
+        mdInput
+        >
+      </md-form-field>
+
+    </td>
+    <td>
+
+      <md-form-field class="example-full-width">
+        <input type="text" name="longitud"
+        class="form-control"
+        placeholder="Longitud"
+        formControlName="coordenadaslon"
+        required
+        mdInput
+        >
+      </md-form-field>
+
+    </td>
+
+    </tr>
+    <tr>
+      <td colspan="2">
+        <md-form-field class="example-full-width">
+          <input type="text" name="direccion"
+          class="form-control"
+          placeholder="Direccion"
+          formControlName="comentario"
+          required
+          mdInput
+          >
+        </md-form-field>
+      </td>
+    </tr>
+
+<tr>
+  <td colspan="2">
+    <md2-select name="potencial"
+              formControlName="id_pot"
+              placeholder="Cliente"
+              style="width=100%; min-width: 100%; min-height: 100%;"
+              mdInput
+              >
+    <md2-select-header>
+      <input class="search" name="c_search"
+             type="text"
+             [(ngModel)]="c_search"
+             placeholder="Buscar..."
+             style="width=95%; min-width: 95%; border: none; outline: none;height: 100%; padding: 0;"
+             formControlName="c_search" />
+    </md2-select-header>
+    <md2-option *ngFor="let i of (pclientes | dataPipe : {nombre: c_search, apellido: c_search, social: c_search, dni: c_search})" [value]="i.id">
+      <span *ngIf="i.kind.toUpperCase() == 'V'">{{(i.kind | capitalize) + i.dni+' / '+(i.nombre | capitalize) +' '+(i.apellido | capitalize)}}</span>
+      <span *ngIf="i.kind.toUpperCase() == 'E'">{{(i.kind | capitalize) + i.dni+' / '+(i.nombre | capitalize) +' '+(i.apellido | capitalize)}}</span>
+      <span *ngIf="i.kind.toUpperCase() == 'J'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span>
+      <span *ngIf="i.kind.toUpperCase() == 'G'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span>
+    </md2-option>
+  </md2-select>
+  </td>
+</tr>
+<tr>
+    <td>
+
+
+      <button *ngIf="row == null" md-raised-button color="primary" [disabled]="!addFact.valid"  class="example-half-width btn btn-primary" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+      <button *ngIf="row != null"md-raised-button color="primary" [disabled]="!addFact.valid"  class="example-half-width btn btn-primary" (click)="Editar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+    </td><td>
+
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
+    </td>
+  </tr>
+  <p>
+
+  </p>
+</table>
+</form>

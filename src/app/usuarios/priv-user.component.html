@@ -1,0 +1,41 @@
+<h1 *ngIf="data.apellido && data.nombre" md-dialog-title>{{data.nombre+" "+data.apellido}}</h1>
+<h1 *ngIf="!data.apellido && data.nombre" md-dialog-title>{{data.nombre}}</h1>
+<h1 *ngIf="data.apellido && !data.nombre" md-dialog-title>{{data.apellido}}</h1>
+  <table class="example-full-width" cellspacing="2" style="border-collapse:collapse;border-spacing:0;border-color:#aaa;">
+<tr>
+  <td colspan="2">
+
+
+    <md2-select multiple
+    placeholder="Permisos"
+    style="width=100%; min-width: 100%;"
+    [(ngModel)]="prev"
+    >
+    <md2-option *ngFor="let creature of permisos" [value]="creature">{{ creature|capitalize2: true }}</md2-option>
+
+  </md2-select>
+</td>
+</tr>
+    <!--tr *ngFor="let i of perm">
+        <td colspan="3" style="text-align:center">
+          {{i}}
+        </td>
+        <td colspan="1" style="text-align:right">
+          <button md-icon-button color="warn"(click)="delete(i.id_srv)">
+              <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
+          </button>
+        </td>
+    </tr-->
+
+
+<tr>
+    <td>
+      <button *ngIf="prev != perm" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+
+    </td>
+    <td>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
+    </td>
+  </tr>
+
+</table>

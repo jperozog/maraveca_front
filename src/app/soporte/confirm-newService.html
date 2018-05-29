@@ -1,0 +1,53 @@
+<h1 md-dialog-title>Confirmacion</h1>
+<div md-dialog-content>
+  <p>Desea cerrar instalacion para {{data.row.nombre+" "+data.row.apellido}}?</p>
+</div>
+<div md-dialog-actions>
+<table>
+  <tr>
+    <td colspan="3">
+      Por favor ingrese los consumibles gastados
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <md-form-field>
+      <input mdInput placeholder="Metro Inicial De Cable" class="md2-input" [(ngModel)]="cable1" />
+      <span mdSuffix>Metros</span>
+      </md-form-field>
+
+    </td>
+    <td>
+      <md-form-field>
+      <input mdInput placeholder="Metro Final De Cable" class="md2-input" [(ngModel)]="cable2" />
+      <span mdSuffix>Metros</span>
+      </md-form-field>
+
+    </td>
+    <td>
+      <md-form-field>
+      <input mdInput placeholder="Conectores" class="md2-input" [(ngModel)]="conectores" />
+      </md-form-field>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <md-form-field>
+      <input mdInput placeholder="IP" class="md2-input" [(ngModel)]="ip" />
+      </md-form-field>
+    </td>
+  </tr>
+</table>
+</div>
+<div md-dialog-actions>
+  <tr>
+    <td>
+      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="service(data.row)" tabindex="2">Si</button>
+
+    </td>
+    <td>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">No</button>
+
+    </td>
+  </tr>
+</div>

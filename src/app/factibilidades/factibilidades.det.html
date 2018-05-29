@@ -1,0 +1,117 @@
+<h1 md-dialog-title>Detalles de Factibilidad</h1>
+<div *ngIf="fact_details">
+  Cliente: {{cliente | capitalize2:true }}
+  <div style="text-align:right">Coordenadas: {{fact_details.coordenadaslat+" "+fact_details.coordenadaslon}}</div>
+</div>
+
+
+
+<table style="border:1px solid black" *ngIf="fact_details && fact_details.status != 1">
+
+  <thead>
+    <tr>
+      <th ><h3>Equipo</h3></th>
+      <th ><h3>Celda</h3></th>
+      <th ><h3>Factible</h3></th>
+      <th ><h3>Usuario</h3></th>
+    </tr>
+  </thead>
+  <tbody class="fac">
+    <tr>
+      <th >{{fact_details.adicionales[1].det}}</th>
+      <th >{{fact_details.adicionales[0].det}}</th>
+      <th *ngIf="fact_details && fact_details.factible == 1" >Factible</th>
+      <th *ngIf="fact_details && fact_details.factible == 2" >No Factible</th>
+      <th >{{user.det}}</th>
+    </tr>
+</tbody>
+
+</table>
+
+
+<form id="client" name="clientForm" [formGroup]="EditFact" ng-submit="ok(clientForm)" novalidate>
+<table style=" width: 100%; border:1px solid black">
+<tr *ngIf="fact_details && fact_details.status == 1" >
+  <td>
+    <md2-select
+    placeholder="Equipo"
+    *ngIf="(usuario.perm && usuario.perm.includes('factibilidades'))&&(fact_details && fact_details.status == 1)"
+    formControlName="equipo"
+    style="width=25%; min-width: 25%;">
+    <md2-select-header>
+      <input class="search" name="c_search"
+      type="text"
+      formControlName="e_search"
+      placeholder="Buscar..."
+      style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+      />
+    </md2-select-header>
+    <md2-option *ngFor="let a of (equipos | dataPipe: {name: EditFact.value.e_search})" [value]="a.id" >{{a.name}}</md2-option>
+  </md2-select>
+</td>
+<td>
+  <md2-select
+  placeholder="Celda"
+  *ngIf="(usuario.perm && usuario.perm.includes('factibilidades'))&&(fact_details && fact_details.status == 1)"
+  formControlName="celda"
+  style="width=25%; min-width: 25%;">
+  <md2-select-header>
+    <input class="search" name="c_search"
+    type="text"
+    formControlName="c_search"
+    placeholder="Buscar..."
+    style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+    />
+  </md2-select-header>
+  <md2-option *ngFor="let a of (celdas | dataPipe: {nombre_celda: EditFact.value.c_search})" [value]="a.id_celda" >{{a.nombre_celda}}</md2-option>
+</md2-select>
+</td>
+<td style="width:200px, min-width:200px">
+  <md-form-field class="example-full-width">
+  <input type="text" name="Altura"
+  class="form-control"
+  formControlName="altura"
+  placeholder="Altura en Metros"
+  required
+  mdInput
+  >
+</md-form-field>
+</td>
+<td>
+  <md-checkbox [(ngModel)]="ptp" *ngIf="(usuario.perm && usuario.perm.includes('factibilidades'))&&(fact_details && fact_details.status == 1)&&!ptp" class="example-margin" formControlName="ptp">PTP</md-checkbox>
+  <md2-select
+  placeholder="PTP"
+  *ngIf="(usuario.perm && usuario.perm.includes('factibilidades'))&&(fact_details && fact_details.status == 1)&&ptp"
+  formControlName="ptp_det"
+  style="width=25%; min-width: 25%;">
+  <md2-select-header>
+    <input class="search" name="c_search"
+    type="text"
+    formControlName="e_search"
+    placeholder="Buscar..."
+    style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+    />
+  </md2-select-header>
+  <md2-option *ngFor="let a of (equipos | dataPipe: {name: EditFact.value.e_search})" [value]="a.id" >{{a.name}}</md2-option>
+</md2-select>
+</td>
+<td>
+  <md2-select
+  placeholder="Factible"
+  *ngIf="(usuario.perm && usuario.perm.includes('factibilidades'))&&(fact_details && fact_details.status == 1)"
+  formControlName="factible"
+  style="width=25%; min-width: 25%;">
+  <md2-option value="1" >Factible</md2-option>
+  <md2-option value="2" >No Factible</md2-option>
+</md2-select>
+</td>
+<td><button
+  *ngIf="(usuario.perm && usuario.perm.includes('factibilidades'))&&(fact_details && fact_details.status == 1)"
+  md-raised-button (click)="agregar()">Consolidar</button></td>
+</tr>
+</table>
+</form>
+
+<ng-template #elseblock>
+  <font color="#00c402"><h1>Factibilidad Pendiente</h1></font>
+</ng-template>

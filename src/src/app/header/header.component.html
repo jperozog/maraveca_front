@@ -1,0 +1,65 @@
+<md-toolbar color="primary">
+  <img src="http://maraveca.com/wp-content/uploads/2016/06/logo-normal.jpg" alt="Maraveca">
+    <span class="example-spacer"></span>
+    <md-chip *ngIf="usuario.currentUser" style="color:rgb(104, 103, 112)">{{usuario.currentUser.nombre_user + " " + usuario.currentUser.apellido_user}}</md-chip>
+  <button *ngIf="usuario.currentUser" md-button [mdMenuTriggerFor]="appMenu" style="color:rgb(104, 103, 112)">
+    <md-icon>menu</md-icon> Menu
+  </button>
+
+</md-toolbar>
+
+<md-menu #appMenu="mdMenu">
+  <button *ngIf="usuario.perm && usuario.perm.includes('clientes')" md-menu-item routerLink="/clients">
+    <md-icon>group</md-icon>
+    <span>Clientes</span>
+  </button>
+  <button *ngIf="usuario.perm && usuario.perm.includes('servicios')" md-menu-item routerLink="/services">
+    <md-icon>assignment</md-icon>
+    <span>Servicios</span>
+  </button>
+  <button *ngIf="usuario.perm && usuario.perm.includes('planes')" md-menu-item routerLink="/planes">
+    <md-icon>dashboard</md-icon>
+    <span>Planes</span>
+  </button>
+  <button *ngIf="usuario.perm && usuario.perm.includes('soporte')" md-menu-item routerLink="/soporte">
+    <md-icon>headset_mic</md-icon>
+    <span>Soporte</span>
+  </button>
+  <!--button md-menu-item>
+    <md-icon>face</md-icon>
+    <span>Potenciales</span>
+  </button-->
+  <button *ngIf="usuario.perm && usuario.perm.includes('router')" md-menu-item routerLink="/router">
+    <md-icon>router</md-icon>
+    <span>Router</span>
+  </button>
+  <button *ngIf="usuario.perm && usuario.perm.includes('celdas')" md-menu-item routerLink="/celdas">
+    <md-icon>settings_input_antenna</md-icon>
+    <span>Celda</span>
+  </button>
+  <button *ngIf="usuario.perm && usuario.perm.includes('ap')" md-menu-item routerLink="/aps">
+    <md-icon>track_changes</md-icon>
+    <span>AP</span>
+  </button>
+  <button *ngIf="usuario.perm && usuario.perm.includes('equipos')" md-menu-item routerLink="/equipos">
+    <md-icon>toys</md-icon>
+    <span>Equipos</span>
+  </button>
+  <button *ngIf="usuario.perm && usuario.perm.includes('usuarios')" md-menu-item routerLink="/users">
+    <md-icon>perm_identity</md-icon>
+    <span>Usuarios</span>
+  </button>
+  <button *ngIf="usuario.currentUser" md-menu-item [routerLink]="['/login']">
+    <md-icon>exit_to_app</md-icon>
+    <span>Logout</span>
+  </button>
+
+  <!--button md-menu-item>
+    <md-icon>library_books</md-icon>
+    <span>Facturacion</span>
+  </button>
+  <button md-menu-item>
+    <md-icon>phonelink</md-icon>
+    <span>Soporte</span>
+  </button-->
+</md-menu>

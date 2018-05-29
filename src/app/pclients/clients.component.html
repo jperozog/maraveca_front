@@ -1,0 +1,59 @@
+<md-toolbar class="submenu">
+  <md-form-field floatPlaceholder="never">
+  <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer" style="text-align: center;">Clientes Potenciales</span>
+  <button md-raised-button (click)="NFactibilidad()" >
+    <md-icon>leak_add</md-icon> Nueva Factibilidad
+  </button>
+  <button md-raised-button (click)="this.myService.refresh()" >
+    <md-icon>cached</md-icon> Actualizar Lista
+  </button>
+  <button md-raised-button (click)="openDialog()" >
+    <md-icon>group_add</md-icon> Agregar Potencial
+  </button>
+
+</md-toolbar>
+<div class="contenido">
+
+<table style="width: 97%" class=addClient [md2Data]="data | dataPipe: { nombre: search, apellido: search, dni: search, phone1:search, social:search }" #md2="md2DataTable" [rowsPerPage]="15">
+  <thead>
+    <tr>
+      <td colspan="6">
+        <md2-pagination [rowsPerPageSet]="[5,10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+      </td>
+    </tr>
+    <tr>
+      <th style="width: 10%" md2SortBy="dni">Cedula</th>
+      <th style="width: 20%" md2SortBy="nombre">Nombre y Apellido</th>
+      <th style="width: 10%" md2SortBy="phone1">Telefono</th>
+      <th style="width: 20%" md2SortBy="email">Correo Electronico</th>
+      <th style="width: 20%" md2SortBy="direccion">Direccion</th>
+      <th style="width: 20%">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let i of md2.data">
+      <td (click)="status(i)" style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
+      <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'V'" style="width: 20%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+      <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'E'" style="width: 20%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+      <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'G'" style="width: 20%">{{(i.social|capitalize)}}</td>
+      <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'J'" style="width: 20%">{{(i.social|capitalize)}}</td>
+      <td (click)="status(i)" style="width: 10%">{{i.phone1}}</td>
+      <td (click)="status(i)" style="width: 20%">{{i.email}}</td>
+      <td (click)="status(i)" style="width: 20%">{{i.direccion}}</td>
+      <td style="width: 20%">
+        <button md-icon-button color="primary" (click)="show(i)"><!---->
+        <md-icon class="md-24" aria-label="Editar Potencial" >mode_edit</md-icon>
+      </button>
+      <button  md-icon-button color="warn"><!--(click)="deleteDialog(i)"-->
+          <md-icon class="md-24" aria-label="Eliminar Potencial">delete</md-icon>
+      </button>
+    </td>
+    </tr>
+  </tbody>
+  <tfoot>
+
+  </tfoot>
+</table>
+</div>

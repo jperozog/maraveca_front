@@ -1,0 +1,66 @@
+<md-toolbar class="submenu x290">
+  <md-form-field floatPlaceholder="never">
+  <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer"></span>
+  <button md-icon-button (click)="this.myService.refresh()" >
+    <md-icon>cached</md-icon>
+  </button>
+  <button md-icon-button (click)="openDialog()" >
+    <md-icon>group_add</md-icon>
+  </button>
+
+</md-toolbar>
+<md-toolbar class="submenu x700">
+  <md-form-field floatPlaceholder="never">
+  <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer" style="text-align: center;">Planes</span>
+  <button md-raised-button (click)="this.myService.refresh()" >
+    <md-icon>cached</md-icon> Actualizar Lista
+  </button>
+  <button md-raised-button (click)="openDialog()" >
+    <md-icon>group_add</md-icon> Agregar Plan
+  </button>
+
+</md-toolbar>
+
+<div class="contenido">
+
+<table class=addClient [md2Data]="data | dataPipe: { name_plan: search}" #md2="md2DataTable" [rowsPerPage]="15">
+  <thead>
+    <tr>
+      <td colspan="6">
+        <md2-pagination [rowsPerPageSet]="[5,10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+      </td>
+    </tr>
+    <tr>
+      <th style="width: 30%" md2SortBy="ip_srvidor">Nombre</th>
+      <th style="width: 30%" md2SortBy="nombre_srvidor">Costo</th>
+      <th style="width: 30%" md2SortBy="user_srvidor">Ultima Actualizacion</th>
+      <th style="width: 10%">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let i of md2.data">
+      <td style="width: 30%">{{i.name_plan}}</td>
+      <td style="width: 30%">{{i.cost_plan | currency : 'BSF' : 'symbol' : '1.0-2' : 'fr'}}</td>
+      <td style="width: 30%">{{i.updated_at}}</td>
+      <td style="width: 10%">
+        <button md-icon-button color="primary" (click)="show(i)">
+        <md-icon class="md-24" aria-label="Editar AP" >mode_edit</md-icon>
+      </button>
+      <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)"-->
+      <button md-icon-button color="warn"(click)="deleteDialog(i)">
+            <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
+      </button>
+
+
+    </td>
+    </tr>
+  </tbody>
+  <tfoot>
+
+  </tfoot>
+</table>
+</div>

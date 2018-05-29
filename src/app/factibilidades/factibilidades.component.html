@@ -1,0 +1,93 @@
+<md-toolbar class="submenu">
+  <md-form-field  floatPlaceholder="never">
+    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer" style="text-align: center;">Factibilidades</span>
+  <button class="x290" md-icon-button (click)="this.myService.refresh()" >
+    <md-icon>cached</md-icon>
+  </button>
+  <button class="x290" md-icon-button (click)="openDialog()" >
+    <md-icon>add_circle_outline</md-icon>
+  </button>
+  <button class="x490 x700" md-raised-button (click)="refresh()" >
+    <md-icon>cached</md-icon>
+    Actualizar
+  </button>
+  <!--button class="x490 x700" md-raised-button (click)="openDialog()" >
+    <md-icon>add_circle_outline</md-icon>
+    Agregar
+  </button>
+  <button md-raised-button (click)="sidenav.toggle()">
+      boton
+    </button-->
+</md-toolbar>
+<md-sidenav #sidenav mode="push" class="sidenav">
+  <h1>Detalles</h1>
+  <h2>Cliente:</h2>
+  <h2>Fecha</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>control</th>
+        <th>tipo</th>
+        <th>monto</th>
+    </thead>
+  </table>
+
+</md-sidenav>
+<md-sidenav-container>
+
+<div class="contenido">
+  <div class="cajon">
+    <div class="x700">
+      <table style="width: 97%" [md2Data]="data | dataPipe: {cliente: search}" #md2="md2DataTable" class="addClient x700" >
+        <thead>
+          <tr>
+            <td colspan="5">
+              <md2-pagination paginationLabel="Filas por pagina"></md2-pagination>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 15%; margin: 0 1em;">N</th>
+            <th style="width: 15%" md2SortBy="cliente">Cliente</th>
+            <th style="width: 15%" md2SortBy="fac_status">Estado</th>
+            <th style="width: 15%">Fecha</th>
+            <th style="width: 10%">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="cuerpo">
+          <tr class="hover" *ngFor="let t of md2.data" (click)='show(t)'>
+            <td style="width: 15%; margin: 0 1em;">{{t.id}}</td>
+
+            <td *ngIf="((t.kind | capitalize2) == 'V' || (t.kind | capitalize2) == 'E')" style="width: 15%">{{t.nombre+" "+t.apellido | capitalize2:true}}</td>
+            <td *ngIf="((t.kind | capitalize2) == 'J' || (t.kind | capitalize2) == 'G') && (t.social != null && t.social != 'null')" style="width: 15%">{{t.nombre+" "+t.apellido | capitalize2:true}}</td>
+            <td *ngIf="((t.kind | capitalize2) == 'J' || (t.kind | capitalize2) == 'G') && (t.social == null && t.social == 'null')" style="width: 15%">{{"Sin Definir" | capitalize2:true}}</td>
+
+
+            <td *ngIf="t.status == 1" style="width: 15%"><font color="#d10512">Pendiente</font></td>
+            <td *ngIf="t.status == 2 && t.factible ==1" style="width: 15%"><font color="#00c402">Factible</font></td>
+            <td *ngIf="t.status == 2 && t.factible ==2" style="width: 15%"><font color="#d10512">No Factible</font></td>
+
+            <td style="width: 15%">{{t.created_at | stringToDate | date: 'd/M/yy'}}</td>
+
+            <td style="width: 15%">
+              <button md-icon-button color="primary" (click)="openLINK(t.id_soporte)">
+                <md-icon class="md-24" aria-label="Editar AP" >rate_review</md-icon>
+              </button>
+              <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
+              <button md-icon-button color="warn"(click)="deleteDialog(i)">
+              <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
+            </button-->
+
+
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+
+      </tfoot>
+    </table>
+  </div>
+</div>
+</div>
+</md-sidenav-container>

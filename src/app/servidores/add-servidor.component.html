@@ -1,0 +1,73 @@
+<form class="example-form" id="client" name="clientForm" [formGroup]="addClient" ng-submit="ok(clientForm)" novalidate>
+  <table class="example-full-width" cellspacing="0"><tr>
+    <td>
+      <md-form-field class="example-full-width">
+        <input type="text" name="nombre_srvidor"
+        class="form-control"
+        formControlName="nombre_srvidor"
+        placeholder="Nombre"
+
+        required
+        mdInput
+        >
+      </md-form-field>
+
+    </td>
+    <td>
+
+      <md-form-field class="example-full-width">
+        <input type="text" name="ip_srvidor"
+        class="form-control"
+        placeholder="IP"
+        formControlName="ip_srvidor"
+
+        required
+        mdInput
+        >
+      </md-form-field>
+
+    </td>
+
+    </tr>
+  <tr>
+
+    <td>
+
+      <md-form-field class="example-full-width">
+        <input name="user_srvidor"
+        class="form-control"
+        formControlName="user_srvidor"
+        placeholder="Usuario"
+        mdInput
+        >
+      </md-form-field>
+
+    </td>
+    <td>
+      <md-form-field class="example-full-width">
+        <input type="text" name="password_srvidor"
+        class="form-control"
+        formControlName="password_srvidor"
+        placeholder="Password"
+        required
+        mdInput
+        >
+      </md-form-field>
+    </td>
+  </tr>
+<tr>
+    <td>
+
+
+      <button *ngIf="row == null" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+      <button *ngIf="row != null"md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Editar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+    </td><td>
+
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
+    </td>
+  </tr>
+  <p>
+
+  </p>
+</table>
+</form>

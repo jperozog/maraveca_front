@@ -1,0 +1,59 @@
+<h1 md-dialog-title>Resumen De Facturacion</h1>
+Cliente: {{(row.nombre+" "+row.apellido) | capitalize2:true }}
+
+
+
+<table *ngIf="monto != 0; else elseblock">
+<thead>
+  <tr>
+    <th style="text-align: center; width: 10%" ><h3>Numero De Factura</h3></th>
+    <th style="text-align: center" colspan="2"><h3>Monto Factura</h3></th>
+    <th style="text-align: center"><h3>Monto Pagado</h3></th>
+    <th style="text-align: center"><h3>Acciones</h3></th>
+
+  </tr>
+</thead>
+  <tbody class="fac">
+  <tr class="fac montos" *ngFor="let i of fac_products">
+    <td class="fac montos" style="border-right: 1px solid #000000; text-align: right">
+    {{i.id}}
+    </td>
+    <td class="fac montos" colspan="2">
+      {{i.monto | currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}
+    </td>
+    <td class="fac montos" *ngIf="i.pagado != null || i.comment_articulo != 'null'">
+      {{i.pagado | currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}
+    </td>
+    <td  class="fac montos" >
+      <button md-icon-button color="primary" (click)="status(i)">
+      <md-icon class="md-24" aria-label="Detalles De Factura" >find_in_page</md-icon>
+    </button>
+    </td>
+    <!--td class="fac" #obf>
+      0BSF
+    </td-->
+
+  </tr>
+
+  <tr style="border-top: 1px solid #127aa1;">
+    <td></td>
+    <td *ngIf="row.serie == 0" style="text-align: right" >Total Neto:</td>
+    <td *ngIf="row.serie == 1" style="text-align: right" >Total Neto Con Iva:</td>
+    <td style="text-align: right" >{{monto | currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</td>
+    <td style="text-align: right" >{{pagado | currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</td>
+  </tr>
+  <tr>
+    <td colspan="2"></td>
+    <td *ngIf="deuda > 0"><font color="#d10512"><h3>Deuda: </h3></font></td>
+    <td *ngIf="deuda <= 0"><font color="#00c402"><h3>Deuda: </h3></font></td>
+    <td *ngIf="deuda > 0"><font color="#d10512">{{deuda|currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</font></td>
+    <td *ngIf="deuda <= 0"><font color="#00c402">{{deuda|currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</font></td>
+
+  </tr>
+
+</tbody>
+
+</table>
+<ng-template #elseblock>
+  <font color="#00c402"><h1>Cliente solvente o sin servicios contratados</h1></font>
+</ng-template>

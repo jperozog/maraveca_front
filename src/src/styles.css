@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+body {
+    background-color: #f4f4f4 !important;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 8px !important;
+    background-image: url(http://maraveca.com/wp-content/uploads/2017/11/bot-sistema-img.jpg);
+    background-repeat: no-repeat;
+    background-position-y: bottom;
+    background-size: contain;
+}
+.my-full-screen-dialog .mat-dialog-container {
+max-height: 90%;
+}

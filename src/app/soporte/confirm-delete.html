@@ -1,0 +1,16 @@
+<h1 md-dialog-title>Confirmacion</h1>
+<div md-dialog-content>
+  <p>Esta seguro que desea cerrar el ticket para {{data.nombre}}?</p>
+</div>
+<div md-dialog-actions>
+  <tr>
+    <td>
+      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="delete()" tabindex="2">Ok</button>
+
+    </td>
+    <td>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">NO</button>
+
+    </td>
+  </tr>
+</div>

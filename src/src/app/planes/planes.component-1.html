@@ -1,0 +1,56 @@
+<md-toolbar>
+  <span class="example-spacer"></span>
+  <button md-raised-button (click)="this.CC.refresh()" >
+    <md-icon>cached</md-icon> Actualizar Lista
+  </button>
+  <button md-raised-button (click)="openDialog()" >
+    <md-icon>group_add</md-icon> Agregar Plan
+  </button>
+
+</md-toolbar>
+
+  <md-table #table [dataSource]="dataSource">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- nombre Column -->
+    <ng-container mdColumnDef="nombre">
+      <md-header-cell *mdHeaderCellDef> Nombre </md-header-cell>
+      <md-cell *mdCellDef="let row"> {{row.nombre}} </md-cell>
+    </ng-container>
+
+    <!-- costo Column -->
+    <ng-container mdColumnDef="costo">
+      <md-header-cell *mdHeaderCellDef> Costo </md-header-cell>
+      <md-cell *mdCellDef="let row"> {{row.costo}} </md-cell>
+    </ng-container>
+
+    <!-- ultima actualizacion Column -->
+    <ng-container mdColumnDef="lastupd">
+      <md-header-cell *mdHeaderCellDef> Ultima Actualizacion </md-header-cell>
+      <md-cell *mdCellDef="let row"> {{row.updated_at}} </md-cell>
+    </ng-container>
+
+    <!-- Acciones Colimn -->
+    <ng-container mdColumnDef="acciones">
+      <md-header-cell *mdHeaderCellDef> Acciones </md-header-cell>
+      <md-cell *mdCellDef="let row">
+        <button md-icon-button color="primary" (click)="show(row)">
+          <md-icon class="md-24" aria-label="Editar Celda" >mode_edit</md-icon>
+        </button>
+        <button md-icon-button color="warn"(click)="delete(row.id)">
+            <md-icon class="md-24" aria-label="Eliminar Celda">delete</md-icon>
+        </button>
+        
+       </md-cell>
+
+    </ng-container>
+
+    <md-header-row *mdHeaderRowDef="displayedColumns" ></md-header-row>
+    <md-row
+      *mdRowDef="let row; columns: displayedColumns;"
+      >
+
+    ></md-row>
+  </md-table>
