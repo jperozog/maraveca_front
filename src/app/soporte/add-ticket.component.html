@@ -217,7 +217,7 @@
         <tr *ngIf="!edit && addplan.value.tipo_soporte == 1">
           <td>
             <md-form-field class="example-full-width" *ngIf="!EN" floatPlaceholder="never">
-            <input autocomplete="off" mdInput placeholder="Serial De Equipo" class="md2-input" formControlName="seriale" />
+            <input autocomplete="off" mdInput placeholder="Serial De Equipo" class="md2-input" formControlName="seriale" maxlength="12"/>
           </md-form-field>
           </td>
           <td>
