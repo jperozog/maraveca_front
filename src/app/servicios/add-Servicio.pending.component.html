@@ -215,7 +215,7 @@
   <td>
 
 
-    <button md-raised-button color="primary" class="example-half-width btn btn-primary" [disabled]="!addClient.valid && !planes_.length>=1" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+    <button md-raised-button color="primary" class="example-half-width btn btn-primary" [disabled]="!(addClient.valid && this.planes_.length!=0)" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
 
   </td><td>
 

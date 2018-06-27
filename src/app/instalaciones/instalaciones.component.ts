@@ -425,26 +425,32 @@ export class InstalacionesComponent implements OnInit, OnDestroy {
         public snackBar: MdSnackBar,
         private router: Router){
           this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-          this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientes/')
+          this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/soporte/'+row.id_soporte)
           .subscribe((data) => {
-            this.clientes = data.json();
-            setTimeout(() =>
-            {
-              this.addplan.value.servicio_soporte = row.servicio;
-            },
-            3000);
-          });
-          this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/celdas/')
-          .subscribe((data) => {
-            this.celda = data.json();
-            this.celdas = this.addplan.value.celda_soporte
+            this.row = data.json();
+            console.log(data.json());
+            this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientes/')
+            .subscribe((data) => {
+              this.clientes = data.json();
+              setTimeout(() =>
+              {
+                this.addplan.value.servicio_soporte = row.servicio_soporte;
+              },
+              3000);
+            });
+            this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/celdas/')
+            .subscribe((data) => {
+              this.celda = data.json();
+              this.celdas = this.addplan.value.celda_soporte
 
+            });
+            this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/equipos/')
+            .subscribe((data) => {
+              this.equipos = data.json();
+              this.equipo = this.addplan.value.equipo_soporte
+            });
           });
-          this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/equipos/')
-          .subscribe((data) => {
-            this.equipos = data.json();
-            this.equipo = this.addplan.value.equipo_soporte
-          });
+
           this.addplan = this.fb.group({
             tipo_soporte: '1',
             problema_soporte: '',
@@ -466,8 +472,8 @@ export class InstalacionesComponent implements OnInit, OnDestroy {
           if(row != null){
             console.log(row.ptp)
             this.addplan.patchValue({
-              servicio_soporte: row.servicio,
-              celda_soporte:row.celda,
+              servicio_soporte: row.servicio_soporte,
+              celda_soporte:row.celdas,
               equipo_soporte:row.equipo,
               user_soporte: this.currentUser.id_user
             });
