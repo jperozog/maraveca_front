@@ -18,7 +18,7 @@ max-height: 90%;
 
   body {
       background-color: #f4f4f4 !important;
-      background-image: url(http://maraveca.com/wp-content/uploads/2017/11/bot-sistema-img.jpg);
+      background-image: url(assets/images/bot-sistema-img.jpg);
       background-repeat: no-repeat;
       background-position-y: bottom;
       background-size: contain;
@@ -31,7 +31,7 @@ body {
     margin-left: 0px;
     margin-right: 0px;
     margin-bottom: 8px !important;
-    
+
 }
 
 .material-icons {

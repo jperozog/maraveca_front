@@ -23,14 +23,14 @@
  <h1 style="font-weight: bold;text-transform: uppercase;color:#ffffff;"> </h1>
 <div class="login-form">
 <div class="head-info">Sistema Administrativo</div>
-			<div class="clear"> </div>
+			<div style="background-color:lightpink" *ngIf="error" class="clear"> Error en Usuario Y Contraseña </div>
 	<div class="avtar">
 		<img src="../../assets/images/avtar.png" />
 	</div>
 				<form [formGroup]="log">
-					<input type="text" class="text" placeholder="Usuario" formControlName="username" [(ngModel)]="model.username">
+					<input type="text" class="text" placeholder="Usuario" formControlName="username" autocomplete="off" [(ngModel)]="model.username">
 						<div class="key">
-					<input type="password" placeholder="Contraseña" formControlName="password" [(ngModel)]="model.password">
+					<input type="password" placeholder="Contraseña" formControlName="password" autocomplete="off" [(ngModel)]="model.password">
 						</div>
 	<div class="signin">
 	  <input type="submit" (click)="login()" value="Ingresar"  >

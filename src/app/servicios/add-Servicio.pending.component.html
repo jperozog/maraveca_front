@@ -107,7 +107,7 @@
 <tr>
   <td>
     <md-form-field>
-      <input mdInput formControlName="mac_srv" maxlength="17" placeholder="MAC"/>
+      <input mdInput formControlName="mac_srv" maxlength="17" placeholder="MAC" disabled/>
       <md-error *ngIf="!addClient.controls.mac_srv.valid">La direccion MAC es invalida</md-error>
     </md-form-field>
   </td>
@@ -164,13 +164,14 @@
     </md-form-field>
   </td>
   <td colspan="1">
-    <button md-raised-button style="width=100%; min-width=100%" type="button" [disabled]="row && row.status_soporte==2" (click)="addr()">
+    <button md-raised-button class="example-half-width btn" type="button" (click)="addr()">
       <md-icon class="md-24" aria-label="Editar AP" >add_circle</md-icon>
+      <span>Agregar Plan</span>
     </button>
   </td>
 </tr>
 <tr>
-  <td>
+  <td colspan="2">
     <md2-select name="Estado"
     formControlName="stat_srv"
     placeholder="Estado"
@@ -182,11 +183,6 @@
     <md2-option [value]="3">Suspendido</md2-option>
     <md2-option [value]="4">Retirado</md2-option>
   </md2-select>
-</td>
-<td>
-  <md-form-field>
-    <input mdInput formControlName="comment_srv" placeholder="Comentario"/>
-  </md-form-field>
 </td>
 </tr>
 <tr>
@@ -219,7 +215,7 @@
   <td>
 
 
-    <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+    <button md-raised-button color="primary" class="example-half-width btn btn-primary" [disabled]="!addClient.valid && !planes_.length>=1" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
 
   </td><td>
 

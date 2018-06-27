@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
   loading = false;
   returnUrl: string;
   log : FormGroup;
-
+  error = false
   constructor(
       private route: ActivatedRoute,
       private router: Router,
@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
 
   login() {
       this.loading = true;
+      this.error = false;
       var logi = this.log.value;
       if(logi.username != "" && logi.password != ""){
         this.authenticationService.login(logi.username, logi.password)
@@ -49,6 +50,8 @@ export class LoginComponent implements OnInit {
           error => {
             this.alertService.error(error);
             this.loading = false;
+            this.error=true;
+            console.log("fallo la autenticacion")
           });
 
       }

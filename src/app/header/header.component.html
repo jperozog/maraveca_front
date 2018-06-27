@@ -1,7 +1,7 @@
 <header class="toolbar">
 
 <md-toolbar color="primary">
-  <img style="max-width:20%" src="http://maraveca.com/wp-content/uploads/2016/06/logo-normal.jpg" alt="Maraveca">
+  <img style="max-width:20%" src="assets/images/logo-normal.jpg" alt="Maraveca">
     <span class="example-spacer"></span>
     <md-chip-list>
     <md-chip *ngIf="usuario.currentUser && usuario.currentUser.nombre_user && usuario.currentUser.apellido_user"  md-button [mdMenuTriggerFor]="usuarios" style="color:rgb(255, 255, 255); background-color:rgb(36, 156, 200)">{{usuario.currentUser.nombre_user + " " + usuario.currentUser.apellido_user}}</md-chip>
@@ -16,62 +16,93 @@
 </header>
 
 <md-menu #appMenu="mdMenu">
-  <button *ngIf="usuario.perm && usuario.perm.includes('clientes')" md-menu-item routerLink="/clients">
-    <md-icon>group</md-icon>
-    <span>Clientes</span>
-  </button>
-  <button *ngIf="usuario.perm && usuario.perm.includes('pclientes')" md-menu-item routerLink="/pclients">
-    <md-icon>group</md-icon>
-    <span>Clientes Potenciales</span>
-  </button>
-  <button *ngIf="usuario.perm && usuario.perm.includes('potenciales')" md-menu-item routerLink="/potenciales">
-    <md-icon>group</md-icon>
-    <span>Potenciales</span>
-  </button>
-  <button *ngIf="usuario.perm && usuario.perm.includes('facturacion')" md-menu-item routerLink="/facturacion">
-    <md-icon>credit_card</md-icon>
-    <span>Facturacion</span>
-  </button>
-  <button *ngIf="usuario.perm && usuario.perm.includes('servicios')" md-menu-item routerLink="/services">
-    <md-icon>assignment</md-icon>
-    <span>Servicios</span>
-  </button>
-  <button *ngIf="usuario.perm && usuario.perm.includes('planes')" md-menu-item routerLink="/planes">
-    <md-icon>dashboard</md-icon>
-    <span>Planes</span>
-  </button>
-  <button *ngIf="usuario.perm && usuario.perm.includes('notify')" md-menu-item routerLink="/notify">
-    <md-icon>tap_and_play</md-icon>
-    <span>Notificaciones</span>
-  </button>
-  <button *ngIf="usuario.perm && usuario.perm.includes('soporte')" md-menu-item routerLink="/soporte">
-    <md-icon>headset_mic</md-icon>
-    <span>Soporte</span>
-  </button>
-  <button *ngIf="usuario.perm && usuario.perm.includes('factibilidades')" md-menu-item routerLink="/factibilidades">
-    <md-icon>perm_scan_wifi</md-icon>
-    <span>Factibilidades</span>
-  </button>
-  <button *ngIf="usuario.perm && usuario.perm.includes('router')" md-menu-item routerLink="/router">
-    <md-icon>router</md-icon>
-    <span>Router</span>
-  </button>
-  <button *ngIf="usuario.perm && usuario.perm.includes('celdas')" md-menu-item routerLink="/celdas">
-    <md-icon>settings_input_antenna</md-icon>
-    <span>Celda</span>
-  </button>
+
+
   <button *ngIf="usuario.perm && usuario.perm.includes('ap')" md-menu-item routerLink="/aps">
     <md-icon>track_changes</md-icon>
     <span>AP</span>
   </button>
+
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('celdas')" md-menu-item routerLink="/celdas">
+    <md-icon>settings_input_antenna</md-icon>
+    <span>Celda</span>
+  </button>
+
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('clientes')" md-menu-item routerLink="/clients">
+    <md-icon>group</md-icon>
+    <span>Clientes</span>
+  </button>
+
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('pclientes')" md-menu-item routerLink="/pclients">
+    <md-icon>group</md-icon>
+    <span>Clientes Potenciales</span>
+  </button>
+
+
   <button *ngIf="usuario.perm && usuario.perm.includes('equipos')" md-menu-item routerLink="/equipos">
     <md-icon>toys</md-icon>
     <span>Equipos</span>
   </button>
+
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('factibilidades')" md-menu-item routerLink="/factibilidades">
+    <md-icon>perm_scan_wifi</md-icon>
+    <span>Factibilidades</span>
+  </button>
+
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('facturacion')" md-menu-item routerLink="/facturacion">
+    <md-icon>credit_card</md-icon>
+    <span>Facturacion</span>
+  </button>
+
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('instalaciones')" md-menu-item routerLink="/instalaciones">
+    <md-icon>assignment</md-icon>
+    <span>Instalaciones</span>
+  </button>
+
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('notify')" md-menu-item routerLink="/notify">
+    <md-icon>tap_and_play</md-icon>
+    <span>Notificaciones</span>
+  </button>
+
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('planes')" md-menu-item routerLink="/planes">
+    <md-icon>dashboard</md-icon>
+    <span>Planes</span>
+  </button>
+
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('router')" md-menu-item routerLink="/router">
+    <md-icon>router</md-icon>
+    <span>Router</span>
+  </button>
+
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('servicios')" md-menu-item routerLink="/services">
+    <md-icon>assignment</md-icon>
+    <span>Servicios</span>
+  </button>
+
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('soporte')" md-menu-item routerLink="/soporte">
+    <md-icon>headset_mic</md-icon>
+    <span>Soporte</span>
+  </button>
+
+
   <button *ngIf="usuario.perm && usuario.perm.includes('usuarios')" md-menu-item routerLink="/users">
     <md-icon>perm_identity</md-icon>
     <span>Usuarios</span>
   </button>
+
+
+
 </md-menu>
 
 <md-menu #usuarios="mdMenu">

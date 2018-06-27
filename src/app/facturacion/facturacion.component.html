@@ -9,8 +9,8 @@
   <button class="x290" md-icon-button (click)="openDialog()" >
     <md-icon>add_circle_outline</md-icon>
   </button>
-  <button class="x490 x700" md-raised-button (click)="refresh()" >
-    <md-icon>cached</md-icon>
+  <button class="x490 x700" md-raised-button (click)="refresh(true)" >
+    <md-icon [class.updateicon]="update">cached</md-icon>
     Actualizar
   </button>
   <!--button class="x490 x700" md-raised-button (click)="openDialog()" >
@@ -38,9 +38,8 @@
 <md-sidenav-container>
 
 <div class="contenido">
-  <div class="cajon">
     <div class="x700">
-      <table style="width: 97%" [md2Data]="data | dataPipe: {cliente: search}" #md2="md2DataTable" class="addClient x700" >
+      <table style="width: 97%" [md2Data]="facturacion | dataPipe: {cliente: search, id: search}" #md2="md2DataTable" class="addClient x700" [rowsPerPage]="15">
         <thead>
           <tr>
             <td colspan="5">
@@ -50,7 +49,7 @@
           <tr>
             <th style="width: 15%; margin: 0 1em;">N</th>
             <th style="width: 15%" md2SortBy="cliente">Cliente</th>
-            <th style="width: 15%" md2SortBy="fac_status">Estado</th>
+            <th style="width: 15%" md2SortBy="pagado">Estado</th>
             <th style="width: 15%">Fecha</th>
             <th style="width: 10%">Acciones</th>
           </tr>
@@ -86,6 +85,5 @@
       </tfoot>
     </table>
   </div>
-</div>
 </div>
 </md-sidenav-container>

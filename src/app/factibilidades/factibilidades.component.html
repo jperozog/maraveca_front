@@ -38,9 +38,8 @@
 <md-sidenav-container>
 
 <div class="contenido">
-  <div class="cajon">
     <div class="x700">
-      <table style="width: 97%" [md2Data]="data | dataPipe: {cliente: search}" #md2="md2DataTable" class="addClient x700" >
+      <table style="width: 97%" [md2Data]="data | dataPipe: {cliente: search}" #md2="md2DataTable" class="addClient x700" [rowsPerPage]="15">
         <thead>
           <tr>
             <td colspan="5">
@@ -88,6 +87,5 @@
       </tfoot>
     </table>
   </div>
-</div>
 </div>
 </md-sidenav-container>

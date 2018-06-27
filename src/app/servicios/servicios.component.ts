@@ -1,4 +1,4 @@
-import {Component, Inject, Pipe, PipeTransform, Injectable, OnInit} from '@angular/core';
+import {Component, Inject, Pipe, PipeTransform, Injectable, OnInit, OnDestroy} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -7,6 +7,8 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/material';
+import { IntervalObservable } from "rxjs/observable/IntervalObservable";
+import 'rxjs/add/operator/takeWhile';
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import { DatePipe } from '@angular/common';
@@ -18,14 +20,18 @@ const MAC_REGEX = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/
   templateUrl: './servicios.component.html',
   styleUrls: ['./servicios.component.css']
 })
-export class ServiciosComponent {
+export class ServiciosComponent implements OnInit, OnDestroy {
 
-
+    update=true;
+    autoupdate:boolean
     myService: MyService | null;
     data: any = [];
     installs: any = [];
+    data_t: any = [];
+    installs_t: any = [];
     search: string = '';
     constructor(private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router) {
+      this.autoupdate=true;
       this.snackBar.open("Cargando Clientes", null, {
         duration: 2000,
       });
@@ -34,12 +40,41 @@ export class ServiciosComponent {
         .subscribe((data) => {
           this.data = data.json().servicios;
           this.installs = data.json().soportes;
-          console.log(this.data);
-          console.log(this.installs.length);
+          this.data_t=this.data;
+          this.installs_t=this.installs;
+          this.snackBar.open("Clientes Cargados", null, {
+            duration: 2000,
+          });
+          this.update=false
         });
-      this.snackBar.open("Clientes Cargados", null, {
-        duration: 2000,
+    }
+
+    ngOnInit(){
+      IntervalObservable.create(10000)
+      .takeWhile(() => this.autoupdate)
+      .subscribe(() => {
+        this.refresh(false);
       });
+    }
+    ngOnDestroy(){
+      this.autoupdate=false
+    }
+    refresh(nf){
+      this.update=true
+      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servicios/')
+        .subscribe((data) => {
+          this.data_t = data.json().servicios;
+          this.installs_t = data.json().soportes;
+          this.update=false
+          if (nf){
+            this.snackBar.open("Lista Actualizada", null, {
+            duration: 2000,
+          });
+        }
+        });
+          this.data=this.data_t;
+          this.installs=this.installs_t;
+
     }
 
     openDialog(): void {
@@ -60,7 +95,16 @@ export class ServiciosComponent {
       });
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was AddClient closed');
+        this.update=true
+        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servicios/')
+          .subscribe((data) => {
+            this.data = data.json().servicios;
+            this.installs = data.json().soportes;
+            console.log(this.data);
+            console.log(this.installs.length);
+            this.update=false
 
+          });
       });
       //this.myService.refresh();
     }
@@ -73,8 +117,16 @@ export class ServiciosComponent {
         data: row
       });
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was AddClient closed');
-
+        this.update=true
+        console.log('The dialog was AddClientPending closed');
+        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servicios/')
+          .subscribe((data) => {
+            this.data = data.json().servicios;
+            this.installs = data.json().soportes;
+            console.log(this.data);
+            console.log(this.installs.length);
+            this.update=false
+          });
       });
       //this.myService.refresh();
     }
@@ -133,7 +185,7 @@ export class ServiciosComponent {
     styleUrls: ['./servicios.component.css'],
     providers: [DatePipe]
   })
-  export class AddservicesComponent{
+  export class AddservicesComponent implements OnInit{
 
     addClient: FormGroup;
     funciones: MyService | null;
@@ -219,23 +271,23 @@ export class ServiciosComponent {
 
           this.addClient = this.fb.group({
             plan_srv: '',
-            cliente_srv: '',
-            instalacion_srv: '',
+            cliente_srv: ['', Validators.required],
+            instalacion_srv: ['', Validators.required],
             recibo_srv: '',
             costo_instalacion_srv: '',
             credito_srv: '40',
             notify_srv: '',
-            start_srv: '',
-            ip_srv: '',
+            start_srv: ['', Validators.required],
+            ip_srv: ['', Validators.required],
             //celda_srv: '',
             //servidor_srv: '',
-            ap_srv: '',
-            serial_srv: '',
+            ap_srv: ['', Validators.required],
+            serial_srv: ['', Validators.required],
             mac_srv: ['', [Validators.required, Validators.pattern(MAC_REGEX)]],
             zona_srv: '',
-            stat_srv: '',
+            stat_srv: ['', Validators.required],
             comment_srv: '',
-            equipo_srv: '',
+            equipo_srv: ['', Validators.required],
             c_search: '',
             p_search: '',
             C_search: '',
@@ -254,6 +306,22 @@ export class ServiciosComponent {
         this.dialogRef.close();
       }
 
+      ngOnInit(){
+        this.addClient.get('serial_srv').valueChanges.subscribe(
+          (EN) => {
+            setTimeout(()=>{
+              var pre = this.addClient.value.serial_srv.replace(/(.{2})/g, '$&:')
+              this.addClient.patchValue(
+                {
+                  serial_srv: this.addClient.value.serial_srv.replace(/[^a-zA-Z0-9 ]/g, ""),
+                  mac_srv: pre.replace(/(^:+|:+$)/g, "")
+                  //mac_srv: pre.replace(/(.{16})/g, '$&')
+                }
+              )
+              this.addClient.updateValueAndValidity();
+            }, 200);
+          })
+      }
 
       Enviar(){
         var client = this.addClient.value;
@@ -284,7 +352,7 @@ export class ServiciosComponent {
 
         this.http.post(url, body).subscribe((data) => {});
         this.dialogRef.close();
-        this.funciones.refresh();
+      //  this.funciones.refresh();
         this.snackBar.open("Agregando Cliente: Por favor espere", null, {
           duration: 2000,
         });
@@ -319,7 +387,7 @@ export class ServiciosComponent {
 
         this.http.put(url, body).subscribe((data) => {});
         this.dialogRef.close();
-        this.funciones.refresh();
+        //this.funciones.refresh();
         this.snackBar.open("Agregando Cliente: Por favor espere", null, {
           duration: 2000,
         });
@@ -377,50 +445,29 @@ export class ServiciosComponent {
               this.planes = data.json().planes;
               console.log(this.clientes.slice(0,3));
             });
-            /*this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientes/')
-            .subscribe((data) => {
-              this.clientes = data.json();
-              console.log(this.clientes.slice(0,3));
-            });
-            this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/equipos/')
-            .subscribe((data) => {
-              this.equipo = data.json();
-              console.log(this.equipo);
-            });
-            this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/aps/')
-            .subscribe((data) => {
-              this.aps = data.json();
-              console.log(this.aps);
-            });
-            this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/planes/')
-            .subscribe((data) => {
-              this.planes = data.json();
-              console.log(this.planes);
-            });*/
-
             this.funciones = new MyService(http, router);
 
             this.addClient = this.fb.group({
                 plan_srv: '',
-                cliente_srv: '',
-                instalacion_srv: '',
+                cliente_srv: ['', Validators.required],
+                instalacion_srv: ['', Validators.required],
                 recibo_srv: '',
                 costo_instalacion_srv: '',
                 credito_srv: '40',
                 notify_srv: '',
-                start_srv: '',
-                ip_srv: '',
+                start_srv: ['', Validators.required],
+                ip_srv: ['', Validators.required],
                 planes_: '',
                 comment_: '',
                 //celda_srv: '',
                 //servidor_srv: '',
-                ap_srv: '',
-                serial_srv: '',
+                ap_srv: ['', Validators.required],
+                serial_srv: ['', Validators.required],
                 mac_srv: ['', [Validators.required, Validators.pattern(MAC_REGEX)]],
                 zona_srv: '',
-                stat_srv: '',
+                stat_srv: ['', Validators.required],
                 comment_srv: '',
-                equipo_srv: '',
+                equipo_srv: ['', Validators.required],
                 c_search: '',
                 p_search: '',
                 C_search: '',
@@ -453,24 +500,18 @@ export class ServiciosComponent {
                   ap_srv: this.row.ap,
                   instalacion_srv: this.row.instalacion_srv,
                   recibo_srv: this.row.recibo_srv,
-                  costo_instalacion_srv: this.row.costo_instalacion_srv,
-                  credito_srv: this.row.credito_srv,
+                  costo_instalacion_srv: '0',
+                  credito_srv: '40',
                   notify_srv: this.row.notify_srv,
                   start_srv: this.row.start_srv,
                   ip_srv: this.row.ip,
-                  //celda_srv: row.celda_srv,
-                  //servidor_srv: row.servidor_srv,
                   serial_srv: this.row.serial,
-                  //mac_srv: ['', [Validators.required, Validators.pattern(MAC_REGEX)]],
                   zona_srv: this.row.zona_srv,
-                  stat_srv: this.row.stat_srv,
                   comment_srv: this.row.comment_srv,
-                  c_search: '',
-                  p_search: '',
-                  C_search: '',
-                  a_search: '',
                   mac_srv: pre.replace(/(^:+|:+$)/g, "")
                 })
+                this.addClient.updateValueAndValidity();
+
               },
               200);
 
@@ -488,11 +529,12 @@ export class ServiciosComponent {
                   var pre = this.addClient.value.serial_srv.replace(/(.{2})/g, '$&:')
                   this.addClient.patchValue(
                     {
+                      serial_srv: this.addClient.value.serial_srv.replace(/[^a-zA-Z0-9 ]/g, ""),
                       mac_srv: pre.replace(/(^:+|:+$)/g, "")
                       //mac_srv: pre.replace(/(.{16})/g, '$&')
                     }
                   )
-
+                  this.addClient.updateValueAndValidity();
                 }, 200);
               })
           }
@@ -544,8 +586,20 @@ export class ServiciosComponent {
                   comment_srv: item.comment,
                 });
                 var url = "http://186.167.32.27:81/maraveca/public/index.php/api/servicios";
-                this.http.post(url, this.post).subscribe((data) => {});
+                this.http.post(url, this.post.value).subscribe((data) => {
+                  var put:FormGroup
+                  put=this.fb.group({
+                    status_soporte:"4"
+                  })
+                  var url = "http://186.167.32.27:81/maraveca/public/index.php/api/soporte/"+this.row.id_soporte;
+                  this.http.put(url, put.value).subscribe((data) => {
+
+                  });
+                });
                 this.dialogRef.close();
+                this.snackBar.open("Servicio Registrado", null, {
+                  duration: 2000,
+                });
 
               });
 
@@ -584,42 +638,6 @@ export class ServiciosComponent {
             });
             //this.router.navigate(['/clientes']);*/
           }
-          Editar(){
-            var client = this.addClient.value;
-            //console.log(JSON.stringify(this.addClient.value));
-            let dp = new DatePipe(navigator.language);
-            var body =
-            "plan_srv=" + client.plan_srv +
-            "&cliente_srv=" + client.cliente_srv +
-            "&instalacion_srv=" + client.instalacion_srv +
-            //"&recibo_srv="+client.recibo_srv+
-            "&costo_instalacion_srv="+client.costo_instalacion_srv+
-            "&credito_srv="+client.credito_srv+
-            "&start_srv="+client.start_srv+
-            //"&notify_srv="+client.notify_srv+
-            "&equipo_srv="+client.equipo_srv+
-            "&ip_srv="+client.ip_srv+
-            "&mac_srv="+client.mac_srv+
-            "&serial_srv="+client.serial_srv+
-            //"&servidor_srv="+client.servidor_srv+
-            //"&celda_srv="+client.celda_srv+
-            "&ap_srv="+client.ap_srv+
-            //"&zona_srv="+client.zona_srv+
-            "&stat_srv="+client.stat_srv+
-            "&comment_srv="+client.comment_srv
-
-            var url = "http://186.167.32.27:81/maraveca/public/index.php/api/servicios/"+client.id_srv+"?"+body;
-            //console.log(body);
-
-            this.http.put(url, body).subscribe((data) => {});
-            this.dialogRef.close();
-            this.funciones.refresh();
-            this.snackBar.open("Agregando Cliente: Por favor espere", null, {
-              duration: 2000,
-            });
-            //this.router.navigate(['/clientes']);
-          }
-
 
           }
 

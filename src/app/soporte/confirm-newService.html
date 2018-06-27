@@ -12,21 +12,21 @@
   <tr>
     <td>
       <md-form-field>
-      <input mdInput placeholder="Metro Inicial De Cable" class="md2-input" [(ngModel)]="cable1" />
+      <input mdInput type="number" placeholder="Metro Inicial De Cable" class="md2-input" [(ngModel)]="cable1" />
       <span mdSuffix>Metros</span>
       </md-form-field>
 
     </td>
     <td>
       <md-form-field>
-      <input mdInput placeholder="Metro Final De Cable" class="md2-input" [(ngModel)]="cable2" />
+      <input mdInput type="number" placeholder="Metro Final De Cable" class="md2-input" [(ngModel)]="cable2" />
       <span mdSuffix>Metros</span>
       </md-form-field>
 
     </td>
     <td>
       <md-form-field>
-      <input mdInput placeholder="Conectores" class="md2-input" [(ngModel)]="conectores" />
+      <input mdInput type="number" placeholder="Conectores" class="md2-input" [(ngModel)]="conectores" />
       </md-form-field>
     </td>
   </tr>
@@ -36,18 +36,39 @@
       <input mdInput placeholder="IP" class="md2-input" [(ngModel)]="ip" />
       </md-form-field>
     </td>
+    <td>
+      <md2-select name="AP"
+                [(ngModel)]="ap"
+                placeholder="AccessPoint"
+                style="width=100%; min-width: 100%;"
+                mdInput
+                >
+      <md2-select-header>
+        <input name="a_search"
+               type="text"
+               [(ngModel)]="a_search"
+               placeholder="Buscar..."
+               style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+               />
+      </md2-select-header>
+      <md2-option *ngFor="let i of (aps | dataPipe : {nombre_ap: a_search, ip_ap: a_search})" [value]="i.id">{{i.ip_ap + " " + i.nombre_ap}}</md2-option>
+      </md2-select>
+    </td>
+    <td *ngIf="data.row.ser1al==0">
+      <md-form-field>
+      <input mdInput placeholder="Serial" class="md2-input" (input)="nosymbol()" [(ngModel)]="serial" />
+      </md-form-field>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <button md-raised-button color="primary" class="example-full-width btn btn-primary" (click)="service(data.row)" tabindex="2">Si</button>
+
+    </td>
+    <td colspan="2">
+      <button md-raised-button color="warn" class="example-full-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">No</button>
+
+    </td>
   </tr>
 </table>
-</div>
-<div md-dialog-actions>
-  <tr>
-    <td>
-      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="service(data.row)" tabindex="2">Si</button>
-
-    </td>
-    <td>
-      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">No</button>
-
-    </td>
-  </tr>
 </div>

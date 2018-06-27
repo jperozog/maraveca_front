@@ -1,4 +1,4 @@
-import {Component, Inject, Pipe, PipeTransform, Injectable} from '@angular/core';
+import {Component, Inject, Pipe, PipeTransform, Injectable, OnInit} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -16,7 +16,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './notify.component.html',
   styleUrls: ['./notify.component.css']
 })
-export class NotifyComponent {
+export class NotifyComponent implements OnInit{
   messaje: any;
   a_search: any;
   c_search: any;
@@ -79,6 +79,14 @@ export class NotifyComponent {
     });
    }
 
+   ngOnInit(){
+     this.notify.get("tipo").valueChanges.subscribe(()=>{
+       this.notify.patchValue({
+         detail:''
+       })
+     })
+   }
+
    sendSMS() {
      /*let params= {message: this.messaje,
      tipo: this.tipo,
@@ -96,7 +104,7 @@ export class NotifyComponent {
          this.snackBar.open("Mensajes Enviados", null, {
            duration: 2000,
          });
-         
+
        });
      });
    }

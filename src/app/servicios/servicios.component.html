@@ -3,8 +3,8 @@
     <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
   </md-form-field>
   <span class="example-spacer" style="text-align: center;">Servicios</span>
-  <button md-raised-button (click)="this.myService.refresh()" >
-    <md-icon>cached</md-icon> Actualizar Lista
+  <button md-raised-button (click)="refresh(true)" >
+    <md-icon [class.updateicon]="update">cached</md-icon> Actualizar Lista
   </button>
   <button md-raised-button (click)="openDialog()" >
     <md-icon>group_add</md-icon> Agregar Servicio
@@ -32,18 +32,18 @@
           </td>
         </tr>
         <tr>
-          <th style="width: 20%" md2SortBy="nombre">Cliente</th>
-          <th style="width: 20%" md2SortBy="nombre_celda">IP</th>
+          <th style="width: 40%" md2SortBy="nombre">Cliente</th>
+          <th style="width: 40%" md2SortBy="nombre_celda">IP</th>
           <th style="width: 20%">Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let i of md2.data">
-          <td *ngIf="i.kind.toUpperCase() == 'V'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-          <td *ngIf="i.kind.toUpperCase() == 'E'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-          <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.social|capitalize)}}</td>
-          <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.social|capitalize)}}</td>
-          <td style="width: 20%">{{i.ip}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'V'" style="width: 40%">{{i.kind.toUpperCase()+i.dni+" / "+(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'E'" style="width: 40%">{{i.kind.toUpperCase()+i.dni+" / "+(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 40%">{{i.kind.toUpperCase()+i.dni+" / "+(i.social|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 40%">{{i.kind.toUpperCase()+i.dni+" / "+(i.social|capitalize)}}</td>
+          <td style="width: 40%Z">{{i.ip}}</td>
           <td style="width: 20%">
             <!--botones de acciones-->
 
@@ -53,7 +53,7 @@
             <button md-icon-button color="warn"(click)="delete(i.id_srv)">
                 <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
             </button>
-            <button md-icon-button color="primary"(click)="openLINK(i.ip_srv)" >
+            <button md-icon-button color="primary"(click)="openLINK(i.ip)" >
               <md-icon class="md-24" aria-label="Ubiquiti Admin">language</md-icon>
             </button>
             <button md-icon-button color="primary">
@@ -110,7 +110,8 @@
           <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.social|capitalize)}}</td>
           <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 20%">{{i.kind.toUpperCase()+i.dni+" / "+(i.social|capitalize)}}</td>
           <td style="width: 20%">{{i.name_plan}}</td>
-          <td style="width: 20%">{{i.nombre_ap}}</td>
+          <td style="width: 20%">{{i.comment_srv}}</td>
+
           <td style="width: 20%">
             <button md-icon-button *ngIf="i.stat_srv == 1" >
               <span>Activo</span>
@@ -120,6 +121,9 @@
             </button>
             <button md-icon-button *ngIf="i.stat_srv == 3" >
               <span>Suspendido</span>
+            </button>
+            <button md-icon-button *ngIf="i.stat_srv == 4" >
+              <span>Retirado</span>
             </button>
           </td>
           <td style="width: 20%">
@@ -145,6 +149,9 @@
             </button>
             <button md-icon-button *ngIf="i.stat_srv == 3" >
               <md-icon class="md-24" style="color:red;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+            </button>
+            <button md-icon-button *ngIf="i.stat_srv == 4" >
+              <md-icon class="md-24" style="color:grey;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
             </button>
             <!--terminan los botones-->
           </td>

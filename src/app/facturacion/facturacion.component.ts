@@ -1,4 +1,4 @@
-import {Component, Inject, Pipe, PipeTransform} from '@angular/core';
+import {Component, Inject, Pipe, PipeTransform, OnInit, OnDestroy} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -9,17 +9,24 @@ import 'rxjs/add/operator/map';
 import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/material';
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import { IntervalObservable } from "rxjs/observable/IntervalObservable";
+import 'rxjs/add/operator/takeWhile';
+
+
 @Component({
   selector: 'app-facturacion',
   templateUrl: './facturacion.component.html',
   styleUrls: ['./facturacion.component.css']
 })
-export class FacturacionComponent {
+export class FacturacionComponent implements OnInit, OnDestroy {
 
 
       myService: MyService | null;
-      data: any = null;
+      facturacion= [];
+      facturacion_t = [];
       search: string = '';
+      update:boolean=true;
+      autoupdate:boolean=true;
       constructor(private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router) {
         this.snackBar.open("Cargando Facturas", null, {
           duration: 2000,
@@ -27,8 +34,10 @@ export class FacturacionComponent {
         this.myService = new MyService(http, router);
         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/facturas/')
           .subscribe((data) => {
-            this.data = data.json();
-            console.log(this.data);
+            this.facturacion = data.json();
+            this.facturacion_t = this.facturacion;
+            this.update=false;
+            //console.log(this.data);
           });
         this.snackBar.open("Facturas Cargadas", null, {
           duration: 2000,
@@ -45,12 +54,31 @@ export class FacturacionComponent {
 
         })
       }
-      refresh(){
+
+      ngOnInit(){
+        IntervalObservable.create(10000)
+        .takeWhile(() => this.autoupdate)
+        .subscribe(() => {
+          this.refresh(false);
+        });
+      }
+      ngOnDestroy(){
+        this.autoupdate=false
+      }
+
+      refresh(nf){
+        this.update=true;
         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/facturas/')
           .subscribe((data) => {
-            this.data = data.json();
-            console.log(this.data);
+            this.facturacion_t = data.json();
+            this.update=false
+            if (nf){
+              this.snackBar.open("Lista Actualizada", null, {
+                duration: 2000,
+              })
+            }
           });
+          this.facturacion=this.facturacion_t;
       }
       show(row){
         //console.log(row);
@@ -62,11 +90,7 @@ export class FacturacionComponent {
 
         dialogRef.afterClosed().subscribe(result => {
           //console.log('The dialog was closed');
-          this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/facturas/')
-            .subscribe((data) => {
-              this.data = data.json();
-              //console.log(this.data);
-            });
+          this.refresh(false);
           this.snackBar.open("Facturas Actualizadas", null, {
             duration: 2000,
           });
@@ -123,6 +147,7 @@ export class FacturacionComponent {
 })
 export class FacturacionPagos {
 
+  addPago: FormGroup;
   fac_control : string ;
   fac_products : any = null;
   fac_pagos : any = null;
@@ -132,6 +157,7 @@ export class FacturacionPagos {
   address : any;
   dni : any;
   monto: any;
+  fecha:any;
   montosi: any;
   pagado: any;
   deuda: any;
@@ -156,7 +182,15 @@ export class FacturacionPagos {
   this.phone = row.phone;
   this.address = row.address;
   this.dni = row.dni;
-  this.monto = row.monto
+  this.monto = row.monto;
+
+  this.addPago = this.fb.group({
+    fac_id: this.row.id,
+    pag_tip: ['',[Validators.required]],
+    pag_monto: ['',[Validators.required]],
+    pag_comment: ['',[Validators.required]],
+    created_at: ['', [Validators.required]]
+  })
 
   if(row.pagado == null){
     this.pagado = 0;
@@ -188,9 +222,10 @@ export class FacturacionPagos {
 }
 
 agregar(){
-  let body = "fac_id="+this.row.id+"&pag_tip="+this.tipo+"&pag_monto="+this.nada+"&pag_comment="+this.opcion;
+  //let body = "fac_id="+this.row.id+"&pag_tip="+this.tipo+"&pag_monto="+this.nada+"&pag_comment="+this.opcion;
   //console.log(body);
-  this.http.post('http://186.167.32.27:81/maraveca/public/index.php/api/facpag?'+body, body)
+  var url = "http://186.167.32.27:81/maraveca/public/index.php/api/facpag";
+  this.http.post(url, this.addPago.value)
   .subscribe((data)=>{
     this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/facpag/'+this.row.id)
     .subscribe((data) => {

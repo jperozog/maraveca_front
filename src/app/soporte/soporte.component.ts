@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, OnDestroy} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -9,6 +9,8 @@ import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/materi
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import 'rxjs/add/operator/startWith';
 import {Router, ActivatedRoute} from '@angular/router';
+import { IntervalObservable } from "rxjs/observable/IntervalObservable";
+import 'rxjs/add/operator/takeWhile';
 import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
 
@@ -17,10 +19,18 @@ import { AuthenticationService } from '../_services/index';
   templateUrl: './soporte.component.html',
   styleUrls: ['./soporte.component.css']
 })
-export class SoporteComponent {
-  myService: MyService | null;
-  datat: any = null;
-  datai: any = null;
+export class SoporteComponent implements OnInit, OnDestroy{
+  myService: MyService;
+  datat: any = [];
+  datai: any = [];
+  pi:any;
+  pt:any;
+  datat_t: any = [];
+  datai_t: any = [];
+  pi_t:any;
+  pt_t:any;
+  update:boolean=true
+  autoupdate:boolean
   //datai= [];
   search: string;
   modo: any = 2;
@@ -29,33 +39,72 @@ export class SoporteComponent {
     this.snackBar.open("Cargando Tickets", null, {
       duration: 2000,
     });
+    this.autoupdate=true;
     this.myService = new MyService(http, router);
     console.log(usuario.currentUser)
     this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/soportesm/?user=' + usuario.currentUser.id_user)
     .subscribe((data) => {
-      this.datat = data.json()[1].soporte;
-      this.datai = data.json()[0].instalaciones;
-      console.log(this.datat);
+      this.datat_t = data.json().soporte;
+      this.datai_t = data.json().instalaciones;
+      this.pi_t = data.json().pendingi;
+      this.pt_t = data.json().pendingt;
+      this.datat = this.datat_t
+      this.datai = this.datai_t
+      this.pi = this.pi_t
+      this.pt = this.pt_t
+      this.update=false
     });
 
     this.snackBar.open("Tickets Cargados", null, {
       duration: 2000,
     });
+
+
+
   }
-
-
+  ngOnInit(){
+    IntervalObservable.create(10000)
+    .takeWhile(() => this.autoupdate)
+    .subscribe(() => {
+      this.refresh(false);
+    });
+  }
+  ngOnDestroy(){
+    this.autoupdate=false
+  }
   private openLINK(id){
     //console.log(url)
     window.open("../#/editticket/"+id, '_blank');
   }
 
-  refresh(){
+  refresh(nf){
+    this.update=true
     this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/soportesm/?user=' + this.usuario.currentUser.id_user)
     .subscribe((data) => {
-      this.datat = data.json()[1].soporte;
-      this.datai = data.json()[0].instalaciones;
-      console.log(this.datat);
-    });
+      this.datat_t = data.json().soporte;
+      this.datai_t = data.json().instalaciones;
+      this.pi_t = data.json().pendingi;
+      this.pt_t = data.json().pendingt;
+        this.update=false
+        if (nf){
+          this.snackBar.open("Lista Actualizada", null, {
+          duration: 2000,
+        });
+      }
+      });
+      this.datat = this.datat_t
+      this.datai = this.datai_t
+      this.pi = this.pi_t
+      this.pt = this.pt_t
+
+  }
+
+  toggle(){
+    if(this.modo==2){
+      this.modo=1
+    }else if(this.modo==1){
+      this.modo=2
+    }
   }
 
   openDialog(): void {
@@ -159,7 +208,6 @@ export class AddticketComponent implements OnInit{
   S_celda:any;
   S_equipos:any;
   addplan: FormGroup;
-  CC:MyService | null;
   //row: any;
   currentUser: any;
   problemas: any;
@@ -172,7 +220,7 @@ export class AddticketComponent implements OnInit{
     private fb: FormBuilder,
     public dialogRef: MdDialogRef<AddticketComponent>,
     @Inject(MD_DIALOG_DATA) public row: any,
-    private route: ActivatedRoute,
+    //private route: ActivatedRoute,
     public snackBar: MdSnackBar,
     private router: Router){
       this.edit = false;
@@ -204,7 +252,6 @@ export class AddticketComponent implements OnInit{
         this.equipos = data.json();
         this.equipo = this.addplan.value.equipo_soporte
       });
-      this.CC = new MyService(http, router);
       this.addplan = this.fb.group({
         tipo_soporte: '1',
         problema_soporte: '',
@@ -388,7 +435,7 @@ export class AddticketComponent implements OnInit{
       duration: 2000,
     });
 
-    this.CC.refresh();
+
   }
 
 }
@@ -397,12 +444,11 @@ export class AddticketComponent implements OnInit{
   templateUrl: './edit-ticket.component.html',
   styleUrls: ['./soporte.component.css']
 })
-export class EditticketComponent{
+export class EditticketComponent implements OnInit, OnDestroy{
   edit : any;
   id : any;
   prueba;
   addplan: FormGroup;
-  CC:MyService | null;
   row: any;
   currentUser:any;
   problems= [];
@@ -410,6 +456,8 @@ export class EditticketComponent{
   history: any;
   status= [];
   stat= [];
+  autoupdate:boolean=true;
+  update:boolean=true;
   constructor(private http:Http,
     private fb: FormBuilder,
     //public dialogRef: MdDialogRef<AddticketComponent>,
@@ -441,7 +489,6 @@ export class EditticketComponent{
 
         });
       });
-      this.CC = new MyService(http, router);
       this.addplan = this.fb.group({
         servicio: '',
         problema_soporte: '',
@@ -459,6 +506,41 @@ export class EditticketComponent{
       }
 
     }
+
+    ngOnDestroy(){
+      this.autoupdate=false;
+    }
+
+    ngOnInit(){
+      IntervalObservable.create(10000)
+      .takeWhile(() => this.autoupdate)
+      .subscribe(() => {
+        this.refresh(false);
+      });
+
+    }
+
+    refresh(nf){
+      this.update=true
+      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/soporte/'+this.id)
+      .subscribe((data) => {
+        this.row = data.json()[0];
+        this.addplan.value.status_soporte=this.row.status_soporte;
+        this.addplan.value.tipo=this.row.tipo_soporte;
+        console.log(this.addplan.value)
+        this.history = this.row.history;
+        this.row.problems.forEach(perm => {
+          this.problems.push(perm.problem_pb);
+          this.problemas = this.problems;
+        });
+        if (nf){
+          this.snackBar.open("Lista Actualizada", null, {
+          duration: 2000,
+        });
+        }
+      });
+    }
+
     onNoClick(): void {
       //this.dialogRef.close();
     }
@@ -477,7 +559,7 @@ export class EditticketComponent{
       "&comment="+this.addplan.value.historia
       var url = "http://186.167.32.27:81/maraveca/public/index.php/api/ticketh?"+body;
       this.http.post(url, body).subscribe((data) => {
-        this.CC.refresh()
+        this.refresh(false)
       });
     }
     closeticket(): void {
@@ -527,7 +609,7 @@ export class EditticketComponent{
   duration: 2000,
 });
 //}
-this.CC.refresh();
+this.refresh(false);
 }
 Editar(){
   var plan = this.addplan.value;
@@ -553,7 +635,7 @@ this.snackBar.open("Editando Usuario: Por favor espere", null, {
 duration: 2000,
 });
 //}
-this.CC.refresh();
+this.refresh(false);
 }
 
 }
@@ -611,14 +693,19 @@ export class DeleteticketDialog {
     templateUrl: 'confirm-newService.html',
     styleUrls: ['./soporte.component.css']
   })
-  export class DeleteInstallDialog {
+  export class DeleteInstallDialog implements OnInit{
     myService: MyService | null;
+    addDetails: FormGroup;
     currentUser: any;
     consumibles: any;
     cable1:any = 0;
     cable2:any = 0;
-    conectores:any = 0
-    ip:any = "0.0.0.0"
+    conectores:any = 0;
+    ip:any = "";
+    ap:any="";
+    serial:any;
+    aps:any;
+    a_search:any="";
     constructor(
       private fb: FormBuilder,
       private route: ActivatedRoute,
@@ -628,9 +715,29 @@ export class DeleteticketDialog {
       public dialog: MdDialog,
       public snackBar:MdSnackBar,
       private router: Router) {
+        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/aps/')
+        .subscribe((data) => {
+          this.aps = data.json();
+          console.log(this.aps);
+        });
+        console.log(this.cable1);
+        console.log(this.cable2);
+        console.log(this.conectores);
+        console.log(this.ip);
+        console.log(this.ap);
         this.myService = new MyService(http, router);
-
+        console.log(data.row)
         this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+      }
+
+      ngOnInit(){
+
+      }
+
+      nosymbol(){
+        setTimeout(()=>{
+        this.serial=this.serial.replace(/[^a-zA-Z0-9 ]/g, "");
+      }, 200);
       }
 
       service(row): void {
@@ -658,6 +765,15 @@ export class DeleteticketDialog {
         var url1 = "http://186.167.32.27:81/maraveca/public/index.php/api/ticketh?"+body1;
         this.http.post(url1,body1).subscribe((data) => {});
 
+        this.addDetails=this.fb.group({
+          ap: this.ap,
+          ip: this.ip,
+          serial: this.serial,
+          ser1al: this.data.row.ser1al,
+          id: this.data.row.id_soporte
+        })
+        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/ticketa";
+        this.http.post(url, this.addDetails.value).subscribe((data) =>{});
 
       }
 

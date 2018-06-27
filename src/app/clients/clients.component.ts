@@ -1,4 +1,4 @@
-import {Component, Inject, Pipe, PipeTransform} from '@angular/core';
+import {Component, Inject, Pipe, PipeTransform, OnInit, OnDestroy} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -11,6 +11,8 @@ import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} fr
 import { FacturacionPagos } from '../facturacion/facturacion.component'
 import {Router} from '@angular/router';
 import { User } from '../_models/index';
+import { IntervalObservable } from "rxjs/observable/IntervalObservable";
+import 'rxjs/add/operator/takeWhile';
 import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
 import { APP_CONFIG } from '../app.config';
@@ -64,27 +66,48 @@ export class DataTablePipe implements PipeTransform {
   styleUrls: ['./clients.component.css']
 })
 
-export class ClientsComponent {
+export class ClientsComponent implements OnInit, OnDestroy {
 
 
   myService: MyService | null;
-  data: any = null;
+  clientes= [];
+  pendientes= [];
+  clientes_t= [];
+  pendientes_t= [];
   search: string = '';
+  modo: any = 1;
+  update:boolean=true
+  autoupdate:boolean=true
   constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router, public usuario: AuthGuard, public test: AuthenticationService) {
     this.snackBar.open("Cargando Clientes", null, {
       duration: 2000,
     });
     this.myService = new MyService(http, router, config);
-    this.http.get(config.apiEndpoint+'clientes/')
+    this.http.get(config.apiEndpoint+'clientes1/')
       .subscribe((data) => {
-        this.data = data.json();
-        console.log(this.data);
+        this.clientes = data.json().clientes;
+        this.pendientes = data.json().pendientes;
+        this.clientes_t = this.clientes
+        this.pendientes_t = this.pendientes
+        this.update=false
+        //console.log(this.data);
       });
     this.snackBar.open("Clientes Cargados", null, {
       duration: 2000,
     });
   }
 
+  ngOnInit(){
+    IntervalObservable.create(10000)
+    .takeWhile(() => this.autoupdate)
+    .subscribe(() => {
+      this.refresh(false);
+    });
+  }
+
+  ngOnDestroy(){
+    this.autoupdate=false
+  }
   openDialog(): void {
     /*let dialogRef = this.dialog.open(AddclientsComponent, {
       width: '25%'
@@ -99,6 +122,21 @@ export class ClientsComponent {
 
     })
   }
+  refresh(nf){
+    this.update=true
+    this.http.get(this.config.apiEndpoint+'clientes1/')
+      .subscribe((data) => {
+        this.clientes_t = data.json().clientes;
+        this.pendientes_t = data.json().pendientes;
+        this.update=false
+        if (nf){
+          this.snackBar.open("Lista Actualizada", null, {
+          duration: 2000,
+        });}
+      });
+      this.clientes=this.clientes_t
+      this.pendientes=this.pendientes_t
+  }
   show(row){
     console.log(row);
     //this.selectedRowIndex = row.id;
@@ -108,7 +146,7 @@ export class ClientsComponent {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was AddClient closed');
-
+      this.refresh(false);
     });
     //this.myService.refresh();
   }
@@ -123,6 +161,7 @@ export class ClientsComponent {
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was AddClient closed');
+      this.refresh(false);
     });
     //this.myService.refresh();
 
@@ -146,7 +185,7 @@ export class ClientsComponent {
     this.snackBar.open("Borrando Cliente: Por favor espere", null, {
       duration: 2000,
     });
-    this.myService.refresh();
+    //this.myService.refresh();
 
   }
 
@@ -186,7 +225,7 @@ export class MyService {
 })
 export class AddclientsComponent{
 
-
+  error : boolean = false;
   tipo : string;
   dni :string;
   email :string;
@@ -282,12 +321,15 @@ export class AddclientsComponent{
       "&social="+client.social
       var url = this.config.apiEndpoint+"clientes?"+body;
 
-      this.http.post(url, body).subscribe((data) => {});
-      this.dialogRef.close();
-      this.myService.refresh();
-      this.snackBar.open("Agregando Cliente: Por favor espere", null, {
-        duration: 2000,
+      this.http.post(url, body).subscribe(data => {
+        this.dialogRef.close();
+        this.snackBar.open("Agregando Cliente: Por favor espere", null, {
+          duration: 2000,
+        });
+      }, error => {
+        this.error=true
       });
+      //this.myService.refresh();
       //this.router.navigate(['/clientes']);
     }
     Editar(){
@@ -309,9 +351,10 @@ export class AddclientsComponent{
       "&social="+client.social
 
       var url = this.config.apiEndpoint+"clientes/"+client.id+"?"+body;
-      this.http.put(url, body).subscribe((data) => {});
-      this.dialogRef.close();
-      this.myService.refresh();
+      this.http.put(url, body).subscribe((data) => {
+        this.dialogRef.close();
+      });
+      //this.myService.refresh();
       this.snackBar.open("Agregando Cliente: Por favor espere", null, {
         duration: 2000,
       });
@@ -481,7 +524,7 @@ export class DeleteCliente {
       this.snackBar.open("Borrando cliente: Por favor espere", null, {
         duration: 1000,
       });
-      this.myService.refresh();
+      //this.myService.refresh();
     }
 
   onNoClick(): void {

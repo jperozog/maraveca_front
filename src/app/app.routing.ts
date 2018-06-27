@@ -19,6 +19,7 @@ import { NotifyComponent } from './notify/notify.component'
 import { AuthGuard } from './_guards/index';
 import { FacturacionComponent, FacturacionPagos } from './facturacion/facturacion.component';
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
+import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component'
 
 
 const appRoutes: Routes = [
@@ -39,8 +40,11 @@ const appRoutes: Routes = [
   {path: 'planes', component: PlanesComponent, canActivate: [AuthGuard]},
   {path: 'facturacion', component: FacturacionComponent, canActivate: [AuthGuard]},
   {path: 'factibilidades', component: FactibilidadesComponent, canActivate: [AuthGuard]},
+  {path: 'instalaciones', component: InstalacionesComponent, canActivate: [AuthGuard]},
   {path: 'fac_det', component: FacturacionPagos},
   {path: 'fact_det', component: FactibilidadesDetComponent},
+  {path: 'addinst', component: AddInstallComponent},
+  {path: 'editinst', component: EditInstallComponent},
   {path: 'addusers', component: AdduserComponent},
   {path: 'delusers', component: DeleteuserDialog},
   {path: 'delticket', component: DeleteticketDialog},

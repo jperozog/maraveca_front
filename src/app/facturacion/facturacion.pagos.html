@@ -3,7 +3,6 @@ Cliente: {{cliente | capitalize2:true }}
 <div style="text-align: right">Factura: {{row.id}}</div>
 
 
-
 <table>
   <thead>
     <tr>
@@ -66,6 +65,7 @@ Cliente: {{cliente | capitalize2:true }}
     <td class="fac" *ngIf="p.pag_tip==3">Transferencia Venezuela</td>
     <td class="fac" *ngIf="p.pag_tip==4">Retencion ISLR</td>
     <td class="fac" *ngIf="p.pag_tip==5">Retencion IVA</td>
+    <td class="fac" *ngIf="p.pag_tip==7">Exonerado</td>
     <td class="fac">{{p.pag_comment | capitalize2:true}}</td>
     <td class="fac">{{p.pag_monto | currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</td>
     <td class="fac">{{p.created_at | stringToDate | date: 'd/M/yy'}}</td>
@@ -88,17 +88,21 @@ Cliente: {{cliente | capitalize2:true }}
 </tbody>
 
 </table>
-<md2-select [(ngModel)]="tipo" style="width=40%; min-width: 40%;">
+<form id="pago" name="PagoForm" [formGroup]="addPago" ng-submit="ok(clientForm)" novalidate>
+<md2-select formControlName='pag_tip' style="width=35%; min-width: 35%;">
   <md2-option value="2" >Transferencia Banesco</md2-option>
   <md2-option value="6" >Transferencia Bicentenario</md2-option>
   <md2-option value="1" >Transferencia BOD</md2-option>
   <md2-option value="3" >Transferencia Venezuela</md2-option>
   <md2-option value="4" >Retencion ISLR</md2-option>
   <md2-option value="5" >Retencion IVA</md2-option>
+  <md2-option value="7" >Exonerado</md2-option>
 </md2-select>
-<input placeholder="Referencia" class="md2-input" [(ngModel)]="opcion">
-<input placeholder="Monto" class="md2-input" [(ngModel)]="nada">
-<button md-raised-button (click)="agregar()">Agregar Pago</button>
+<input formControlName='pag_comment' placeholder="Referencia" class="md2-input" [(ngModel)]="opcion">
+<input formControlName='created_at' type="date" placeholder="Fecha de Realizacion" class="md2-input" [(ngModel)]="fecha">
+<input formControlName='pag_monto' type="number" placeholder="Monto" class="md2-input" [(ngModel)]="nada">
+<button md-raised-button (click)="agregar()" [disabled]="!addPago.valid">Agregar Pago</button>
+</form>
 <ng-template #elseblock>
   <td>
     &nbsp;

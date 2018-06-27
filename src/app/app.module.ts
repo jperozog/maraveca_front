@@ -65,7 +65,7 @@ import { FacturacionComponent, FacturacionPagos } from './facturacion/facturacio
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
 import { APP_CONFIG } from './app.config';
 import { AppConfig } from './app.interface';
-import { InstalacionesComponent } from './instalaciones/instalaciones.component';
+import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component';
 
 
 
@@ -122,7 +122,9 @@ import { InstalacionesComponent } from './instalaciones/instalaciones.component'
     FacturacionPagos,
     FactibilidadesComponent,
     FactibilidadesDetComponent,
-    InstalacionesComponent
+    InstalacionesComponent,
+    AddInstallComponent,
+    EditInstallComponent
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,

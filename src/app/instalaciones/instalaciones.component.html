@@ -1,3 +1,91 @@
-<p>
-  instalaciones works!
-</p>
+<md-toolbar class="submenu">
+  <md-form-field  floatPlaceholder="never">
+    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer" style="text-align: center;">Instalaciones</span>
+  <button class="x290" md-icon-button (click)="refresh(true)" >
+    <md-icon [class.updateicon]="update" >cached</md-icon>
+  </button>
+  <button class="x490 x700" md-raised-button (click)="openDialog()" >
+    <md-icon>add_circle_outline</md-icon>
+    <span>Agendar Instalacion</span>
+  </button>
+  <button class="x490 x700" md-raised-button (click)="refresh(true)" >
+    <md-icon [class.updateicon]="update" >cached</md-icon>
+    Actualizar
+  </button>
+  <!--button class="x490 x700" md-raised-button (click)="openDialog()" >
+    <md-icon>add_circle_outline</md-icon>
+    Agregar
+  </button>
+  <button md-raised-button (click)="sidenav.toggle()">
+      boton
+    </button-->
+</md-toolbar>
+<div class="x700">
+
+  <table class="addClient x700" [md2Data]="datai | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="10">
+    <thead>
+      <tr>
+        <td colspan="7">
+          <md2-pagination [rowsPerPageSet]="[10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+        </td>
+      </tr>
+      <tr>
+        <th md2SortBy="id_soporte" style="width: 15%; margin: 0 1em;">Ticket</th>
+        <th md2SortBy="nombre" style="width: 15%">Cliente</th>
+        <th style="width: 15%">Zona</th>
+        <th style="width: 15%">Router</th>
+        <th md2SortBy="status_soporte" style="width: 15%">Estado</th>
+        <th style="width: 15%">Serial</th>
+        <th style="width: 15%">Usuario</th>
+        <th style="width: 10%">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of md2.data">
+        <td style="width: 15%; margin: 0 1em;">{{t.id_soporte}}</td>
+
+        <td *ngIf="(t.nombre != null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre|capitalize2: true)+" "+(t.apellido|capitalize2: true)}}</td>
+        <td *ngIf="(t.nombre != null) && (t.apellido == null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre|capitalize2: true)}}</td>
+        <td *ngIf="(t.nombre == null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.apellido|capitalize2: true)}}</td>
+        <td *ngIf="(t.social != '' && t.social != null && t.social != 'null')" style="width: 15%">{{(t.social|capitalize2: true)}}</td>
+
+
+        <td style="width: 15%">{{t.celdas.value}}</td>
+
+
+        <td style="width: 15%">{{t.nombre_srvidor}}</td>
+
+        <td *ngIf="t.status_soporte == 1" style="width: 15%">Abierto</td>
+        <td *ngIf="t.status_soporte == 2 || t.status_soporte == 4" style="width: 15%">Cerrado</td>
+        <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
+        <td *ngIf="t.status_soporte == -1" style="width: 15%">Incompleta</td>
+
+        <td style="width: 15%">{{t.serial}}</td>
+
+        <td *ngIf="(t.nombre_user == null) && (t.apellido_user != null)" style="width: 15%">{{t.apellido_user}}</td>
+        <td *ngIf="(t.nombre_user != null) && (t.apellido_user == null)" style="width: 15%">{{t.nombre_user}}</td>
+        <td *ngIf="(t.nombre_user != null) && (t.apellido_user != null)" style="width: 15%">{{t.nombre_user+ " " +t.apellido_user}}</td>
+
+        <td style="width: 15%">
+          <button *ngIf="t.status_soporte != -1" md-icon-button color="primary" (click)="openLINK(t.id_soporte)">
+            <md-icon class="md-24" aria-label="Editar AP" >rate_review</md-icon>
+          </button>
+          <button *ngIf="t.status_soporte == -1" md-icon-button color="primary" (click)="openEdit(t)">
+            <md-icon class="md-24" aria-label="Editar AP" >rate_review</md-icon>
+          </button>
+          <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
+          <button md-icon-button color="warn"(click)="deleteDialog(i)">
+          <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
+        </button-->
+
+
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+
+  </tfoot>
+</table>
+</div>

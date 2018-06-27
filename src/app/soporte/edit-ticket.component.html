@@ -9,11 +9,12 @@
             <md-chip-list>
               <md-chip *ngIf="!row.social || row.social == null">Nombre: {{(row.nombre | capitalize)+" "+(row.apellido | capitalize)}}</md-chip>
               <md-chip *ngIf="row.social && row.social != null">Persona de Contacto: {{(row.nombre | capitalize)+" "+(row.apellido | capitalize)}}</md-chip>
-              <md-chip *ngIf="row.social && row.social != null">Razon Social: {{row.social | capitalize}}</md-chip>
-              <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Equipo: {{row.adicionales[0].value}}</md-chip>
-              <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Celda: {{row.adicionales[1].value}}</md-chip>
-              <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Celda: {{row.adicionales[1].value}}</md-chip>
+              <md-chip *ngIf="(row.social != '' && row.social != null && row.social != 'null') && (row.kind.toUpperCase() == 'J' || row.kind.toUpperCase() == 'G')">Razon Social: {{row.social | capitalize}}</md-chip>
+              <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Equipo: {{row.equipos.value}}</md-chip>
+              <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Serial: {{row.serial}}</md-chip>
+              <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1 && row.router" >Router: {{row.router}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 2" (click)="openLINK(row.ip_srv)">IP: {{row.ip_srv}}</md-chip>
+              <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Celda: {{row.celdas.value}}</md-chip>
               <md-chip>Direccion: {{row.direccion | capitalize}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 2" >Plan: {{row.name_plan | capitalize}}</md-chip>
               <md-chip>Telefono: {{row.phone1}}</md-chip>
