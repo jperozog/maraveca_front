@@ -31,11 +31,18 @@ export class PClientsComponent {
   myService: MyService | null;
   data: any = null;
   search: string = '';
-  constructor(private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router, public usuario: AuthGuard, public test: AuthenticationService) {
+  constructor(
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    public usuario: AuthGuard,
+    public test: AuthenticationService
+  ) {
     this.snackBar.open("Cargando Clientes", null, {
       duration: 2000,
     });
-    this.myService = new MyService(http, router);
+    this.myService = new MyService(http, router, usuario);
     this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/pclientes/')
       .subscribe((data) => {
         this.data = data.json();
@@ -134,10 +141,10 @@ function capitalizeName(name) {
 
 export class MyService {
 
-  constructor(private http: Http, private router: Router) {}
+  constructor(private http: Http, private router: Router, private usuario:AuthGuard) {}
 
   deleteData(id){
-    return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/pclientes/'+id, {})
+    return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/pclientes/'+id+"?responsable="+this.usuario.currentUser.id_user, {})
     .map((resp:Response)=>resp.json());
     //return null;
 
@@ -186,10 +193,11 @@ export class AddPclientsComponent{
     public dialogRef: MdDialogRef<AddPclientsComponent>,
     @Inject(MD_DIALOG_DATA) public row: any,
     public snackBar: MdSnackBar,
+    public usuario: AuthGuard,
     private router: Router,
   private _fb: FormBuilder){
 
-      this.myService = new MyService(http, router);
+      this.myService = new MyService(http, router, usuario);
 
       if(row != null){
         this.addClient = this.fb.group({
@@ -206,7 +214,8 @@ export class AddPclientsComponent{
           phone2: [row.phone2, [Validators.required]],
           comment: row.comment,
           id: [row.id, [Validators.required]],
-          social: [row.social]
+          social: [row.social],
+          responsable: this.usuario.currentUser.id_user
 
         });
         //console.log(row)
@@ -226,6 +235,8 @@ export class AddPclientsComponent{
           phone2: ['', [Validators.required]],
           comment: '',
           social: [''],
+          responsable: this.usuario.currentUser.id_user
+
 
         });
         //console.log("llego vacio"+ row)
@@ -241,55 +252,31 @@ export class AddPclientsComponent{
     Enviar(){
       var client = this.addClient.value;
       console.log(JSON.stringify(this.addClient.value));
-      if(!client.email)(client.email = "")
-      var body =
-      "kind=" + client.kind +
-      "&dni="+client.dni+
-      "&email="+client.email+
-      "&nombre="+client.nombre+
-      "&apellido="+client.apellido+
-      "&direccion="+client.direccion+
-      "&day_of_birth="+client.day_of_birth+
-      "&serie="+client.serie+
-      "&phone1="+client.phone1+
-      "&phone2="+client.phone2+
-      "&comment="+client.comment+
-      "&social="+client.social
-      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/pclientes?"+body;
+      if(!client.email && client.email == ""){
 
-      this.http.post(url, body).subscribe((data) => {});
+      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/pclientes";
+
+      this.http.post(url, this.addClient.value).subscribe((data) => {});
       this.dialogRef.close();
       this.myService.refresh();
       this.snackBar.open("Agregando Cliente: Por favor espere", null, {
         duration: 2000,
       });
+    }
       //this.router.navigate(['/clientes']);
     }
     Editar(){
       var client = this.addClient.value;
       console.log(JSON.stringify(this.addClient.value));
-      if(!client.email)(client.email = "")
-      var body =
-      "kind=" + client.kind +
-      "&dni="+client.dni+
-      "&email="+client.email+
-      "&nombre="+client.nombre+
-      "&apellido="+client.apellido+
-      "&direccion="+client.direccion+
-      "&day_of_birth="+client.day_of_birth+
-      "&serie="+client.serie+
-      "&phone1="+client.phone1+
-      "&phone2="+client.phone2+
-      "&comment="+client.comment+
-      "&social="+client.social
-
-      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/pclientes/"+client.id+"?"+body;
-      this.http.put(url, body).subscribe((data) => {});
+      if(!client.email&&client.email == ""){
+      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/pclientes/"+client.id;
+      this.http.put(url, this.addClient.value).subscribe((data) => {});
       this.dialogRef.close();
       this.myService.refresh();
       this.snackBar.open("Agregando Cliente: Por favor espere", null, {
         duration: 2000,
       });
+    }
       //this.router.navigate(['/clientes']);
     }
 
@@ -360,7 +347,8 @@ export class PClientesStatus {
     @Inject(MD_DIALOG_DATA) public row: any,
     public snackBar: MdSnackBar,
     private router: Router,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private usuario: AuthGuard,
 ){
   //console.log(row);
   this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/factibi/'+row.id)
@@ -390,6 +378,7 @@ status(row){
     });
     row = this.NewService.value;
   }else{
+    row.responsable = this.usuario.currentUser.id_user
     var url = "http://186.167.32.27:81/maraveca/public/index.php/api/pclienttc/";
     this.http.post(url, row).subscribe((data) => {
       row.id_cli= data.json().id
@@ -432,8 +421,8 @@ export class DeletePCliente {
 
   constructor(
     public dialogRef: MdDialogRef<DeletePCliente>,
-    @Inject(MD_DIALOG_DATA) public data: any, private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router) {
-      this.myService = new MyService(http, router);
+    @Inject(MD_DIALOG_DATA) public data: any, private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router, private usuario: AuthGuard) {
+      this.myService = new MyService(http, router, usuario);
       console.log(this.data);
      }
 
@@ -478,7 +467,8 @@ export class AddFactComponent{
     public dialogRef: MdDialogRef<AddFactComponent>,
     @Inject(MD_DIALOG_DATA) public row: any,
     public snackBar: MdSnackBar,
-    private router: Router){
+    private router: Router,
+  private usuario: AuthGuard){
 
       this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/pclientes/')
       .subscribe((data) => {
@@ -486,7 +476,7 @@ export class AddFactComponent{
         //console.log(this.celdas);
       });
 
-      this.myService = new MyService(http, router);
+      this.myService = new MyService(http, router, usuario);
       console.log(row)
       if(row != null){
         this.addFact = this.fb.group({
@@ -496,7 +486,7 @@ export class AddFactComponent{
           comentario: ['', [Validators.required]],
           status: '1',
           c_search: '',
-
+          responsable: this.usuario.currentUser.id_user,
         });
         //console.log(row)
       }else{
@@ -508,6 +498,7 @@ export class AddFactComponent{
           comentario: ['', [Validators.required]],
           status: '1',
           c_search: '',
+          responsable: this.usuario.currentUser.id_user,
 
         });
         //console.log("llego vacio"+ row)
