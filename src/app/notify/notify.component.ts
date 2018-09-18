@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/material';
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import { AuthGuard } from '../_guards/index';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -34,6 +35,7 @@ export class NotifyComponent implements OnInit{
 
 
   constructor(private http: Http,
+    public usuario: AuthGuard,
     private fb: FormBuilder,
     public snackBar: MdSnackBar,
     private router: Router,
@@ -96,6 +98,7 @@ export class NotifyComponent implements OnInit{
          tipo: [this.notify.value.tipo],
          detail: [n],
          message: [this.notify.value.message],
+         responsable: this.usuario.currentUser.id_user,
        });
        const url = 'http://186.167.32.27:81/maraveca/public/index.php/api/tnotify';
        const req = this.http.post(url, this.notify1.value).subscribe((data) => {

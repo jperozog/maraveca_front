@@ -37,27 +37,30 @@ import {
 
 } from '@angular/material';
 
+import { StatsComponent, PagarComponent, DetallesInstallerComponent, cargarPagocomponent } from './stats/stats.component';
+
+import { ChartsModule } from 'ng2-charts'
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
-import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente } from './clients/clients.component';
+import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview } from './clients/clients.component';
 import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente } from './pclients/clients.component';
 import { CapitalizePipe2, StringToDatePipe } from './capitalize.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiciosComponent, AddservicesComponent, AddPendingComponent} from './servicios/servicios.component';
 import { ServidoresComponent, AddServidoresComponent, DeleteRouterDialog } from './servidores/servidores.component';
 import { CeldasComponent, AddceldasComponent } from './celdas/celdas.component';
-import { PlanesComponent, AddplanesComponent, DeletePlanDialog } from './planes/planes.component';
+import { PlanesComponent, AddplanesComponent, DeletePlanDialog, UpdatePlanPricesDialog } from './planes/planes.component';
 import { EquiposComponent, AddequipoComponent } from './equipos/equipos.component';
 import { LoginComponent } from './login/login.component';
 import { ApsComponent, AddapsComponent, DeleteApsDialog } from './aps/aps.component';
 import { Md2Module} from 'md2';
-import { DatePipe, CurrencyPipe } from '@angular/common';
+import { DatePipe, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { SoporteComponent, DeleteticketDialog, DeleteInstallDialog, AddticketComponent, EditticketComponent } from './soporte/soporte.component';
 import { AuthGuard } from './_guards/index';
-import { AlertService, AuthenticationService, UserService } from './_services/index';
+import { AlertService, AuthenticationService, UserService, PingService, VersionCheckService } from './_services/index';
 import { User } from './_models/index';
-import { UsuariosComponent, AdduserComponent, DeleteuserDialog, PrivuserDialog, ZoneuserDialog } from './usuarios/usuarios.component';
+import { UsuariosComponent, DetallesUsuarios, AdduserComponent, DeleteuserDialog, ResetCounter } from './usuarios/usuarios.component';
 import { PotencialesComponent } from './potenciales/potenciales.component';
 //import { MyDatePickerModule } from 'mydatepicker';
 import { NotifyComponent } from './notify/notify.component';
@@ -78,6 +81,7 @@ import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } fro
     HeaderComponent,
     AddclientsComponent,
     ClientsComponent,
+    ClientOverview,
     ClientesStatus,
     DeleteCliente,
     AddPclientsComponent,
@@ -110,8 +114,6 @@ import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } fro
     AdduserComponent,
     UsuariosComponent,
     DeleteuserDialog,
-    PrivuserDialog,
-    ZoneuserDialog,
     AddticketComponent,
     DeleteticketDialog,
     DeleteInstallDialog,
@@ -124,7 +126,14 @@ import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } fro
     FactibilidadesDetComponent,
     InstalacionesComponent,
     AddInstallComponent,
-    EditInstallComponent
+    EditInstallComponent,
+    UpdatePlanPricesDialog,
+    DetallesUsuarios,
+    StatsComponent,
+    PagarComponent,
+    ResetCounter,
+    DetallesInstallerComponent,
+    cargarPagocomponent
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,
@@ -135,7 +144,9 @@ import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } fro
     BrowserModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     routing,
+    ChartsModule,
     BrowserAnimationsModule,
     MdButtonModule,
     MdCardModule,
@@ -165,11 +176,14 @@ import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } fro
   providers: [
     DatePipe,
     CurrencyPipe,
+    DecimalPipe,
     AuthGuard,
     AlertService,
     AuthenticationService,
     UserService,
     User,
+    PingService,
+    VersionCheckService,
     { provide: APP_CONFIG, useValue: AppConfig }
   ],
   bootstrap: [AppComponent]

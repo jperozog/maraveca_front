@@ -104,7 +104,7 @@ table.addClient {
 
   tr {
     position: relative;
-    height: 36px;
+    max-height: 36px;
     vertical-align: middle;
 
     &:hover {
@@ -138,4 +138,11 @@ table{
   text-align: left;
   border-collapse: collapse;
 
+}
+.container {
+    overflow:auto;
+}
+.card {
+    float:left;
+    margin:5px;
 }

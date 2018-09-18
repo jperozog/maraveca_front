@@ -1,0 +1,27 @@
+<h1 md-dialog-title>Pagar Instalaciones a {{data.nombre}}</h1>
+<div md-dialog-content>
+  <p>Comprobante de Pago</p>
+</div>
+<div md-dialog-actions>
+  <tr>
+    <td>
+      referencia
+    </td>
+    <td>
+      monto
+    </td>
+    <td>
+      fecha
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="delete()" tabindex="2">Ok</button>
+
+    </td>
+    <td>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">NO</button>
+
+    </td>
+  </tr>
+</div>

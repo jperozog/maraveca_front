@@ -9,7 +9,7 @@ import 'rxjs/add/operator/map';
 import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/material';
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import { FacturacionPagos } from '../facturacion/facturacion.component'
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import { User } from '../_models/index';
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 import 'rxjs/add/operator/takeWhile';
@@ -17,6 +17,10 @@ import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
 import { APP_CONFIG } from '../app.config';
 import { IAppConfig } from '../app.interface';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/takeWhile';
+import { Location } from '@angular/common';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const PHONE_REGEX = /^(0414\d|0412\d|0416\d|0426\d|0424\d|0415\d)+\d{6}/;
@@ -78,11 +82,18 @@ export class ClientsComponent implements OnInit, OnDestroy {
   modo: any = 1;
   update:boolean=true
   autoupdate:boolean=true
-  constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router, public usuario: AuthGuard, public test: AuthenticationService) {
+  constructor(
+    @Inject(APP_CONFIG) private config: IAppConfig,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    public usuario: AuthGuard,
+    public test: AuthenticationService) {
     this.snackBar.open("Cargando Clientes", null, {
       duration: 2000,
     });
-    this.myService = new MyService(http, router, config);
+    this.myService = new MyService(http, router, config, usuario);
     this.http.get(config.apiEndpoint+'clientes1/')
       .subscribe((data) => {
         this.clientes = data.json().clientes;
@@ -197,10 +208,10 @@ function capitalizeName(name) {
 
 export class MyService {
 
-  constructor(private http: Http, private router: Router, @Inject(APP_CONFIG) private config: IAppConfig) {}
+  constructor(private http: Http, private router: Router, @Inject(APP_CONFIG) private config: IAppConfig, private usuario: AuthGuard) {}
 
   deleteData(id){
-    return this.http.delete(this.config.apiEndpoint+'clientes/'+id, {})
+    return this.http.delete(this.config.apiEndpoint+'clientes/'+id+'?responsable='+this.usuario.currentUser.id_user, {})
     .map((resp:Response)=>resp.json());
     //return null;
 
@@ -251,9 +262,10 @@ export class AddclientsComponent{
     @Inject(MD_DIALOG_DATA) public row: any,
     public snackBar: MdSnackBar,
     private router: Router,
+    private usuario:AuthGuard,
   private _fb: FormBuilder){
 
-      this.myService = new MyService(http, router, config);
+      this.myService = new MyService(http, router, config, usuario);
 
       if(row != null){
         this.addClient = this.fb.group({
@@ -427,6 +439,7 @@ export class ClientesStatus {
   tipo: any;
   pagos: number = 0;
   id: any;
+  //cliente: null;
   constructor(
     @Inject(APP_CONFIG) private config: IAppConfig,
     private http:Http,
@@ -436,7 +449,9 @@ export class ClientesStatus {
     @Inject(MD_DIALOG_DATA) public row: any,
     public snackBar: MdSnackBar,
     private router: Router,
+    public usuario: AuthGuard,
     private _fb: FormBuilder
+
 ){
   //console.log(row);
   if(row.pagado == null){
@@ -444,6 +459,7 @@ export class ClientesStatus {
   }else{
     this.pagado = parseInt(row.pagado);
   }
+  this.cliente=row.nombre+" "+row.apellido
   this.http.get(config.apiEndpoint+'facturas/'+row.id)
   .subscribe((data) => {
     this.fac_products = data.json();
@@ -462,6 +478,28 @@ export class ClientesStatus {
     this.id = row.id;
   });
 
+}
+
+generate(fecha){
+  const req = this.http.post(this.config.apiEndpoint+'factura', {
+    cliente: this.row.id ,
+    fecha : "18-08-01"
+    //fecha : fecha
+  }).subscribe(result => {
+    this.monto = 0;
+    this.pagado = 0;
+    this.http.get(this.config.apiEndpoint+'facturas/'+this.id)
+    .subscribe((data) => {
+      this.fac_products = data.json();
+      console.log(this.fac_products.slice(0,3));
+      this.fac_products.forEach(linea => {
+        this.monto += linea.monto;
+        this.pagado += linea.pagado;
+        console.log(this.monto+" | "+this.pagado);
+      });
+      this.deuda=this.monto-this.pagado;
+    });
+  })
 }
 
 //aqui comenzara el dialog de detalles de una facturas
@@ -508,8 +546,13 @@ export class DeleteCliente {
   constructor(
     @Inject(APP_CONFIG) private config: IAppConfig,
     public dialogRef: MdDialogRef<DeleteCliente>,
-    @Inject(MD_DIALOG_DATA) public data: any, private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router) {
-      this.myService = new MyService(http, router, config);
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+      this.myService = new MyService(http, router, config, usuario);
       console.log(this.data);
      }
 
@@ -518,7 +561,7 @@ export class DeleteCliente {
 
     delete(): void {
       console.log(this.data);
-      this.myService.deleteData(this.data.id_plan)
+      this.myService.deleteData(this.data.id)
       .subscribe((data) => {console.log(data)});
       this.dialogRef.close();
       this.snackBar.open("Borrando cliente: Por favor espere", null, {
@@ -530,6 +573,220 @@ export class DeleteCliente {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
+}
+@Component({
+selector: 'OverviewComponent',
+templateUrl: 'client.overview.component.html',
+styleUrls: ['./clients.component.css']
+})
+export class ClientOverview implements OnInit{
+  myService: MyService | null;
+  id:any
+  soporte:any
+  cliente:any
+  servicios:any
+  addClient: FormGroup;
+  facturacion:any
+  editclient:boolean=false
+  facturado: any = 0;
+  pagado:any = 0;
+  constructor(
+
+    @Inject(APP_CONFIG) private config: IAppConfig,
+    private route: ActivatedRoute,
+    private http: Http,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private location: Location,
+    private fb: FormBuilder,
+    public dialog: MdDialog,
+    private _fb: FormBuilder,
+    public usuario: AuthGuard,
+  ) {
+    this.addClient = this.fb.group({
+      kind: ['', [Validators.required, Validators.pattern(KIND_REGEX)]],
+      dni:['', [Validators.required]],
+      //email: ['', [Validators.required, Validators.pattern(EMAIL_REGEX)]],
+      email: ['', [Validators.pattern(EMAIL_REGEX)]],
+      nombre: ['', [Validators.required]],
+      apellido: ['', [Validators.required]],
+      direccion: ['', [Validators.required]],
+      day_of_birth: ['', [Validators.required]],
+      serie: ['', [Validators.required]],
+      phone1: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
+      phone2: ['', [Validators.required]],
+      comment: '',
+      social: [''],
+      responsable: this.usuario.currentUser.id_user
+
+    });
+     }
+
+     Close(){this.location.back();}
+     private openLINK(url){
+       console.log(url)
+       window.open("http://186.167.32.27:81/maraveca/test.php?ip="+url, '_blank');
+     }
+     generate(fecha){
+       const req = this.http.post(this.config.apiEndpoint+'factura', {
+         cliente: this.cliente.id ,
+         fecha : "18-09-01",
+         responsable: this.usuario.currentUser.id_user,
+         //fecha : fecha
+       }).subscribe(result => {
+       this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientover/' + this.id)
+       .subscribe((data) => {
+         var response = data.json()
+         this.soporte= response.soporte
+         this.facturacion = response.facturacion
+         this.servicios = response.servicios
+         this.cliente = response.cliente
+         this.addClient.patchValue({
+           kind: this.cliente.kind,
+           dni: this.cliente.dni,
+           //email: [row.email, [Validators.required, Validators.pattern(EMAIL_REGEX)]],
+           email: this.cliente.email,
+           nombre: this.cliente.nombre,
+           apellido: this.cliente.apellido,
+           direccion: this.cliente.direccion,
+           day_of_birth: this.cliente.day_of_birth,
+           serie: this.cliente.serie,
+           phone1: this.cliente.phone1,
+           phone2: this.cliente.phone2,
+           comment: this.cliente.comment,
+           id: this.cliente.id,
+           social: this.cliente.social,
+
+         });
+       });
+       })
+     }
+     edit(){
+       this.editclient=true
+     }
+
+     updateClient(){
+       var url = this.config.apiEndpoint+"clientes/"+this.cliente.id
+       this.http.put(url, this.addClient.value).subscribe((data) => {
+         this.editclient=false
+         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientover/' + this.id)
+         .subscribe((data) => {
+           var response = data.json()
+           this.soporte= response.soporte
+           this.facturacion = response.facturacion
+           this.servicios = response.servicios
+           this.cliente = response.cliente
+           this.addClient.patchValue({
+             kind: this.cliente.kind,
+             dni: this.cliente.dni,
+             //email: [row.email, [Validators.required, Validators.pattern(EMAIL_REGEX)]],
+             email: this.cliente.email,
+             nombre: this.cliente.nombre,
+             apellido: this.cliente.apellido,
+             direccion: this.cliente.direccion,
+             day_of_birth: this.cliente.day_of_birth,
+             serie: this.cliente.serie,
+             phone1: this.cliente.phone1,
+             phone2: this.cliente.phone2,
+             comment: this.cliente.comment,
+             id: this.cliente.id,
+             social: this.cliente.social,
+
+           });
+         });
+       });
+
+     }
+
+     status(row){
+       console.log(row);
+       //this.selectedRowIndex = row.id;
+       //this.id = row.id;
+       let dialogRef = this.dialog.open(FacturacionPagos, {
+         width: '80%',
+         data: row
+       });
+       dialogRef.afterClosed().subscribe(result => {
+         console.log('The dialog was AddClient closed');
+         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientover/' + this.id)
+         .subscribe((data) => {
+           var response = data.json()
+           this.soporte= response.soporte
+           this.facturacion = response.facturacion
+           this.servicios = response.servicios
+           this.cliente = response.cliente
+           this.addClient.patchValue({
+             kind: this.cliente.kind,
+             dni: this.cliente.dni,
+             //email: [row.email, [Validators.required, Validators.pattern(EMAIL_REGEX)]],
+             email: this.cliente.email,
+             nombre: this.cliente.nombre,
+             apellido: this.cliente.apellido,
+             direccion: this.cliente.direccion,
+             day_of_birth: this.cliente.day_of_birth,
+             serie: this.cliente.serie,
+             phone1: this.cliente.phone1,
+             phone2: this.cliente.phone2,
+             comment: this.cliente.comment,
+             id: this.cliente.id,
+             social: this.cliente.social,
+
+           });
+         });
+       });
+       //this.myService.refresh();
+
+     }
+
+     ngOnInit(){
+       this.route.params
+       .subscribe(
+         params => {
+           this.id = params.id_user;
+           console.log(params.id_user)
+         }
+       )
+       //console.log(this.usuario)
+       this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientover/' + this.id)
+       .subscribe((data) => {
+         var response = data.json()
+         this.soporte= response.soporte
+         this.facturacion = response.facturacion
+         this.servicios = response.servicios
+         this.cliente = response.cliente
+         this.facturacion.forEach(linea => {
+           if(linea.denominacion == 'Bs.S'){
+             if(linea.fac_status==1){
+             this.pagado=this.pagado+linea.pagado;
+             this.facturado = this.facturado+linea.monto;
+           }
+           }else if(linea.denominacion == 'BSF'){
+             if(linea.fac_status == 1){
+             this.pagado=+this.pagado+(+linea.pagado/100000);
+             this.facturado = +this.facturado+(+linea.monto/100000);
+           }
+           }
+         });
+         this.addClient.patchValue({
+           kind: this.cliente.kind,
+           dni: this.cliente.dni,
+           //email: [row.email, [Validators.required, Validators.pattern(EMAIL_REGEX)]],
+           email: this.cliente.email,
+           nombre: this.cliente.nombre,
+           apellido: this.cliente.apellido,
+           direccion: this.cliente.direccion,
+           day_of_birth: this.cliente.day_of_birth,
+           serie: this.cliente.serie,
+           phone1: this.cliente.phone1,
+           phone2: this.cliente.phone2,
+           comment: this.cliente.comment,
+           id: this.cliente.id,
+           social: this.cliente.social,
+
+         });
+       });
+     }
 
 }
 

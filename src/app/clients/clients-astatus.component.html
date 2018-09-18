@@ -1,13 +1,50 @@
 <h1 md-dialog-title>Resumen De Facturacion</h1>
 Cliente: {{(row.nombre+" "+row.apellido) | capitalize2:true }}
-
+<table>
+  <tr>
+    <td *ngIf=" row " class="fac" colspan="4">
+      Cliente: {{cliente.toUpperCase() }}
+    </td>
+    <td class="fac" colspan="2" style="text-align: center">
+      Numero De Usuario: {{row.id}}
+    </td>
+    <td class="fontz" style="text-align: right">
+    <button md-raised-button (click)="generate()" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')">Generar Factura</button>
+    </td>
+  </tr>
+  <tr>
+    <td  colspan="4" *ngIf="row && ((row.kind | capitalize2)=='V' || (row.kind | capitalize2)=='E')" class="fac">
+      Cedula:  {{row.kind+row.dni}}
+    </td>
+    <td colspan="4" *ngIf="(row.kind | capitalize2)=='J' || (row.kind | capitalize2)=='G'"class="fac">
+      R.I.F.:  {{row.kind+row.dni}}
+    </td>
+    <td class="fac" style="text-align: center" colspan="3">
+      Direccion de entrega (domicilio fiscal)
+    </td>
+  </tr>
+  <tr>
+    <td *ngIf=" row " colspan="4" class="fac">
+      Correo electrónico: {{row.email}}
+    </td>
+    <td *ngIf=" row " rowspan="2" colspan="3" class="fac" style="text-align:center; vertical-align: text-center">
+      {{row.direccion}}
+    </td>
+  </tr>
+  <tr>
+    <td *ngIf=" row " class="fac" colspan="4">
+      Teléfonos: {{row.phone1}}
+    </td>
+  </tr>
+</table>
 
 
 <table *ngIf="monto != 0; else elseblock">
 <thead>
   <tr>
     <th style="text-align: center; width: 10%" ><h3>Numero De Factura</h3></th>
-    <th style="text-align: center" colspan="2"><h3>Monto Factura</h3></th>
+    <th style="text-align: center" ><h3>Fecha De Factura</h3></th>
+    <th style="text-align: center" ><h3>Monto Factura</h3></th>
     <th style="text-align: center"><h3>Monto Pagado</h3></th>
     <th style="text-align: center"><h3>Acciones</h3></th>
 
@@ -18,11 +55,14 @@ Cliente: {{(row.nombre+" "+row.apellido) | capitalize2:true }}
     <td class="fac montos" style="border-right: 1px solid #000000; text-align: right">
     {{i.id}}
     </td>
-    <td class="fac montos" colspan="2">
-      {{i.monto | currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}
+    <td class="fac montos" style="text-align: center">
+      {{i.created_at | stringToDate | date: 'M/yy'}}
+    </td>
+    <td class="fac montos">
+      {{i.monto | number : '1.0-2'}} BSF
     </td>
     <td class="fac montos" *ngIf="i.pagado != null || i.comment_articulo != 'null'">
-      {{i.pagado | currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}
+      {{i.pagado | number : '1.0-2'}} BSF
     </td>
     <td  class="fac montos" >
       <button md-icon-button color="primary" (click)="status(i)">
@@ -39,15 +79,15 @@ Cliente: {{(row.nombre+" "+row.apellido) | capitalize2:true }}
     <td></td>
     <td *ngIf="row.serie == 0" style="text-align: right" >Total Neto:</td>
     <td *ngIf="row.serie == 1" style="text-align: right" >Total Neto Con Iva:</td>
-    <td style="text-align: right" >{{monto | currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</td>
-    <td style="text-align: right" >{{pagado | currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</td>
+    <td style="text-align: right" >{{monto | number : '1.0-2'}} BSF</td>
+    <td style="text-align: right" >{{pagado | number : '1.0-2'}} BSF</td>
   </tr>
   <tr>
     <td colspan="2"></td>
     <td *ngIf="deuda > 0"><font color="#d10512"><h3>Deuda: </h3></font></td>
     <td *ngIf="deuda <= 0"><font color="#00c402"><h3>Deuda: </h3></font></td>
-    <td *ngIf="deuda > 0"><font color="#d10512">{{deuda|currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</font></td>
-    <td *ngIf="deuda <= 0"><font color="#00c402">{{deuda|currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</font></td>
+    <td *ngIf="deuda > 0"><font color="#d10512">{{deuda|number : '1.0-2'}} BSF</font></td>
+    <td *ngIf="deuda <= 0"><font color="#00c402">{{deuda|number : '1.0-2'}} BSF</font></td>
 
   </tr>
 

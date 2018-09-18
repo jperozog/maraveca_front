@@ -3,13 +3,13 @@
   <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
   </md-form-field>
   <span class="example-spacer" style="text-align: center;">Clientes Potenciales</span>
-  <button md-raised-button (click)="NFactibilidad()" >
+  <button md-raised-button (click)="NFactibilidad()" *ngIf="usuario.perm && usuario.perm.includes('pclientes_w')" >
     <md-icon>leak_add</md-icon> Nueva Factibilidad
   </button>
   <button md-raised-button (click)="this.myService.refresh()" >
     <md-icon>cached</md-icon> Actualizar Lista
   </button>
-  <button md-raised-button (click)="openDialog()" >
+  <button md-raised-button (click)="openDialog()" *ngIf="usuario.perm && usuario.perm.includes('pclientes_w')" >
     <md-icon>group_add</md-icon> Agregar Potencial
   </button>
 
@@ -42,7 +42,10 @@
       <td (click)="status(i)" style="width: 10%">{{i.phone1}}</td>
       <td (click)="status(i)" style="width: 20%">{{i.email}}</td>
       <td (click)="status(i)" style="width: 20%">{{i.direccion}}</td>
-      <td style="width: 20%">
+      <td style="width:20%" *ngIf="usuario.perm && !usuario.perm.includes('pclientes_w')">
+        No Autorizado
+      </td>
+      <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('pclientes_w')">
         <button md-icon-button color="primary" (click)="show(i)"><!---->
         <md-icon class="md-24" aria-label="Editar Potencial" >mode_edit</md-icon>
       </button>

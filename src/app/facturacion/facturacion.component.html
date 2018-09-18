@@ -2,7 +2,13 @@
   <md-form-field  floatPlaceholder="never">
     <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
   </md-form-field>
+
   <span class="example-spacer" style="text-align: center;">Facturacion</span>
+  <md-select placeholder="Mes" [(ngModel)]="mes">
+    <md-option *ngFor="let mes of meses" [value]=mes.numero>
+      {{mes.nombre}}
+    </md-option>
+  </md-select>
   <button class="x290" md-icon-button (click)="this.myService.refresh()" >
     <md-icon>cached</md-icon>
   </button>
@@ -39,7 +45,7 @@
 
 <div class="contenido">
     <div class="x700">
-      <table style="width: 97%" [md2Data]="facturacion | dataPipe: {cliente: search, id: search}" #md2="md2DataTable" class="addClient x700" [rowsPerPage]="15">
+      <table style="width: 97%" [md2Data]="facturacion | dataPipe: {cliente: search, id: search}" #md2="md2DataTable" class="addClient x700" [rowsPerPage]="14">
         <thead>
           <tr>
             <td colspan="5">
@@ -61,9 +67,9 @@
             <td style="width: 15%">{{t.cliente | capitalize2:true}}</td>
 
 
-            <td *ngIf="t.pagado < t.monto || t.pagado == null" style="width: 15%"><font color="#d10512">Pendiente</font></td>
-            <td *ngIf="t.pagado >= t.monto" style="width: 15%"><font color="#00c402">Pagada</font></td>
-            <td *ngIf="t.fac_status == 3" style="width: 15%">Anulado</td>
+            <td *ngIf="t.fac_status == 1 && (t.pagado < t.monto || t.pagado == null)" style="width: 15%"><font color="#d10512">Pendiente</font></td>
+            <td *ngIf="t.fac_status == 1 && (t.pagado >= t.monto)" style="width: 15%"><font color="#00c402">Pagada</font></td>
+            <td *ngIf="t.fac_status == 2" style="width: 15%">Anulado</td>
 
             <td style="width: 15%">{{t.created_at | stringToDate | date: 'd/M/yy'}}</td>
 

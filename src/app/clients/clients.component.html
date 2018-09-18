@@ -6,7 +6,7 @@
   <button md-raised-button (click)="refresh(true)" >
     <md-icon [class.updateicon]="update">cached</md-icon> Actualizar Lista
   </button>
-  <button md-raised-button (click)="openDialog()" >
+  <button md-raised-button (click)="openDialog()" *ngIf="usuario.perm && usuario.perm.includes('clientes_w')">
     <md-icon>group_add</md-icon> Agregar Cliente
   </button>
 
@@ -36,25 +36,29 @@
             <th style="width: 10%" md2SortBy="phone1">Telefono</th>
             <th style="width: 20%" md2SortBy="email">Correo Electronico</th>
             <th style="width: 30%" md2SortBy="direccion">Direccion</th>
-            <th style="width: 7%" md2SortBy="servicios">Servicios Contratados</th>
+            <th style="width: 7%" md2SortBy="servicios">Serv. Cont.</th>
             <th style="width: 20%">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let i of md2.data">
-            <td (click)="status(i)" style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
-            <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'V'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-            <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'E'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-            <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'G'" style="width: 15%">{{(i.social|capitalize)}}</td>
-            <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'J'" style="width: 15%">{{(i.social|capitalize)}}</td>
-            <td (click)="status(i)" style="width: 10%">{{i.phone1}}</td>
-            <td (click)="status(i)" style="width: 20%">{{i.email}}</td>
-            <td (click)="status(i)" style="width: 30%">{{i.direccion}}</td>
-            <td (click)="status(i)" style="width: 7%">{{i.servicios}}</td>
-            <td style="width: 20%">
-              <button md-icon-button color="primary" (click)="show(i)"><!---->
-                <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
+            <td style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
+            <td *ngIf="i.kind.toUpperCase() == 'V'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+            <td *ngIf="i.kind.toUpperCase() == 'E'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+            <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 15%">{{(i.social|capitalize)}}</td>
+            <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 15%">{{(i.social|capitalize)}}</td>
+            <td style="width: 10%">{{i.phone1}}</td>
+            <td style="width: 20%">{{i.email}}</td>
+            <td style="width: 30%">{{i.direccion}}</td>
+            <td style="width: 7%">{{i.servicios}}</td>
+            <td style="width: 20%" *ngIf="usuario.perm && !usuario.perm.includes('clientes_w')"> No Autorizado</td>
+            <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('clientes_w')">
+              <button md-icon-button color="primary" [routerLink]="['/ClientOverview', i.id]"><!---->
+                <md-icon class="md-24" aria-label="Mas Detalles" >search</md-icon>
               </button>
+              <!--button md-icon-button color="primary" (click)="show(i)">
+                <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
+              </button-->
               <button  md-icon-button color="warn"(click)="deleteDialog(i)">
                 <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
               </button>
@@ -108,9 +112,12 @@
             <td (click)="status(i)" style="width: 30%">{{i.direccion}}</td>
             <td (click)="status(i)" style="width: 7%">{{i.servicios}}</td>
             <td style="width: 20%">
-              <button md-icon-button color="primary" (click)="show(i)"><!---->
-                <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
+              <button md-icon-button color="primary" [routerLink]="['/ClientOverview', i.id]"><!---->
+                <md-icon class="md-24" aria-label="Mas Detalles" >search</md-icon>
               </button>
+              <!--button md-icon-button color="primary" (click)="show(i)">
+                <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
+              </button-->
               <button  md-icon-button color="warn"(click)="deleteDialog(i)">
                 <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
               </button>

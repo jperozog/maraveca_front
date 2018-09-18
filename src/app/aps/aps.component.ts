@@ -9,6 +9,7 @@ import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/materi
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule} from '@angular/forms';
 import 'rxjs/add/operator/startWith';
 import {Router} from '@angular/router';
+import { AuthGuard } from '../_guards/index';
 //import 'rxjs/add/operator/map';
 
 @Component({
@@ -22,7 +23,7 @@ export class ApsComponent {
     myService: MyService | null;
     data:any = null;
     search: string = '';
-    constructor(private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, public router: Router) {
+    constructor(private http: Http, public usuario: AuthGuard, public dialog: MdDialog, public snackBar:MdSnackBar, public router: Router) {
       this.snackBar.open("Cargando AccessPoints", null, {
         duration: 2000,
       });
@@ -76,7 +77,7 @@ export class ApsComponent {
     });
   }
 
-    
+
 
   }
 

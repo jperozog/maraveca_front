@@ -101,15 +101,15 @@ Cliente: {{(row.nombre+" "+row.apellido) | capitalize2:true }}
   <!--tr style="border-top: 1px solid #127aa1;">
     <td></td>
     <td style="text-align: right" >Total Neto:</td>
-    <td style="text-align: right" >{{monto | currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</td>
-    <td style="text-align: right" >{{pagado | currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</td>
+    <td style="text-align: right" >{{monto | number : '1.0-2'}} BSF</td>
+    <td style="text-align: right" >{{pagado | number : '1.0-2'}} BSF</td>
   </tr>
   <tr>
     <td colspan="2"></td>
     <td *ngIf="deuda > 0"><font color="#d10512"><h3>Deuda: </h3></font></td>
     <td *ngIf="deuda <= 0"><font color="#00c402"><h3>Deuda: </h3></font></td>
-    <td *ngIf="deuda > 0"><font color="#d10512">{{deuda|currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</font></td>
-    <td *ngIf="deuda <= 0"><font color="#00c402">{{deuda|currency : 'bsf' : 'symbol' : '1.0-2' : 'fr'}}</font></td>
+    <td *ngIf="deuda > 0"><font color="#d10512">{{deuda|number : '1.0-2'}} BSF</font></td>
+    <td *ngIf="deuda <= 0"><font color="#00c402">{{deuda|number : '1.0-2'}} BSF</font></td>
 
   </tr-->
 </tbody>

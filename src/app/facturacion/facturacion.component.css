@@ -58,6 +58,14 @@ tr.hover:hover{
 table.fac, th.fac, td.fac {
   border:1px solid black
 }
+table.fact, th.fact, td.fact {
+  border-bottom: 1px solid black
+}
+table.fontprod, th.fontprod, td.fontprod {
+  font-size: 12px
+}
+
+
 
 .sidenav{
   min-width: 30%;

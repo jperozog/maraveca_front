@@ -1,6 +1,9 @@
 <h1 md-dialog-title>Confirmacion</h1>
 <div md-dialog-content>
   <p>Esta seguro que desea eliminar al cliente:</p> <p>{{data.nombre+" "+data.apellido | capitalize2:true}}?</p>
+  <p>
+    Esta accion eliminara tambien sus servicios asociados asi como sus tickets de falla y de instalaciones.
+  </p>
 </div>
 <div md-dialog-actions>
   <tr>

@@ -4,25 +4,69 @@
   <div style="width:90%; margin: 0 auto;">
     <form id="client" name="clientForm" [formGroup]="addplan" ng-submit="ok(clientForm)" novalidate>
       <table class="example-full-width" cellspacing="2">
-        <tr *ngIf="edit && row">
+        <thead *ngIf="edit && row" class="x700">
           <td colspan="2">
             <md-chip-list>
-              <md-chip *ngIf="!row.social || row.social == null">Nombre: {{(row.nombre | capitalize)+" "+(row.apellido | capitalize)}}</md-chip>
-              <md-chip *ngIf="row.social && row.social != null">Persona de Contacto: {{(row.nombre | capitalize)+" "+(row.apellido | capitalize)}}</md-chip>
-              <md-chip *ngIf="(row.social != '' && row.social != null && row.social != 'null') && (row.kind.toUpperCase() == 'J' || row.kind.toUpperCase() == 'G')">Razon Social: {{row.social | capitalize}}</md-chip>
+              <md-chip *ngIf="(!row.social || row.social == null)&& row.tipo_soporte!=3">Nombre: {{(row.nombre | capitalize)+" "+(row.apellido | capitalize)}}</md-chip>
+              <md-chip *ngIf="(row.social && row.social != null)&& row.tipo_soporte!=3">Persona de Contacto: {{(row.nombre | capitalize)+" "+(row.apellido | capitalize)}}</md-chip>
+              <md-chip *ngIf="(row.social != '' && row.social != null && row.social != 'null') && (row.kind.toUpperCase() == 'J' || row.kind.toUpperCase() == 'G')&& row.tipo_soporte!=3">Razon Social: {{row.social | capitalize}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Equipo: {{row.equipos.value}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Serial: {{row.serial}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1 && row.router" >Router: {{row.router}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 2" (click)="openLINK(row.ip_srv)">IP: {{row.ip_srv}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Celda: {{row.celdas.value}}</md-chip>
-              <md-chip>Direccion: {{row.direccion | capitalize}}</md-chip>
+              <md-chip>Celda: {{row.nombre_celda | capitalize}}</md-chip>
+              <md-chip  *ngIf="row.tipo_soporte && row.tipo_soporte !=3">Direccion: {{row.direccion | capitalize}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 2" >Plan: {{row.name_plan | capitalize}}</md-chip>
-              <md-chip>Telefono: {{row.phone1}}</md-chip>
+              <md-chip  class="x700" *ngIf="row.tipo_soporte && row.tipo_soporte !=3">Telefono: {{row.phone1}}</md-chip>
               <md-chip *ngIf="row.phone2">Otros Telefono: {{row.phone2}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 2" >AccessPoint: {{row.nombre_ap}}</md-chip>
             </md-chip-list>
           </td>
-        </tr>
+        </thead>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4" *ngIf="(!row.social || row.social == null)&& row.tipo_soporte!=3">Nombre: {{(row.nombre | capitalize)+" "+(row.apellido | capitalize)}}</td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4" *ngIf="(row.social && row.social != null)&& row.tipo_soporte!=3">Persona de Contacto: {{(row.nombre | capitalize)+" "+(row.apellido | capitalize)}}</td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4" *ngIf="(row.social != '' && row.social != null && row.social != 'null') && (row.kind.toUpperCase() == 'J' || row.kind.toUpperCase() == 'G')&& row.tipo_soporte!=3">Razon Social: {{row.social | capitalize}}</td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4" *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Equipo: {{row.equipos.value}}</td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4" *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Serial: {{row.serial}}</td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4" *ngIf="row.tipo_soporte && row.tipo_soporte == 1 && row.router" >Router: {{row.router}}</td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4" *ngIf="row.tipo_soporte && row.tipo_soporte == 2" (click)="openLINK(row.ip_srv)">IP: {{row.ip_srv}}</td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4" *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Celda: {{row.celdas.value}}</td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4" >Celda: {{row.nombre_celda | capitalize}}</td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4"  *ngIf="row.tipo_soporte && row.tipo_soporte !=3">Direccion: {{row.direccion | capitalize}}</td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4" *ngIf="row.tipo_soporte && row.tipo_soporte == 2" >Plan: {{row.name_plan | capitalize}}</td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4"  *ngIf="row.tipo_soporte && row.tipo_soporte !=3">Telefono: <a [href]="'tel:'+row.phone1">{{row.phone1}}<md-icon>call</md-icon></a></td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4" *ngIf="row.phone2">Otros Telefono: {{row.phone2}}</td>
+          </tr>
+          <tr *ngIf="edit && row" class="x290">
+            <td colspan="4" *ngIf="row.tipo_soporte && row.tipo_soporte == 2" >AccessPoint: {{row.nombre_ap}}</td>
+          </tr>
+
 
         <tr *ngIf="!edit && addplan.value.tipo_soporte == 2"> <!-- esto mostrara los campos para un nuevo ticket solo si no se esta editando -->
           <td>
@@ -221,12 +265,13 @@
         <tr>
           <td>
             <button *ngIf="!edit" md-raised-button color="primary" class="example-full-width btn btn-primary" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+            <button *ngIf="row && row.tipo_soporte == 3" md-raised-button color="primary" class="example-full-width btn btn-primary" [disabled]="row && row.status_soporte==2" (click)="closeticket()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Averia</button>
             <button *ngIf="row && row.tipo_soporte == 2" md-raised-button color="primary" class="example-full-width btn btn-primary" [disabled]="row && row.status_soporte==2" (click)="closeticket()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Ticket</button>
             <button *ngIf="row && row.tipo_soporte == 1" md-raised-button color="primary" class="example-full-width btn btn-primary" [disabled]="row && row.status_soporte==2" (click)="closeinstall()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Instalacion</button>
           </td>
           <td>
-            <button *ngIf="edit" md-raised-button color="warn" class="example-full-width btn btn-danger" type="button" (click)="Close()"><i class="fa fa-times" aria-hidden="true"></i>Salir</button>
-            <button *ngIf="!edit" md-raised-button color="warn" class="example-full-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
+            <button *ngIf="edit" md-raised-button color="warn" class="example-full-width btn btn-danger" type="button" (click)='Close()'><i class="fa fa-times" aria-hidden="true"></i>Salir</button>
+            <button *ngIf="!edit" md-raised-button color="warn" class="example-full-width btn btn-danger" type="button" routerLink="/soporte"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
           </td>
 
         </tr>

@@ -1,0 +1,548 @@
+<md-toolbar class="submenu">
+  <button md-raised-button class="btn" (click)="Close()">Atras</button>
+  <span class="example-spacer" style="text-align: center;">Ficha De Cliente</span>
+
+</md-toolbar>
+
+<div class="container">
+
+<div class="card">
+
+<!-- card de datos de usuario -->
+  <md-card class="example-card card-body text-center">
+    <md-card-header>
+      <md-card-title><h4>Datos de Cliente</h4></md-card-title>
+      <span class="example-spacer" style="text-align: center;"></span>
+      <button *ngIf="editclient" (click)="updateClient()" md-raised-button color="#888888">Actualizar</button>
+      <button *ngIf="!editclient" (click)="edit()" md-raised-button color="#888888">Editar</button>
+    </md-card-header>
+
+    <md-card-content *ngIf="cliente && !editclient">
+      <table class="example-full-width" cellspacing="0"><tr>
+        <td colspan="2">
+          {{(addClient.value.nombre|capitalize)+' '+(addClient.value.apellido|capitalize)}}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          {{(addClient.value.kind|capitalize)+addClient.value.dni}}
+        </td>
+
+      </tr>
+      <tr>
+        <td colspan="2">
+          {{addClient.value.email}}
+        </td>
+      </tr>
+      <tr *ngIf="addClient.value.kind == 'J'">
+        <td >
+          {{addClient.value.social|capitalize}}
+        </td>
+        <td>
+          {{addClient.value.phone1}}
+        </td>
+      </tr>
+      <tr *ngIf="addClient.value.kind == 'G'">
+        <td >
+          {{addClient.value.social|capitalize}}
+        </td>
+        <td>
+          {{addClient.value.phone1}}
+        </td>
+      </tr>
+      <tr *ngIf="addClient.value.kind == 'V'">
+        <td colspan="2">
+          {{addClient.value.phone1}}
+        </td>
+      </tr>
+      <tr *ngIf="addClient.value.kind == 'E'">
+        <td colspan="2">
+          {{addClient.value.phone1}}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+              <span *ngIf="addClient.value.serie==0">No Facturable</span>
+              <span *ngIf="addClient.value.serie==1">Facturable</span>
+        </td>
+      </tr><tr *ngIf="addClient.value.day_of_birth">
+        <td colspan="2">
+          {{addClient.value.day_of_birth | stringToDate | date: 'd/M/yy'}}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          {{addClient.value.phone2}}
+        </td>
+      </tr><tr>
+        <td>
+          {{addClient.value.direccion|capitalize}}
+        </td><td>
+          {{addClient.value.comment|capitalize}}
+        </td>
+      </tr>
+    </table>
+    </md-card-content>
+
+    <!-- si es editable a partir de aqui-->
+
+    <md-card-content *ngIf="editclient">
+      <form class="example-form" id="client" name="clientForm" [formGroup]="addClient" ng-submit="ok(clientForm)" novalidate>
+      <table class="example-full-width" cellspacing="0"><tr>
+        <td>
+          <md-form-field class="example-full-width">
+            <input type="text" name="nombre"
+            class="form-control"
+            formControlName="nombre"
+            placeholder="Nombres"
+            autocomplete="off"
+            required
+            mdInput
+            >
+          </md-form-field>
+
+        </td>
+        <td>
+
+          <md-form-field class="example-full-width">
+            <input type="text" name="last"
+            class="form-control"
+            placeholder="Apellidos"
+            formControlName="apellido"
+            autocomplete="off"
+            required
+            mdInput
+            >
+          </md-form-field>
+
+        </td>
+
+        </tr>
+
+
+        <td>
+          <md-input-container class="example-full-width">
+            <input mdInput placeholder="Tipo:" maxlength="1" required formControlName="kind" [mdAutocomplete]="tipo" />
+            <md-autocomplete #tipo="mdAutocomplete">
+              <md-option value="E">E</md-option>
+              <md-option value="V">V</md-option>
+              <md-option value="J">J</md-option>
+              <md-option value="G">G</md-option>
+            </md-autocomplete>
+          </md-input-container>
+        </td>
+        <td>
+          <md-form-field class="example-full-width">
+            <input type="text" name="dni"
+            class="form-control"
+            formControlName="dni"
+            placeholder="Cedula o Rif"
+            autocomplete="off"
+            required
+            mdInput>
+          </md-form-field>
+        </td>
+        <tr >
+          <td colspan="2">
+            <md-error *ngIf="!addClient.controls.kind.valid">Por favor ingrese un tipo valido de identificacion</md-error>
+          </td>
+        </tr>
+      <tr>
+        <th colspan="2">
+
+          <md-form-field class="example-full-width">
+            <input id="validation-email"
+            name="email"
+            formControlName="email"
+            placeholder="Email"
+            mdInput
+            autocomplete="off">
+            <md-error *ngIf="!addClient.controls.email.valid">Por favor ingrese un correo valido</md-error>
+
+          </md-form-field>
+
+
+        </th>
+      </tr>
+
+
+
+
+      <tr *ngIf="addClient.value.kind == 'J'">
+        <td >
+          <md-form-field class="example-full-width">
+            <input name="nombre"
+            class="form-control"
+            placeholder="Razon Social"
+            mdInput
+            formControlName="social"
+            autocomplete="off"
+            required
+            >
+          </md-form-field>
+        </td>
+        <td>
+          <md-form-field class="example-full-width">
+            <input name="phone"
+            placeholder="Telefono"
+            mdInput
+            formControlName="phone1"
+            autocomplete="off"
+            required
+            >
+            <md-error *ngIf="!addClient.controls.phone1.valid">El numero ingresado no es valido</md-error>
+
+          </md-form-field>
+        </td>
+      </tr>
+      <tr *ngIf="addClient.value.kind == 'G'">
+        <td >
+          <md-form-field class="example-full-width">
+            <input name="nombre"
+            class="form-control"
+            placeholder="Razon Social"
+            mdInput
+            formControlName="social"
+            autocomplete="off"
+            required
+            >
+          </md-form-field>
+        </td>
+        <td>
+          <md-form-field class="example-full-width">
+            <input name="phone"
+            placeholder="Telefono"
+            mdInput
+            formControlName="phone1"
+            autocomplete="off"
+            required
+            >
+            <md-error *ngIf="!addClient.controls.phone1.valid">El numero ingresado no es valido</md-error>
+
+          </md-form-field>
+        </td>
+      </tr>
+      <tr *ngIf="addClient.value.kind == 'V'">
+        <td colspan="2">
+          <md-form-field class="example-full-width">
+            <input name="phone"
+            placeholder="Telefono"
+            mdInput
+            formControlName="phone1"
+            autocomplete="off"
+            required
+            >
+            <md-error *ngIf="!addClient.controls.phone1.valid">El numero ingresado no es valido</md-error>
+
+          </md-form-field>
+        </td>
+      </tr>
+      <tr *ngIf="addClient.value.kind == 'E'">
+        <td colspan="2">
+          <md-form-field class="example-full-width">
+            <input name="phone"
+            placeholder="Telefono"
+            mdInput
+            formControlName="phone1"
+            autocomplete="off"
+            required
+            >
+            <md-error *ngIf="!addClient.controls.phone1.valid">El numero ingresado no es valido</md-error>
+
+          </md-form-field>
+        </td>
+      </tr>
+
+
+
+
+      <tr>
+        <td colspan="2">
+            <md-select class="example-full-width" mdInput placeholder="Facturable" formControlName="serie">
+              <md-option value="0">No Facturable</md-option>
+              <md-option value="1">Facturable</md-option>
+
+            </md-select>
+
+        </td>
+      </tr><tr>
+        <td colspan="2">
+          <md-form-field class="example-full-width">
+            <input type="date" name="birthdate" data-ng-model="user.birthdate"
+            class="form-control"
+
+            formControlName="day_of_birth"
+            placeholder="Fecha de nacimiento"
+            required mdInput>
+          </md-form-field>
+        </td>
+
+
+      </tr>
+      <tr>
+        <th colspan="2">
+          <md-form-field class="example-full-width">
+            <input type="text" name="phone2" formControlName="phone2" data-ng-model="user.phone2"
+            mdInput
+            class="form-control"
+            autocomplete="off"
+            placeholder="Otros Telefonos De Contacto"
+            required>
+          </md-form-field>
+        </th>
+      </tr><tr>
+        <td>
+
+          <md-form-field class="example-full-width">
+            <textarea name="address"
+            data-ng-model="user.contact_people.description"
+            mdInput
+            formControlName="direccion"
+            #address
+            class="form-control"
+            placeholder="Direccion"
+            maxlength="256"
+            required></textarea>
+            <md-hint align="end">{{address.value.length}} / 256</md-hint>
+          </md-form-field>
+        </td><td>
+          <md-form-field class="example-full-width">
+            <textarea mdInput name="address" data-ng-model="user.comments"
+            class="form-control"
+            maxlength="256"
+            formControlName="comment"
+            placeholder="Comentarios"></textarea>
+            <md-hint align="end">{{address.value.length}} / 256</md-hint>
+          </md-form-field>
+        </td>
+      </tr>
+    </table>
+  </form>
+    </md-card-content>
+
+  </md-card>
+</div>
+
+<!-- card de Servicios -->
+
+<div class="card" *ngIf="usuario.perm && usuario.perm.includes('servicios')">
+
+  <md-card class="example-card card-body text-center">
+    <md-card-header>
+      <md-card-title><h4>Servicios</h4></md-card-title>
+    </md-card-header>
+    <md-card-content>
+      <div class="example-form">
+
+      <table class=example-full-width [md2Data]="servicios" #md2="md2DataTable" class="addClient" [rowsPerPage]="3">
+        <thead>
+          <tr>
+            <td colspan="3">
+              <md2-pagination></md2-pagination>
+            </td>
+          </tr>
+          <tr>
+            <th  md2SortBy="name_plan">Plan</th>
+            <th md2SortBy='comment_srv'> Zona</th>
+            <th style="text-align: center"  md2SortBy="stat_srv">Estado</th>
+            <th style="text-align: center" >Acciones</th>
+          </tr>
+        </thead>
+        <tbody class='fac'>
+          <tr class="fac montos" *ngFor="let i of md2.data">
+            <td class="fac montos" style="text-align: center; width: 40%; max-height:34px" >{{i.name_plan}}</td>
+            <td class="fac montos" style="text-align: center" >{{i.comment_srv}}</td>
+
+
+            <td class="fac montos" style="text-align: center; width: 15%" >
+              <button md-icon-button *ngIf="i.stat_srv == 1" >
+                <span>Activo</span>
+              </button>
+              <button md-icon-button *ngIf="i.stat_srv == 2" >
+                <span>Moroso</span>
+              </button>
+              <button md-icon-button *ngIf="i.stat_srv == 3" >
+                <span>Suspendido</span>
+              </button>
+              <button md-icon-button *ngIf="i.stat_srv == 4" >
+                <span>Retirado</span>
+              </button>
+              <button md-icon-button *ngIf="i.stat_srv == 5" >
+                <span>Exonerado</span>
+              </button>
+            </td>
+            <td class="fac montos" style="text-align: center; width: 20%"  *ngIf="usuario.perm && !usuario.perm.includes('servicios_w')">
+              No Autorizado
+            </td>
+            <td class="fac montos" style="text-align: center; width: 20%"  *ngIf="usuario.perm && usuario.perm.includes('servicios_w')">
+              <!--botones de acciones-->
+
+              <button md-icon-button color="primary"(click)="openLINK(i.ip_srv)" >
+                <md-icon class="md-24" aria-label="Ubiquiti Admin">language</md-icon>
+              </button>
+              <button md-icon-button *ngIf="i.stat_srv == 1" >
+                <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+              </button>
+              <button md-icon-button *ngIf="i.stat_srv == 2" >
+                <md-icon class="md-24" style="color:yellow;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+              </button>
+              <button md-icon-button *ngIf="i.stat_srv == 3" >
+                <md-icon class="md-24" style="color:red;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+              </button>
+              <button md-icon-button *ngIf="i.stat_srv == 4" >
+                <md-icon class="md-24" style="color:grey;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+              </button>
+              <!--terminan los botones-->
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+      </table>
+    </div>
+    </md-card-content>
+
+  </md-card>
+</div>
+
+  <!-- card de facturacion -->
+
+<div class="card" *ngIf="usuario.perm && usuario.perm.includes('facturacion') && facturacion">
+
+  <md-card class="example-card card-body text-center">
+    <md-card-header>
+      <md-card-title><h4>Resumen de Facturacion</h4></md-card-title>
+      <span class="example-spacer" style="text-align: center;"></span>
+      <button md-raised-button color="#888888" [disabled]="!usuario.perm && !usuario.perm.includes('facturacion_w')" (click)="generate()">Generar Factura</button>
+
+    </md-card-header>
+    <md-card-content>
+        <table [md2Data]="facturacion" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="facturacion.length>0; else elseblock">
+      <thead>
+        <tr>
+          <td colspan="4">
+            <md2-pagination>
+            </md2-pagination>
+          </td><td>
+
+          </td>
+        </tr>
+        <tr >
+          <th style="text-align: center; width: 10%" ><h3>N</h3></th>
+          <th style="text-align: center" ><h3>Fecha</h3></th>
+          <th style="text-align: center" ><h3>Monto</h3></th>
+          <th style="text-align: center"><h3>Pagado</h3></th>
+          <th style="text-align: center"><h3>Acciones</h3></th>
+
+        </tr>
+      </thead>
+        <tbody class="fac">
+        <tr class="fac montos" *ngFor="let i of md2.data">
+          <td class="fac montos" style="border-right: 1px solid #000000; text-align: right">
+          {{i.id}}
+          </td>
+          <td class="fac montos" style="text-align: center">
+            {{i.created_at | stringToDate | date: 'M/yy'}}
+          </td>
+          <td class="fac montos">
+            {{i.monto | number : '1.0-2'}} {{i.denominacion}}
+          </td>
+          <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado != null)">
+            {{i.pagado | number : '1.0-2'}}  {{i.denominacion}}
+          </td>
+          <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado == null)">
+
+          </td>
+          <td class="fac montos" *ngIf="i.fac_status == 2">
+            Anulado
+          </td>
+          <td  class="fac montos" >
+            <button md-icon-button color="primary" (click)="status(i)">
+            <md-icon class="md-24" aria-label="Detalles De Factura" >find_in_page</md-icon>
+          </button>
+          </td>
+          <!--td class="fac" #obf>
+            0BSF
+          </td-->
+
+        </tr>
+
+
+      </tbody>
+
+      </table>
+      <ng-template #elseblock>
+        <font color="#00c402"><h1>Cliente solvente o sin servicios contratados</h1></font>
+      </ng-template>
+
+    </md-card-content>
+    <md-card-actions style="text-align: center">
+            <span *ngIf="(facturado - pagado)>0">
+              Total Adeudado: {{(facturado - pagado) | number:'1.0-2'}} Bs.S
+            </span>
+    </md-card-actions>
+  </md-card>
+</div>
+
+  <!-- card de Tickets -->
+
+<div class="card" *ngIf="usuario.perm && usuario.perm.includes('soporte') && soporte && soporte.length > 0">
+
+  <md-card class="example-card card-body text-center">
+    <md-card-header>
+      <md-card-title><h4>Tickets</h4></md-card-title>
+    </md-card-header>
+    <md-card-content>
+      <table [md2Data]="soporte" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" >
+        <thead>
+          <tr>
+            <td colspan="7">
+              <md2-pagination ></md2-pagination>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 10%; margin: 0 1em;">Ticket</th>
+            <th style="width: 15%">Estado</th>
+            <th style="width: 15%">Usuario</th>
+            <th style="width: 10%">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of md2.data">
+            <td style="width: 10%; margin: 0 1em;">{{t.id_soporte}}</td>
+
+            <td *ngIf="t.status_soporte == 1" style="width: 15%">Abierto</td>
+            <td *ngIf="t.status_soporte == 2" style="width: 15%">Cerrado</td>
+            <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
+
+            <td *ngIf="(t.nombre_user == null) && (t.apellido_user != null)" style="width: 15%">{{t.apellido_user}}</td>
+            <td *ngIf="(t.nombre_user != null) && (t.apellido_user == null)" style="width: 15%">{{t.nombre_user}}</td>
+            <td *ngIf="(t.nombre_user != null) && (t.apellido_user != null)" style="width: 15%">{{t.nombre_user+ " " +t.apellido_user}}</td>
+
+            <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
+              No Autorizado
+            </td>
+            <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
+              <button md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+                <md-icon class="md-24" aria-label="Editar AP" >rate_review</md-icon>
+              </button>
+              <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
+              <button md-icon-button color="warn"(click)="deleteDialog(i)">
+              <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
+            </button-->
+
+
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+
+      </tfoot>
+    </table>
+    </md-card-content>
+
+  </md-card>
+</div>
+
+</div>

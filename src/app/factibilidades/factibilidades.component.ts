@@ -22,7 +22,12 @@ export class FactibilidadesComponent {
       myService: MyService | null;
       data: any = null;
       search: string = '';
-      constructor(private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router) {
+      constructor(
+        private http: Http,
+        public dialog: MdDialog,
+        public usuario: AuthGuard,
+        public snackBar:MdSnackBar,
+        private router: Router) {
         this.snackBar.open("Cargando Facturas", null, {
           duration: 2000,
         });
@@ -58,6 +63,9 @@ export class FactibilidadesComponent {
       show(row){
         //console.log(row);
         //this.selectedRowIndex = row.id;
+
+        if (this.usuario.perm && this.usuario.perm.includes('factibilidades_w')){
+
         let dialogRef = this.dialog.open(FactibilidadesDetComponent, {
           width: '75%',
           data: row
@@ -75,6 +83,7 @@ export class FactibilidadesComponent {
           });
         });
         //this.myService.refresh();
+      }
 
       }
 

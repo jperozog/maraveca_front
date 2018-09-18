@@ -1,6 +1,7 @@
 <form class="example-form" id="client" name="clientForm" [formGroup]="addplan" ng-submit="ok(clientForm)" novalidate>
-  <table class="example-full-width" cellspacing="0"><tr>
-    <td>
+  <table class="example-full-width" cellspacing="0">
+    <tr>
+    <td colspan="2">
       <md-form-field class="example-full-width">
         <input type="text" name="nombre"
         class="form-control"
@@ -13,7 +14,10 @@
       </md-form-field>
 
     </td>
-    <td>
+  </tr>
+  <tr>
+
+    <td colspan="2">
 
       <md-form-field class="example-full-width">
         <input type="text" name="costo"
@@ -27,8 +31,25 @@
       </md-form-field>
 
     </td>
+  </tr>
+  <tr>
 
-    </tr>
+    <td colspan="2">
+
+      <md-form-field class="example-full-width">
+        <input type="text" name="taza"
+        class="form-control"
+        placeholder="Costo $"
+        formControlName="taza"
+
+        required
+        mdInput
+        >
+      </md-form-field>
+
+    </td>
+  </tr>
+
 
 <tr>
     <td>

@@ -92,7 +92,7 @@ export class PClientsComponent {
   status(row){
     console.log(row);
     //this.selectedRowIndex = row.id;
-    if(this.usuario.perm && this.usuario.perm.includes('facturacion')){
+    if(this.usuario.perm && this.usuario.perm.includes('pclientes_w')){
     let dialogRef = this.dialog.open(PClientesStatus, {
       width: '80%',
       data: row

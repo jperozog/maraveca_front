@@ -36,7 +36,7 @@
       <input mdInput placeholder="IP" class="md2-input" [(ngModel)]="ip" />
       </md-form-field>
     </td>
-    <td>
+    <td *ngIf="aps && aps.length>0">
       <md2-select name="AP"
                 [(ngModel)]="ap"
                 placeholder="AccessPoint"
@@ -54,9 +54,30 @@
       <md2-option *ngFor="let i of (aps | dataPipe : {nombre_ap: a_search, ip_ap: a_search})" [value]="i.id">{{i.ip_ap + " " + i.nombre_ap}}</md2-option>
       </md2-select>
     </td>
-    <td *ngIf="data.row.ser1al==0">
-      <md-form-field>
-      <input mdInput placeholder="Serial" class="md2-input" (input)="nosymbol()" [(ngModel)]="serial" />
+    <td *ngIf="currentUser && currentUser.installer==0">
+      <md2-select name="Installer"
+                [(ngModel)]="installer"
+                placeholder="Instalador"
+                style="width=100%; min-width: 100%;"
+                mdInput
+                >
+      <md2-select-header>
+        <input name="a_search"
+               type="text"
+               [(ngModel)]="u_search"
+               placeholder="Buscar..."
+               style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+               />
+      </md2-select-header>
+      <md2-option *ngFor="let i of (installers | dataPipe : {nombre_user: u_search, apellido_user: u_search})" [value]="i.id_user">{{i.nombre_user + " " + i.apellido_user}}</md2-option>
+      </md2-select>
+    </td>
+  </tr>
+    <tr>
+
+    <td colspan="3" *ngIf="data.row.ser1al==0">
+      <md-form-field style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;">
+      <input mdInput placeholder="Serial" class="md2-input" (input)="nosymbol()" [(ngModel)]="serial" style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"/>
       </md-form-field>
     </td>
   </tr>

@@ -6,7 +6,7 @@
   <button md-raised-button (click)="refresh(true)" >
     <md-icon [class.updateicon]="update">cached</md-icon> Actualizar Lista
   </button>
-  <button md-raised-button (click)="openDialog()" >
+  <button md-raised-button (click)="openDialog()" *ngIf="usuario.perm && usuario.perm.includes('servicios_w')">
     <md-icon>group_add</md-icon> Agregar Servicio
   </button>
 
@@ -24,7 +24,7 @@
     </md-expansion-panel-header>
 
     <!-- contenido del desplegable de instalaciones -->
-    <table class=addClient [md2Data]="installs | dataPipe: { nombre: search, name_plan: search, nombre_celda: search, social: search, nombre_ap: search}" #md2="md2DataTable" [rowsPerPage]="10">
+    <table class=addClient [md2Data]="installs | dataPipe: { nombre: search, name_plan: search, nombre_celda: search, social: search, nombre_ap: search, dni: search}" #md2="md2DataTable" [rowsPerPage]="10">
       <thead>
         <tr>
           <td colspan="6">
@@ -44,7 +44,10 @@
           <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 40%">{{i.kind.toUpperCase()+i.dni+" / "+(i.social|capitalize)}}</td>
           <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 40%">{{i.kind.toUpperCase()+i.dni+" / "+(i.social|capitalize)}}</td>
           <td style="width: 40%Z">{{i.ip}}</td>
-          <td style="width: 20%">
+          <td style="width: 20%" *ngIf="usuario.perm && !usuario.perm.includes('servicios_w')">
+            No Autorizado
+          </td>
+          <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('servicios_w')">
             <!--botones de acciones-->
 
             <button md-icon-button color="primary" (click)="register(i)">
@@ -88,7 +91,7 @@
       </md-panel-description>
     </md-expansion-panel-header>
     <!-- contenido del desplegable de servicios -->
-    <table class=addClient [md2Data]="data | dataPipe: { nombre: search, name_plan: search, nombre_celda: search, social: search, nombre_ap: search}" #md2="md2DataTable" [rowsPerPage]="10">
+    <table class=addClient [md2Data]="data | dataPipe: { nombre: search, ip_srv: search, name_plan: search, nombre_celda: search, social: search, nombre_ap: search, dni: search}" #md2="md2DataTable" [rowsPerPage]="10">
       <thead>
         <tr>
           <td colspan="6">
@@ -125,8 +128,14 @@
             <button md-icon-button *ngIf="i.stat_srv == 4" >
               <span>Retirado</span>
             </button>
+            <button md-icon-button *ngIf="i.stat_srv == 5" >
+              <span>Exonerado</span>
+            </button>
           </td>
-          <td style="width: 20%">
+          <td style="width: 20%" *ngIf="usuario.perm && !usuario.perm.includes('servicios_w')">
+            No Autorizado
+          </td>
+          <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('servicios_w')">
             <!--botones de acciones-->
 
             <button md-icon-button color="primary" (click)="show(i)">

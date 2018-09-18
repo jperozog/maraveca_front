@@ -131,10 +131,18 @@
                 <md2-option [value]="2">Moroso</md2-option>
                 <md2-option [value]="3">Suspendido</md2-option>
                 <md2-option [value]="4">Retirado</md2-option>
+                <md2-option [value]="5">Exonerado</md2-option>
                 </md2-select>
     </td>
     <td>
       <md-form-field>
+        <input mdInput formControlName="signal_srv" placeholder="Nivel de Señal"/>
+      </md-form-field>
+    </td>
+  </tr>
+  <tr>
+    <td colspan='2'>
+      <md-form-field class="example-full-width">
         <input mdInput formControlName="comment_srv" placeholder="Comentario"/>
       </md-form-field>
     </td>

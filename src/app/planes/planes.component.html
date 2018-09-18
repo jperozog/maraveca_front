@@ -19,7 +19,10 @@
   <button md-raised-button (click)="this.myService.refresh()" >
     <md-icon>cached</md-icon> Actualizar Lista
   </button>
-  <button md-raised-button (click)="openDialog()" >
+  <button md-raised-button (click)="updatePrices()" *ngIf="usuario.perm && usuario.perm.includes('planes_w')">
+    <!--md-icon>cached</md-icon--> Actualizar Precios
+  </button>
+  <button md-raised-button (click)="openDialog()" *ngIf="usuario.perm && usuario.perm.includes('planes_w')">
     <md-icon>group_add</md-icon> Agregar Plan
   </button>
 
@@ -36,7 +39,8 @@
     </tr>
     <tr>
       <th style="width: 30%" md2SortBy="ip_srvidor">Nombre</th>
-      <th style="width: 30%" md2SortBy="nombre_srvidor">Costo</th>
+      <th style="width: 10%" md2SortBy="nombre_srvidor">Costo</th>
+      <th style="width: 10%" md2SortBy="user_srvidor">Costo $</th>
       <th style="width: 30%" md2SortBy="user_srvidor">Ultima Actualizacion</th>
       <th style="width: 10%">Acciones</th>
     </tr>
@@ -44,9 +48,13 @@
   <tbody>
     <tr *ngFor="let i of md2.data">
       <td style="width: 30%">{{i.name_plan}}</td>
-      <td style="width: 30%">{{i.cost_plan | currency : 'BSF' : 'symbol' : '1.0-2' : 'fr'}}</td>
+      <td style="width: 10%">{{i.cost_plan | number : '1.0-2'}} BSF</td>
+      <td style="width: 10%">{{i.taza | currency : 'USD' : 'symbol' : '1.0-2' : 'fr'}}</td>
       <td style="width: 30%">{{i.updated_at}}</td>
-      <td style="width: 10%">
+      <td style="width:10%" *ngIf="usuario.perm && !usuario.perm.includes('planes_w')">
+        No Autorizado
+      </td>
+      <td style="width: 10%" *ngIf="usuario.perm && usuario.perm.includes('planes_w')">
         <button md-icon-button color="primary" (click)="show(i)">
         <md-icon class="md-24" aria-label="Editar AP" >mode_edit</md-icon>
       </button>

@@ -8,6 +8,7 @@ import 'rxjs/add/observable/merge';
 import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/material';
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule} from '@angular/forms';
 import 'rxjs/add/operator/startWith';
+import { AuthGuard } from '../_guards/index';
 import {Router} from '@angular/router';
 
 @Component({
@@ -22,6 +23,7 @@ export class PlanesComponent {
     data:any = null;
     search: string = '';
     constructor(
+      public usuario: AuthGuard,
       private http: Http,
       public dialog: MdDialog,
       public snackBar:MdSnackBar,
@@ -44,6 +46,15 @@ export class PlanesComponent {
 
     openDialog(): void {
       let dialogRef = this.dialog.open(AddplanesComponent, {
+        width: '25%'
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+
+      })
+    }
+    updatePrices(): void {
+      let dialogRef = this.dialog.open(UpdatePlanPricesDialog, {
         width: '25%'
       });
       dialogRef.afterClosed().subscribe(result => {
@@ -148,7 +159,8 @@ export class PlanesComponent {
           this.addplan = this.fb.group({
             cost_plan: row.cost_plan,
             name_plan: row.name_plan,
-            id: row.id_plan
+            taza: row.taza,
+            id_plan: row.id_plan
 
           });
           //console.log(row)
@@ -157,6 +169,7 @@ export class PlanesComponent {
           this.addplan = this.fb.group({
             cost_plan: '',
             name_plan: '',
+            taza: '',
 
 
           });
@@ -175,15 +188,17 @@ export class PlanesComponent {
         console.log(JSON.stringify(this.addplan.value));
         var body =
         "cost_plan=" + plan.cost_plan +
+        "&taza=" + plan.taza +
         "&name_plan="+plan.name_plan;
         var url = "http://186.167.32.27:81/maraveca/public/index.php/api/planes?"+body;
 
-        this.http.post(url, body).subscribe((data) => {});
-        this.dialogRef.close();
-        this.snackBar.open("Agregando Plan: Por favor espere", null, {
-          duration: 2000,
+        this.http.post(url, body).subscribe((data) => {
+          this.dialogRef.close();
+          this.snackBar.open("Agregando Plan: Por favor espere", null, {
+            duration: 2000,
+          });
+          this.CC.refresh();
         });
-        this.CC.refresh();
 
       }
       Editar(){
@@ -191,15 +206,17 @@ export class PlanesComponent {
         console.log(JSON.stringify(this.addplan.value));
         var body =
         "cost_plan=" + plan.cost_plan +
+        "&taza=" + plan.taza +
         "&name_plan="+plan.name_plan;
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/planes/"+plan.id+"?"+body;
+        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/planes/"+plan.id_plan+"?"+body;
 
-        this.http.put(url, body).subscribe((data) => {});
-        this.dialogRef.close();
-        this.snackBar.open("Editando Plan: Por favor espere", null, {
-          duration: 2000,
+        this.http.put(url, plan).subscribe((data) => {
+          this.dialogRef.close();
+          this.snackBar.open("Editando Plan: Por favor espere", null, {
+            duration: 2000,
+          });
+          this.CC.refresh();
         });
-        this.CC.refresh();
 
       }
 
@@ -227,6 +244,50 @@ export class PlanesComponent {
             duration: 1000,
           });
           this.myService.refresh();
+        }
+
+      onNoClick(): void {
+        this.dialogRef.close();
+      }
+
+    }
+    @Component({
+  selector: 'Update-Prices',
+  templateUrl: 'UpdatePrices.component.html',
+  styleUrls: ['./planes.component.css']
+})
+    export class UpdatePlanPricesDialog {
+      myService: MyService | null;
+      addplan: FormGroup;
+      constructor(
+        public dialogRef: MdDialogRef<DeletePlanDialog>,
+        @Inject(MD_DIALOG_DATA) public data: any,
+         private http: Http,
+         public dialog: MdDialog,
+         public snackBar:MdSnackBar,
+         private router: Router,
+         private fb: FormBuilder) {
+          this.myService = new MyService(http, router);
+          this.addplan = this.fb.group({
+            taza: '',
+
+          });
+         }
+
+        update(): void {
+          var plan = this.addplan.value;
+          console.log(JSON.stringify(this.addplan.value));
+          var body = "taza=" + plan.taza;
+          var url = "http://186.167.32.27:81/maraveca/public/index.php/api/planes/update";
+
+          this.http.post(url, this.addplan.value).subscribe((data) => {
+            this.dialogRef.close();
+            this.snackBar.open("Editando Plan: Por favor espere", null, {
+              duration: 2000,
+            });
+
+          });
+
         }
 
       onNoClick(): void {

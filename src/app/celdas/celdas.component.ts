@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/material';
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import { AuthGuard } from '../_guards/index';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class CeldasComponent {
   myService: MyService | null;
   data: any = null;
   search: string = '';
-  constructor(private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router) {
+  constructor(public usuario: AuthGuard, private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router) {
     this.snackBar.open("Cargando Clientes", null, {
       duration: 2000,
     });

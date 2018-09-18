@@ -1,0 +1,473 @@
+<md-toolbar class="submenu">
+  <button md-raised-button class="btn" (click)="Close()">Atras</button>
+  <span class="example-spacer" style="text-align: center;">Ficha De Usuario</span>
+
+</md-toolbar>
+
+<div class="container">
+
+<div class="card">
+
+<!-- card de datos de usuario -->
+  <md-card class="example-card card-body text-center">
+    <md-card-header>
+      <md-card-title><h2>Datos de usuario</h2></md-card-title>
+    </md-card-header>
+    <md-card-content>
+
+      <!--form class="example-form" id="client" name="clientForm" [formGroup]="edituser" ng-submit="ok(clientForm)" novalidate-->
+        <table class="example-full-width" cellspacing="2">
+          <tr [formGroup]="edituser">
+          <td>
+            <md-form-field class="example-full-width">
+              <input type="text" name="nombre"
+              class="form-control"
+              formControlName="nombre_user"
+              placeholder="Nombre"
+              required
+              mdInput
+              >
+            </md-form-field>
+          </td>
+          <td>
+            <md-form-field class="example-full-width">
+              <input type="text" name="apellido"
+              class="form-control"
+              placeholder="Apellido"
+              formControlName="apellido_user"
+              required
+              mdInput
+              >
+            </md-form-field>
+          </td>
+          </tr>
+          <tr [formGroup]="edituser">
+          <td>
+            <md-form-field class="example-full-width">
+              <input type="text" name="email"
+              class="form-control"
+              formControlName="email_user"
+              placeholder="email"
+              required
+              mdInput
+              >
+            </md-form-field>
+          </td>
+          <td>
+            <md-form-field class="example-full-width">
+              <input type="text" name="phone"
+              class="form-control"
+              placeholder="Telefono"
+              formControlName="phone_user"
+              required
+              mdInput
+              >
+            </md-form-field>
+          </td>
+          </tr>
+          <tr [formGroup]="edituser">
+          <td colspan="2">
+            <md-form-field class="example-full-width">
+              <input type="text" name="Username"
+              class="form-control"
+              formControlName="username"
+              placeholder="Nombre de Usuario"
+              required
+              mdInput
+              >
+            </md-form-field>
+          </td>
+          </tr>
+          <tr [formGroup]="edituser">
+            <td>
+              <md-form-field class="example-full-width">
+                <input type="password" name="Password"
+                class="form-control"
+                placeholder="Contraseña"
+                formControlName="password"
+                mdInput
+                >
+              </md-form-field>
+            </td>
+            <td>
+              <md-form-field class="example-full-width">
+                <input type="password" name="Password"
+                class="form-control"
+                placeholder="Confirme Contraseña"
+                formControlName="confirm"
+                mdInput
+                >
+              </md-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <md-error *ngIf="wrongpass">las contraseñas no concuerdan</md-error>
+
+            </td>
+          </tr>
+        <!--/form-->
+          <tr *ngIf="usuario.perm && usuario.perm.includes('usuarios_w')">
+            <td>
+              <md-checkbox  [(ngModel)]="installer"  (change)="installerToggle(installer)">Es Instalador</md-checkbox>
+            </td>
+          </tr>
+
+      </table>
+
+
+    </md-card-content>
+    <md-card-actions>
+      <button (click)="actualizarUsuario()" md-raised-button color="#888888">Actualizar</button>
+    </md-card-actions>
+  </md-card>
+</div>
+  <!-- card de permisos y privilegios -->
+
+<div class="card" *ngIf="usuario.perm && usuario.perm.includes('usuarios_w')">
+
+  <md-card class="example-card card-body text-center">
+    <md-card-header>
+      <md-card-title><h2>Permisos</h2></md-card-title>
+    </md-card-header>
+    <md-card-content>
+
+      <table class="example-full-width">
+        <thead>
+        <tr>
+          <td>
+            <h3>Modulo</h3>
+          </td>
+          <td>
+            <h3>Lectura</h3>
+          </td>
+          <td>
+            <h3>Escritura</h3>
+          </td>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              AP
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="ap"  (change)="listToglePermisos('ap', ap)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="ap_w"  (change)="listToglePermisos('ap_w', ap_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Celdas
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="celdas"  (change)="listToglePermisos('celdas', celdas)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="celdas_w"  (change)="listToglePermisos('celdas_w', celdas_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Clientes
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="clientes"  (change)="listToglePermisos('clientes', clientes)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="clientes_w"  (change)="listToglePermisos('clientes_w', clientes_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Equipos
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="equipos"  (change)="listToglePermisos('equipos', equipos)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="equipos_w"  (change)="listToglePermisos('equipos_w', equipos_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Cuentas por cobrar
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="cobrar"  (change)="listToglePermisos('cobrar', cobrar)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="cobrar_w"  (change)="listToglePermisos('cobrar_w', cobrar_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Factibilidades
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="factibilidades"  (change)="listToglePermisos('factibilidades', factibilidades)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="factibilidades_w"  (change)="listToglePermisos('factibilidades_w', factibilidades_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Facturacion
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="facturacion"  (change)="listToglePermisos('facturacion', facturacion)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="facturacion_w"  (change)="listToglePermisos('facturacion_w', facturacion_w)"></md-checkbox>
+            </td>
+          </tr>
+          <!--tr>
+            <td>
+              Instalaciones
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="instalaciones"  (change)="listToglePermisos('instalaciones', instalaciones)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="instalaciones_w"  (change)="listToglePermisos('instalaciones_w', instalaciones_w)"></md-checkbox>
+            </td>
+          </tr-->
+          <tr>
+            <td>
+              Notificaciones
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="notificaciones"  (change)="listToglePermisos('notify', notificaciones)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="notificaciones_w"  (change)="listToglePermisos('notify_w', notificaciones_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Pagar
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="pagar"  (change)="listToglePermisos('pagar', pagar)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox  [(ngModel)]="pagar_w"  (change)="listToglePermisos('pagar_w', pagar_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Potenciales
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="potenciales"  (change)="listToglePermisos('pclientes', potenciales)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox  [(ngModel)]="potenciales_w"  (change)="listToglePermisos('pclientes_w', potenciales_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Planes
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="planes"  (change)="listToglePermisos('planes', planes)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="planes_w"  (change)="listToglePermisos('planes_w', planes_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Routers
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="routers"  (change)="listToglePermisos('router', routers)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="routers_w"  (change)="listToglePermisos('router_w', routers_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Servicios
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="servicios"  (change)="listToglePermisos('servicios', servicios)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="servicios_w"  (change)="listToglePermisos('servicios_w', servicios_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Soporte
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="soporte"  (change)="listToglePermisos('soporte', soporte)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="soporte_w"  (change)="listToglePermisos('soporte_w', soporte_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Usuarios
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="usuarios"  (change)="listToglePermisos('usuarios', usuarios)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="usuarios_w"  (change)="listToglePermisos('usuarios_w', usuarios_w)"></md-checkbox>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </md-card-content>
+    <md-card-actions>
+      <button md-raised-button color="#888888" (click)="actualizarPermisos()">Actualizar</button>
+    </md-card-actions>
+  </md-card>
+</div>
+
+  <!-- card de zonas -->
+
+<div class="card" *ngIf="usuario.perm && usuario.perm.includes('usuarios_w')">
+
+  <md-card class="example-card card-body text-center">
+    <md-card-header>
+      <md-card-title><h2>Zonas</h2></md-card-title>
+    </md-card-header>
+    <md-card-content>
+
+      <table class="example-full-width">
+        <thead>
+          <tr>
+            <td>
+              <h3>Zona</h3>
+            </td>
+            <td>
+              <h3>Permiso</h3>
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+            Dabajuro
+          </td>
+          <td>
+            <md-checkbox  [(ngModel)]="dabajuro"  (change)="listTogleZonas('3', dabajuro)"></md-checkbox>
+          </td>
+          </tr>
+          <tr>
+            <td>
+            Cabimas
+          </td>
+          <td>
+            <md-checkbox  [(ngModel)]="cabimas"  (change)="listTogleZonas('14', cabimas)"></md-checkbox>
+          </td>
+          </tr>
+          <tr>
+            <td>
+            Coro-Galicia
+          </td>
+          <td>
+            <md-checkbox  [(ngModel)]="galicia"  (change)="listTogleZonas('12', galicia)"></md-checkbox>
+          </td>
+          </tr>
+          <tr>
+            <td>
+            Mene Mauroa
+          </td>
+          <td>
+            <md-checkbox  [(ngModel)]="mene"  (change)="listTogleZonas('6', mene)"></md-checkbox>
+          </td>
+          </tr>
+          <tr>
+            <td>
+            Punto Fijo
+          </td>
+          <td>
+            <md-checkbox  [(ngModel)]="ptofjo"  (change)="listTogleZonas('11', ptofjo)"></md-checkbox>
+          </td>
+          </tr>
+          <tr>
+            <td>
+            San Francisco
+          </td>
+          <td>
+            <md-checkbox  [(ngModel)]="sanfrancisco"  (change)="listTogleZonas('21', sanfrancisco)"></md-checkbox>
+          </td>
+          </tr>
+          <tr>
+            <td>
+            Seque
+          </td>
+          <td>
+            <md-checkbox  [(ngModel)]="seque"  (change)="listTogleZonas('10', seque)"></md-checkbox>
+          </td>
+          </tr>
+          <tr>
+            <td>
+            Socopo
+          </td>
+          <td>
+            <md-checkbox  [(ngModel)]="socopo"  (change)="listTogleZonas('13', socopo)"></md-checkbox>
+          </td>
+          </tr>
+          <tr>
+            <td>
+            Valle Claro (Inter)
+          </td>
+          <td>
+            <md-checkbox  [(ngModel)]="inter"  (change)="listTogleZonas('15', inter)"></md-checkbox>
+          </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </md-card-content>
+    <md-card-actions>
+      <button (click)="actualizarZonas()" md-raised-button color="#888888">Actualizar</button>
+    </md-card-actions>
+  </md-card>
+</div>
+<div class="card" *ngIf="(usuario && usuario.perm.includes('usuarios_w')) && (data && data.installer == 1)">
+  <md-card class="example-card card-body text-center">
+    <md-card-header>
+      <md-card-title><h2>Instaladores</h2></md-card-title>
+    </md-card-header>
+    <md-card-content>
+
+      <table class="example-full-width">
+        <thead>
+          <tr>
+            <td *ngIf="data && data.installs>0">
+              {{data.installs}} Instalaciones Finalizadas
+            </td>
+            <td *ngIf="data && data.installs==0">
+              0 Instalaciones Finalizadas
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+
+          </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </md-card-content>
+    <md-card-actions>
+      <button (click)="ResetCounter(data)" md-raised-button color="#888888">Reiniciar Contador</button>
+    </md-card-actions>
+  </md-card>
+</div>
+</div>

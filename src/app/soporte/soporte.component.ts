@@ -13,6 +13,7 @@ import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 import 'rxjs/add/operator/takeWhile';
 import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-soporte',
@@ -23,34 +24,43 @@ export class SoporteComponent implements OnInit, OnDestroy{
   myService: MyService;
   datat: any = [];
   datai: any = [];
+  dataa: any = [];
   pi:any;
   pt:any;
+  pa:any;
   datat_t: any = [];
   datai_t: any = [];
+  dataa_t: any = [];
   pi_t:any;
   pt_t:any;
+  pa_t:any;
   update:boolean=true
   autoupdate:boolean
   //datai= [];
   search: string;
-  modo: any = 2;
+  modo;
   position: string = '2';
-  constructor(private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, public router: Router, public usuario: AuthGuard) {
+  constructor(
+    private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, public router: Router, public usuario: AuthGuard) {
     this.snackBar.open("Cargando Tickets", null, {
       duration: 2000,
     });
     this.autoupdate=true;
-    this.myService = new MyService(http, router);
+    this.myService = new MyService(http, router, usuario);
     console.log(usuario.currentUser)
     this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/soportesm/?user=' + usuario.currentUser.id_user)
     .subscribe((data) => {
       this.datat_t = data.json().soporte;
       this.datai_t = data.json().instalaciones;
+      this.dataa_t = data.json().averias;
       this.pi_t = data.json().pendingi;
       this.pt_t = data.json().pendingt;
+      this.pa_t = data.json().pendinga;
       this.datat = this.datat_t
       this.datai = this.datai_t
+      this.dataa = this.dataa_t
       this.pi = this.pi_t
+      this.pa = this.pa_t
       this.pt = this.pt_t
       this.update=false
     });
@@ -63,6 +73,7 @@ export class SoporteComponent implements OnInit, OnDestroy{
 
   }
   ngOnInit(){
+    //this.modo =2;
     IntervalObservable.create(10000)
     .takeWhile(() => this.autoupdate)
     .subscribe(() => {
@@ -86,16 +97,16 @@ export class SoporteComponent implements OnInit, OnDestroy{
       this.pi_t = data.json().pendingi;
       this.pt_t = data.json().pendingt;
         this.update=false
+        this.datat = this.datat_t
+        this.datai = this.datai_t
+        this.pi = this.pi_t
+        this.pt = this.pt_t
         if (nf){
           this.snackBar.open("Lista Actualizada", null, {
           duration: 2000,
         });
       }
       });
-      this.datat = this.datat_t
-      this.datai = this.datai_t
-      this.pi = this.pi_t
-      this.pt = this.pt_t
 
   }
 
@@ -155,7 +166,7 @@ this.myService.refresh();
 
 export class MyService {
 
-  constructor(private http: Http, private router: Router) {
+  constructor(private http: Http, private router: Router, public usuario: AuthGuard) {
 
   }
 
@@ -164,7 +175,7 @@ export class MyService {
   }
   deleteData(id){
 
-    return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/soporte/'+id, {})
+    return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/soporte/'+id+'?responsable='+this.usuario.currentUser.id_user, {})
     .map((resp:Response)=>resp.json());
 
 
@@ -257,6 +268,7 @@ export class AddticketComponent implements OnInit{
         problema_soporte: '',
         afectacion_soporte: '1',
         problems:'',
+        comment_soporte:'',
         servicio_soporte: ['', Validators.required],
         celda_soporte:['', Validators.required],
         equipo_soporte:['', Validators.required],
@@ -350,6 +362,7 @@ export class AddticketComponent implements OnInit{
             this.addplan.get('equipo_soporte').setValidators([Validators.required]);
             this.addplan.get('seriale').setValidators([Validators.required]);
             this.addplan.get('afectacion_soporte').setValidators([]);
+            this.addplan.get('comment_soporte').setValidators([]);
             this.addplan.get('servicio_soporte').setValidators([]);
             this.addplan.get('problems').setValidators([]);
 
@@ -360,8 +373,19 @@ export class AddticketComponent implements OnInit{
             this.addplan.get('equipo_soporte').setValidators([]);
             this.addplan.get('seriale').setValidators([]);
             this.addplan.get('afectacion_soporte').setValidators([Validators.required]);
+            this.addplan.get('comment_soporte').setValidators([]);
             this.addplan.get('servicio_soporte').setValidators([Validators.required]);
             this.addplan.get('problems').setValidators([Validators.required]);
+
+          }else if (tipo_soporte === "3") {
+            console.log("averia")
+            this.addplan.get('servicio_soporte').setValidators([Validators.required]);
+            this.addplan.get('celda_soporte').setValidators([]);
+            this.addplan.get('equipo_soporte').setValidators([]);
+            this.addplan.get('seriale').setValidators([]);
+            this.addplan.get('afectacion_soporte').setValidators([]);
+            this.addplan.get('comment_soporte').setValidators([Validators.required]);
+            this.addplan.get('problems').setValidators([]);
 
           }
 
@@ -464,6 +488,7 @@ export class EditticketComponent implements OnInit, OnDestroy{
     //@Inject(MD_DIALOG_DATA) public row: any,
     private route: ActivatedRoute,
     public snackBar: MdSnackBar,
+    private location: Location,
     public dialog: MdDialog,
     private router: Router){
       this.edit = true
@@ -549,7 +574,7 @@ export class EditticketComponent implements OnInit, OnDestroy{
       window.open("http://186.167.32.27:81/maraveca/test.php?ip="+id, '_blank');
     }
     Close(){
-      window.close();
+    this.location.back();
     }
     addh(){
       //console.log(this.addplan.value.historia)
@@ -584,60 +609,6 @@ export class EditticketComponent implements OnInit, OnDestroy{
         //this.animal = result;
       });
     }
-
-    Enviar(){
-      var plan = this.addplan.value;
-      console.log(JSON.stringify(this.addplan.value));
-      var body =
-      "nombre_user=" + plan.nombre_user +
-      "&apellido_user="+plan.apellido_user+
-      "&username="+plan.username+
-      "&email_user="+plan.email_user+
-      "&phone_user="+plan.phone_user+
-      "&password_user="+plan.password_user;
-      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/users?"+body;
-      /*if (!this.row)
-      {this.http.post(url, body).subscribe((data) => {});
-      this.dialogRef.close();
-      this.snackBar.open("Agregando Usuario: Por favor espere", null, {
-      duration: 2000,
-    });
-  }else{*/
-  this.http.put(url, body).subscribe((data) => {});
-  //this.dialogRef.close();
-  this.snackBar.open("Editando Usuario: Por favor espere", null, {
-  duration: 2000,
-});
-//}
-this.refresh(false);
-}
-Editar(){
-  var plan = this.addplan.value;
-  console.log(JSON.stringify(this.addplan.value));
-  var body =
-  "nombre_user=" + plan.nombre_user +
-  "&apellido_user="+plan.apellido_user+
-  "&username="+plan.username+
-  "&email_user="+plan.email_user+
-  "&phone_user="+plan.phone_user+
-  "&password_user="+plan.password_user;
-  var url = "http://186.167.32.27:81/maraveca/public/index.php/api/users?"+body;
-  /*if (!this.row)
-  {this.http.post(url, body).subscribe((data) => {});
-  this.dialogRef.close();
-  this.snackBar.open("Agregando Usuario: Por favor espere", null, {
-  duration: 2000,
-});
-}else{*/
-this.http.put(url, body).subscribe((data) => {});
-//this.dialogRef.close();
-this.snackBar.open("Editando Usuario: Por favor espere", null, {
-duration: 2000,
-});
-//}
-this.refresh(false);
-}
-
 }
 
 
@@ -655,15 +626,21 @@ export class DeleteticketDialog {
     @Inject(MD_DIALOG_DATA) public data: any,
     private http: Http,
     public dialog: MdDialog,
+    private fb: FormBuilder,
     public snackBar:MdSnackBar,
-    private router: Router) {
-      this.myService = new MyService(http, router);
+    private router: Router,
+    public usuario: AuthGuard) {
+      this.myService = new MyService(http, router, usuario);
       this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
       console.log(data)
     }
 
     delete(): void {
       console.log("cerrando"+this.data.id);
+      var post = this.fb.group({
+        status_soporte: 2,
+        responsable: this.usuario.currentUser.id_user
+      });
       var body ="status_soporte=2"
       var url = "http://186.167.32.27:81/maraveca/public/index.php/api/soporte/"+this.data.id+"?"+body;
       this.http.put(url, body).subscribe((data) => {
@@ -703,9 +680,12 @@ export class DeleteticketDialog {
     conectores:any = 0;
     ip:any = "";
     ap:any="";
+    installer:any="";
     serial:any;
     aps:any;
+    installers:any;
     a_search:any="";
+    u_search:any="";
     constructor(
       private fb: FormBuilder,
       private route: ActivatedRoute,
@@ -714,24 +694,29 @@ export class DeleteticketDialog {
       private http: Http,
       public dialog: MdDialog,
       public snackBar:MdSnackBar,
-      private router: Router) {
+      private router: Router,
+      public usuario: AuthGuard) {
+      }
+
+      ngOnInit(){
+        //186.167.32.27:81/maraveca/public/index.php/api/installer
+        this.myService = new MyService(this.http, this.router, this.usuario);
+        this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/installer')
+        .subscribe((data) => {
+          this.installers = data.json();
+          console.log(this.aps);
+        });
+
         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/aps/')
         .subscribe((data) => {
           this.aps = data.json();
           console.log(this.aps);
         });
-        console.log(this.cable1);
-        console.log(this.cable2);
-        console.log(this.conectores);
-        console.log(this.ip);
-        console.log(this.ap);
-        this.myService = new MyService(http, router);
-        console.log(data.row)
-        this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-      }
 
-      ngOnInit(){
-
+        if (this.currentUser.installer==1){
+          this.installer=this.currentUser.id_user
+        }
       }
 
       nosymbol(){
@@ -741,39 +726,29 @@ export class DeleteticketDialog {
       }
 
       service(row): void {
-        console.log(this.data.row.id_soporte + " prueba");
-        var body ="status_soporte=2"
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/soporte/"+this.data.row.id_soporte+"?"+body;
-        this.http.put(url, body).subscribe((data) => {
-          this.myService.refresh()
-          this.myService.Close()
-        });
-        var body1=
-        "user_th="+this.currentUser.id_user+
-        "&ticket_th="+this.data.row.id_soporte+
-        "&comment=Se Cierra el ticket"
-        var url1 = "http://186.167.32.27:81/maraveca/public/index.php/api/ticketh?"+body1;
-        this.http.post(url1,body1).subscribe((data) => {});
         var cable=this.cable1-this.cable2;
         if (cable < 0){
           cable=cable*(-1);
         }
-        var body1=
-        "user_th="+this.currentUser.id_user+
-        "&ticket_th="+this.data.row.id_soporte+
-        "&comment=se usaron: "+(cable)+" metros de cable y "+this.conectores+" conectores"
-        var url1 = "http://186.167.32.27:81/maraveca/public/index.php/api/ticketh?"+body1;
-        this.http.post(url1,body1).subscribe((data) => {});
-
         this.addDetails=this.fb.group({
           ap: this.ap,
           ip: this.ip,
+          conectores: this.conectores,
+          cable: cable,
           serial: this.serial,
           ser1al: this.data.row.ser1al,
-          id: this.data.row.id_soporte
+          id: this.data.row.id_soporte,
+          status_soporte: "2",
+          user: this.currentUser.id_user,
+          installer: this.installer
         })
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/ticketa";
-        this.http.post(url, this.addDetails.value).subscribe((data) =>{});
+        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/install/"+this.data.row.id_soporte;
+        this.http.put(url, this.addDetails.value).subscribe((data) => {
+          this.myService.refresh()
+          this.dialogRef.close();
+
+        });
+
 
       }
 

@@ -24,7 +24,7 @@
             <md2-select name="tipo"
             formControlName="tipo_soporte"
             placeholder="Tipo de soporte"
-            style="width=100%; min-width: 100%; min-height: 100%;"
+            style="width:100%; min-width: 100%; min-height: 100%;"
             mdInput
             >
             <md2-option value="2" >
@@ -33,7 +33,7 @@
             <md2-option value="1" >
               Instalacion
             </md2-option>
-            <md2-option value="3" disabled>
+            <md2-option value="3">
               Averia
             </md2-option>
           </md2-select>
@@ -68,7 +68,7 @@
         <md2-option value="1" >
           Instalacion
         </md2-option>
-        <md2-option value="3" disabled>
+        <md2-option value="3" >
           Averia
         </md2-option>
       </md2-select>
@@ -178,9 +178,53 @@
           </td>
 
         </tr>
-
-
         <!-- fin de celdas y equipos para instalaciones -->
+
+        <!-- Celdas y equipos para averias -->
+
+        <tr *ngIf="addplan.value.tipo_soporte == 3">
+          <td colspan="2">
+            <md2-select name="celda"
+                      formControlName="servicio_soporte"
+                      placeholder="Celda"
+                      style="width=100%; min-width: 100%; min-height: 100%;"
+                      mdInput
+                      floatPlaceholder="never"
+                      [disabled]="row"
+                      >
+            <md2-select-header>
+              <input class="search" name="S_celda"
+                     type="text"
+                     [(ngModel)]="S_celda"
+                     placeholder="Buscar..."
+                     style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                     formControlName="S_servicios" />
+            </md2-select-header>
+            <md2-option *ngFor="let i of (celda | dataPipe : {nombre_celda: S_celda})" [value]="i.id_celda">
+              <span>{{(i.nombre_celda | capitalize2)}}</span><br />
+            </md2-option>
+          </md2-select>
+          </td>
+
+
+        </tr>
+        <tr *ngIf="addplan.value.tipo_soporte == 3">
+          <td colspan="2">
+            <md-form-field class="example-full-width">
+              <input type="text" name="last"
+              class="form-control"
+              formControlName="comment_soporte"
+              placeholder="Comentario"
+              autocomplete="off"
+              required
+              mdInput
+              >
+            </md-form-field>
+          </td>
+        </tr>
+
+
+        <!-- fin de celdas y equipos para averias -->
 
 
 
@@ -258,6 +302,7 @@
               <md2-option value="Switch" >
                 Switch
               </md2-option>
+              
             </md2-select>
             </td>
             <td>
