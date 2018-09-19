@@ -122,6 +122,54 @@
     </md-card-actions>
   </md-card>
 </div>
+
+
+<div class="card" *ngIf="historial && historial.length > 0">
+
+  <md-card class="example-card card-body text-center">
+    <md-card-header>
+      <md-card-title><h4>Historial</h4></md-card-title>
+    </md-card-header>
+    <md-card-content>
+      <div class="example-form">
+
+      <table class=example-full-width [md2Data]="historial" #md2="md2DataTable" class="addClient" [rowsPerPage]="3">
+        <thead>
+          <tr>
+            <td colspan="3">
+              <md2-pagination></md2-pagination>
+            </td>
+          </tr>
+          <tr>
+            <th  md2SortBy="name_plan">Detalle</th>
+            <th md2SortBy='comment_srv'> Modulo</th>
+            <th style="text-align: center" >Fecha</th>
+          </tr>
+        </thead>
+        <tbody class='fac'>
+          <tr class="fac montos" *ngFor="let i of md2.data">
+            <td class="fac">
+              {{i.detalle}}
+            </td>
+            <td class="fac">
+              {{i.modulo}}
+            </td>
+            <td class="fac">
+              {{i.created_at  | stringToDate | date: 'd/M/yy'}}
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+      </table>
+    </div>
+    </md-card-content>
+
+  </md-card>
+</div>
+
+
   <!-- card de permisos y privilegios -->
 
 <div class="card" *ngIf="usuario.perm && usuario.perm.includes('usuarios_w')">

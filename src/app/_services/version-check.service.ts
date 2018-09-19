@@ -32,7 +32,6 @@ export class VersionCheckService {
                 (response: any) => {
                     const hash = response.hash;
                     const hashChanged = this.hasHashChanged(this.currentHash, hash);
-
                     // If new version, do something
                     if (hashChanged) {
                         // ENTER YOUR CODE TO DO SOMETHING UPON VERSION CHANGE
@@ -62,7 +61,6 @@ export class VersionCheckService {
         if (!currentHash || currentHash === '{{POST_BUILD_ENTERS_HASH_HERE}}') {
             return false;
         }
-        console.log(currentHash !== newHash)
         return currentHash !== newHash;
     }
 }

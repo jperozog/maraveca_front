@@ -22,6 +22,9 @@
     .x290{display:block;}
 
 }
+table.fac, th.fac, td.fac {
+  border:1px solid black
+}
 
 .updateicon {
     color: red;

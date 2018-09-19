@@ -26,6 +26,9 @@
 .example-half-width {
   width: 100%;
 }
+table.fac, th.fac, td.fac {
+  border:1px solid black
+}
 
 .example-spacer {
     flex: 1 1 auto;

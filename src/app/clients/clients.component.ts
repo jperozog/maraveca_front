@@ -586,6 +586,7 @@ export class ClientOverview implements OnInit{
   soporte:any
   cliente:any
   servicios:any
+  historial:any
   addClient: FormGroup;
   facturacion:any
   editclient:boolean=false
@@ -642,6 +643,7 @@ export class ClientOverview implements OnInit{
          this.facturacion = response.facturacion
          this.servicios = response.servicios
          this.cliente = response.cliente
+         this.historial = response.history
          this.addClient.patchValue({
            kind: this.cliente.kind,
            dni: this.cliente.dni,
@@ -677,6 +679,7 @@ export class ClientOverview implements OnInit{
            this.facturacion = response.facturacion
            this.servicios = response.servicios
            this.cliente = response.cliente
+           this.historial = response.history
            this.addClient.patchValue({
              kind: this.cliente.kind,
              dni: this.cliente.dni,
@@ -716,6 +719,7 @@ export class ClientOverview implements OnInit{
            this.facturacion = response.facturacion
            this.servicios = response.servicios
            this.cliente = response.cliente
+           this.historial = response.history
            this.addClient.patchValue({
              kind: this.cliente.kind,
              dni: this.cliente.dni,
@@ -755,6 +759,7 @@ export class ClientOverview implements OnInit{
          this.facturacion = response.facturacion
          this.servicios = response.servicios
          this.cliente = response.cliente
+         this.historial = response.history
          this.facturacion.forEach(linea => {
            if(linea.denominacion == 'Bs.S'){
              if(linea.fac_status==1){

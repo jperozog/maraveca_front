@@ -236,6 +236,7 @@ export class DeleteuserDialog {
     test:any;
     id: any;
     data: any;
+    historial: any = null;
     edituser: FormGroup;
     wrongpass:boolean = false;
     //permisos
@@ -300,225 +301,229 @@ export class DeleteuserDialog {
       private router: Router,
       private fb: FormBuilder,
       private location: Location,
-    public usuario: AuthGuard,
+      public usuario: AuthGuard,
     )
-      {
-        this.test = this.route.params
-        .subscribe(
-          params => {
-            this.id = params.id_user;
-          }
-        )
-        this.edituser = this.fb.group({
-          responsable: this.usuario.currentUser.id_user,
-          nombre_user: '',
-          installer: '',
-          apellido_user: '',
-          username: ['', [Validators.required]],
-          email_user: '',
-          phone_user: '',
-          password: ['', [Validators.required]],
-          confirm: ['', [Validators.required]],
-        });
-        this.editpermisos= this.fb.group({
-          responsable: '',
-          permisos: '',
-          usuario: ''
-        })
-        this.editzona= this.fb.group({
-          responsable: '',
-          zonas: '',
-          usuario: ''
-        })
-      }
+    {
+      this.test = this.route.params
+      .subscribe(
+        params => {
+          this.id = params.id_user;
+        }
+      )
+      this.edituser = this.fb.group({
+        responsable: this.usuario.currentUser.id_user,
+        nombre_user: '',
+        installer: '',
+        apellido_user: '',
+        username: ['', [Validators.required]],
+        email_user: '',
+        phone_user: '',
+        password: ['', [Validators.required]],
+        confirm: ['', [Validators.required]],
+      });
+      this.editpermisos= this.fb.group({
+        responsable: '',
+        permisos: '',
+        usuario: ''
+      })
+      this.editzona= this.fb.group({
+        responsable: '',
+        zonas: '',
+        usuario: ''
+      })
+    }
 
-      Close(){this.location.back();}
+    Close(){this.location.back();}
 
-      listToglePermisos(nombre, valor){
-        console.log(nombre)
-        console.log(valor)
-        if(valor){
-          this.permisos.push(nombre)
-          console.log(this.permisos)
-        }else{
-          const index: number = this.permisos.indexOf(nombre);
-          if (index !== -1) {
-        this.permisos.splice(index, 1);
+    listToglePermisos(nombre, valor){
+      console.log(nombre)
+      console.log(valor)
+      if(valor){
+        this.permisos.push(nombre)
         console.log(this.permisos)
-    }
+      }else{
+        const index: number = this.permisos.indexOf(nombre);
+        if (index !== -1) {
+          this.permisos.splice(index, 1);
+          console.log(this.permisos)
         }
       }
-      listTogleZonas(nombre, valor){
-        if(valor){
-          this.zonas.push(nombre)
-          console.log(this.zonas)
-        }else{
-          const index: number = this.zonas.indexOf(nombre);
-          if (index !== -1) {
-        this.zonas.splice(index, 1);
+    }
+    listTogleZonas(nombre, valor){
+      if(valor){
+        this.zonas.push(nombre)
         console.log(this.zonas)
+      }else{
+        const index: number = this.zonas.indexOf(nombre);
+        if (index !== -1) {
+          this.zonas.splice(index, 1);
+          console.log(this.zonas)
+        }
+      }
     }
-        }
+    installerToggle(valor){
+      if(valor){
+        this.edituser.patchValue({
+          installer: '1'
+        })
+      }else{
+        this.edituser.patchValue({
+          installer: '0'
+        })
       }
-      installerToggle(valor){
-        if(valor){
-          this.edituser.patchValue({
-            installer: '1'
-          })
+      console.log(valor)
+    }
+    ResetCounter(row): void {
+      let dialogRef = this.dialog.open(ResetCounter, {
+        data: { nombre: row.nombre_user+" "+row.apellido_user, id: row.id_user }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        //this.animal = result;
+      });
+    }
+    ngOnInit(){
+
+      //http://186.167.32.27:81/maraveca/public/index.php/api/uh/1
+      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/uh/'+this.id)
+      .subscribe((data)=>{
+        this.historial = data.json();
+      })
+      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+this.id+'/zona')
+      .subscribe((data) => {
+        data.json().forEach(permi => {
+          this.zonas.push(permi.zona);
+        });
+        this.zonas.forEach(zonas =>{
+          if(zonas == '3'){ this.dabajuro=true }
+          else if(zonas == '14'){ this.cabimas=true }
+          else if(zonas == '12'){ this.galicia=true }
+          else if(zonas == '6'){ this.mene=true }
+          else if(zonas == '11'){ this.ptofjo=true }
+          else if(zonas == '21'){ this.sanfrancisco=true }
+          else if(zonas == '10'){ this.seque=true }
+          else if(zonas == '13'){ this.socopo=true }
+          else if(zonas == '15'){ this.inter=true }
+
+        })
+      });
+
+      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+this.id)
+      .subscribe((data) => {
+        this.data = data.json()[0];
+        console.log(this.data)
+        this.edituser.patchValue({
+          nombre_user: this.data.nombre_user,
+          apellido_user: this.data.apellido_user,
+          username: this.data.username,
+          email_user: this.data.email_user,
+          phone_user: this.data.phone_user,
+          password: '',
+          confirm: '',
+          installer: this.data.installer,
+        })
+        if(this.data.installer=='1'){
+          this.installer=true
         }else{
-          this.edituser.patchValue({
-            installer: '0'
-          })
+          this.installer=false
         }
-        console.log(valor)
-      }
-      ResetCounter(row): void {
-        let dialogRef = this.dialog.open(ResetCounter, {
-          data: { nombre: row.nombre_user+" "+row.apellido_user, id: row.id_user }
-        });
+      });
+      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+this.id+'/permission')
+      .subscribe((data) => {
+        data.json().forEach(permi => {
+          this.permisos.push(permi.perm);
+        })
+        this.permisos.forEach(perm =>{
+          if(perm == 'ap'){ this.ap=true }
+          else if(perm == 'ap_w'){ this.ap_w=true }
+          else if(perm == 'celdas'){ this.celdas=true }
+          else if(perm == 'celdas_w'){ this.celdas_w=true }
+          else if(perm == 'clientes'){ this.clientes=true }
+          else if(perm == 'clientes_w'){ this.clientes_w=true }
+          else if(perm == 'pclientes'){ this.potenciales=true }
+          else if(perm == 'pclientes_w'){ this.potenciales_w=true }
+          else if(perm == 'equipos'){ this.equipos=true }
+          else if(perm == 'equipos_w'){ this.equipos_w=true }
+          else if(perm == 'factibilidades'){ this.factibilidades=true }
+          else if(perm == 'factibilidades_w'){ this.factibilidades_w=true }
+          else if(perm == 'facturacion'){ this.facturacion=true }
+          else if(perm == 'facturacion_w'){ this.facturacion_w=true }
+          else if(perm == 'instalaciones'){ this.instalaciones=true }
+          else if(perm == 'instalaciones_w'){ this.instalaciones_w=true }
+          else if(perm == 'notify'){ this.notificaciones=true }
+          else if(perm == 'notify_w'){ this.notificaciones_w=true }
+          else if(perm == 'planes'){ this.planes=true }
+          else if(perm == 'planes_w'){ this.planes_w=true }
+          else if(perm == 'router'){ this.routers=true }
+          else if(perm == 'router_w'){ this.routers_w=true }
+          else if(perm == 'servicios'){ this.servicios=true }
+          else if(perm == 'servicios_w'){ this.servicios_w=true }
+          else if(perm == 'soporte'){ this.soporte=true }
+          else if(perm == 'soporte_w'){ this.soporte_w=true }
+          else if(perm == 'usuarios'){ this.usuarios=true }
+          else if(perm == 'usuarios_w'){ this.usuarios_w=true }
+          else if(perm == 'cobrar'){ this.cobrar=true }
+          else if(perm == 'cobrar_w'){ this.cobrar_w=true }
+          else if(perm == 'pagar'){ this.pagar=true }
+          else if(perm == 'pagar_w'){ this.pagar_w=true }
+        })
+      });
 
-        dialogRef.afterClosed().subscribe(result => {
-          console.log('The dialog was closed');
-          //this.animal = result;
-        });
-      }
-      ngOnInit(){
+    }
 
+    actualizarPermisos(){
 
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+this.id+'/zona')
-        .subscribe((data) => {
-          data.json().forEach(permi => {
-            this.zonas.push(permi.zona);
+      this.editpermisos.patchValue({
+        responsable: this.usuario.currentUser.id_user,
+        permisos: this.permisos,
+        usuario: this.data.id_user
+      })
+      var url = 'http://186.167.32.27:81/maraveca/public/index.php/api/users/permission/'
+      this.http.post(url, this.editpermisos.value)
+      .subscribe((data) => {
+
+      });
+
+    }
+
+    actualizarZonas(){
+      this.editzona.patchValue({
+        responsable: this.usuario.currentUser.id_user,
+        zonas: this.zonas,
+        usuario: this.data.id_user
+      })
+      var url='http://186.167.32.27:81/maraveca/public/index.php/api/users/zona'
+      this.http.post(url, this.editzona.value)
+      .subscribe((data) => {
+
+      });
+    }
+
+    actualizarUsuario(){
+      if(this.edituser.value.password == ''){
+        this.edituser.patchValue({
+          password: this.data.password
+        })
+        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/users/"+this.id;
+        this.http.put(url, this.edituser.value).subscribe((data) => {
+          this.snackBar.open("usuario_editado", null, {
+            duration: 2000,
           });
-          this.zonas.forEach(zonas =>{
-            if(zonas == '3'){ this.dabajuro=true }
-            else if(zonas == '14'){ this.cabimas=true }
-            else if(zonas == '12'){ this.galicia=true }
-            else if(zonas == '6'){ this.mene=true }
-            else if(zonas == '11'){ this.ptofjo=true }
-            else if(zonas == '21'){ this.sanfrancisco=true }
-            else if(zonas == '10'){ this.seque=true }
-            else if(zonas == '13'){ this.socopo=true }
-            else if(zonas == '15'){ this.inter=true }
-
-          })
-        });
-
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+this.id)
-        .subscribe((data) => {
-          this.data = data.json()[0];
-          console.log(this.data)
           this.edituser.patchValue({
-            nombre_user: this.data.nombre_user,
-            apellido_user: this.data.apellido_user,
-            username: this.data.username,
-            email_user: this.data.email_user,
-            phone_user: this.data.phone_user,
-            password: '',
-            confirm: '',
-            installer: this.data.installer,
+            password: ''
           })
-          if(this.data.installer=='1'){
-            this.installer=true
-          }else{
-            this.installer=false
-          }
-        });
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+this.id+'/permission')
-        .subscribe((data) => {
-          data.json().forEach(permi => {
-            this.permisos.push(permi.perm);
-          })
-          this.permisos.forEach(perm =>{
-            if(perm == 'ap'){ this.ap=true }
-            else if(perm == 'ap_w'){ this.ap_w=true }
-            else if(perm == 'celdas'){ this.celdas=true }
-            else if(perm == 'celdas_w'){ this.celdas_w=true }
-            else if(perm == 'clientes'){ this.clientes=true }
-            else if(perm == 'clientes_w'){ this.clientes_w=true }
-            else if(perm == 'pclientes'){ this.potenciales=true }
-            else if(perm == 'pclientes_w'){ this.potenciales_w=true }
-            else if(perm == 'equipos'){ this.equipos=true }
-            else if(perm == 'equipos_w'){ this.equipos_w=true }
-            else if(perm == 'factibilidades'){ this.factibilidades=true }
-            else if(perm == 'factibilidades_w'){ this.factibilidades_w=true }
-            else if(perm == 'facturacion'){ this.facturacion=true }
-            else if(perm == 'facturacion_w'){ this.facturacion_w=true }
-            else if(perm == 'instalaciones'){ this.instalaciones=true }
-            else if(perm == 'instalaciones_w'){ this.instalaciones_w=true }
-            else if(perm == 'notify'){ this.notificaciones=true }
-            else if(perm == 'notify_w'){ this.notificaciones_w=true }
-            else if(perm == 'planes'){ this.planes=true }
-            else if(perm == 'planes_w'){ this.planes_w=true }
-            else if(perm == 'router'){ this.routers=true }
-            else if(perm == 'router_w'){ this.routers_w=true }
-            else if(perm == 'servicios'){ this.servicios=true }
-            else if(perm == 'servicios_w'){ this.servicios_w=true }
-            else if(perm == 'soporte'){ this.soporte=true }
-            else if(perm == 'soporte_w'){ this.soporte_w=true }
-            else if(perm == 'usuarios'){ this.usuarios=true }
-            else if(perm == 'usuarios_w'){ this.usuarios_w=true }
-            else if(perm == 'cobrar'){ this.cobrar=true }
-            else if(perm == 'cobrar_w'){ this.cobrar_w=true }
-            else if(perm == 'pagar'){ this.pagar=true }
-            else if(perm == 'pagar_w'){ this.pagar_w=true }
-          })
-        });
-
-      }
-
-      actualizarPermisos(){
-
-        this.editpermisos.patchValue({
-          responsable: this.usuario.currentUser.id_user,
-          permisos: this.permisos,
-          usuario: this.data.id_user
-        })
-        var url = 'http://186.167.32.27:81/maraveca/public/index.php/api/users/permission/'
-        this.http.post(url, this.editpermisos.value)
-        .subscribe((data) => {
-
-        });
-
-      }
-
-      actualizarZonas(){
-        this.editzona.patchValue({
-          responsable: this.usuario.currentUser.id_user,
-          zonas: this.zonas,
-          usuario: this.data.id_user
-        })
-        var url='http://186.167.32.27:81/maraveca/public/index.php/api/users/zona'
-        this.http.post(url, this.editzona.value)
-        .subscribe((data) => {
-
-        });
-      }
-
-      actualizarUsuario(){
-        if(this.edituser.value.password == ''){
-          this.edituser.patchValue({
-            password: this.data.password
-          })
-          var url = "http://186.167.32.27:81/maraveca/public/index.php/api/users/"+this.id;
-          this.http.put(url, this.edituser.value).subscribe((data) => {
-            this.snackBar.open("usuario_editado", null, {
-              duration: 2000,
-            });
-            this.edituser.patchValue({
-              password: ''
-            })
-            this.wrongpass = false;
+          this.wrongpass = false;
 
         })
       }else if( this.edituser.value.password == this.edituser.value.confirm){
 
-          var url = "http://186.167.32.27:81/maraveca/public/index.php/api/users/"+this.id;
-          this.http.put(url, this.edituser.value).subscribe((data) => {
-            this.snackBar.open("usuario_editado", null, {
-              duration: 2000,
-            });
-            this.wrongpass = false;
+        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/users/"+this.id;
+        this.http.put(url, this.edituser.value).subscribe((data) => {
+          this.snackBar.open("usuario_editado", null, {
+            duration: 2000,
+          });
+          this.wrongpass = false;
 
         })
       } else{
@@ -527,9 +532,9 @@ export class DeleteuserDialog {
       }
 
     }
-      ngOnDestroy(){}
+    ngOnDestroy(){}
 
-    }
+  }
 
   @Component({
     selector: 'delete-dialog',
@@ -547,7 +552,7 @@ export class DeleteuserDialog {
       public snackBar:MdSnackBar,
       private router: Router,
       private fb: FormBuilder,
-      ) {}
+    ) {}
 
 
     onNoClick(): void {

@@ -252,31 +252,33 @@ export class AddPclientsComponent{
     Enviar(){
       var client = this.addClient.value;
       console.log(JSON.stringify(this.addClient.value));
-      if(!client.email && client.email == ""){
 
       var url = "http://186.167.32.27:81/maraveca/public/index.php/api/pclientes";
 
-      this.http.post(url, this.addClient.value).subscribe((data) => {});
-      this.dialogRef.close();
-      this.myService.refresh();
-      this.snackBar.open("Agregando Cliente: Por favor espere", null, {
-        duration: 2000,
+      this.http.post(url, this.addClient.value).subscribe((data) => {
+        this.dialogRef.close();
+        this.myService.refresh();
+        this.snackBar.open("Agregando Cliente: Por favor espere", null, {
+          duration: 2000,
+        });
+
       });
-    }
+
       //this.router.navigate(['/clientes']);
     }
     Editar(){
       var client = this.addClient.value;
-      console.log(JSON.stringify(this.addClient.value));
-      if(!client.email&&client.email == ""){
+      console.log(JSON.stringify(client));
       var url = "http://186.167.32.27:81/maraveca/public/index.php/api/pclientes/"+client.id;
-      this.http.put(url, this.addClient.value).subscribe((data) => {});
-      this.dialogRef.close();
-      this.myService.refresh();
-      this.snackBar.open("Agregando Cliente: Por favor espere", null, {
-        duration: 2000,
+      this.http.put(url, this.addClient.value).subscribe((data) => {
+        this.dialogRef.close();
+        this.myService.refresh();
+        this.snackBar.open("Agregando Cliente: Por favor espere", null, {
+          duration: 2000,
+        });
+
       });
-    }
+
       //this.router.navigate(['/clientes']);
     }
 
@@ -524,13 +526,13 @@ export class AddFactComponent{
       var url = "http://186.167.32.27:81/maraveca/public/index.php/api/factibi/";
       var resp = this.http.post(url, this.addFact.value).subscribe((data) => {
         console.log(data);
+        this.dialogRef.close();
+        this.snackBar.open("Agregando AccessPoint: Por favor espere", null, {
+          duration: 2000,
+        });
+        this.myService.refresh();
       });
       //console.log(resp);
-      this.dialogRef.close();
-      this.snackBar.open("Agregando AccessPoint: Por favor espere", null, {
-        duration: 2000,
-      });
-      this.myService.refresh();
 
     }
 
