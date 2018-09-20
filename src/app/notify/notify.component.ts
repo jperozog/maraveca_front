@@ -41,36 +41,11 @@ export class NotifyComponent implements OnInit{
     private router: Router,
     private _fb: FormBuilder,
     private date: DatePipe) {
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/planes/')
-    .subscribe((data) => {
-      this.planes = data.json();
-      // console.log(this.planes.slice(0,3));
-    });
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/aps/')
-    .subscribe((data) => {
-      this.aps = data.json();
-      // console.log(this.aps);
-    });
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/celdas/')
-    .subscribe((data) => {
-      this.celdas = data.json();
-      // console.log(this.celdas);
-    });
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servidor/')
-    .subscribe((data) => {
-      this.routers = data.json();
-      // console.log(this.routers);
-    });
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientes/')
-    .subscribe((data) => {
-      this.clientes = data.json();
-      // console.log(this.routers);
-    });
-
     this.notify = this.fb.group({
       tipo: ['', [Validators.required]],
       detail: ['', [Validators.required]],
       message: ['', [Validators.required]],
+      responsable: this.usuario.currentUser.id_user,
       a_search: [''],
       p_search: [''],
       c_search: [''],
@@ -82,7 +57,86 @@ export class NotifyComponent implements OnInit{
    }
 
    ngOnInit(){
-     this.notify.get("tipo").valueChanges.subscribe(()=>{
+     this.notify.get("tipo").valueChanges.subscribe((tipo)=>{
+       if (tipo ==='6'){
+         this.planes=null;
+         this.aps=null;
+         this.celdas=null;
+         this.routers=null;
+         this.clientes=null;
+
+         this.notify.get('detail').setValidators([Validators.required]);
+         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientes/')
+         .subscribe((data) => {
+           this.clientes = data.json();
+           // console.log(this.routers);
+         });
+       }else if (tipo ==='5'){
+         this.planes=null;
+         this.aps=null;
+         this.celdas=null;
+         this.routers=null;
+         this.clientes=null;
+
+         this.notify.get('detail').setValidators([]);
+
+       }else if(tipo === '4'){
+         this.planes=null;
+         this.aps=null;
+         this.celdas=null;
+         this.routers=null;
+         this.clientes=null;
+
+         this.notify.get('detail').setValidators([Validators.required]);
+         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/planes/')
+         .subscribe((data) => {
+           this.planes = data.json();
+           // console.log(this.planes.slice(0,3));
+         });
+
+       }else if(tipo === '3'){
+         this.planes=null;
+         this.aps=null;
+         this.celdas=null;
+         this.routers=null;
+         this.clientes=null;
+
+         this.notify.get('detail').setValidators([Validators.required]);
+         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/aps/')
+         .subscribe((data) => {
+           this.aps = data.json();
+           // console.log(this.aps);
+         });
+
+       }else if(tipo === '2'){
+         this.planes=null;
+         this.aps=null;
+         this.celdas=null;
+         this.routers=null;
+         this.clientes=null;
+
+         this.notify.get('detail').setValidators([Validators.required]);
+         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/celdas/')
+         .subscribe((data) => {
+           this.celdas = data.json();
+           // console.log(this.celdas);
+         });
+
+       }else if(tipo === '1'){
+         this.planes=null;
+         this.aps=null;
+         this.celdas=null;
+         this.routers=null;
+         this.clientes=null;
+
+         this.notify.get('detail').setValidators([Validators.required]);
+         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servidor/')
+         .subscribe((data) => {
+           this.routers = data.json();
+           // console.log(this.routers);
+         });
+
+       }
        this.notify.patchValue({
          detail:''
        })
@@ -93,23 +147,18 @@ export class NotifyComponent implements OnInit{
      /*let params= {message: this.messaje,
      tipo: this.tipo,
      detail: this.detail}*/
-     this.notify.value.detail.forEach(n => {
-       this.notify1 = this.fb.group({
-         tipo: [this.notify.value.tipo],
-         detail: [n],
-         message: [this.notify.value.message],
-         responsable: this.usuario.currentUser.id_user,
-       });
-       const url = 'http://186.167.32.27:81/maraveca/public/index.php/api/tnotify';
-       const req = this.http.post(url, this.notify1.value).subscribe((data) => {
+     //this.notify.value.detail.forEach(n => {
+    // const url = 'http://200.209.74.4/maraveca/public/index.php/api/tnotify';
+    const url = 'http://186.167.32.27:81/maraveca/public/index.php/api/tnotify';
+       const req = this.http.post(url, this.notify.value).subscribe((data) => {
          this.detail = []
          this.messaje=""
-         this.snackBar.open("Mensajes Enviados", null, {
-           duration: 2000,
+         this.snackBar.open("Total de enviados: "+data.json().number+" mensajes", null, {
+           duration: 5000,
          });
 
        });
-     });
+     //});
    }
 
 

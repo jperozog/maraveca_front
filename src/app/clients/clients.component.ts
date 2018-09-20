@@ -234,7 +234,7 @@ export class MyService {
   templateUrl: './add-clients.component.html',
   styleUrls: ['./clients.component.css']
 })
-export class AddclientsComponent{
+export class AddclientsComponent implements OnInit{
 
   error : boolean = false;
   tipo : string;
@@ -282,8 +282,8 @@ export class AddclientsComponent{
           phone2: [row.phone2, [Validators.required]],
           comment: row.comment,
           id: [row.id, [Validators.required]],
-          social: [row.social]
-
+          social: [row.social],
+          responsable: this.usuario.currentUser.id_user,
         });
         //console.log(row)
       }else{
@@ -302,11 +302,25 @@ export class AddclientsComponent{
           phone2: ['', [Validators.required]],
           comment: '',
           social: [''],
+          responsable: this.usuario.currentUser.id_user,
 
         });
         //console.log("llego vacio"+ row)
       }
 
+    }
+
+    ngOnInit(){
+      this.addClient.get('kind').valueChanges.subscribe(
+        (kind) => {
+          if ( kind.toLowerCase()==='v'||kind.toLowerCase()==='e'){
+            this.addClient.get('social').setValidators([]);
+            this.addClient.get('social').updateValueAndValidity();
+          }else if(kind.toLowerCase()==='g'||kind.toLowerCase()==='j'){
+            this.addClient.get('social').setValidators([Validators.required]);
+            this.addClient.get('social').updateValueAndValidity();
+          }
+        })
     }
 
     onNoClick(): void {
@@ -316,24 +330,9 @@ export class AddclientsComponent{
 
     Enviar(){
       var client = this.addClient.value;
-      console.log(JSON.stringify(this.addClient.value));
-      if(!client.email)(client.email = "")
-      var body =
-      "kind=" + client.kind +
-      "&dni="+client.dni+
-      "&email="+client.email+
-      "&nombre="+client.nombre+
-      "&apellido="+client.apellido+
-      "&direccion="+client.direccion+
-      "&day_of_birth="+client.day_of_birth+
-      "&serie="+client.serie+
-      "&phone1="+client.phone1+
-      "&phone2="+client.phone2+
-      "&comment="+client.comment+
-      "&social="+client.social
-      var url = this.config.apiEndpoint+"clientes?"+body;
+      var url = this.config.apiEndpoint+"clientes";
 
-      this.http.post(url, body).subscribe(data => {
+      this.http.post(url, client).subscribe(data => {
         this.dialogRef.close();
         this.snackBar.open("Agregando Cliente: Por favor espere", null, {
           duration: 2000,
@@ -346,24 +345,8 @@ export class AddclientsComponent{
     }
     Editar(){
       var client = this.addClient.value;
-      console.log(JSON.stringify(this.addClient.value));
-      if(!client.email)(client.email = "")
-      var body =
-      "kind=" + client.kind +
-      "&dni="+client.dni+
-      "&email="+client.email+
-      "&nombre="+client.nombre+
-      "&apellido="+client.apellido+
-      "&direccion="+client.direccion+
-      "&day_of_birth="+client.day_of_birth+
-      "&serie="+client.serie+
-      "&phone1="+client.phone1+
-      "&phone2="+client.phone2+
-      "&comment="+client.comment+
-      "&social="+client.social
-
-      var url = this.config.apiEndpoint+"clientes/"+client.id+"?"+body;
-      this.http.put(url, body).subscribe((data) => {
+      var url = this.config.apiEndpoint+"clientes/"+client.id;
+      this.http.put(url, client).subscribe((data) => {
         this.dialogRef.close();
       });
       //this.myService.refresh();
