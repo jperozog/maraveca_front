@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { User, perm } from '../_models/index';
 import { AuthGuard } from '../_guards/index';
 import 'rxjs/add/operator/map'
+import { environment } from '../../environments/environment'
 
 @Injectable()
 export class AuthenticationService {
@@ -14,7 +15,7 @@ export class AuthenticationService {
 
     login(username: string, password: string) {
       console.log(JSON.stringify({ username: username, password: password }))
-        return this.http.post('http://186.167.32.27:81/maraveca/public/index.php/api/users/login/'+username+'/'+password, JSON.stringify({ username: username, password: password }))
+        return this.http.post(environment.apiEndpoint+'users/login/'+username+'/'+password, JSON.stringify({ username: username, password: password }))
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();
@@ -25,7 +26,7 @@ export class AuthenticationService {
                     sessionStorage.setItem('currentUser', JSON.stringify(user1));
                     this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
                     this.Usuario = this.currentUser;
-                    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+user1.id_user+'/permission')
+                    this.http.get(environment.apiEndpoint+'users/'+user1.id_user+'/permission')
                     .subscribe((data) => {
                       data.json().forEach(perm => {
                           this.auth.perm.push(perm.perm);

@@ -13,6 +13,7 @@ import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} fr
 import {Router} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
 import { DatePipe } from '@angular/common';
+import { environment } from '../../environments/environment'
 
 const MAC_REGEX = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/
 
@@ -39,7 +40,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
         duration: 2000,
       });
       this.myService = new MyService(http, router, usuario);
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servicios/')
+      this.http.get(environment.apiEndpoint+'servicios/')
         .subscribe((data) => {
           this.data = data.json().servicios;
           this.installs = data.json().soportes;
@@ -65,7 +66,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
     refresh(nf){
       this.update=true
       this.autoupdate=false
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servicios/')
+      this.http.get(environment.apiEndpoint+'servicios/')
         .subscribe((data) => {
           this.data_t = data.json().servicios;
           this.installs_t = data.json().soportes;
@@ -107,7 +108,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
         this.ngOnInit();
         console.log('The dialog was AddClient closed');
         this.update=true
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servicios/')
+        this.http.get(environment.apiEndpoint+'servicios/')
           .subscribe((data) => {
             this.data = data.json().servicios;
             this.installs = data.json().soportes;
@@ -133,7 +134,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
         this.ngOnInit();
         this.update=true
         console.log('The dialog was AddClientPending closed');
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servicios/')
+        this.http.get(environment.apiEndpoint+'servicios/')
           .subscribe((data) => {
             this.data = data.json().servicios;
             this.installs = data.json().soportes;
@@ -173,7 +174,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
     constructor(private http: Http, private router: Router, private usuario: AuthGuard,) {}
 
     deleteData(id){
-      return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/servicios/'+id+'?responsable='+this.usuario.currentUser.id_user, {})
+      return this.http.delete(environment.apiEndpoint+'servicios/'+id+'?responsable='+this.usuario.currentUser.id_user, {})
       .map((resp:Response)=>resp.json());
 
     }
@@ -229,7 +230,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
       private date: DatePipe){
 
 
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/add_preload/')
+        this.http.get(environment.apiEndpoint+'add_preload/')
         .subscribe((data) => {
           this.clientes = data.json().clientes;
           this.equipo = data.json().equipos;
@@ -333,7 +334,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
         var client = this.addClient.value;
         //console.log(JSON.stringify(this.addClient.value));
         let dp = new DatePipe(navigator.language);
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/servicios";
+        var url = environment.apiEndpoint+"servicios";
         //console.log(body);
 
         this.snackBar.open("Agregando Cliente: Por favor espere", null, {
@@ -349,7 +350,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
         var client = this.addClient.value;
         //console.log(JSON.stringify(this.addClient.value));
         let dp = new DatePipe(navigator.language);
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/servicios/"+client.id_srv;
+        var url = environment.apiEndpoint+"servicios/"+client.id_srv;
         //console.log(body);
 
         this.snackBar.open("Agregando Cliente: Por favor espere", null, {
@@ -406,7 +407,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
         public usuario: AuthGuard){
 
 
-            this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/add_preload/')
+            this.http.get(environment.apiEndpoint+'add_preload/')
             .subscribe((data) => {
               this.clientes = data.json().clientes;
               this.equipo = data.json().equipos;
@@ -560,13 +561,13 @@ export class ServiciosComponent implements OnInit, OnDestroy {
                   comment_srv: item.comment,
                   responsable: this.usuario.currentUser.id_user
                 });
-                var url = "http://186.167.32.27:81/maraveca/public/index.php/api/servicios";
+                var url = environment.apiEndpoint+"servicios";
                 this.http.post(url, this.post.value).subscribe((data) => {
                   var put:FormGroup
                   put=this.fb.group({
                     status_soporte:"4"
                   })
-                  var url = "http://186.167.32.27:81/maraveca/public/index.php/api/soporte/"+this.row.id_soporte;
+                  var url = environment.apiEndpoint+"soporte/"+this.row.id_soporte;
                   this.http.put(url, put.value).subscribe((data) => {
 
                   });
@@ -602,7 +603,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
             "&stat_srv="+client.stat_srv+
             "&comment_srv="+client.comment_srv
 
-            var url = "http://186.167.32.27:81/maraveca/public/index.php/api/servicios?"+body;
+            var url = environment.apiEndpoint+"servicios?"+body;
             //console.log(body);
 
             this.http.post(url, body).subscribe((data) => {});

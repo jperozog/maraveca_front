@@ -14,6 +14,7 @@ import { User } from '../_models/index';
 import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
 import {AddticketComponent} from '../soporte/soporte.component';
+import { environment } from '../../environments/environment'
 
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const PHONE_REGEX = /^(0414\d|0412\d|0416\d|0426\d|0424\d|0415\d)+\d{6}/;
@@ -43,7 +44,7 @@ export class PClientsComponent {
       duration: 2000,
     });
     this.myService = new MyService(http, router, usuario);
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/pclientes/')
+    this.http.get(environment.apiEndpoint+'pclientes/')
       .subscribe((data) => {
         this.data = data.json();
         console.log(this.data);
@@ -144,7 +145,7 @@ export class MyService {
   constructor(private http: Http, private router: Router, private usuario:AuthGuard) {}
 
   deleteData(id){
-    return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/pclientes/'+id+"?responsable="+this.usuario.currentUser.id_user, {})
+    return this.http.delete(environment.apiEndpoint+'pclientes/'+id+"?responsable="+this.usuario.currentUser.id_user, {})
     .map((resp:Response)=>resp.json());
     //return null;
 
@@ -253,7 +254,7 @@ export class AddPclientsComponent{
       var client = this.addClient.value;
       console.log(JSON.stringify(this.addClient.value));
 
-      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/pclientes";
+      var url = environment.apiEndpoint+"pclientes";
 
       this.http.post(url, this.addClient.value).subscribe((data) => {
         this.dialogRef.close();
@@ -269,7 +270,7 @@ export class AddPclientsComponent{
     Editar(){
       var client = this.addClient.value;
       console.log(JSON.stringify(client));
-      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/pclientes/"+client.id;
+      var url = environment.apiEndpoint+"pclientes/"+client.id;
       this.http.put(url, this.addClient.value).subscribe((data) => {
         this.dialogRef.close();
         this.myService.refresh();
@@ -295,7 +296,7 @@ export class AddPclientsComponent{
         client.apellido != ""){
 
 
-          const req = this.http.post('http://186.167.32.27:81/maraveca/public/api/sms', {
+          const req = this.http.post(environment.apiEndpoint+'sms', {
             numero: client.phone1 ,
             mensaje: 'Este es un mensaje de prueba de MARAVECA, saludos '+ client.nombre + " " + client.apellido,
             userId: 1
@@ -353,7 +354,7 @@ export class PClientesStatus {
     private usuario: AuthGuard,
 ){
   //console.log(row);
-  this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/factibi/'+row.id)
+  this.http.get(environment.apiEndpoint+'factibi/'+row.id)
   .subscribe((data) => {
     this.fac_products = data.json();
     console.log(this.fac_products.slice(0,3));
@@ -381,7 +382,7 @@ status(row){
     row = this.NewService.value;
   }else{
     row.responsable = this.usuario.currentUser.id_user
-    var url = "http://186.167.32.27:81/maraveca/public/index.php/api/pclienttc/";
+    var url = environment.apiEndpoint+"pclienttc/";
     this.http.post(url, row).subscribe((data) => {
       row.id_cli= data.json().id
       console.log("prueba")
@@ -402,7 +403,7 @@ status(row){
   });
   dialogRef.afterClosed().subscribe(result => {
     console.log('The dialog was AddClient closed');
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/factibi/'+this.id)
+    this.http.get(environment.apiEndpoint+'factibi/'+this.id)
     .subscribe((data) => {
       this.fac_products = data.json();
       this.fac_products.forEach(linea => {
@@ -472,7 +473,7 @@ export class AddFactComponent{
     private router: Router,
   private usuario: AuthGuard){
 
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/pclientes/')
+      this.http.get(environment.apiEndpoint+'pclientes/')
       .subscribe((data) => {
         this.pclientes = data.json();
         //console.log(this.celdas);
@@ -523,7 +524,7 @@ export class AddFactComponent{
       "&celda_ap="+client.celda_ap+
       "&nombre_ap="+client.nombre_ap;
       console.log(url);*/
-      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/factibi/";
+      var url = environment.apiEndpoint+"factibi/";
       var resp = this.http.post(url, this.addFact.value).subscribe((data) => {
         console.log(data);
         this.dialogRef.close();

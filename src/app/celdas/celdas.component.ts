@@ -10,6 +10,7 @@ import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/materi
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
+import { environment } from '../../environments/environment'
 
 
 @Component({
@@ -28,7 +29,7 @@ export class CeldasComponent {
       duration: 2000,
     });
     this.myService = new MyService(http, router);
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/celdas/')
+    this.http.get(environment.apiEndpoint+'celdas/')
       .subscribe((data) => {
         this.data = data.json();
         console.log(this.data);
@@ -86,7 +87,7 @@ export class MyService {
 
   deleteData(id){
 
-    return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/celdas/'+id, {})
+    return this.http.delete(environment.apiEndpoint+'celdas/'+id, {})
     .map((resp:Response)=>resp.json());
 
 
@@ -132,7 +133,7 @@ export class AddceldasComponent{
     public snackBar: MdSnackBar,
     private router: Router){
 
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servidor/')
+      this.http.get(environment.apiEndpoint+'servidor/')
       .subscribe((data) => {
         this.routers = data.json();
         console.log(this.routers.slice(0,3));
@@ -178,7 +179,7 @@ export class AddceldasComponent{
       var body =
       "nombre_celda="+client.nombre_celda+
       "&servidor_celda="+client.servidor_celda;
-      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/celdas?"+body;
+      var url = environment.apiEndpoint+"celdas?"+body;
 
       this.http.post(url, body).subscribe((data) => {});
       this.dialogRef.close();
@@ -195,7 +196,7 @@ export class AddceldasComponent{
       var body =
       "nombre_celda="+client.nombre_celda+
       "&servidor_celda="+client.servidor_celda;
-      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/celdas/"+client.id_celda+"?"+body;
+      var url = environment.apiEndpoint+"celdas/"+client.id_celda+"?"+body;
 
       this.http.put(url, body).subscribe((data) => {});
       this.dialogRef.close();

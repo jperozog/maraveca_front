@@ -11,6 +11,7 @@ import 'rxjs/add/operator/startWith';
 import {Router, ActivatedRoute} from '@angular/router';
 import { Location } from '@angular/common';
 import { AuthGuard } from '../_guards/index';
+import { environment } from '../../environments/environment'
 //import 'rxjs/add/operator/map';
 
 @Component({
@@ -31,7 +32,7 @@ export class StatsComponent {
       this.snackBar.open("Cargando AccessPoints", null, {
         duration: 2000,
       });
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/stat/')
+      this.http.get(environment.apiEndpoint+'stat/')
         .subscribe((data) => {
           this.fechas = data.json().fechas;
           this.data = data.json().datos;
@@ -124,7 +125,7 @@ colors = [
         this.snackBar.open("Cargando Usuarios", null, {
           duration: 2000,
         });
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/installers/')
+        this.http.get(environment.apiEndpoint+'installers/')
         .subscribe((data) => {
           this.data = data.json();
           //console.log(this.data);
@@ -166,13 +167,13 @@ colors = [
             console.log(this.instalador)
           }
         );
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/installer/'+this.instalador)
+        this.http.get(environment.apiEndpoint+'installer/'+this.instalador)
         .subscribe((data) => {
           this.instalaciones = data.json().instalaciones;
           this.pagos = data.json().pagos;
           console.log(this.instalaciones);
         });
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+this.instalador)
+        this.http.get(environment.apiEndpoint+'users/'+this.instalador)
         .subscribe((data) => {
           this.instalador = data.json();
           console.log(this.instalador);
@@ -241,7 +242,7 @@ colors = [
           installer: this.instalador[0].id_user,
           comment: this.comment
         })
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/instpagos/";
+        var url = environment.apiEndpoint+"instpagos/";
         this.http.post(url, this.addPago.value).subscribe((data) => {
           this.dialogRef.close();
 

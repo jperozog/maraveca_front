@@ -14,6 +14,7 @@ import 'rxjs/add/operator/takeWhile';
 import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
 import { Location } from '@angular/common';
+import { environment } from '../../environments/environment'
 
 @Component({
   selector: 'app-soporte',
@@ -48,7 +49,7 @@ export class SoporteComponent implements OnInit, OnDestroy{
     this.autoupdate=true;
     this.myService = new MyService(http, router, usuario);
     console.log(usuario.currentUser)
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/soportesm/?user=' + usuario.currentUser.id_user)
+    this.http.get(environment.apiEndpoint+'soportesm/?user=' + usuario.currentUser.id_user)
     .subscribe((data) => {
       this.datat_t = data.json().soporte;
       this.datai_t = data.json().instalaciones;
@@ -90,7 +91,7 @@ export class SoporteComponent implements OnInit, OnDestroy{
 
   refresh(nf){
     this.update=true
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/soportesm/?user=' + this.usuario.currentUser.id_user)
+    this.http.get(environment.apiEndpoint+'soportesm/?user=' + this.usuario.currentUser.id_user)
     .subscribe((data) => {
       this.datat_t = data.json().soporte;
       this.datai_t = data.json().instalaciones;
@@ -128,7 +129,7 @@ export class SoporteComponent implements OnInit, OnDestroy{
   dialogRef.afterClosed().subscribe(result => {
     console.log('The dialog was closed');
     //this.myService.refresh();
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/soportesm/?user=' + this.usuario.currentUser.id_user)
+    this.http.get(environment.apiEndpoint+'soportesm/?user=' + this.usuario.currentUser.id_user)
     .subscribe((data) => {
       this.datat = data.json()[1].soporte;
       this.datai = data.json()[0].instalaciones;
@@ -175,7 +176,7 @@ export class MyService {
   }
   deleteData(id){
 
-    return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/soporte/'+id+'?responsable='+this.usuario.currentUser.id_user, {})
+    return this.http.delete(environment.apiEndpoint+'soporte/'+id+'?responsable='+this.usuario.currentUser.id_user, {})
     .map((resp:Response)=>resp.json());
 
 
@@ -193,7 +194,7 @@ export class MyService {
   }
   addPb(ticket, pb){
     pb.forEach(i => {
-      this.http.post('http://186.167.32.27:81/maraveca/public/index.php/api/ticketp/?ticket_pb='+ticket+'&problem_pb='+i, i).subscribe((data) => {});
+      this.http.post(environment.apiEndpoint+'ticketp/?ticket_pb='+ticket+'&problem_pb='+i, i).subscribe((data) => {});
 
 
     });
@@ -236,13 +237,13 @@ export class AddticketComponent implements OnInit{
     private router: Router){
       this.edit = false;
       this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servicios/')
+      this.http.get(environment.apiEndpoint+'servicios/')
       .subscribe((data) => {
         this.servicios = data.json().servicios;
         console.log("servicios")
         console.log(this.servicios)
       });
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientes/')
+      this.http.get(environment.apiEndpoint+'clientes/')
       .subscribe((data) => {
         this.clientes = data.json();
         setTimeout(() =>
@@ -252,13 +253,13 @@ export class AddticketComponent implements OnInit{
         },
         3000);
       });
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/celdas/')
+      this.http.get(environment.apiEndpoint+'celdas/')
       .subscribe((data) => {
         this.celda = data.json();
         this.celdas = this.addplan.value.celda_soporte
 
       });
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/equipos/')
+      this.http.get(environment.apiEndpoint+'equipos/')
       .subscribe((data) => {
         this.equipos = data.json();
         this.equipo = this.addplan.value.equipo_soporte
@@ -438,7 +439,7 @@ export class AddticketComponent implements OnInit{
         adicionales: this.requ
       })
       var plan = this.addplan.value;
-      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/soporte2";
+      var url = environment.apiEndpoint+"soporte2";
       this.http.post(url, plan).subscribe((data) => {
         this.row = data.json();
       });
@@ -447,7 +448,7 @@ export class AddticketComponent implements OnInit{
         "user_th="+plan.id_user+
         "&ticket_th="+this.row.id+
         "&comment=Se apertura el ticket"
-        var url1 = "http://186.167.32.27:81/maraveca/public/index.php/api/ticketh?"+body1;
+        var url1 = environment.apiEndpoint+"ticketh?"+body1;
         this.http.post(url1,body1).subscribe((data) => {});
         if (plan.tipo == 2){
         this.CC.addPb(this.row.id, plan.problems);
@@ -501,7 +502,7 @@ export class EditticketComponent implements OnInit, OnDestroy{
       );
       this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
       //console.log(this.currentUser)
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/soporte/'+this.id)
+      this.http.get(environment.apiEndpoint+'soporte/'+this.id)
       .subscribe((data) => {
         this.row = data.json()[0];
         this.addplan.value.status_soporte=this.row.status_soporte;
@@ -547,7 +548,7 @@ export class EditticketComponent implements OnInit, OnDestroy{
 
     refresh(nf){
       this.update=true
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/soporte/'+this.id)
+      this.http.get(environment.apiEndpoint+'soporte/'+this.id)
       .subscribe((data) => {
         this.row = data.json()[0];
         this.addplan.value.status_soporte=this.row.status_soporte;
@@ -582,7 +583,7 @@ export class EditticketComponent implements OnInit, OnDestroy{
       "ticket_th="+this.id+
       "&user_th="+this.addplan.value.id+
       "&comment="+this.addplan.value.historia
-      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/ticketh?"+body;
+      var url = environment.apiEndpoint+"ticketh?"+body;
       this.http.post(url, body).subscribe((data) => {
         this.refresh(false)
       });
@@ -642,7 +643,7 @@ export class DeleteticketDialog {
         responsable: this.usuario.currentUser.id_user
       });
       var body ="status_soporte=2"
-      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/soporte/"+this.data.id+"?"+body;
+      var url = environment.apiEndpoint+"soporte/"+this.data.id+"?"+body;
       this.http.put(url, body).subscribe((data) => {
         this.myService.refresh()
         this.myService.Close()
@@ -651,7 +652,7 @@ export class DeleteticketDialog {
       "user_th="+this.currentUser.id_user+
       "&ticket_th="+this.data.id+
       "&comment=Se Cierra el ticket"
-      var url1 = "http://186.167.32.27:81/maraveca/public/index.php/api/ticketh?"+body1;
+      var url1 = environment.apiEndpoint+"ticketh?"+body1;
       this.http.post(url1,body1).subscribe((data) => {});
 
 
@@ -702,13 +703,13 @@ export class DeleteticketDialog {
         //186.167.32.27:81/maraveca/public/index.php/api/installer
         this.myService = new MyService(this.http, this.router, this.usuario);
         this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/installer')
+        this.http.get(environment.apiEndpoint+'installer')
         .subscribe((data) => {
           this.installers = data.json();
           console.log(this.aps);
         });
 
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/aps/')
+        this.http.get(environment.apiEndpoint+'aps/')
         .subscribe((data) => {
           this.aps = data.json();
           console.log(this.aps);
@@ -742,7 +743,7 @@ export class DeleteticketDialog {
           user: this.currentUser.id_user,
           installer: this.installer
         })
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/install/"+this.data.row.id_soporte;
+        var url = environment.apiEndpoint+"install/"+this.data.row.id_soporte;
         this.http.put(url, this.addDetails.value).subscribe((data) => {
           this.myService.refresh()
           this.dialogRef.close();

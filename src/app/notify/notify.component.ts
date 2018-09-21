@@ -11,6 +11,7 @@ import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} fr
 import {Router} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
 import { DatePipe } from '@angular/common';
+import { environment } from '../../environments/environment'
 
 @Component({
   selector: 'app-notify',
@@ -66,7 +67,7 @@ export class NotifyComponent implements OnInit{
          this.clientes=null;
 
          this.notify.get('detail').setValidators([Validators.required]);
-         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientes/')
+         this.http.get(environment.apiEndpoint+'clientes/')
          .subscribe((data) => {
            this.clientes = data.json();
            // console.log(this.routers);
@@ -88,7 +89,7 @@ export class NotifyComponent implements OnInit{
          this.clientes=null;
 
          this.notify.get('detail').setValidators([Validators.required]);
-         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/planes/')
+         this.http.get(environment.apiEndpoint+'planes/')
          .subscribe((data) => {
            this.planes = data.json();
            // console.log(this.planes.slice(0,3));
@@ -102,7 +103,7 @@ export class NotifyComponent implements OnInit{
          this.clientes=null;
 
          this.notify.get('detail').setValidators([Validators.required]);
-         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/aps/')
+         this.http.get(environment.apiEndpoint+'aps/')
          .subscribe((data) => {
            this.aps = data.json();
            // console.log(this.aps);
@@ -116,7 +117,7 @@ export class NotifyComponent implements OnInit{
          this.clientes=null;
 
          this.notify.get('detail').setValidators([Validators.required]);
-         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/celdas/')
+         this.http.get(environment.apiEndpoint+'celdas/')
          .subscribe((data) => {
            this.celdas = data.json();
            // console.log(this.celdas);
@@ -130,7 +131,7 @@ export class NotifyComponent implements OnInit{
          this.clientes=null;
 
          this.notify.get('detail').setValidators([Validators.required]);
-         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servidor/')
+         this.http.get(environment.apiEndpoint+'servidor/')
          .subscribe((data) => {
            this.routers = data.json();
            // console.log(this.routers);
@@ -149,7 +150,7 @@ export class NotifyComponent implements OnInit{
      detail: this.detail}*/
      //this.notify.value.detail.forEach(n => {
     // const url = 'http://200.209.74.4/maraveca/public/index.php/api/tnotify';
-    const url = 'http://186.167.32.27:81/maraveca/public/index.php/api/tnotify';
+    const url = environment.apiEndpoint+'tnotify';
        const req = this.http.post(url, this.notify.value).subscribe((data) => {
          this.detail = []
          this.messaje=""

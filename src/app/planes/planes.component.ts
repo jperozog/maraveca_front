@@ -10,6 +10,7 @@ import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule} from '@angular
 import 'rxjs/add/operator/startWith';
 import { AuthGuard } from '../_guards/index';
 import {Router} from '@angular/router';
+import { environment } from '../../environments/environment'
 
 @Component({
   selector: 'app-planes',
@@ -32,7 +33,7 @@ export class PlanesComponent {
         duration: 2000,
       });
       this.myService = new MyService(http, router);
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/planes/')
+      this.http.get(environment.apiEndpoint+'planes/')
         .subscribe((data) => {
           this.data = data.json();
           //console.log(this.data);
@@ -110,7 +111,7 @@ export class PlanesComponent {
 
     deleteData(id){
 
-      return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/planes/'+id, {})
+      return this.http.delete(environment.apiEndpoint+'planes/'+id, {})
       .map((resp:Response)=>resp.json());
 
 
@@ -190,7 +191,7 @@ export class PlanesComponent {
         "cost_plan=" + plan.cost_plan +
         "&taza=" + plan.taza +
         "&name_plan="+plan.name_plan;
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/planes?"+body;
+        var url = environment.apiEndpoint+"planes?"+body;
 
         this.http.post(url, body).subscribe((data) => {
           this.dialogRef.close();
@@ -208,7 +209,7 @@ export class PlanesComponent {
         "cost_plan=" + plan.cost_plan +
         "&taza=" + plan.taza +
         "&name_plan="+plan.name_plan;
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/planes/"+plan.id_plan+"?"+body;
+        var url = environment.apiEndpoint+"planes/"+plan.id_plan+"?"+body;
 
         this.http.put(url, plan).subscribe((data) => {
           this.dialogRef.close();
@@ -278,7 +279,7 @@ export class PlanesComponent {
           var plan = this.addplan.value;
           console.log(JSON.stringify(this.addplan.value));
           var body = "taza=" + plan.taza;
-          var url = "http://186.167.32.27:81/maraveca/public/index.php/api/planes/update";
+          var url = environment.apiEndpoint+"planes/update";
 
           this.http.post(url, this.addplan.value).subscribe((data) => {
             this.dialogRef.close();

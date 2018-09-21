@@ -11,6 +11,7 @@ import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} fr
 import {Router} from '@angular/router';
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 import 'rxjs/add/operator/takeWhile';
+import { environment } from '../../environments/environment'
 @Component({
   templateUrl: './instalaciones.component.html',
   styleUrls: ['./instalaciones.component.css']
@@ -29,7 +30,7 @@ export class InstalacionesComponent implements OnInit, OnDestroy {
       duration: 2000,
     });
     this.myService = new MyService(http, router);
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/instalaciones/')
+    this.http.get(environment.apiEndpoint+'instalaciones/')
     .subscribe((data) => {
       this.datai = data.json();
       console.log(this.datai);
@@ -79,7 +80,7 @@ export class InstalacionesComponent implements OnInit, OnDestroy {
   }
   refresh(nf){
     this.update = true;
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/instalaciones/')
+    this.http.get(environment.apiEndpoint+'instalaciones/')
     .subscribe((data) => {
       this.update=false
       this.datai_t = data.json();
@@ -113,7 +114,7 @@ export class MyService {
 
   deleteData(id){
 
-    return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/equipos/'+id, {})
+    return this.http.delete(environment.apiEndpoint+'equipos/'+id, {})
     .map((resp:Response)=>resp.json());
 
 
@@ -168,7 +169,7 @@ export class AddInstallComponent{
     public snackBar: MdSnackBar,
     private router: Router){
       this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientes/')
+      this.http.get(environment.apiEndpoint+'clientes/')
       .subscribe((data) => {
         this.clientes = data.json();
         setTimeout(() =>
@@ -177,13 +178,13 @@ export class AddInstallComponent{
         },
         3000);
       });
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/celdas/')
+      this.http.get(environment.apiEndpoint+'celdas/')
       .subscribe((data) => {
         this.celda = data.json();
         this.celdas = this.addplan.value.celda_soporte
 
       });
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/equipos/')
+      this.http.get(environment.apiEndpoint+'equipos/')
       .subscribe((data) => {
         this.equipos = data.json();
         this.equipo = this.addplan.value.equipo_soporte
@@ -314,7 +315,7 @@ export class AddInstallComponent{
         })
       }
       var plan = this.addplan.value;
-      var url = "http://186.167.32.27:81/maraveca/public/index.php/api/soporte2";
+      var url = environment.apiEndpoint+"soporte2";
       this.http.post(url, plan).subscribe((data) => {
         this.row = data.json();
       });
@@ -323,7 +324,7 @@ export class AddInstallComponent{
         "user_th="+plan.id_user+
         "&ticket_th="+this.row.id+
         "&comment=Se apertura el ticket"
-        var url1 = "http://186.167.32.27:81/maraveca/public/index.php/api/ticketh?"+body1;
+        var url1 = environment.apiEndpoint+"ticketh?"+body1;
         this.http.post(url1,body1).subscribe((data) => {});
         if (plan.tipo == 2){
         this.CC.addPb(this.row.id, plan.problems);
@@ -368,7 +369,7 @@ export class EditInstallComponent{
     public snackBar: MdSnackBar,
     private router: Router){
       this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/soporte/'+row.id_soporte)
+      this.http.get(environment.apiEndpoint+'soporte/'+row.id_soporte)
       .subscribe((data) => {
         this.row = data.json()[0];
         console.log(this.row)
@@ -381,7 +382,7 @@ export class EditInstallComponent{
 
         console.log("cargo datos del ticket")
         console.log(this.requ);
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientes/')
+        this.http.get(environment.apiEndpoint+'clientes/')
         .subscribe((data) => {
           this.clientes = data.json();
           setTimeout(() =>
@@ -392,7 +393,7 @@ export class EditInstallComponent{
           },
           30);
         });
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/celdas/')
+        this.http.get(environment.apiEndpoint+'celdas/')
         .subscribe((data) => {
           this.celda = data.json();
           setTimeout(() =>
@@ -404,7 +405,7 @@ export class EditInstallComponent{
           },
           30);
         });
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/equipos/')
+        this.http.get(environment.apiEndpoint+'equipos/')
         .subscribe((data) => {
           this.equipos = data.json();
           this.equipo = this.addplan.value.equipo_soporte
@@ -528,7 +529,7 @@ export class EditInstallComponent{
       })
     }
     var plan = this.addplan.value;
-    var url = "http://186.167.32.27:81/maraveca/public/index.php/api/soporte2";
+    var url = environment.apiEndpoint+"soporte2";
     this.http.post(url, plan).subscribe((data) => {
       this.row = data.json();
     });
@@ -537,7 +538,7 @@ export class EditInstallComponent{
       "user_th="+plan.id_user+
       "&ticket_th="+this.row.id+
       "&comment=Se apertura el ticket"
-      var url1 = "http://186.167.32.27:81/maraveca/public/index.php/api/ticketh?"+body1;
+      var url1 = environment.apiEndpoint+"ticketh?"+body1;
       this.http.post(url1,body1).subscribe((data) => {});
       if (plan.tipo == 2){
       this.CC.addPb(this.row.id, plan.problems);

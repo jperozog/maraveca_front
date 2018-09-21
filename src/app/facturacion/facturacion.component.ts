@@ -13,6 +13,7 @@ import { AuthGuard } from '../_guards/index';
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 import 'rxjs/add/operator/takeWhile';
 import { DatePipe } from '@angular/common';
+import { environment } from '../../environments/environment'
 
 
 @Component({
@@ -43,7 +44,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
       duration: 2000,
     });
     this.myService = new MyService(http, router);
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/facturas/')
+    this.http.get(environment.apiEndpoint+'facturas/')
     .subscribe((data) => {
       this.facturacion = data.json();
       this.facturacion_t = this.facturacion;
@@ -95,7 +96,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
 
   refresh(nf){
     this.update=true;
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/facturas/', {params:{month: this.mes, year: '2018'}})
+    this.http.get(environment.apiEndpoint+'facturas/', {params:{month: this.mes, year: '2018'}})
     .subscribe((data) => {
       this.facturacion_t = data.json();
       this.update=false
@@ -148,7 +149,7 @@ export class MyService {
 
   deleteData(id){
 
-    return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/equipos/'+id, {})
+    return this.http.delete(environment.apiEndpoint+'equipos/'+id, {})
     .map((resp:Response)=>resp.json());
 
 
@@ -251,7 +252,7 @@ export class FacturacionPagos {
       this.pagado = parseInt(row.pagado);
     }
     this.deuda=parseInt(this.monto)-parseInt(this.pagado);
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/facprod/'+row.id)
+    this.http.get(environment.apiEndpoint+'facprod/'+row.id)
     .subscribe((data) => {
       this.fac_products = data.json();
       this.iva= this.fac_products[0].IVA;
@@ -263,12 +264,12 @@ export class FacturacionPagos {
       }
       //console.log(this.fac_products.slice(0,3));
     });
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/facpag/'+row.id)
+    this.http.get(environment.apiEndpoint+'facpag/'+row.id)
     .subscribe((data) => {
       this.fac_pagos = data.json();
       //console.log(this.fac_pagos.slice(0,3));
     });
-    this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientes/'+row.id_cliente)
+    this.http.get(environment.apiEndpoint+'clientes/'+row.id_cliente)
     .subscribe((data) => {
       this.serie = data.json().serie;
       this.client = data.json()
@@ -289,7 +290,7 @@ export class FacturacionPagos {
   }
 
   sendmail(){
-    var url = "http://186.167.32.27:81/maraveca/public/index.php/api/facturas/"+this.row.id;
+    var url = environment.apiEndpoint+"facturas/"+this.row.id;
     if(this.client.email!= null && this.client.email.toUpperCase()!="NULL"){
       var post = this.fb.group({
         responsable: this.usuario.currentUser.id_user
@@ -389,11 +390,11 @@ export class FacturacionPagos {
       precio_articulo: this.precio_articulo,
       IVA: this.fac_products[0].IVA
     })
-    var url = "http://186.167.32.27:81/maraveca/public/index.php/api/facprod";
+    var url = environment.apiEndpoint+"facprod";
     this.http.post(url, this.addProduct.value)
     .subscribe((data)=>{
       this.agregarProducto=false;
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/facprod/'+this.row.id)
+      this.http.get(environment.apiEndpoint+'facprod/'+this.row.id)
       .subscribe((data) => {
         this.fac_products = data.json();
         //console.log(this.fac_pagos.slice(0,3));
@@ -415,11 +416,11 @@ export class FacturacionPagos {
   agregar(){
     //let body = "fac_id="+this.row.id+"&pag_tip="+this.tipo+"&pag_monto="+this.nada+"&pag_comment="+this.opcion;
     //console.log(body);
-    var url = "http://186.167.32.27:81/maraveca/public/index.php/api/facpag";
+    var url = environment.apiEndpoint+"facpag";
     this.http.post(url, this.addPago.value)
     .subscribe((data)=>{
       this.agregarProducto=false;
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/facpag/'+this.row.id)
+      this.http.get(environment.apiEndpoint+'facpag/'+this.row.id)
       .subscribe((data) => {
         this.fac_pagos = data.json();
         //console.log(this.fac_pagos.slice(0,3));

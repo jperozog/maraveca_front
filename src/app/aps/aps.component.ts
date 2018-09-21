@@ -10,6 +10,7 @@ import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule} from '@angular
 import 'rxjs/add/operator/startWith';
 import {Router} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
+import { environment } from '../../environments/environment'
 //import 'rxjs/add/operator/map';
 
 @Component({
@@ -28,7 +29,7 @@ export class ApsComponent {
         duration: 2000,
       });
       this.myService = new MyService(http, router);
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/aps/')
+      this.http.get(environment.apiEndpoint+'aps/')
         .subscribe((data) => {
           this.data = data.json();
           console.log(this.data);
@@ -90,7 +91,7 @@ export class ApsComponent {
 
     deleteData(id){
 
-      return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/aps/'+id, {})
+      return this.http.delete(environment.apiEndpoint+'aps/'+id, {})
       .map((resp:Response)=>resp.json());
 
 
@@ -134,7 +135,7 @@ export class ApsComponent {
       public snackBar: MdSnackBar,
       private router: Router){
 
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/celdas/')
+        this.http.get(environment.apiEndpoint+'celdas/')
         .subscribe((data) => {
           this.celdas = data.json();
           //console.log(this.celdas);
@@ -184,7 +185,7 @@ export class ApsComponent {
         "&password_ap="+client.password_ap+
         "&celda_ap="+client.celda_ap+
         "&nombre_ap="+client.nombre_ap;
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/aps/?"+body;
+        var url = environment.apiEndpoint+"aps/?"+body;
         console.log(url);
         this.http.post(url, body).subscribe((data) => {});
         this.dialogRef.close();
@@ -203,7 +204,7 @@ export class ApsComponent {
         "&password_ap="+client.password_ap+
         "&celda_ap="+client.celda_ap+
         "&nombre_ap="+client.nombre_ap;
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/aps/"+client.id+"?"+body;
+        var url = environment.apiEndpoint+"aps/"+client.id+"?"+body;
         console.log(url);
         this.http.put(url, body).subscribe((data) => {});
         this.dialogRef.close();

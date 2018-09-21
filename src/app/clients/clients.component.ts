@@ -16,11 +16,11 @@ import 'rxjs/add/operator/takeWhile';
 import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
 import { APP_CONFIG } from '../app.config';
-import { IAppConfig } from '../app.interface';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/takeWhile';
 import { Location } from '@angular/common';
+import { environment } from '../../environments/environment'
 
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const PHONE_REGEX = /^(0414\d|0412\d|0416\d|0426\d|0424\d|0415\d)+\d{6}/;
@@ -83,7 +83,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
   update:boolean=true
   autoupdate:boolean=true
   constructor(
-    @Inject(APP_CONFIG) private config: IAppConfig,
     private http: Http,
     public dialog: MdDialog,
     public snackBar:MdSnackBar,
@@ -93,8 +92,8 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.snackBar.open("Cargando Clientes", null, {
       duration: 2000,
     });
-    this.myService = new MyService(http, router, config, usuario);
-    this.http.get(config.apiEndpoint+'clientes1/')
+    this.myService = new MyService(http, router, usuario);
+    this.http.get(environment.apiEndpoint+'clientes1/')
       .subscribe((data) => {
         this.clientes = data.json().clientes;
         this.pendientes = data.json().pendientes;
@@ -135,7 +134,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
   }
   refresh(nf){
     this.update=true
-    this.http.get(this.config.apiEndpoint+'clientes1/')
+    this.http.get(environment.apiEndpoint+'clientes1/')
       .subscribe((data) => {
         this.clientes_t = data.json().clientes;
         this.pendientes_t = data.json().pendientes;
@@ -208,10 +207,10 @@ function capitalizeName(name) {
 
 export class MyService {
 
-  constructor(private http: Http, private router: Router, @Inject(APP_CONFIG) private config: IAppConfig, private usuario: AuthGuard) {}
+  constructor(private http: Http, private router: Router, private usuario: AuthGuard) {}
 
   deleteData(id){
-    return this.http.delete(this.config.apiEndpoint+'clientes/'+id+'?responsable='+this.usuario.currentUser.id_user, {})
+    return this.http.delete(environment.apiEndpoint+'clientes/'+id+'?responsable='+this.usuario.currentUser.id_user, {})
     .map((resp:Response)=>resp.json());
     //return null;
 
@@ -255,7 +254,7 @@ export class AddclientsComponent implements OnInit{
 
 
 
-  constructor(@Inject(APP_CONFIG) private config: IAppConfig,
+  constructor(
   private http:Http,
     private fb: FormBuilder,
     public dialogRef: MdDialogRef<AddclientsComponent>,
@@ -265,7 +264,7 @@ export class AddclientsComponent implements OnInit{
     private usuario:AuthGuard,
   private _fb: FormBuilder){
 
-      this.myService = new MyService(http, router, config, usuario);
+      this.myService = new MyService(http, router, usuario);
 
       if(row != null){
         this.addClient = this.fb.group({
@@ -330,7 +329,7 @@ export class AddclientsComponent implements OnInit{
 
     Enviar(){
       var client = this.addClient.value;
-      var url = this.config.apiEndpoint+"clientes";
+      var url = environment.apiEndpoint+"clientes";
 
       this.http.post(url, client).subscribe(data => {
         this.dialogRef.close();
@@ -345,7 +344,7 @@ export class AddclientsComponent implements OnInit{
     }
     Editar(){
       var client = this.addClient.value;
-      var url = this.config.apiEndpoint+"clientes/"+client.id;
+      var url = environment.apiEndpoint+"clientes/"+client.id;
       this.http.put(url, client).subscribe((data) => {
         this.dialogRef.close();
       });
@@ -369,7 +368,7 @@ export class AddclientsComponent implements OnInit{
         client.apellido != ""){
 
 
-          const req = this.http.post(this.config.apiEndpoint+'sms', {
+          const req = this.http.post(environment.apiEndpoint+'sms', {
             numero: client.phone1 ,
             mensaje: 'Este es un mensaje de prueba de MARAVECA, saludos '+ client.nombre + " " + client.apellido,
             userId: 1
@@ -424,7 +423,6 @@ export class ClientesStatus {
   id: any;
   //cliente: null;
   constructor(
-    @Inject(APP_CONFIG) private config: IAppConfig,
     private http:Http,
     private fb: FormBuilder,
     public dialog: MdDialog,
@@ -443,7 +441,7 @@ export class ClientesStatus {
     this.pagado = parseInt(row.pagado);
   }
   this.cliente=row.nombre+" "+row.apellido
-  this.http.get(config.apiEndpoint+'facturas/'+row.id)
+  this.http.get(environment.apiEndpoint+'facturas/'+row.id)
   .subscribe((data) => {
     this.fac_products = data.json();
     console.log(this.fac_products.slice(0,3));
@@ -464,14 +462,14 @@ export class ClientesStatus {
 }
 
 generate(fecha){
-  const req = this.http.post(this.config.apiEndpoint+'factura', {
+  const req = this.http.post(environment.apiEndpoint+'factura', {
     cliente: this.row.id ,
     fecha : "18-08-01"
     //fecha : fecha
   }).subscribe(result => {
     this.monto = 0;
     this.pagado = 0;
-    this.http.get(this.config.apiEndpoint+'facturas/'+this.id)
+    this.http.get(environment.apiEndpoint+'facturas/'+this.id)
     .subscribe((data) => {
       this.fac_products = data.json();
       console.log(this.fac_products.slice(0,3));
@@ -498,7 +496,7 @@ status(row){
     console.log('The dialog was AddClient closed');
     this.monto = 0;
     this.pagado = 0;
-    this.http.get(this.config.apiEndpoint+'facturas/'+this.id)
+    this.http.get(environment.apiEndpoint+'facturas/'+this.id)
     .subscribe((data) => {
       this.fac_products = data.json();
       console.log(this.fac_products.slice(0,3));
@@ -527,7 +525,6 @@ export class DeleteCliente {
   myService: MyService | null;
 
   constructor(
-    @Inject(APP_CONFIG) private config: IAppConfig,
     public dialogRef: MdDialogRef<DeleteCliente>,
     @Inject(MD_DIALOG_DATA) public data: any,
     private http: Http,
@@ -535,7 +532,7 @@ export class DeleteCliente {
     public snackBar:MdSnackBar,
     private router: Router,
     private usuario: AuthGuard) {
-      this.myService = new MyService(http, router, config, usuario);
+      this.myService = new MyService(http, router, usuario);
       console.log(this.data);
      }
 
@@ -577,7 +574,6 @@ export class ClientOverview implements OnInit{
   pagado:any = 0;
   constructor(
 
-    @Inject(APP_CONFIG) private config: IAppConfig,
     private route: ActivatedRoute,
     private http: Http,
     public snackBar:MdSnackBar,
@@ -613,7 +609,7 @@ export class ClientOverview implements OnInit{
        window.open("http://186.167.32.27:81/maraveca/test.php?ip="+url, '_blank');
      }
      generate(fecha){
-       const req = this.http.post(this.config.apiEndpoint+'factura', {
+       const req = this.http.post(environment.apiEndpoint+'factura', {
          cliente: this.cliente.id ,
          fecha : "18-09-01",
          responsable: this.usuario.currentUser.id_user,
@@ -652,7 +648,7 @@ export class ClientOverview implements OnInit{
      }
 
      updateClient(){
-       var url = this.config.apiEndpoint+"clientes/"+this.cliente.id
+       var url = environment.apiEndpoint+"clientes/"+this.cliente.id
        this.http.put(url, this.addClient.value).subscribe((data) => {
          this.editclient=false
          this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientover/' + this.id)
@@ -695,7 +691,7 @@ export class ClientOverview implements OnInit{
        });
        dialogRef.afterClosed().subscribe(result => {
          console.log('The dialog was AddClient closed');
-         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientover/' + this.id)
+         this.http.get(environment.apiEndpoint+'clientover/' + this.id)
          .subscribe((data) => {
            var response = data.json()
            this.soporte= response.soporte
@@ -735,7 +731,7 @@ export class ClientOverview implements OnInit{
          }
        )
        //console.log(this.usuario)
-       this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientover/' + this.id)
+       this.http.get(environment.apiEndpoint+'clientover/' + this.id)
        .subscribe((data) => {
          var response = data.json()
          this.soporte= response.soporte

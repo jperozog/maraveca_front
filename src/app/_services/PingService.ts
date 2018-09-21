@@ -2,6 +2,7 @@ import {Component, Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Subject, Observable} from 'rxjs/Rx';
 import 'rxjs/Rx';
+import { environment } from '../../environments/environment'
 
 
 @Injectable()

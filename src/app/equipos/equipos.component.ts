@@ -10,6 +10,7 @@ import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/materi
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
+import { environment } from '../../environments/environment'
 
 @Component({
   selector: 'app-equipos',
@@ -32,7 +33,7 @@ export class EquiposComponent {
         duration: 2000,
       });
       this.myService = new MyService(http, router);
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/equipos/')
+      this.http.get(environment.apiEndpoint+'equipos/')
         .subscribe((data) => {
           this.data = data.json();
           console.log(this.data);
@@ -90,7 +91,7 @@ export class EquiposComponent {
 
     deleteData(id){
 
-      return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/equipos/'+id, {})
+      return this.http.delete(environment.apiEndpoint+'equipos/'+id, {})
       .map((resp:Response)=>resp.json());
 
 
@@ -131,7 +132,7 @@ export class EquiposComponent {
       public snackBar: MdSnackBar,
       private router: Router){
 
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/equipos/')
+        this.http.get(environment.apiEndpoint+'equipos/')
         .subscribe((data) => {
           this.equipos = data.json();
           console.log(this.equipos.slice(0,3));
@@ -171,7 +172,7 @@ export class EquiposComponent {
         console.log(JSON.stringify(this.addClient.value));
         var body =
         "name="+client.name;
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/equipos?"+body;
+        var url = environment.apiEndpoint+"equipos?"+body;
 
         this.http.post(url, body).subscribe((data) => {});
         this.dialogRef.close();
@@ -187,7 +188,7 @@ export class EquiposComponent {
         console.log(JSON.stringify(this.addClient.value));
         var body =
         "name="+client.name;
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/equipos/"+client.id+"?"+body;
+        var url = environment.apiEndpoint+"equipos/"+client.id+"?"+body;
 
         this.http.put(url, body).subscribe((data) => {});
         this.dialogRef.close();

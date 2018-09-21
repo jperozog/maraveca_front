@@ -13,6 +13,7 @@ import 'rxjs/add/operator/takeWhile';
 import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
 import { Location } from '@angular/common';
+import { environment } from '../../environments/environment'
 
 @Component({
   selector: 'app-usuarios',
@@ -33,7 +34,7 @@ export class UsuariosComponent{
         duration: 2000,
       });
       this.myService = new MyService(http, router);
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/users/')
+      this.http.get(environment.apiEndpoint+'users/')
       .subscribe((data) => {
         this.data = data.json();
         //console.log(this.data);
@@ -83,7 +84,7 @@ export class MyService {
   constructor(private http: Http, private router: Router) {
   }
   deleteData(id){
-    return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+id, {})
+    return this.http.delete(environment.apiEndpoint+'users/'+id, {})
     .map((resp:Response)=>resp.json());
   }
   refresh(){
@@ -96,13 +97,13 @@ export class MyService {
     2000);
   }
   deletePerm(user){
-    return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+user+'/permission/', {})
+    return this.http.delete(environment.apiEndpoint+'users/'+user+'/permission/', {})
     .map((resp:Response)=>resp.json());
 
   }
   addPerm(user, perm){
     perm.forEach(i => {
-      this.http.post('http://186.167.32.27:81/maraveca/public/index.php/api/users/permission/?user='+user+'&perm='+i, i).subscribe((data) => {});
+      this.http.post(environment.apiEndpoint+'users/permission/?user='+user+'&perm='+i, i).subscribe((data) => {});
 
 
     });
@@ -163,7 +164,7 @@ export class AdduserComponent{
     "&email_user="+plan.email_user+
     "&phone_user="+plan.phone_user+
     "&password="+plan.password_user;
-    var url = "http://186.167.32.27:81/maraveca/public/index.php/api/users?"+body;
+    var url = environment.apiEndpoint+"users?"+body;
 
     this.http.post(url, body).subscribe((data) => {
       this.dialogRef.close();
@@ -183,7 +184,7 @@ export class AdduserComponent{
     "&email_user="+plan.email_user+
     "&phone_user="+plan.phone_user+
     "&password="+plan.password_user;
-    var url = "http://186.167.32.27:81/maraveca/public/index.php/api/users/"+plan.id+"?"+body;
+    var url = environment.apiEndpoint+"users/"+plan.id+"?"+body;
 
     this.http.put(url, body).subscribe((data) => {
       this.dialogRef.close();
@@ -386,11 +387,11 @@ export class DeleteuserDialog {
     ngOnInit(){
 
       //http://186.167.32.27:81/maraveca/public/index.php/api/uh/1
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/uh/'+this.id)
+      this.http.get(environment.apiEndpoint+'uh/'+this.id)
       .subscribe((data)=>{
         this.historial = data.json();
       })
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+this.id+'/zona')
+      this.http.get(environment.apiEndpoint+'users/'+this.id+'/zona')
       .subscribe((data) => {
         data.json().forEach(permi => {
           this.zonas.push(permi.zona);
@@ -409,7 +410,7 @@ export class DeleteuserDialog {
         })
       });
 
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+this.id)
+      this.http.get(environment.apiEndpoint+'users/'+this.id)
       .subscribe((data) => {
         this.data = data.json()[0];
         console.log(this.data)
@@ -429,7 +430,7 @@ export class DeleteuserDialog {
           this.installer=false
         }
       });
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/users/'+this.id+'/permission')
+      this.http.get(environment.apiEndpoint+'users/'+this.id+'/permission')
       .subscribe((data) => {
         data.json().forEach(permi => {
           this.permisos.push(permi.perm);
@@ -479,7 +480,7 @@ export class DeleteuserDialog {
         permisos: this.permisos,
         usuario: this.data.id_user
       })
-      var url = 'http://186.167.32.27:81/maraveca/public/index.php/api/users/permission/'
+      var url = environment.apiEndpoint+'users/permission/'
       this.http.post(url, this.editpermisos.value)
       .subscribe((data) => {
 
@@ -493,7 +494,7 @@ export class DeleteuserDialog {
         zonas: this.zonas,
         usuario: this.data.id_user
       })
-      var url='http://186.167.32.27:81/maraveca/public/index.php/api/users/zona'
+      var url=environment.apiEndpoint+'users/zona'
       this.http.post(url, this.editzona.value)
       .subscribe((data) => {
 
@@ -505,7 +506,7 @@ export class DeleteuserDialog {
         this.edituser.patchValue({
           password: this.data.password
         })
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/users/"+this.id;
+        var url = environment.apiEndpoint+"users/"+this.id;
         this.http.put(url, this.edituser.value).subscribe((data) => {
           this.snackBar.open("usuario_editado", null, {
             duration: 2000,
@@ -518,7 +519,7 @@ export class DeleteuserDialog {
         })
       }else if( this.edituser.value.password == this.edituser.value.confirm){
 
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/users/"+this.id;
+        var url = environment.apiEndpoint+"users/"+this.id;
         this.http.put(url, this.edituser.value).subscribe((data) => {
           this.snackBar.open("usuario_editado", null, {
             duration: 2000,

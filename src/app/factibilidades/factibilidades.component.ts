@@ -10,6 +10,7 @@ import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/materi
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
+import { environment } from '../../environments/environment'
 
 @Component({
   selector: 'app-factibilidades',
@@ -32,7 +33,7 @@ export class FactibilidadesComponent {
           duration: 2000,
         });
         this.myService = new MyService(http, router);
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/factibi/')
+        this.http.get(environment.apiEndpoint+'factibi/')
           .subscribe((data) => {
             this.data = data.json();
             console.log(this.data[0].adicionales);
@@ -54,7 +55,7 @@ export class FactibilidadesComponent {
         })
       }
       refresh(){
-        this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/factibi/')
+        this.http.get(environment.apiEndpoint+'factibi/')
           .subscribe((data) => {
             this.data = data.json();
             console.log(this.data);
@@ -73,7 +74,7 @@ export class FactibilidadesComponent {
 
         dialogRef.afterClosed().subscribe(result => {
           //console.log('The dialog was closed');
-          this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/factibi/')
+          this.http.get(environment.apiEndpoint+'factibi/')
             .subscribe((data) => {
               this.data = data.json();
               //console.log(this.data);
@@ -109,7 +110,7 @@ export class FactibilidadesComponent {
 
       deleteData(id){
 
-        return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/equipos/'+id, {})
+        return this.http.delete(environment.apiEndpoint+'equipos/'+id, {})
         .map((resp:Response)=>resp.json());
 
 
@@ -161,7 +162,7 @@ export class FactibilidadesDetComponent {
     public usuario: AuthGuard
 ){
   //console.log(row);
-  this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/factibil/'+row.id)
+  this.http.get(environment.apiEndpoint+'factibil/'+row.id)
   .subscribe((data) => {
     //console.log(data.json())
     this.fact_details = data.json()[0].factibilidad[0];
@@ -196,7 +197,7 @@ agregar(){
     )
   }
   //console.log(this.EditFact.value)
-  var url = 'http://186.167.32.27:81/maraveca/public/index.php/api/factibi/'+this.fact_details.id
+  var url = environment.apiEndpoint+'factibi/'+this.fact_details.id
   this.http.put(url, this.EditFact.value).subscribe((data) => {
     this.dialogRef.close();
   });

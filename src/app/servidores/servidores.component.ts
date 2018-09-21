@@ -10,6 +10,7 @@ import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/materi
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
+import { environment } from '../../environments/environment'
 
 @Component({
   selector: 'app-servidores',
@@ -31,7 +32,7 @@ export class ServidoresComponent {
         duration: 2000,
       });
       this.myService = new MyService(http, router);
-      this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/servidor/')
+      this.http.get(environment.apiEndpoint+'servidor/')
         .subscribe((data) => {
           this.data = data.json();
           console.log(this.data);
@@ -104,7 +105,7 @@ export class ServidoresComponent {
 
     deleteData(id){
 
-      return this.http.delete('http://186.167.32.27:81/maraveca/public/index.php/api/servidor/'+id, {})
+      return this.http.delete(environment.apiEndpoint+'servidor/'+id, {})
       .map((resp:Response)=>resp.json());
 
 
@@ -185,7 +186,7 @@ export class ServidoresComponent {
         "&user_srvidor="+client.user_srvidor+
         "&password_srvidor="+client.password_srvidor+
         "&nombre_srvidor="+client.nombre_srvidor;
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/servidor?"+body;
+        var url = environment.apiEndpoint+"servidor?"+body;
 
         this.http.post(url, body).subscribe((data) => {});
         this.dialogRef.close();
@@ -204,7 +205,7 @@ export class ServidoresComponent {
         "&user_srvidor="+client.user_srvidor+
         "&password_srvidor="+client.password_srvidor+
         "&nombre_srvidor="+client.nombre_srvidor;
-        var url = "http://186.167.32.27:81/maraveca/public/index.php/api/servidor/"+client.id+"?"+body;
+        var url = environment.apiEndpoint+"servidor/"+client.id+"?"+body;
 
         this.http.put(url, body).subscribe((data) => {});
         this.dialogRef.close();

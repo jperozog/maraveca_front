@@ -20,7 +20,7 @@
     <table class="example-full-width">
       <tr *ngFor="let p of pagos">
         <td>
-          {{p.monto}}
+          {{p.monto | number : '1.0-2'}}Bs.S.
         </td>
         <td *ngIf="p.banco==2">Transferencia Banesco</td>
         <td *ngIf="p.banco==6">Transferencia Bicentenario</td>

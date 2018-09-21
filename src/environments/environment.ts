@@ -4,5 +4,6 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiEndpoint: "http://186.167.32.27:81/maraveca/public/index.php/api/"
 };
