@@ -289,6 +289,7 @@ export class DeleteuserDialog {
     seque:boolean = false;
     socopo:boolean = false;
     inter:boolean = false;
+    gladiolas:boolean = false;
 
 
 
@@ -406,6 +407,7 @@ export class DeleteuserDialog {
           else if(zonas == '10'){ this.seque=true }
           else if(zonas == '13'){ this.socopo=true }
           else if(zonas == '15'){ this.inter=true }
+          else if(zonas == '23'){ this.gladiolas=true }
 
         })
       });
