@@ -15,6 +15,7 @@ import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
 import {AddticketComponent} from '../soporte/soporte.component';
 import { environment } from '../../environments/environment'
+import { PreComponent } from '../presupuestos/pre.component'
 
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const PHONE_REGEX = /^(0414\d|0412\d|0416\d|0426\d|0424\d|0415\d)+\d{6}/;
@@ -53,7 +54,23 @@ export class PClientsComponent {
       duration: 2000,
     });
   }
+  SendPre(row): void {
+    /*let dialogRef = this.dialog.open(AddclientsComponent, {
+      width: '25%'
+    });*/
+    var tipo = 'p'
+    var datos = [row, tipo]
+    let dialogRef = this.dialog.open(PreComponent, {
+      width: '25%',
+      data: datos
+    });
 
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    })
+  }
   openDialog(): void {
     /*let dialogRef = this.dialog.open(AddclientsComponent, {
       width: '25%'

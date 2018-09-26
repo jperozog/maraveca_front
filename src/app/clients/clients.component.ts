@@ -21,7 +21,8 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/takeWhile';
 import { Location } from '@angular/common';
 import { environment } from '../../environments/environment'
-
+import { PreComponent } from '../presupuestos/pre.component'
+import { AddservicesComponent } from '../servicios/servicios.component'
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const PHONE_REGEX = /^(0414\d|0412\d|0416\d|0426\d|0424\d|0415\d)+\d{6}/;
 const KIND_REGEX= /^(V|J|E|G)/
@@ -602,7 +603,23 @@ export class ClientOverview implements OnInit{
 
     });
      }
+     SendPre(): void {
+       /*let dialogRef = this.dialog.open(AddclientsComponent, {
+         width: '25%'
+       });*/
+       var tipo = 'c'
+       var datos = [this.cliente, tipo]
+       let dialogRef = this.dialog.open(PreComponent, {
+         width: '25%',
+         data: datos
+       });
 
+
+       dialogRef.afterClosed().subscribe(result => {
+         console.log('The dialog was closed');
+
+       })
+     }
      Close(){this.location.back();}
      private openLINK(url){
        console.log(url)
@@ -646,7 +663,18 @@ export class ClientOverview implements OnInit{
      edit(){
        this.editclient=true
      }
-
+     show(row){
+       console.log(row);
+       let dialogRef = this.dialog.open(AddservicesComponent, {
+         panelClass: 'my-full-screen-dialog',
+         data: row
+       });
+       dialogRef.afterClosed().subscribe(result => {
+         this.ngOnInit();
+         console.log('The dialog was AddClient closed');
+       });
+       //this.myService.refresh();
+     }
      updateClient(){
        var url = environment.apiEndpoint+"clientes/"+this.cliente.id
        this.http.put(url, this.addClient.value).subscribe((data) => {

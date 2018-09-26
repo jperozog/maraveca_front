@@ -82,6 +82,10 @@
         </td>
       </tr>
     </table>
+    <button md-button color="primary" (click)="SendPre()">
+      Enviar Presupuesto
+    </button>
+
     </md-card-content>
 
     <!-- si es editable a partir de aqui-->
@@ -377,6 +381,9 @@
             <td class="fac montos" style="text-align: center; width: 20%"  *ngIf="usuario.perm && usuario.perm.includes('servicios_w')">
               <!--botones de acciones-->
 
+              <button md-icon-button color="primary" (click)="show(i)">
+                <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
+              </button>
               <button md-icon-button color="primary"(click)="openLINK(i.ip_srv)" >
                 <md-icon class="md-24" aria-label="Ubiquiti Admin">language</md-icon>
               </button>

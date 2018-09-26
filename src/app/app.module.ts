@@ -64,6 +64,7 @@ import { UsuariosComponent, DetallesUsuarios, AdduserComponent, DeleteuserDialog
 import { PotencialesComponent } from './potenciales/potenciales.component';
 //import { MyDatePickerModule } from 'mydatepicker';
 import { NotifyComponent } from './notify/notify.component';
+import { PreComponent } from './presupuestos/pre.component';
 import { FacturacionComponent, FacturacionPagos } from './facturacion/facturacion.component';
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
 import { APP_CONFIG } from './app.config';
@@ -133,7 +134,8 @@ import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } fro
     PagarComponent,
     ResetCounter,
     DetallesInstallerComponent,
-    cargarPagocomponent
+    cargarPagocomponent,
+    PreComponent,
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,
