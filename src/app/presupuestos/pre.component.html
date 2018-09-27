@@ -1,0 +1,72 @@
+<h1 md-dialog-title>Presupuesto</h1>
+<div md-dialog-content>
+  <p>Formulario de presupuesto para el cliente:</p>
+  <p *ngIf="cliente.kind.toUpperCase() == 'V'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
+  <p *ngIf="cliente.kind.toUpperCase() == 'E'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
+  <p *ngIf="cliente.kind.toUpperCase() == 'G'">{{(cliente.social|capitalize)}}</p>
+  <p *ngIf="cliente.kind.toUpperCase() == 'J'">{{(cliente.social|capitalize)}}</p>
+
+  <form [formGroup]="pre" ng-submit="ok(pre)">
+    <table>
+      <tr>
+        <td>
+          <md-select class="example-full-width" mdInput placeholder="Planes" formControlName="planes">
+            <md-option value="r">Residenciales</md-option>
+            <md-option value="c">Comerciales</md-option>
+            <md-option value="h">Happy Time</md-option>
+            <md-option value="d">Dedicados</md-option>
+          </md-select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <md-form-field class="example-full-width">
+            <input name="nombre"
+            class="form-control"
+            placeholder="Costo De Instalacion"
+            mdInput
+            formControlName="instalacion"
+            autocomplete="off"
+            required
+            >
+          </md-form-field>
+        </td>
+      </tr>
+        <tr>
+        <td>
+          <md-select class="example-full-width" mdInput placeholder="Moneda" formControlName="moneda">
+            <md-option value="$">Dolares</md-option>
+            <md-option value="Bs.S.">Bolivares Soberanos</md-option>
+          </md-select>
+        </td>
+      </tr>
+      <tr *ngIf="tipo == 'p' && fac_products">
+        <td>
+          <md2-select name="Factibilidad"
+                    formControlName="factibi"
+                    placeholder="Factibilidades"
+                    style="width=100%; min-width: 100%; min-height: 100%;"
+                    mdInput
+                    >
+          <md2-option *ngFor="let i of fac_products" [value]="i.id">
+            <span *ngIf="i.factible && i.factible == 1">{{i.comentario}}</span>
+          </md2-option>
+        </md2-select>
+
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+<div md-dialog-actions>
+  <tr>
+    <td>
+      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="enviar()" tabindex="2">Enviar Presupuesto</button>
+
+    </td>
+    <td>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">Cerrar</button>
+
+    </td>
+  </tr>
+</div>
