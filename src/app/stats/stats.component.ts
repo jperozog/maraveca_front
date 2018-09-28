@@ -28,6 +28,7 @@ export class StatsComponent {
     pagado  = [];
     facturado  = [];
     datos:boolean=false
+    lineChartType:string = 'line';
     constructor(private http: Http, public usuario: AuthGuard, public dialog: MdDialog, public snackBar:MdSnackBar, public router: Router) {
       this.snackBar.open("Cargando AccessPoints", null, {
         duration: 2000,
@@ -102,7 +103,10 @@ colors = [
     onChartClick(event) {
       console.log(event);
     }
-
+    changeTYPE(dat){
+      this.lineChartType='bar'
+      console.log(dat)
+    }
   }
 
 

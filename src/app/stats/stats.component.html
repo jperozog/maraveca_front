@@ -27,13 +27,13 @@
         <div style="display: block;">
           <canvas
           baseChart
-          [chartType]="'line'"
+        [chartType]="lineChartType"
           [datasets]="chartData"
           [labels]="labels"
           [options]="chartOptions"
           [legend]="true"
           [colors]="colors"
-          (chartClick)="onChartClick($event)"
+          (chartClick)="onChartClick()"
           width="900" height="400">
         </canvas>
       </div>
@@ -73,7 +73,7 @@
         <tbody>
 
           <tr *ngFor="let item of data; let i = index">
-            <td class="fac" style="text-align:center;">
+            <td class="fac" style="text-align:center;" (click)="changeTYPE(item)">
               {{fechas[i].fecha}}
             </td>
             <td class="fac" style="text-align:right; ">

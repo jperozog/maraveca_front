@@ -57,13 +57,13 @@ ngOnInit(){
   });
   if(this.tipo == 'p'){
     this.pre.addControl('factibi', new FormControl(''))
-    this.http.get(environment.apiEndpoint+'factibi/'+this.cliente.id)
+    this.http.get(environment.apiEndpoint+'factible/'+this.cliente.id)
     .subscribe((data) => {
       this.fac_products = data.json();
       console.log(this.fac_products.slice(0,3));
     });
   }
-  
+
 }
 
 
