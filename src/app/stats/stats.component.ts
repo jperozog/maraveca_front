@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -12,7 +12,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import { Location } from '@angular/common';
 import { AuthGuard } from '../_guards/index';
 import { environment } from '../../environments/environment'
-//import 'rxjs/add/operator/map';
+import { BaseChartDirective }   from 'ng2-charts/ng2-charts';//import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-stat',
@@ -20,13 +20,18 @@ import { environment } from '../../environments/environment'
   styleUrls: ['./stats.component.css']
 })
 export class StatsComponent {
-
-
+     @ViewChild(BaseChartDirective)
+     chart: BaseChartDirective;
     data:any = null;
     fechas:any = null;
     search: string = '';
     pagado  = [];
+    tittle="Grafico Comparativo 4 meses"
     facturado  = [];
+    numero_pagos=[];
+    monto_pagos=[];
+    dias_pagos=[];
+    _chartData:any;
     datos:boolean=false
     lineChartType:string = 'line';
     constructor(private http: Http, public usuario: AuthGuard, public dialog: MdDialog, public snackBar:MdSnackBar, public router: Router) {
@@ -66,7 +71,7 @@ export class StatsComponent {
       callbacks: {
         label: function (tooltipItem, data) {
           const datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
-          return  datasetLabel + ': ' +tooltipItem.yLabel+ ' Bs.S';
+          return  datasetLabel + ': ' +tooltipItem.yLabel.toLocaleString('en-us') + ' Bs.S';
         }
       }},
     scales: {
@@ -80,7 +85,7 @@ export class StatsComponent {
       }
   }
 
-  labels =  [1,2,3,4];
+  labels = [];
 
   // STATIC DATA FOR THE CHART IN JSON FORMAT.
   chartData=[
@@ -104,8 +109,25 @@ colors = [
       console.log(event);
     }
     changeTYPE(dat){
-      this.lineChartType='bar'
-      console.log(dat)
+      this.tittle="Grafico con detalles del mes "+dat.fecha
+      this.http.get(environment.apiEndpoint+'incidencia/?mes='+dat.fecha)
+        .subscribe((data) => {
+          var data_mes = data.json()
+          this.labels.length = 0;
+          this.chartData[0].data.length=0
+          this.chartData[1].data.length=0
+          this.chartData[0].label="Numero de Pagos"
+          this.chartData[1].label="Monto de Pagos"
+
+          data_mes.forEach(dia =>{
+            this.chartData[1].data.push(dia.monto_pagos);
+            this.chartData[0].data.push(dia.numero_pagos);
+            this.labels.push(dia.fecha);
+          })
+          this.lineChartType='bar'
+          this.chart.chart.update()
+          })
+      console.log(this.chartData)
     }
   }
 

@@ -18,7 +18,7 @@
     <!-- card de graficos -->
     <md-card class="example-card card-body text-center">
       <md-card-header>
-        <md-card-title><h4>Grafico Comparativo 4 meses</h4></md-card-title>
+        <md-card-title><h4>{{tittle}}</h4></md-card-title>
         <span class="example-spacer" style="text-align: center;"></span>
       </md-card-header>
 
@@ -26,6 +26,8 @@
 
         <div style="display: block;">
           <canvas
+          #chart
+          id="grafico"
           baseChart
         [chartType]="lineChartType"
           [datasets]="chartData"

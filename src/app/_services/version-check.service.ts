@@ -37,14 +37,14 @@ export class VersionCheckService {
                         // ENTER YOUR CODE TO DO SOMETHING UPON VERSION CHANGE
                         // for an example: location.reload();
                         window.location.reload();
-                        console.log("refresh")
+                        //console.log("refresh")
                     }
                     // store the new hash so we wouldn't trigger versionChange again
                     // only necessary in case you did not force refresh
                     this.currentHash = hash;
                 },
                 (err) => {
-                    console.error(err, 'Could not get version');
+                    //console.error(err, 'Could not get version');
                 }
             );
     }
