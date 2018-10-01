@@ -22,7 +22,9 @@
     .x290{display:block;}
 
 }
-
+.pointer {
+    cursor: pointer;
+}
 .updateicon {
     color: red;
     -webkit-animation-name: spin;

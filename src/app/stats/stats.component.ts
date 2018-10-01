@@ -124,6 +124,27 @@ colors = [
             this.chartData[0].data.push(dia.numero_pagos);
             this.labels.push(dia.fecha);
           })
+          this.chartOptions = {
+          responsive: true,    // THIS WILL MAKE THE CHART RESPONSIVE (VISIBLE IN ANY DEVICE).
+          tooltips: {
+            mode: 'index',
+            intersect: false ,
+            callbacks: {
+              label: function (tooltipItem, data) {
+                const datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+                return  datasetLabel + ': ' +tooltipItem.yLabel.toLocaleString('en-us') + ' ' +data_mes[0].denominacion;
+              }
+            }},
+          scales: {
+              xAxes: [{
+                  title: 'meses/años'
+              }],
+              yAxes: [{
+                title: data_mes[0].denominacion
+              }],
+
+            }
+        }
           this.lineChartType='bar'
           this.chart.chart.update()
           })

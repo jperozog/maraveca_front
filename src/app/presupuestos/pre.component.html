@@ -40,18 +40,18 @@
           </md-select>
         </td>
       </tr>
-      <tr *ngIf="tipo == 'p' && fac_products && fac_products.length > 0">
+      <tr *ngIf="tipo == 'p' && fac_products && fac_products.length > 0 && factibi != 0 && factibi != nofac">
         <td>
-          <md2-select name="Factibilidad"
+          <md-select name="Factibilidad"
                     formControlName="factibi"
                     placeholder="Factibilidades"
                     style="width=100%; min-width: 100%; min-height: 100%;"
                     mdInput
                     >
-          <md2-option *ngFor="let i of fac_products" [value]="i.id">
+          <md-option *ngFor="let i of fac_products" [value]="i.id" [disabled]="i.factible==2 || i.factible == null">
             {{i.comentario}}
-          </md2-option>
-        </md2-select>
+          </md-option>
+        </md-select>
 
         </td>
       </tr>
@@ -61,8 +61,7 @@
 <div md-dialog-actions>
   <tr>
     <td>
-      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="enviar()" tabindex="2">Enviar Presupuesto</button>
-
+      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="confirm()" tabindex="2" [disabled]="!pre.valid">Enviar Presupuesto</button>
     </td>
     <td>
       <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">Cerrar</button>

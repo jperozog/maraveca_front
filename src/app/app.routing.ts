@@ -17,7 +17,7 @@ import { SoporteComponent, DeleteticketDialog, DeleteInstallDialog, AddticketCom
 import {UsuariosComponent, DetallesUsuarios, AdduserComponent, DeleteuserDialog, ResetCounter} from './usuarios/usuarios.component'
 import { NotifyComponent } from './notify/notify.component'
 import { AuthGuard } from './_guards/index';
-import { PreComponent } from './presupuestos/pre.component';
+import { PreComponent, DialogOverviewExampleDialog } from './presupuestos/pre.component';
 import { FacturacionComponent, FacturacionPagos } from './facturacion/facturacion.component';
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component'
@@ -50,6 +50,7 @@ const appRoutes: Routes = [
   {path: 'PreComponent', component: PreComponent, canActivate: [AuthGuard]},
   {path: 'fac_det', component: FacturacionPagos},
   {path: 'cargarPago', component: cargarPagocomponent},
+  {path: 'confirmSend', component: DialogOverviewExampleDialog},
   {path: 'fact_det', component: FactibilidadesDetComponent},
   {path: 'resetCounter', component: ResetCounter},
   {path: 'addinst', component: AddInstallComponent},
