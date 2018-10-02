@@ -249,9 +249,9 @@ export class FacturacionPagos {
     if(row.pagado == null){
       this.pagado = 0;
     }else{
-      this.pagado = parseInt(row.pagado);
+      this.pagado = row.pagado;
     }
-    this.deuda=parseInt(this.monto)-parseInt(this.pagado);
+    this.deuda=this.monto-this.pagado;
     this.http.get(environment.apiEndpoint+'facprod/'+row.id)
     .subscribe((data) => {
       this.fac_products = data.json();
@@ -399,8 +399,8 @@ export class FacturacionPagos {
         this.fac_products = data.json();
         //console.log(this.fac_pagos.slice(0,3));
       });
-      this.monto=parseInt(this.monto)+parseInt(this.precio_articulo);
-      this.deuda=parseInt(this.monto)-parseInt(this.pagado);
+      this.monto=this.monto+this.precio_articulo;
+      this.deuda=this.monto-this.pagado;
       if (this.deuda <= 0) {
 
       }
@@ -425,8 +425,8 @@ export class FacturacionPagos {
         this.fac_pagos = data.json();
         //console.log(this.fac_pagos.slice(0,3));
       });
-      this.pagado=parseInt(this.pagado)+parseInt(this.nada);
-      this.deuda=parseInt(this.monto)-parseInt(this.pagado);
+      this.pagado=this.pagado+this.nada;
+      this.deuda=this.monto-this.pagado;
       if (this.deuda <= 0) {
 
       }

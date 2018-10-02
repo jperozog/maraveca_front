@@ -470,7 +470,7 @@
 <!--===============================================================================================-->
 
 
-  <!-- card de facturacion -->
+  <!-- card de historial -->
 
 <div class="card" *ngIf="usuario.perm && usuario.perm.includes('facturacion') && facturacion">
 
@@ -548,6 +548,87 @@
     </md-card-actions>
   </md-card>
 </div>
+
+<!--===================================card de balance==========================================-->
+<div class="card" *ngIf="usuario.perm && usuario.perm.includes('facturacion') && facturacion">
+
+  <md-card class="example-card card-body text-center">
+    <md-card-header>
+      <md-card-title><h4>Balance de cliente</h4></md-card-title>
+      <span class="example-spacer" style="text-align: center;"></span>
+      <button md-raised-button color="#888888" [disabled]="!usuario.perm && !usuario.perm.includes('facturacion_w')" (click)="generate()">Generar Factura</button>
+
+    </md-card-header>
+    <md-card-content>
+        <table [md2Data]="facturacion" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="facturacion.length>0; else elseblock">
+      <thead>
+        <tr>
+          <td colspan="4">
+            <md2-pagination>
+            </md2-pagination>
+          </td><td>
+
+          </td>
+        </tr>
+        <tr >
+          <th style="text-align: center; width: 10%" ><h3>N</h3></th>
+          <th style="text-align: center" ><h3>Fecha</h3></th>
+          <th style="text-align: center" ><h3>Monto</h3></th>
+          <th style="text-align: center"><h3>Pagado</h3></th>
+          <th style="text-align: center"><h3>Acciones</h3></th>
+
+        </tr>
+      </thead>
+        <tbody class="fac">
+        <tr class="fac montos" *ngFor="let i of md2.data">
+          <td class="fac montos" style="border-right: 1px solid #000000; text-align: right">
+          {{i.id}}
+          </td>
+          <td class="fac montos" style="text-align: center">
+            {{i.created_at | stringToDate | date: 'M/yy'}}
+          </td>
+          <td class="fac montos">
+            {{i.monto | number : '1.0-2'}} {{i.denominacion}}
+          </td>
+          <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado != null)">
+            {{i.pagado | number : '1.0-2'}}  {{i.denominacion}}
+          </td>
+          <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado == null)">
+
+          </td>
+          <td class="fac montos" *ngIf="i.fac_status == 2">
+            Anulado
+          </td>
+          <td  class="fac montos" >
+            <button md-icon-button color="primary" (click)="status(i)">
+            <md-icon class="md-24" aria-label="Detalles De Factura" >find_in_page</md-icon>
+          </button>
+          </td>
+          <!--td class="fac" #obf>
+            0BSF
+          </td-->
+
+        </tr>
+
+
+      </tbody>
+
+      </table>
+      <ng-template #elseblock>
+        <font color="#00c402"><h1>Cliente solvente o sin servicios contratados</h1></font>
+      </ng-template>
+
+    </md-card-content>
+    <md-card-actions style="text-align: center">
+            <span *ngIf="(facturado - pagado)>0">
+              Total Adeudado: {{(facturado - pagado) | number:'1.0-2'}} Bs.S
+            </span>
+    </md-card-actions>
+  </md-card>
+</div>
+
+<!--====================================================================================-->
+
 
   <!-- card de Tickets -->
 
