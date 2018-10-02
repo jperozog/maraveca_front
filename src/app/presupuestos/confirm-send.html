@@ -3,12 +3,13 @@
   <p *ngIf="data.factibi==0">Esta seguro que desea enviar el presupuesto sin realizar la factibilidad?</p>
   <p *ngIf="data.factibi>0&&data.fac==0&&data.nofac==0">Esta seguro que desea enviar el presupuesto sin tener factibilidades resueltas?</p>
   <p *ngIf="data.factibi>0&&data.factibi == data.nofac">No se puede enviar este presupuesto debido a que la(s) factibilidad(es) del cliente no son factibles</p>
+  <p *ngIf="data.factibi>0&&data.factibi> data.nofac&& data.fac>0">Desea enviar este presupuesto?</p>
 </div>
 <div md-dialog-actions>
   <tr>
     <td>
       <button *ngIf="data.factibi>0&&data.factibi == data.nofac" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="onNoClick()" tabindex="2">Ok</button>
-      <button *ngIf=" (data.factibi==0)||(data.factibi>0&&data.fac==0&&data.nofac==0) " md-button [mat-dialog-close]="data.answer" cdkFocusInitial>Ok</button>
+      <button *ngIf=" (data.factibi==0)||(data.factibi>0&&data.fac==0&&data.nofac==0)||(data.factibi>0&&data.factibi> data.nofac&& data.fac>0) " md-button [mat-dialog-close]="data.answer" cdkFocusInitial>Si</button>
     </td>
     <td>
       <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">NO</button>

@@ -61,7 +61,8 @@
 <div md-dialog-actions>
   <tr>
     <td>
-      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="confirm()" tabindex="2" [disabled]="!pre.valid">Enviar Presupuesto</button>
+      <button *ngIf="tipo && tipo=='p'" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="confirm()" tabindex="2" [disabled]="!pre.valid">Enviar Presupuesto</button>
+      <button *ngIf="tipo && tipo=='c'" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="enviar()" tabindex="2" [disabled]="!pre.valid">Enviar Presupuesto</button>
     </td>
     <td>
       <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">Cerrar</button>
