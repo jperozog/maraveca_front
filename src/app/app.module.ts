@@ -43,7 +43,7 @@ import { ChartsModule } from 'ng2-charts'
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
-import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview } from './clients/clients.component';
+import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddPagoBalance } from './clients/clients.component';
 import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente } from './pclients/clients.component';
 import { CapitalizePipe2, StringToDatePipe } from './capitalize.pipe';
 import { HttpClientModule } from '@angular/common/http';
@@ -137,6 +137,7 @@ import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } fro
     cargarPagocomponent,
     PreComponent,
     DialogOverviewExampleDialog,
+    AddPagoBalance,
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,

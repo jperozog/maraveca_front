@@ -574,6 +574,7 @@ export class ClientOverview implements OnInit{
   editclient:boolean=false
   facturado: any = 0;
   pagado:any = 0;
+  balac:any = 0;
   constructor(
 
     private route: ActivatedRoute,
@@ -633,7 +634,7 @@ export class ClientOverview implements OnInit{
          responsable: this.usuario.currentUser.id_user,
          //fecha : fecha
        }).subscribe(result => {
-       this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientover/' + this.id)
+       this.http.get(environment.apiEndpoint+'clientover/' + this.id)
        .subscribe((data) => {
          var response = data.json()
          this.soporte= response.soporte
@@ -676,11 +677,21 @@ export class ClientOverview implements OnInit{
        });
        //this.myService.refresh();
      }
+     abono(){
+       let dialogRef = this.dialog.open(AddPagoBalance, {
+         //data: row
+
+       });
+       dialogRef.afterClosed().subscribe(result => {
+         this.ngOnInit();
+         console.log(result);
+       });
+     }
      updateClient(){
        var url = environment.apiEndpoint+"clientes/"+this.cliente.id
        this.http.put(url, this.addClient.value).subscribe((data) => {
          this.editclient=false
-         this.http.get('http://186.167.32.27:81/maraveca/public/index.php/api/clientover/' + this.id)
+         this.http.get(environment.apiEndpoint+'clientover/' + this.id)
          .subscribe((data) => {
            var response = data.json()
            this.soporte= response.soporte
@@ -760,6 +771,9 @@ export class ClientOverview implements OnInit{
          }
        )
        //console.log(this.usuario)
+       this.pagado=0;
+       this.facturado=0;
+       this.balac=0;
        this.http.get(environment.apiEndpoint+'clientover/' + this.id)
        .subscribe((data) => {
          var response = data.json()
@@ -769,6 +783,11 @@ export class ClientOverview implements OnInit{
          this.cliente = response.cliente
          this.historial = response.history
          this.balance = response.balance
+         this.balance.forEach(linea => {
+           if (linea.bal_rest>0){
+             this.balac=this.balac+linea.bal_rest;
+           }
+         })
          this.facturacion.forEach(linea => {
            if(linea.denominacion == 'Bs.S'){
              if(linea.fac_status==1){
@@ -803,6 +822,30 @@ export class ClientOverview implements OnInit{
      }
 
 }
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'pago-balance.html',
+})
+export class AddPagoBalance {
 
+  addAbono: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    public dialogRef: MdDialogRef<AddPagoBalance>,
+    @Inject(MD_DIALOG_DATA) public data) {
+      this.addAbono = this.fb.group({
+        bal_tip:['', Validators.required],
+        bal_monto:['', Validators.required],
+        created_at:['', Validators.required],
+        bal_comment:['', Validators.required]
+      })
+    }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
 
     //regex to validate phones (^0414\d+|^0412\d+|^0416\d+|^0426\d+|^0424\d+)(\d{6})
