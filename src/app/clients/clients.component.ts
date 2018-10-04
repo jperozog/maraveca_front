@@ -679,12 +679,18 @@ export class ClientOverview implements OnInit{
      }
      abono(){
        let dialogRef = this.dialog.open(AddPagoBalance, {
-         //data: row
+         data: this.id
 
        });
        dialogRef.afterClosed().subscribe(result => {
          this.ngOnInit();
+         if(result){
          console.log(result);
+         var url = environment.apiEndpoint+"pagoclient/"
+         this.http.post(url, result).subscribe(data =>{
+           this.ngOnInit()
+         })
+       }
        });
      }
      updateClient(){
@@ -831,14 +837,17 @@ export class AddPagoBalance {
   addAbono: FormGroup;
 
   constructor(
+    public usuario: AuthGuard,
     private fb: FormBuilder,
     public dialogRef: MdDialogRef<AddPagoBalance>,
-    @Inject(MD_DIALOG_DATA) public data) {
+    @Inject(MD_DIALOG_DATA) public id) {
+      console.log(id);
       this.addAbono = this.fb.group({
         bal_tip:['', Validators.required],
         bal_monto:['', Validators.required],
         created_at:['', Validators.required],
-        bal_comment:['', Validators.required]
+        bal_comment:['', Validators.required],
+        bal_cli: id
       })
     }
 
