@@ -82,7 +82,7 @@
         </td>
       </tr>
     </table>
-    <button md-button color="primary" (click)="SendPre()">
+    <button md-button color="primary" (click)="SendPre()" *ngIf="usuario.perm && usuario.perm.includes('factibilidades_w')">
       Enviar Presupuesto
     </button>
 
@@ -478,7 +478,7 @@
     <md-card-header>
       <md-card-title><h4>Resumen de Facturacion</h4></md-card-title>
       <span class="example-spacer" style="text-align: center;"></span>
-      <button md-raised-button color="#888888" [disabled]="!usuario.perm && !usuario.perm.includes('facturacion_w')" (click)="generate()">Generar Factura</button>
+      <button md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="generate()">Generar Factura</button>
 
     </md-card-header>
     <md-card-content>
