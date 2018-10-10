@@ -791,7 +791,7 @@ export class ClientOverview implements OnInit{
          this.balance = response.balance
          this.balance.forEach(linea => {
            if (linea.bal_rest>0){
-             this.balac=this.balac+linea.bal_rest;
+             this.balac=this.balac+Number(linea.bal_rest);
            }
          })
          this.facturacion.forEach(linea => {
