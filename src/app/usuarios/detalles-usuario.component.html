@@ -230,17 +230,6 @@
           </tr>
           <tr>
             <td>
-              Equipos
-            </td>
-            <td>
-              <md-checkbox [(ngModel)]="equipos"  (change)="listToglePermisos('equipos', equipos)"></md-checkbox>
-            </td>
-            <td>
-              <md-checkbox [(ngModel)]="equipos_w"  (change)="listToglePermisos('equipos_w', equipos_w)"></md-checkbox>
-            </td>
-          </tr>
-          <tr>
-            <td>
               Cuentas por cobrar
             </td>
             <td>
@@ -248,6 +237,28 @@
             </td>
             <td>
               <md-checkbox [(ngModel)]="cobrar_w"  (change)="listToglePermisos('cobrar_w', cobrar_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Cuentas por pagar
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="pagar"  (change)="listToglePermisos('pagar', pagar)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox  [(ngModel)]="pagar_w"  (change)="listToglePermisos('pagar_w', pagar_w)"></md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Equipos
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="equipos"  (change)="listToglePermisos('equipos', equipos)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="equipos_w"  (change)="listToglePermisos('equipos_w', equipos_w)"></md-checkbox>
             </td>
           </tr>
           <tr>
@@ -292,17 +303,6 @@
             </td>
             <td>
               <md-checkbox [(ngModel)]="notificaciones_w"  (change)="listToglePermisos('notify_w', notificaciones_w)"></md-checkbox>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Pagar
-            </td>
-            <td>
-              <md-checkbox [(ngModel)]="pagar"  (change)="listToglePermisos('pagar', pagar)"></md-checkbox>
-            </td>
-            <td>
-              <md-checkbox  [(ngModel)]="pagar_w"  (change)="listToglePermisos('pagar_w', pagar_w)"></md-checkbox>
             </td>
           </tr>
           <tr>

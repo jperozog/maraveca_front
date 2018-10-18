@@ -4,9 +4,13 @@
 
 </md-toolbar>
 
-<div class="container">
+<ng-masonry-grid [masonryOptions]="{ transitionDuration: '0.8s', gutter: 5 }"
+                    [useAnimation]="true"
+                    [useImagesLoaded]="true"
+                    [scrollAnimationOptions]="{ animationEffect: 'effect-4', minDuration : 0.4, maxDuration : 0.7 }"
+                    *ngIf="cliente">
 
-<div class="card">
+<ng-masonry-grid-item class="card" *ngIf="cliente">
 
 <!-- card de datos de usuario -->
   <md-card class="example-card card-body text-center">
@@ -270,7 +274,7 @@
 
         </td>
       </tr><tr>
-        <td colspan="2">
+        <!--td colspan="2">
           <md-form-field class="example-full-width">
             <input type="date" name="birthdate" data-ng-model="user.birthdate"
             class="form-control"
@@ -279,8 +283,21 @@
             placeholder="Fecha de nacimiento"
             required mdInput>
           </md-form-field>
-        </td>
+        </td-->
+        <md2-datepicker class="example-full-width"
+                      name="birthdate"
+                      mdInput
+                      data-ng-model="user.birthdate"
+                      placeholder="Fecha de nacimiento"
+                      formControlName="day_of_birth"
+                      required
+                      openOnFocus
+                      type="date"
+                      mode="auto"
+                      startView="year"
+                      format="dd/MM/y"
 
+                      ></md2-datepicker>
 
       </tr>
       <tr>
@@ -325,11 +342,11 @@
     </md-card-content>
 
   </md-card>
-</div>
+</ng-masonry-grid-item>
 
 <!-- card de Servicios -->
 
-<div class="card" *ngIf="usuario.perm && usuario.perm.includes('servicios')">
+<ng-masonry-grid-item class="card" *ngIf="usuario.perm && usuario.perm.includes('servicios')">
 
   <md-card class="example-card card-body text-center">
     <md-card-header>
@@ -391,10 +408,10 @@
                 <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
               </button>
               <button md-icon-button *ngIf="i.stat_srv == 2" >
-                <md-icon class="md-24" style="color:yellow;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+                <md-icon class="md-24" style="color:rgb(58, 198, 102);text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
               </button>
               <button md-icon-button *ngIf="i.stat_srv == 3" >
-                <md-icon class="md-24" style="color:red;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+                <md-icon class="md-24" style="color:rgb(236, 46, 46);text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
               </button>
               <button md-icon-button *ngIf="i.stat_srv == 4" >
                 <md-icon class="md-24" style="color:grey;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
@@ -411,13 +428,13 @@
     </md-card-content>
 
   </md-card>
-</div>
+</ng-masonry-grid-item>
 
 
 <!--==============================================================================================-->
 
 
-<div class="card" *ngIf="historial && historial.length > 0">
+<ng-masonry-grid-item class="card" *ngIf="historial && historial.length > 0">
 
   <md-card class="example-card card-body text-center">
     <md-card-header>
@@ -464,7 +481,7 @@
     </md-card-content>
 
   </md-card>
-</div>
+</ng-masonry-grid-item>
 
 
 <!--===============================================================================================-->
@@ -472,7 +489,7 @@
 
   <!-- card de historial -->
 
-<div class="card" *ngIf="usuario.perm && usuario.perm.includes('facturacion') && facturacion">
+<ng-masonry-grid-item class="card" *ngIf="usuario.perm && usuario.perm.includes('facturacion') && facturacion">
 
   <md-card class="example-card card-body text-center">
     <md-card-header>
@@ -542,15 +559,13 @@
 
     </md-card-content>
     <md-card-actions style="text-align: center">
-            <span *ngIf="(facturado - pagado)>0">
-              Total Adeudado: {{(facturado - pagado) | number:'1.0-2'}} Bs.S
-            </span>
+
     </md-card-actions>
   </md-card>
-</div>
+</ng-masonry-grid-item>
 
 <!--===================================card de balance==========================================-->
-<div class="card" *ngIf="usuario.perm && usuario.perm.includes('facturacion') && facturacion">
+<ng-masonry-grid-item class="card" *ngIf="usuario.perm && usuario.perm.includes('facturacion') && facturacion">
 
   <md-card class="example-card card-body text-center">
     <md-card-header>
@@ -575,7 +590,6 @@
           <th style="text-align: center" ><h3>Fecha</h3></th>
           <th style="text-align: center" ><h3>Monto</h3></th>
           <th style="text-align: center"><h3>Banco</h3></th>
-          <th style="text-align: center"><h3>Acciones</h3></th>
 
         </tr>
       </thead>
@@ -597,11 +611,6 @@
           <td class="fac" *ngIf="i.bal_tip==4">Retencion ISLR</td>
           <td class="fac" *ngIf="i.bal_tip==5">Retencion IVA</td>
           <td class="fac" *ngIf="i.bal_tip==7">Exonerado</td>
-          <td  class="fac montos" >
-            <button md-icon-button color="primary" (click)="status(i)">
-            <md-icon class="md-24" aria-label="Detalles De Factura" >find_in_page</md-icon>
-          </button>
-          </td>
           <!--td class="fac" #obf>
             0BSF
           </td-->
@@ -613,24 +622,27 @@
 
       </table>
       <ng-template #elsebal>
-        <font color="#73bd74"><h1>no tiene abonos en su balance</h1></font>
+        <font><h1>no tiene abonos en su balance</h1></font>
       </ng-template>
 
     </md-card-content>
     <md-card-actions style="text-align: center">
-            <span *ngIf="balac>0">
+            <span *ngIf="balac>0" style="color: rgb(75, 170, 78)">
               Saldo a favor: {{(balac) | number:'1.0-2'}} Bs.S
+            </span>
+            <span *ngIf="(facturado - pagado)>0" style="color: rgb(191, 76, 76)">
+              Total Adeudado: {{(facturado - pagado) | number:'1.0-2'}} Bs.S
             </span>
     </md-card-actions>
   </md-card>
-</div>
+</ng-masonry-grid-item>
 
 <!--====================================================================================-->
 
 
   <!-- card de Tickets -->
 
-<div class="card" *ngIf="usuario.perm && usuario.perm.includes('soporte') && soporte && soporte.length > 0">
+<ng-masonry-grid-item class="card" *ngIf="usuario.perm && usuario.perm.includes('soporte') && soporte && soporte.length > 0">
 
   <md-card class="example-card card-body text-center">
     <md-card-header>
@@ -686,6 +698,6 @@
     </md-card-content>
 
   </md-card>
-</div>
+</ng-masonry-grid-item>
 
-</div>
+</ng-masonry-grid>

@@ -59,6 +59,7 @@
         <md-error *ngIf="!addClient.controls.kind.valid">Por favor ingrese un tipo valido de identificacion</md-error>
       </td>
     </tr>
+
   <tr>
     <th colspan="2">
 
@@ -187,14 +188,20 @@
     </td>
   </tr><tr>
     <td colspan="2">
-      <md-form-field class="example-full-width">
-        <input type="date" name="birthdate" data-ng-model="user.birthdate"
-        class="form-control"
+        <md2-datepicker class="example-full-width"
+                      name="birthdate"
+                      mdInput
+                      data-ng-model="user.birthdate"
+                      placeholder="Fecha de nacimiento"
+                      formControlName="day_of_birth"
+                      required
+                      openOnFocus
+                      type="date"
+                      mode="auto"
+                      startView="year"
+                      format="dd/MM/y"
 
-        formControlName="day_of_birth"
-        placeholder="Fecha de nacimiento"
-        required mdInput>
-      </md-form-field>
+></md2-datepicker>
       <!--md2-datepicker placeholder="Fecha De Nacimiento"
                       required
                       data-ng-model="user.birthdate"

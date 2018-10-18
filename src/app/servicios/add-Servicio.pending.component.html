@@ -37,7 +37,7 @@
   </tr>
   <tr >
     <ng-container *ngFor="let ap of aps">
-      <td colspan="2" *ngIf="ap.id == row.ap && !ap_edit" (click)=edit_ap(ap) style="border:1px solid grey" tooltip="Click para editar">
+      <td colspan="2" *ngIf="row.ap && ap.id == row.ap && !ap_edit" (click)=edit_ap(ap) style="border:1px solid grey" tooltip="Click para editar">
         <span >Punto De Acceso: {{ap.nombre_ap}}</span>
       </td>
     </ng-container>

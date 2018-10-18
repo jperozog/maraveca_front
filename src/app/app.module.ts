@@ -36,7 +36,7 @@ import {
   MdExpansionModule
 
 } from '@angular/material';
-
+import { NgMasonryGridModule } from 'ng-masonry-grid';
 import { StatsComponent, PagarComponent, DetallesInstallerComponent, cargarPagocomponent } from './stats/stats.component';
 
 import { ChartsModule } from 'ng2-charts'
@@ -173,7 +173,8 @@ import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } fro
     MdTooltipModule,
     MdTabsModule,
     MdCheckboxModule,
-    MdExpansionModule
+    MdExpansionModule,
+    NgMasonryGridModule,
     //MyDatePickerModule,
 
   ],
