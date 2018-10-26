@@ -1,3 +1,38 @@
-<p>
-  inventarios works!
-</p>
+<md-toolbar class="submenu">
+  <md-form-field floatPlaceholder="never">
+  <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer" style="text-align: center;">Inventarios</span>
+  <button md-raised-button (click)="this.myService.refresh()" >
+    <md-icon [class.updateicon]="update">cached</md-icon> Actualizar Lista
+  </button>
+  <button md-raised-button (click)="openDialog()" *ngIf="usuario.perm && usuario.perm.includes('ap_w')" >
+    <md-icon>group_add</md-icon> Agregar equipos
+  </button>
+
+</md-toolbar>
+<div class="contenido">
+  <table class="addClient x700" [md2Data]="inventarios | dataPipe: { nombre_zona: search}" #md2="md2DataTable" [rowsPerPage]="10">
+    <thead>
+      <tr>
+        <td colspan="3">
+          <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 33%"  md2SortBy="name">Equipo</th>
+          <th style="width: 33%" md2SortBy="serial_inventario" >Serial</th>
+          <th style="width: 33%" md2SortBy="nombre_zona">Zona</th>
+          <th style="width: 33%"  md2SortBy="updated_at">Agregado</th>
+          </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of md2.data">
+        <td>{{i.nombre_zona | capitalize}}</td>
+        <td>{{5}}</td>
+        <td>{{i.created_at | stringToDate | date: 'd/M/yy'}}</td>
+        </tr>
+    </tbody>
+    </table>
+
+  </div>

@@ -22,11 +22,15 @@ import { FacturacionComponent, FacturacionPagos } from './facturacion/facturacio
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component'
 import { StatsComponent, PagarComponent, DetallesInstallerComponent, cargarPagocomponent } from './stats/stats.component'
+import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
+import { InventariosComponent } from './inventarios/inventarios.component';
 
 const appRoutes: Routes = [
   {path: '', component: LayoutComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
   {path: 'clients', component: ClientsComponent, canActivate: [AuthGuard]},
+  {path: 'zonas', component: ZonaComponent, canActivate: [AuthGuard]},
+  {path: 'inventarios', component: InventariosComponent, canActivate: [AuthGuard]},
   {path: 'pclients', component: PClientsComponent, canActivate: [AuthGuard]},
   {path: 'router', component: ServidoresComponent, canActivate: [AuthGuard]},
   {path: 'equipos',component: EquiposComponent, canActivate: [AuthGuard]},
@@ -52,6 +56,7 @@ const appRoutes: Routes = [
   {path: 'cargarPago', component: cargarPagocomponent},
   {path: 'confirmSend', component: DialogOverviewExampleDialog},
   {path: 'AddPagoBalance', component: AddPagoBalance},
+  {path: 'AddZona', component: AddZonaComponent},
   {path: 'fact_det', component: FactibilidadesDetComponent},
   {path: 'resetCounter', component: ResetCounter},
   {path: 'addinst', component: AddInstallComponent},

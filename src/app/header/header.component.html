@@ -33,6 +33,11 @@
     <md-icon>router</md-icon>
     <span>Router</span>
   </button>
+  <button *ngIf="usuario.perm && usuario.perm.includes('zonas')" md-menu-item routerLink="/zonas">
+    <md-icon>category</md-icon>
+    <span>Zonas</span>
+  </button>
+
 </md-menu>
 
 <md-menu #administracion="mdMenu">
@@ -54,6 +59,11 @@
   <button *ngIf="usuario.perm && usuario.perm.includes('facturacion')" md-menu-item routerLink="/facturacion">
     <md-icon>credit_card</md-icon>
     <span>Facturacion</span>
+  </button>
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('inventarios')" md-menu-item routerLink="/inventarios">
+    <md-icon>format_list_numbered</md-icon>
+    <span>Inventarios</span>
   </button>
 
   <button *ngIf="usuario.perm && usuario.perm.includes('planes')" md-menu-item routerLink="/planes">

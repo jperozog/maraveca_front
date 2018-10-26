@@ -1,0 +1,54 @@
+<form class="example-form" id="client" name="clientForm" [formGroup]="addZona" ng-submit="ok(clientForm)" novalidate>
+  <table class="example-full-width" cellspacing="0"><tr>
+    <td colspan="2">
+      <md-form-field class="example-full-width">
+        <input type="text" name="nombre"
+        class="form-control"
+        formControlName="nombre_zona"
+        placeholder="Nombre"
+
+        required
+        mdInput
+        >
+      </md-form-field>
+
+    </td>
+
+    </tr>
+
+  <tr>
+
+    <td colspan="2">
+      <md2-select multiple formControlName="routers"
+                placeholder="Router"
+                style="width=100%; min-width: 100%; min-height: 100%;"
+                mdInput
+                >
+      <md2-select-header>
+        <input class="search" type="text"
+               [(ngModel)]="r_celda"
+               placeholder="Buscar..."
+               style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+               formControlName="r_celda" />
+      </md2-select-header>
+      <md2-option *ngFor="let i of (routers | dataPipe : {nombre_srvidor: r_celda, ip_srvidor: r_celda})" [value]="i.id_srvidor">{{i.id_srvidor +" | "+i.ip_srvidor+' / '+ i.nombre_srvidor}}</md2-option>
+    </md2-select>
+    </td>
+
+  </tr>
+<tr>
+    <td>
+
+
+      <button *ngIf="row == null" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+      <button *ngIf="row != null"md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Editar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+    </td><td>
+
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
+    </td>
+  </tr>
+  <p>
+
+  </p>
+</table>
+</form>

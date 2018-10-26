@@ -72,7 +72,7 @@ import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibili
 import { APP_CONFIG } from './app.config';
 import { AppConfig } from './app.interface';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component';
-import { ZonaComponent } from './zona/zona.component';
+import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
 import { InventariosComponent } from './inventarios/inventarios.component';
 
 
@@ -144,6 +144,7 @@ import { InventariosComponent } from './inventarios/inventarios.component';
     AddPagoBalance,
     ZonaComponent,
     InventariosComponent,
+    AddZonaComponent
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,
