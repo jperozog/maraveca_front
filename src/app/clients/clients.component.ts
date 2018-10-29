@@ -335,6 +335,9 @@ export class AddclientsComponent implements OnInit{
 
     Enviar(){
       var client = this.addClient.value;
+      this.addClient.patchValue({
+        day_of_birth: this.addClient.value.day_of_birth.formatted
+      })
       var url = environment.apiEndpoint+"clientes";
 
       this.http.post(url, client).subscribe(data => {
