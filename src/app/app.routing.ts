@@ -23,7 +23,7 @@ import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibili
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component'
 import { StatsComponent, PagarComponent, DetallesInstallerComponent, cargarPagocomponent } from './stats/stats.component'
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
-import { InventariosComponent } from './inventarios/inventarios.component';
+import { InventariosComponent, AddEquipoComponent } from './inventarios/inventarios.component';
 
 const appRoutes: Routes = [
   {path: '', component: LayoutComponent, canActivate: [AuthGuard]},
@@ -63,6 +63,7 @@ const appRoutes: Routes = [
   {path: 'editinst', component: EditInstallComponent},
   {path: 'editprice', component: UpdatePlanPricesDialog},
   {path: 'addusers', component: AdduserComponent},
+  {path: 'addinventario', component: AddEquipoComponent},
   {path: 'delusers', component: DeleteuserDialog},
   {path: 'delticket', component: DeleteticketDialog},
   {path: 'delticket', component: DeleteInstallDialog},

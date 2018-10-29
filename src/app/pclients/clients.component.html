@@ -56,7 +56,7 @@
       <button  md-icon-button color="warn"><!--(click)="deleteDialog(i)"-->
           <md-icon class="md-24" aria-label="Eliminar Potencial">delete</md-icon>
       </button>
-      <button md-icon-button *ngIf="i.presupuesto >= 1" >
+      <button md-icon-button *ngIf="i.presupuesto >= 1" (click)="showPre(i)">
         <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
       </button>
 

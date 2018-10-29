@@ -285,10 +285,10 @@ export class AddticketComponent implements OnInit{
       if(row != null){
         console.log(row.ptp)
         this.addplan.patchValue({
-          servicio_soporte: row.servicio,
-          celda_soporte:row.celda,
-          equipo_soporte:row.equipo,
-          user_soporte: this.currentUser.id_user
+          servicio_soporte: +row.servicio,
+          celda_soporte:+row.celda,
+          equipo_soporte:+row.equipo,
+          user_soporte: +this.currentUser.id_user
         });
         this.requ.push({nombre: 'Tubo', valor: row.tubo})
         if (row.ptp != null){

@@ -71,6 +71,24 @@ export class PClientsComponent {
 
     })
   }
+  ShowPre(row): void {
+    /*let dialogRef = this.dialog.open(AddclientsComponent, {
+      width: '25%'
+    });*/
+    var tipo = 'p'
+    var client = row.id
+    var datos = [tipo, client]
+    let dialogRef = this.dialog.open(ShowPreComponent, {
+      width: '25%',
+      data: datos
+    });
+
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    })
+  }
   openDialog(): void {
     /*let dialogRef = this.dialog.open(AddclientsComponent, {
       width: '25%'
@@ -555,6 +573,27 @@ export class AddFactComponent{
     }
 
   }
+  @Component({
+selector: 'app-clients-astatus',
+templateUrl: './clients-astatus.component.html',
+styleUrls: ['./clients.component.css']
+})
+export class ShowPreComponent {
+
+constructor(
+  private http:Http,
+  private fb: FormBuilder,
+  public dialog: MdDialog,
+  public dialogRef: MdDialogRef<PClientsComponent>,
+  @Inject(MD_DIALOG_DATA) public row: any,
+  public snackBar: MdSnackBar,
+  private router: Router,
+  private _fb: FormBuilder,
+  private usuario: AuthGuard,
+){
+  
+}
+}
 
 
     //regex to validate phones (^0414\d+|^0412\d+|^0416\d+|^0426\d+|^0424\d+)(\d{6})

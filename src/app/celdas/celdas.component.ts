@@ -159,7 +159,7 @@ export class AddceldasComponent{
           usuario_celda:'',
           password_celda: '',
           nombre_celda: '',
-          servidor_celda: '14',
+          servidor_celda: '',
           r_celda: '',
 
         });
@@ -175,7 +175,7 @@ export class AddceldasComponent{
 
     Enviar(){
       var client = this.addClient.value;
-      console.log(JSON.stringify(this.addClient.value));
+      //console.log(JSON.stringify(this.addClient.value));
       var body =
       "nombre_celda="+client.nombre_celda+
       "&servidor_celda="+client.servidor_celda;

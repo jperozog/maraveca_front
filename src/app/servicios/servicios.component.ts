@@ -388,11 +388,10 @@ export class ServiciosComponent implements OnInit, OnDestroy {
         p_search: string;
         C_search: string;
         a_search: string;
-        ap_srv: string
         planes_= [];
-        ap_edit=false;
-        cliente_edit=false;
-        equipo_edit=false;
+        ap_edit=true;
+        cliente_edit=true;
+        equipo_edit=true;
         //value.replace(/\b\w/g, first => first.toLocaleUpperCase())
 
 
@@ -458,7 +457,6 @@ export class ServiciosComponent implements OnInit, OnDestroy {
 
           ngOnInit(){
             if(this.row){
-              this.ap_srv=this.row.ap;
               var serial = "";
               var pre = "";
               setTimeout(() =>
@@ -468,19 +466,19 @@ export class ServiciosComponent implements OnInit, OnDestroy {
                   serial = this.row.serial
                 }
                 this.addClient.patchValue({
-                  plan_srv: this.row.plan_srv,
-                  cliente_srv: this.row.servicio_soporte,
-                  equipo_srv: this.row.equipo,
-                  ap_srv: this.row.ap,
-                  instalacion_srv: this.row.updated_at,
-                  recibo_srv: this.row.recibo_srv,
+                  plan_srv: +this.row.plan_srv,
+                  cliente_srv: +this.row.servicio_soporte,
+                  equipo_srv: +this.row.equipo,
+                  ap_srv: Number(this.row.ap),
+                  instalacion_srv: +this.row.updated_at,
+                  recibo_srv: +this.row.recibo_srv,
                   costo_instalacion_srv: '0',
                   credito_srv: '40',
-                  notify_srv: this.row.notify_srv,
+                  notify_srv: +this.row.notify_srv,
                   start_srv: this.row.start_srv,
                   ip_srv: this.row.ip,
                   serial_srv: serial,
-                  zona_srv: this.row.zona_srv,
+                  zona_srv: +this.row.zona_srv,
                   comment_srv: this.row.comment_srv,
                   mac_srv: pre.replace(/(^:+|:+$)/g, "")
 
