@@ -1,5 +1,7 @@
-<h1 md-dialog-title>Resumen De factibilidades</h1>
-Cliente: {{(row.nombre+" "+row.apellido) | capitalize2:true }}
+<h1 md-dialog-title>Presupuestos Enviados</h1>
+<div *ngIf="row.kind == 'V' || row.kind == 'E'">Cliente: {{(row.nombre+" "+row.apellido) | capitalize2:true }}</div>
+<div *ngIf="row.kind == 'J' || row.kind == 'G'">Cliente: {{row.social | capitalize2:true }}</div>
+
 
 
 
@@ -7,134 +9,47 @@ Cliente: {{(row.nombre+" "+row.apellido) | capitalize2:true }}
   <thead>
     <tr>
       <th style="text-align: center; width: 10%">
-        <h3>Codigo de Factibilidad</h3>
+        <h3>N</h3>
+      </th>
+      <th style="text-align: center; width: 10%">
+        <h3>Monto</h3>
       </th>
       <th style="text-align: center">
-        <h3>Coordenadas</h3>
+        <h3>Planes Seleccionados</h3>
       </th>
       <th style="text-align: center">
-        <h3>Equipo</h3>
-      </th>
-      <th style="text-align: center">
-        <h3>Celda Sugerida</h3>
-      </th>
-      <th style="text-align: center">
-        <h3>Direccion</h3>
-      </th>
-      <th style="text-align: center">
-        <h3>Tubo</h3>
-      </th>
-      <th style="text-align: center">
-        <h3>ptp</h3>
-      </th>
-      <th style="text-align: center">
-        <h3>Status</h3>
-      </th>
-      <th style="text-align: center">
-        <h3>Acciones</h3>
+        <h3>Fecha de enviado</h3>
       </th>
 
     </tr>
   </thead>
   <tbody class="fac">
-    <tr *ngFor="let i of fac_products">
-      <td class="fac hover" (click)="status(i)" style="border-right: 1px solid #000000; text-align: right">
-        {{i.id}}
+    <tr *ngFor="let i of presupuestos">
+      <td class="fac " colspan="1">
+        {{i.created_at | stringToDate | date: 'yyyyMd'+i.id}}
       </td>
-      <td class="fac montos" colspan="1">
-        {{i.coordenadaslat+", "+i.coordenadaslon}}
+      <td class="fac " (click)="status(i)" style="border-right: 1px solid #000000; text-align: right">
+        {{i.instalacion+i.moneda}}
       </td>
-      <td class="fac montos" colspan="1" *ngIf="i.status != 1 && i.adicionales[1]">
-        {{i.adicionales[1].det}}
+      <td *ngIf="i.planes == 'r'" class="fac " colspan="1">
+        Residenciales
       </td>
-      <td class="fac montos" *ngIf="i.status == 1">
-        <font color="#d10512">
-          Pendiente
-        </font>
+      <td *ngIf="i.planes == 'c'" class="fac " colspan="1">
+        Comerciales
       </td>
-      <td class="fac montos" colspan="1" *ngIf="i.status != 1 && i.adicionales[0]">
-        {{i.adicionales[0].det}}
+      <td *ngIf="i.planes == 'd'" class="fac " colspan="1">
+        Dedicados
       </td>
-      <td class="fac montos" *ngIf="i.status == 1">
-        <font color="#d10512">
-          Pendiente
-        </font>
+      <td *ngIf="i.planes == 'h'" class="fac " colspan="1">
+        Happy Time
       </td>
-      <td class="fac montos">
-        {{i.comentario}}
-      </td>
-      <td class="fac montos" colspan="1" *ngIf="i.status != 1 && i.adicionales[3]">
-        {{i.adicionales[3].valor}}
-      </td>
-      <td class="fac montos" *ngIf="i.status == 1">
-        <font color="#d10512">
-          Pendiente
-        </font>
-      </td>
-      <td *ngIf="i.ptp==1 && i.status != 1 && i.adicionales[4]" class="fac montos" colspan="1">
-        {{i.adicionales[4].det}}
-      </td>
-      <td *ngIf="i.ptp==0" class="fac montos" colspan="1">
-        No Requerido
-      </td>
-      <td *ngIf="i.ptp==1 && i.status != 1 && !i.adicionales[4]" class="fac montos" colspan="1">
-        Error
-      </td>
-      <td class="fac montos" *ngIf="i.status == 1">
-        <font color="#d10512">
-          Pendiente
-        </font>
-      </td>
-      <td class="fac montos" *ngIf="i.status == 2 && i.factible ==1">
-        <font color="#00c402">
-          Factible
-        </font>
-      </td>
-      <td class="fac montos" *ngIf="i.status == 2 && i.factible == 2">
-        <font color="#d10512">
-          No Factible
-        </font>
-      </td>
-      <td class="fac montos" *ngIf="i.status == 1">
-        <font color="#d10512">
-          Pendiente
-        </font>
-      </td>
-      <td class="fac montos" *ngIf="i.status == 1">
-        <font color="#d10512">
-          Pendiente
-        </font>
-      </td>
-      <td>
-        <button md-icon-button color="primary" (click)="status(i)" *ngIf="i.status == 2 && i.factible ==1">
-          <md-icon class="md-24" aria-label="Detalles De Factibilidad">event_available</md-icon>
-        </button>
-      </td>
-
-      <!--td class="fac" #obf>
-      0BSF
-    </td-->
-
-    </tr>
-    <!--tr style="border-top: 1px solid #127aa1;">
-    <td></td>
-    <td style="text-align: right" >Total Neto:</td>
-    <td style="text-align: right" >{{monto | number : '1.0-2'}} BSF</td>
-    <td style="text-align: right" >{{pagado | number : '1.0-2'}} BSF</td>
+      <td class="fac">{{i.created_at | stringToDate | date: 'd/M/yy'}}</td>
   </tr>
-  <tr>
-    <td colspan="2"></td>
-    <td *ngIf="deuda > 0"><font color="#d10512"><h3>Deuda: </h3></font></td>
-    <td *ngIf="deuda <= 0"><font color="#00c402"><h3>Deuda: </h3></font></td>
-    <td *ngIf="deuda > 0"><font color="#d10512">{{deuda|number : '1.0-2'}} BSF</font></td>
-    <td *ngIf="deuda <= 0"><font color="#00c402">{{deuda|number : '1.0-2'}} BSF</font></td>
-
-  </tr-->
   </tbody>
 
 </table>
 <ng-template #elseblock>
   <font color="#00c402">
-    <h1>Cliente Sin Factibilidades</h1>
+    <h1>Cliente Sin Presupuestos</h1>
   </font>
 </ng-template>

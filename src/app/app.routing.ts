@@ -4,7 +4,7 @@ import { SidenavComponent } from './sidenav/sidenav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddPagoBalance } from './clients/clients.component';
-import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente } from './pclients/clients.component';
+import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente, ShowPreComponent } from './pclients/clients.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiciosComponent, AddservicesComponent, AddPendingComponent} from './servicios/servicios.component';
 import { ServidoresComponent, AddServidoresComponent, DeleteRouterDialog } from './servidores/servidores.component';
@@ -83,6 +83,7 @@ const appRoutes: Routes = [
   {path: 'delaps', component: DeleteApsDialog},
   {path: 'dplan', component: DeletePlanDialog},
   {path: 'dclie', component: DeleteCliente},
+  {path: 'ShowPre', component: ShowPreComponent},
 
 
 ]

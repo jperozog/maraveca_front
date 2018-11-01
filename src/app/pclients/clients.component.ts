@@ -71,16 +71,13 @@ export class PClientsComponent {
 
     })
   }
-  ShowPre(row): void {
+  showPre(row): void {
     /*let dialogRef = this.dialog.open(AddclientsComponent, {
       width: '25%'
     });*/
-    var tipo = 'p'
-    var client = row.id
-    var datos = [tipo, client]
     let dialogRef = this.dialog.open(ShowPreComponent, {
       width: '25%',
-      data: datos
+      data: row
     });
 
 
@@ -575,10 +572,12 @@ export class AddFactComponent{
   }
   @Component({
 selector: 'app-clients-astatus',
-templateUrl: './clients-astatus.component.html',
+templateUrl: './ShowPresupuestos.component.html',
 styleUrls: ['./clients.component.css']
 })
 export class ShowPreComponent {
+
+presupuestos:any;
 
 constructor(
   private http:Http,
@@ -591,7 +590,9 @@ constructor(
   private _fb: FormBuilder,
   private usuario: AuthGuard,
 ){
-  
+ this.http.get(environment.apiEndpoint+'presupuesto?tipo=p&cliente='+row.id).subscribe((data)=>{
+   this.presupuestos=data.json()
+ })
 }
 }
 

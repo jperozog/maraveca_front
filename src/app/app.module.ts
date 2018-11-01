@@ -46,7 +46,7 @@ import { SidenavComponent } from './sidenav/sidenav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddPagoBalance } from './clients/clients.component';
-import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente } from './pclients/clients.component';
+import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente, ShowPreComponent } from './pclients/clients.component';
 import { CapitalizePipe2, StringToDatePipe } from './capitalize.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiciosComponent, AddservicesComponent, AddPendingComponent} from './servicios/servicios.component';
@@ -145,7 +145,8 @@ import { InventariosComponent, AddEquipoComponent } from './inventarios/inventar
     ZonaComponent,
     InventariosComponent,
     AddZonaComponent,
-    AddEquipoComponent
+    AddEquipoComponent,
+    ShowPreComponent
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,
