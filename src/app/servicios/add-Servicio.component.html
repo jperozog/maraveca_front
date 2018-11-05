@@ -1,6 +1,6 @@
 <form class="example-form" id="client" name="clientForm" [formGroup]="addClient" ng-submit="ok(clientForm)" novalidate>
   <table class="example-full-width" cellspacing="0"><tr>
-    <td>
+    <td colspan="2">
         <md2-select name="cliente"
                   formControlName="cliente_srv"
                   placeholder="Clientes"
@@ -24,7 +24,9 @@
       </md2-select>
 
     </td>
-    <td>
+  </tr>
+    <tr>
+    <td colspan="2">
       <md2-select name="Plan"
                 formControlName="plan_srv"
                 placeholder="Planes"
