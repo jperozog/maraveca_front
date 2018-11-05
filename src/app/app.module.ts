@@ -33,7 +33,8 @@ import {
   MdTooltipModule,
   MdTabsModule,
   MdCheckboxModule,
-  MdExpansionModule
+  MdExpansionModule,
+  MdRadioModule,
 
 } from '@angular/material';
 import { NgMasonryGridModule } from 'ng-masonry-grid';
@@ -73,7 +74,7 @@ import { APP_CONFIG } from './app.config';
 import { AppConfig } from './app.interface';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component';
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
-import { InventariosComponent, AddEquipoComponent } from './inventarios/inventarios.component';
+import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent } from './inventarios/inventarios.component';
 
 
 
@@ -146,7 +147,8 @@ import { InventariosComponent, AddEquipoComponent } from './inventarios/inventar
     InventariosComponent,
     AddZonaComponent,
     AddEquipoComponent,
-    ShowPreComponent
+    ShowPreComponent,
+    SelectEquipoComponent
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,
@@ -185,6 +187,7 @@ import { InventariosComponent, AddEquipoComponent } from './inventarios/inventar
     MdExpansionModule,
     NgMasonryGridModule,
     MyDatePickerModule,
+    MdRadioModule,
     //MyDatePickerModule,
 
   ],

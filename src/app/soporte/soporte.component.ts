@@ -15,7 +15,7 @@ import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
 import { Location } from '@angular/common';
 import { environment } from '../../environments/environment'
-
+import { SelectEquipoComponent } from '../inventarios/inventarios.component'
 @Component({
   selector: 'app-soporte',
   templateUrl: './soporte.component.html',
@@ -42,7 +42,11 @@ export class SoporteComponent implements OnInit, OnDestroy{
   modo;
   position: string = '2';
   constructor(
-    private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, public router: Router, public usuario: AuthGuard) {
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    public router: Router,
+    public usuario: AuthGuard) {
     this.snackBar.open("Cargando Tickets", null, {
       duration: 2000,
     });
@@ -233,7 +237,9 @@ export class AddticketComponent implements OnInit{
     public dialogRef: MdDialogRef<AddticketComponent>,
     @Inject(MD_DIALOG_DATA) public row: any,
     //private route: ActivatedRoute,
+    public dialog: MdDialog,
     public snackBar: MdSnackBar,
+    public usuario: AuthGuard,
     private router: Router){
       this.edit = false;
       this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -305,6 +311,22 @@ export class AddticketComponent implements OnInit{
 
       console.log(this.addplan.value);
     }
+
+
+    select(): void {
+      //this.router.navigate(['/addticket']);
+      let dialogRef = this.dialog.open(SelectEquipoComponent, {
+      width: '30%',
+      data: this.addplan.value
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+      this.addplan.patchValue({
+        seriale: result.selected
+      })
+    });
+  }
 
     ngOnInit(){
 
