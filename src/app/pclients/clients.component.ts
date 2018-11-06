@@ -398,6 +398,20 @@ export class PClientesStatus {
 }
 
 //aqui comenzara el dialog de detalles de una facturas
+ConfirmNewClient(row): void {
+  /*let dialogRef = this.dialog.open(AddclientsComponent, {
+    width: '25%'
+  });*/
+  let dialogRef = this.dialog.open(ConfirmCliente, {
+    data: row
+  });
+
+
+  dialogRef.afterClosed().subscribe(result => {
+    console.log('The dialog was closed');
+
+  })
+}
 status(row){
   if(row.status == 2 && row.factible == 1){
   //console.log(row)
@@ -412,36 +426,58 @@ status(row){
                     {'nombre':'PTP', 'valor': row.adicionales[4].det}]*/
     });
     row = this.NewService.value;
+    let dialogRef = this.dialog.open(AddticketComponent, {
+      width: '30%',
+      data: row
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was AddClient closed');
+      this.http.get(environment.apiEndpoint+'factibi/'+this.id)
+      .subscribe((data) => {
+        this.fac_products = data.json();
+        this.fac_products.forEach(linea => {
+        });
+      });
+    });
   }else{
-    row.responsable = this.usuario.currentUser.id_user
-    var url = environment.apiEndpoint+"pclienttc/";
-    this.http.post(url, row).subscribe((data) => {
-      row.id_cli= data.json().id
-      console.log("prueba")
-      console.log(row)
-      this.NewService = this.fb.group({
-        servicio: row.id_cli,
-        celda: row.adicionales[0].valor,
-        equipo: row.adicionales[1].valor,
-        tubo:row.adicionales[3].valor,
-        ptp: row.adicionales[4].valor
-      });
+    let dialogRef = this.dialog.open(ConfirmCliente, {
+      data: row
     });
-    row = this.NewService.value;
+    dialogRef.afterClosed().subscribe(result => {
+      if(result.response){
+        row.responsable = this.usuario.currentUser.id_user
+        var url = environment.apiEndpoint+"pclienttc/";
+        this.http.post(url, row).subscribe((data) => {
+          row.id_cli= data.json().id
+          console.log("prueba")
+          console.log(row)
+          this.NewService = this.fb.group({
+            servicio: row.id_cli,
+            celda: row.adicionales[0].valor,
+            equipo: row.adicionales[1].valor,
+            tubo:row.adicionales[3].valor,
+            ptp: row.adicionales[4].valor
+          });
+          row = this.NewService.value;
+          let dialogRef = this.dialog.open(AddticketComponent, {
+            width: '30%',
+            data: row
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was AddClient closed');
+            this.http.get(environment.apiEndpoint+'factibi/'+this.id)
+            .subscribe((data) => {
+              this.fac_products = data.json();
+              this.fac_products.forEach(linea => {
+              });
+            });
+          });
+        });
+
+      }
+    })
   }
-  let dialogRef = this.dialog.open(AddticketComponent, {
-    width: '30%',
-    data: row
-  });
-  dialogRef.afterClosed().subscribe(result => {
-    console.log('The dialog was AddClient closed');
-    this.http.get(environment.apiEndpoint+'factibi/'+this.id)
-    .subscribe((data) => {
-      this.fac_products = data.json();
-      this.fac_products.forEach(linea => {
-      });
-    });
-  });
+
 }
 }
 }
@@ -477,6 +513,29 @@ export class DeletePCliente {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+}
+@Component({
+selector: 'delete-dialog',
+templateUrl: 'confirm-client.html',
+styleUrls: ['./clients.component.css']
+})
+export class ConfirmCliente {
+  return = false
+  constructor(
+    public dialogRef: MdDialogRef<ConfirmCliente>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+      console.log(this.data);
+     }
+
+  onNoClick(): void {
+    this.dialogRef.close({response: this.return});
   }
 
 }

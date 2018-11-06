@@ -3,14 +3,21 @@
   padding-top: 60px;
 }
 
+.card-container {
+  display: flex;
+    flex-flow: row wrap;
+}
+
 .card{
   position: relative;
   display: block;
-  width: 32%;
-  max-width: 32%;
-  min-width: 32%;
-  margin-left: 0.5em;
-  margin-bottom: 0.5em ;
+  width: 150px;
+  max-width: 150px;
+  min-width: 150px;
+  height: 150px;
+  min-height: 150px;
+  max-height: 150px;
+  margin: 4px;
   padding: 0 2px 0;
 }
 

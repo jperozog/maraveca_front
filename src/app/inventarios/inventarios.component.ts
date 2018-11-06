@@ -21,6 +21,8 @@ import { environment } from '../../environments/environment'
 export class InventariosComponent implements OnInit, OnDestroy {
   inventarios:any
   inventarios_t:any
+  zonas:any
+  zonas_t:any
   update:boolean=false
   autoupdate:boolean=true
 
@@ -58,7 +60,7 @@ export class InventariosComponent implements OnInit, OnDestroy {
       console.log(row);
       //this.selectedRowIndex = row.id;
       let dialogRef = this.dialog.open(AddEquipoComponent, {
-        width: '25%',
+        //width: '25%',
         data: row
       });
 
@@ -74,14 +76,16 @@ export class InventariosComponent implements OnInit, OnDestroy {
       this.update=true
       this.http.get(environment.apiEndpoint+'inventarios/')
         .subscribe((data) => {
-          this.inventarios_t = data.json()
+          this.inventarios_t = data.json().inventario
+          this.zonas_t = data.json().zonas
           this.update=false
           if (nf){
             this.snackBar.open("Lista Actualizada", null, {
             duration: 2000,
           });}
-          setTimeout(()=>{this.inventarios=this.inventarios_t})
+          setTimeout(()=>{this.inventarios=this.inventarios_t, this.zonas=this.zonas_t})
         });
+
     }
 
 }
@@ -90,9 +94,10 @@ export class InventariosComponent implements OnInit, OnDestroy {
   templateUrl: './AddEquipo.component.html',
   styleUrls: ['./inventarios.component.css']
 })
-export class AddEquipoComponent {
+export class AddEquipoComponent implements OnInit {
   zonas:any
   equipos:any
+  seriales:any=[]
   addEquipo:FormGroup
   constructor(
     private fb: FormBuilder,
@@ -124,6 +129,24 @@ export class AddEquipoComponent {
         }
       })
     }
+
+    ngOnInit(){
+      this.addEquipo.get('serial_inventario').valueChanges.subscribe(
+        (EN)=>{
+          setTimeout(()=>{
+            this.Agregar()
+          }, 10)
+        }
+      )
+    }
+
+    Agregar(){
+      if(this.addEquipo.value.serial_inventario.length >= 12 && !this.row){
+        this.seriales.push(this.addEquipo.value.serial_inventario)
+        this.addEquipo.patchValue({serial_inventario: ''})
+      }
+    }
+
     Editar(){
       if(this.row != null){
         this.addEquipo.addControl('responsable', new FormControl(this.usuario.currentUser.id_user))
