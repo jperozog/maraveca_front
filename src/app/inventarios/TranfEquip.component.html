@@ -1,0 +1,167 @@
+<md-toolbar class="submenu">
+  <span class="example-spacer" style="text-align: center;">Notificaciones</span>
+  <button color="warn" md-raised-button (click)="sendSMS()" [disabled]="!notify.valid" class="btn btn-danger">Enviar Mensajes Masivos</button>
+
+</md-toolbar>
+
+
+
+  <div class="contenido" style="margin: auto; align-content: center; text-align: center ;">
+    <form class="example-form" id="client" name="clientForm" [formGroup]="notify" ng-submit="ok(clientForm)" novalidate>
+    <table>
+      <tr>
+        <td colspan="2">
+          <md2-select name="Tipo"
+            placeholder="Tipo"
+            class="example-full-width"
+            formControlName="tipo"
+            mdInput
+            >
+            <md2-option value="6">
+              <span>Cliente</span>
+            </md2-option>
+            <md2-option value="1">
+              <span>Router</span>
+            </md2-option>
+            <md2-option value="2">
+              <span>Celda</span>
+            </md2-option>
+            <md2-option value="3">
+              <span>AP</span>
+            </md2-option>
+            <md2-option value="4">
+              <span>Plan</span>
+            </md2-option>
+            <md2-option value="5">
+              <span>Todos</span>
+            </md2-option>
+          </md2-select>
+
+      </td>
+    </tr>
+    <tr>
+      <td *ngIf="notify.value.tipo == '3'" colspan="2">
+          <md2-select multiple name="AP"
+          floatPlaceholder="never"
+          placeholder="AccessPoint"
+          class="example-full-width"
+          formControlName="detail" [(ngModel)]="detail"
+          mdInput
+          >
+          <md2-select-header>
+            <input name="a_search"
+            type="text"
+            formControlName="a_search"
+            placeholder="Buscar..."
+            mdInput
+            style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+            />
+          </md2-select-header>
+
+          <md2-option *ngFor="let i of (aps | dataPipe : {nombre_ap: notify.value.a_search, ip_ap: notify.value.a_search})" [value]="i.id">{{i.ip_ap + " " + i.nombre_ap}}</md2-option>
+        </md2-select>
+
+    </td>
+    <td *ngIf="notify.value.tipo == '4'" colspan="2">
+        <md2-select multiple name="Plan"
+        floatPlaceholder="never"
+        placeholder="Planes"
+        class="example-full-width"
+        mdInput
+        formControlName="detail" [(ngModel)]="detail"
+        >
+        <md2-select-header>
+          <input class="search" name="p_search"
+          type="text"
+          formControlName="p_search"
+          placeholder="Buscar..."
+          mdInput
+          style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+          />
+        </md2-select-header>
+        <md2-option *ngFor="let i of (planes | dataPipe : {name_plan: notify.value.p_search})" [value]="i.id_plan">{{i.name_plan}}</md2-option>
+      </md2-select>
+
+  </td>
+  <td *ngIf="notify.value.tipo == '2'" colspan="2">
+      <md2-select multiple name="celdas"
+      floatPlaceholder="never"
+      placeholder="Celdas"
+      class="example-full-width"
+      mdInput
+      formControlName="detail" [(ngModel)]="detail"
+      >
+      <md2-select-header>
+        <input class="search" name="c_search"
+        type="text"
+        formControlName="c_search"
+        placeholder="Buscar..."
+        mdInput
+        style="width=95%; min-width: 95%; border: none; outline: none;
+        height: 100%; padding: 0;"
+        />
+      </md2-select-header>
+      <md2-option *ngFor="let i of (celdas | dataPipe : {ip_celda: notify.value.c_search, nombre_celda: notify.value.c_search})" [value]="i.id_celda">{{i.nombre_celda}}</md2-option>
+    </md2-select>
+
+</td>
+<td *ngIf="notify.value.tipo == '1'" colspan="2">
+    <md2-select multiple placeholder="Router"
+    floatPlaceholder="never"
+    class="example-full-width"
+    mdInput
+    formControlName="detail" [(ngModel)]="detail"
+    >
+    <md2-select-header>
+      <input class="search" type="text"
+      formControlName="r_celda"
+      placeholder="Buscar..."
+      mdInput
+      style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+      />
+    </md2-select-header>
+    <md2-option *ngFor="let i of (routers | dataPipe : {nombre_srvidor: notify.value.r_celda, ip_srvidor: notify.value.r_celda})" [value]="i.id_srvidor">{{i.id_srvidor +" | "+i.ip_srvidor+' / '+ i.nombre_srvidor}}</md2-option>
+  </md2-select>
+
+</td>
+<td *ngIf="notify.value.tipo == '6'" colspan="2">
+    <md2-select multiple placeholder="Clientes"
+    floatPlaceholder="never"
+    class="example-full-width"
+    mdInput
+    formControlName="detail" [(ngModel)]="detail"
+    >
+    <md2-select-header>
+      <input class="search" type="text"
+      formControlName="u_celda"
+      placeholder="Buscar..."
+      mdInput
+      style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+      />
+    </md2-select-header>
+    <md2-option *ngFor="let i of (clientes | dataPipe : {apellido: notify.value.u_celda, nombre: notify.value.u_celda, dni: notify.value.u_celda})" [value]="i.id">{{i.kind+i.dni +" | "+(i.nombre|capitalize)+' '+ (i.apellido|capitalize)}}</md2-option>
+  </md2-select>
+
+</td>
+</tr>
+<tr>
+  <td>
+
+    <div>
+      <md-form-field class="example-full-width">
+        <textarea mdInput name="Comentarios"
+        mdInput
+        [(ngModel)]="messaje"
+        class="form-control"
+        class="example-full-width"
+        formControlName="message"
+        placeholder="Escribe Aqui El Mensaje De Notificacion"></textarea>
+
+      </md-form-field>
+    </div>
+  </td>
+</tr>
+</table>
+
+</form>
+</div>

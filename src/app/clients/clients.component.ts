@@ -326,6 +326,16 @@ export class AddclientsComponent implements OnInit{
             this.addClient.get('social').updateValueAndValidity();
           }
         })
+        this.addClient.get('day_of_birth').valueChanges.subscribe(
+          (fn) => {
+            if(fn.formatted){
+              setTimeout(()=>{
+              this.addClient.patchValue({
+                day_of_birth: fn.formatted
+              })
+            }, 100)
+          }
+          })
     }
 
     onNoClick(): void {
@@ -335,9 +345,7 @@ export class AddclientsComponent implements OnInit{
 
     Enviar(){
       var client = this.addClient.value;
-      this.addClient.patchValue({
-        day_of_birth: this.addClient.value.day_of_birth.formatted
-      })
+
       var url = environment.apiEndpoint+"clientes";
 
       this.http.post(url, client).subscribe(data => {
@@ -840,7 +848,7 @@ export class ClientOverview implements OnInit{
   selector: 'dialog-overview-example-dialog',
   templateUrl: 'pago-balance.html',
 })
-export class AddPagoBalance {
+export class AddPagoBalance implements OnInit{
 
   addAbono: FormGroup;
   myDatePickerOptions: IMyDpOptions = {
@@ -862,6 +870,19 @@ export class AddPagoBalance {
         bal_comment:['', Validators.required],
         bal_cli: id
       })
+    }
+
+    ngOnInit(){
+      this.addAbono.get('created_at').valueChanges.subscribe(
+        (fn) => {
+        if(fn.epoc){
+            setTimeout(()=>{
+            this.addAbono.patchValue({
+              created_at: fn.epoc
+            })
+          }, 100)
+        }
+        })
     }
 
   onNoClick(): void {

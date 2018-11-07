@@ -1,0 +1,50 @@
+<form class="example-form" id="client" name="clientForm" [formGroup]="addEquipo" ng-submit="ok(clientForm)" novalidate>
+  <table class="example-full-width" cellspacing="0">
+    <tr>
+
+      <td colspan="2">
+        <md2-select formControlName="model_inventario" placeholder="Modelo" style="width=100%; min-width: 100%; min-height: 100%;" mdInput>
+          <md2-select-header>
+            <input class="search" type="text" [(ngModel)]="model_s" placeholder="Buscar..." style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" formControlName="zona_s" />
+          </md2-select-header>
+          <md2-option *ngFor="let i of (equipos | dataPipe : {name: model_s})" [value]="i.id">{{i.name}}</md2-option>
+        </md2-select>
+      </td>
+
+    </tr>
+    <tr>
+      <td colspan="2">
+        <md-form-field class="example-full-width">
+          <input type="text" name="serial" class="form-control" formControlName="serial_inventario" placeholder="Serial" required mdInput>
+        </md-form-field>
+
+      </td>
+
+    </tr>
+
+    <tr>
+
+      <td colspan="2">
+        <md2-select formControlName="zona_inventario" placeholder="Zona" style="width=100%; min-width: 100%; min-height: 100%;" mdInput>
+          <md2-select-header>
+            <input class="search" type="text" [(ngModel)]="zona_s" placeholder="Buscar..." style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" formControlName="zona_s" />
+          </md2-select-header>
+          <md2-option *ngFor="let i of (zonas | dataPipe : {nombre_zona: zona_s})" [value]="i.id">{{i.id +"/"+ i.nombre_zona}}</md2-option>
+        </md2-select>
+      </td>
+
+    </tr>
+    <tr>
+      <td>
+        <button *ngIf="row != null" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Editar()" [disabled]="!addEquipo.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+      </td>
+      <td>
+
+        <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
+      </td>
+    </tr>
+    <p>
+
+    </p>
+  </table>
+</form>

@@ -22,19 +22,10 @@
       </td>
 
     </tr>
-    <tr *ngIf="!row">
+    <tr>
       <td colspan="2">
         <md-form-field class="example-full-width">
-          <input type="text" name="serial" class="form-control" formControlName="serial_inventario" placeholder="Serial" required mdInput>
-        </md-form-field>
-        <button md-raised-button class="example-half-width btn " (click)="Agregar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Agregar</button>
-      </td>
-
-    </tr>
-    <tr *ngIf="row">
-      <td colspan="2">
-        <md-form-field class="example-full-width">
-          <input type="text" name="serial" class="form-control" formControlName="serial_inventario" placeholder="Serial" required mdInput>
+          <input type="text" name="serial" class="form-control" formControlName="serial_inventario" placeholder="Serial" mdInput>
         </md-form-field>
         <button md-raised-button class="example-half-width btn " (click)="Agregar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Agregar</button>
       </td>
@@ -50,8 +41,7 @@
       <td>
 
 
-        <button *ngIf="row == null" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Enviar()" [disabled]="!addEquipo.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
-        <button *ngIf="row != null" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Editar()" [disabled]="!addEquipo.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+        <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Enviar()" [disabled]="!addEquipo.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
       </td>
       <td>
 
