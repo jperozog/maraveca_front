@@ -9,7 +9,7 @@
   <button md-raised-button (click)="openDialog()" *ngIf="usuario.perm && usuario.perm.includes('ap_w')">
     <md-icon>group_add</md-icon> Agregar equipos
   </button>
-
+  <button md-raised-button class="btn" routerLink="/TransfEquipo">Transferir Equipos</button>
 </md-toolbar>
 <md-accordion>
   <md-expansion-panel hideToggle='true' expanded='false' (opened)="this.modo && this.modo=2">

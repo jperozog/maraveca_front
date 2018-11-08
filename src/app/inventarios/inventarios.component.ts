@@ -277,24 +277,33 @@ export class SelectEquipoComponent {
 }
 @Component({
   selector: 'app-inventarios',
-  templateUrl: './inventarios.component.html',
+  templateUrl: './TranfEquip.component.html',
   styleUrls: ['./inventarios.component.css']
 })
 export class TransfEquiposComponent implements OnInit, OnDestroy {
   update:boolean=false
   autoupdate:boolean=true
-
+  zonas:any
+  inventarios:any
+  TransfEquipo: FormGroup
   constructor(
     private http: Http,
     public usuario: AuthGuard,
     public dialog: MdDialog,
+    private fb: FormBuilder,
     public snackBar:MdSnackBar,
     public router: Router)
     {
-
+      this.TransfEquipo = this.fb.group({
+        responsable: this.usuario.currentUser.id_user,
+        desde:'',
+        hacia:'',
+        equipos:[]
+      })
     }
 
     ngOnInit() {
+      this.refresh(false);
       IntervalObservable.create(10000)
       .takeWhile(() => this.autoupdate)
       .subscribe(() => {
@@ -306,9 +315,10 @@ export class TransfEquiposComponent implements OnInit, OnDestroy {
     }
   refresh(nf){
       this.update=true
-      this.http.get(environment.apiEndpoint+'inventarios/')
+      this.http.get(environment.apiEndpoint+'PreloadTransferencias/')
         .subscribe((data) => {
-          
+          this.inventarios=data.json().inventarios
+          this.zonas=data.json().zonas
         });
 
     }
