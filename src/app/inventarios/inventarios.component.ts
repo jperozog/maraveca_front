@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import { Location } from '@angular/common';
 import {Observable} from 'rxjs/Observable';
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 import 'rxjs/add/operator/startWith';
@@ -136,14 +137,21 @@ export class AddEquipoComponent implements OnInit {
       this.addEquipo.get('serial_inventario').valueChanges.subscribe(
         (EN)=>{
           setTimeout(()=>{
-            this.Agregar()
+            //this.Agregar()
           }, 10)
         }
       )
     }
 
+    onKey(event){
+      console.log(event.key)
+      if(event.key == "Enter"){
+        this.Agregar()
+      }
+    }
+
     Agregar(){
-      if(this.addEquipo.value.serial_inventario.length >= 12 && !this.row){
+      if(this.addEquipo.value.serial_inventario.length >= 1 && !this.row){
         this.seriales.push(this.addEquipo.value.serial_inventario)
         setTimeout(()=>{
           this.addEquipo.patchValue({serial_inventario: '', seriales: this.seriales})
@@ -265,7 +273,7 @@ export class SelectEquipoComponent {
     public router: Router)
     {
       console.log(row)
-      this.http.get(environment.apiEndpoint+'inventarios/'+row.celda_soporte)
+      this.http.get(environment.apiEndpoint+'inventarios/'+row.celda_soporte+'?e='+row.equipo_soporte)
         .subscribe((data) => {
           this.equipos = data.json()
         });
@@ -278,22 +286,26 @@ export class SelectEquipoComponent {
 @Component({
   selector: 'app-inventarios',
   templateUrl: './TranfEquip.component.html',
-  styleUrls: ['./inventarios.component.css']
+  styleUrls: ['../notify/notify.component.css']
 })
 export class TransfEquiposComponent implements OnInit, OnDestroy {
   update:boolean=false
   autoupdate:boolean=true
   zonas:any
   inventarios:any
+  client
+  transferencias:any
   TransfEquipo: FormGroup
   constructor(
     private http: Http,
     public usuario: AuthGuard,
     public dialog: MdDialog,
     private fb: FormBuilder,
+    private location: Location,
     public snackBar:MdSnackBar,
     public router: Router)
     {
+      this.client = usuario.currentUser.id_user
       this.TransfEquipo = this.fb.group({
         responsable: this.usuario.currentUser.id_user,
         desde:'',
@@ -319,8 +331,44 @@ export class TransfEquiposComponent implements OnInit, OnDestroy {
         .subscribe((data) => {
           this.inventarios=data.json().inventarios
           this.zonas=data.json().zonas
+          this.transferencias=data.json().trans
         });
 
+    }
+    transf(){
+      this.http.post(environment.apiEndpoint+'transferdevice/', this.TransfEquipo.value)
+      .subscribe((data)=>{
+        console.log(data)
+        this.TransfEquipo.patchValue({
+          responsable: this.usuario.currentUser.id_user,
+          desde:'',
+          hacia:'',
+          equipos:[]
+        })
+      })
+    }
+    Close(){this.location.back();}
+    confirm(t){
+      var t1:FormGroup
+      t1 = this.fb.group({
+        status: '2',
+        confirma: this.client
+      })
+      this.http.put(environment.apiEndpoint+'transferdevice/'+t.id, t1.value)
+      .subscribe((data)=>{
+        console.log(data)
+      })
+    }
+    cancel(t){
+      var t1:FormGroup
+      t1 = this.fb.group({
+        status: '3',
+        confirma: this.client
+      })
+      this.http.put(environment.apiEndpoint+'transferdevice/'+t.id, t1.value)
+      .subscribe((data)=>{
+        console.log(data)
+      })
     }
 
 }

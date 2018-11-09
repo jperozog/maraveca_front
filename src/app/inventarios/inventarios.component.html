@@ -28,18 +28,14 @@
           </tr>
           <tr>
             <th style="width: 25%" md2SortBy="name">Equipo</th>
-            <th style="width: 25%" md2SortBy="serial_inventario">Serial</th>
-            <th style="width: 25%" md2SortBy="nombre_zona">Zona</th>
-            <th style="width: 25%" md2SortBy="updated_at">Agregado</th>
+            <th style="width: 25%" md2SortBy="serial_inventario">Cantidad</th>
             <th style="width: 25%">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let i of md2.data">
             <td>{{i.name | capitalize}}</td>
-            <td>{{i.serial_inventario}}</td>
-            <td>{{i.nombre_zona}}</td>
-            <td>{{i.created_at | stringToDate | date: 'd/M/yy'}}</td>
+            <td>{{i.equipos.length}}</td>
             <td>
               <button md-icon-button color="primary" (click)="show(i)">
                 <md-icon class="md-24" aria-label="Editar Equipo">mode_edit</md-icon>

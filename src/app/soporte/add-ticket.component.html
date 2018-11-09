@@ -160,7 +160,6 @@
                       placeholder="Equipo"
                       style="width=100%; min-width: 100%; min-height: 100%;"
                       mdInput
-                      [disabled]="row"
                       floatPlaceholder="never"
                       >
             <md2-select-header>
@@ -266,7 +265,7 @@
           </td>
           <td>
           <md-checkbox [(ngModel)]="EN" class="example-margin" formControlName="EN">Equipo Usado</md-checkbox>
-          <button md-icon-button (click)="select()">
+          <button md-icon-button (click)="select()" [disabled]="addplan.value.celda_soporte && addplan.value.celda_soporte == '' && addplan.value.equipo_soporte == ''">
             <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
           </button>
         </td>

@@ -1,4 +1,5 @@
 <md-toolbar class="submenu">
+  <button md-raised-button class="btn" (click)="Close()">Atras</button>
   <span class="example-spacer" style="text-align: center;">Transferir Equipos</span>
   <!--button color="warn" md-raised-button (click)="sendSMS()" [disabled]="!notify.valid" class="btn btn-danger">Enviar Mensajes Masivos</button-->
 
@@ -6,58 +7,113 @@
 
 
 
-  <div class="contenido" style="margin: auto; align-content: center; text-align: center ;">
-    <form class="example-form" id="client" name="clientForm" [formGroup]="TransfEquipo" ng-submit="ok(clientForm)" novalidate>
+<div class="contenido" style="margin: auto; align-content: center; text-align: center ;">
+  <form class="example-form" id="client" name="clientForm" [formGroup]="TransfEquipo" ng-submit="ok(clientForm)" novalidate>
     <table>
       <tr>
         <td colspan="2">
-          <md2-select name="Tipo"
-            placeholder="Desde"
-            floatPlaceholder="never"
-            class="example-full-width"
-            formControlName="desde"
-            mdInput
-            >
+          <md2-select name="Tipo" placeholder="Desde" floatPlaceholder="never" class="example-full-width" formControlName="desde" mdInput>
             <md2-option *ngFor="let z of zonas" [value]="z.id">
               <span>{{z.nombre_zona}}</span>
             </md2-option>
 
           </md2-select>
 
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <md2-select name="Tipo"
-        floatPlaceholder="never"
-          placeholder="Hasta"
-          class="example-full-width"
-          formControlName="hacia"
-          mdInput
-          >
-          <md2-option *ngFor="let z of zonas" [value]="z.id">
-            <span>{{z.nombre_zona}}</span>
-          </md2-option>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <md2-select name="Tipo" floatPlaceholder="never" placeholder="Hasta" class="example-full-width" formControlName="hacia" mdInput>
+            <md2-option *ngFor="let z of zonas" [value]="z.id">
+              <span>{{z.nombre_zona}}</span>
+            </md2-option>
 
-        </md2-select>
+          </md2-select>
 
-    </td>
-  </tr>
-  <tr *ngIf="TransfEquipo.value.desde != ''">
-      <td colspan="2">
-          <md2-select multiple name="AP"
-          floatPlaceholder="never"
-          placeholder="Equipos"
-          class="example-full-width"
-          formControlName="equipos"
-          mdInput
-          >
-          <md2-option *ngFor="let i of inventarios" [disabled]="TransfEquipo.value.desde != i.zona_inventario" [value]="i.id">{{i.name + " " + i.serial_inventario}}</md2-option>
-        </md2-select>
+        </td>
+      </tr>
+      <tr *ngIf="TransfEquipo.value.desde != ''">
+        <td colspan="2">
+          <md2-select multiple name="AP" floatPlaceholder="never" placeholder="Equipos" class="example-full-width" formControlName="equipos" mdInput>
+            <md2-option *ngFor="let i of inventarios" [disabled]="TransfEquipo.value.desde != i.zona_inventario" [value]="i.id">{{i.name + " " + i.serial_inventario}}</md2-option>
+          </md2-select>
 
-    </td>
-</tr>
-</table>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button md-raised-button class="example-half-width btn " (click)="transf()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Solicitar Transferir</button>
 
-</form>
+        </td>
+      </tr>
+    </table>
+    <div>
+      <span>Historico De Transferencias</span>
+      <table>
+        <thead>
+          <td>
+            ID
+          </td>
+          <td>
+            Numero de Equipos
+          </td>
+          <td>
+            Desde zona
+          </td>
+          <td>
+            Hasta zona
+          </td>
+          <td>
+            Solicito
+          </td>
+          <td>
+            Estado
+          </td>
+          <td>
+            Acciones
+          </td>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let t of transferencias">
+            <td>
+              {{t.id}}
+            </td>
+            <td>
+              {{t.equipos.split(",").length+" equipos"}}
+            </td>
+            <td>
+              {{t.nombre_desde}}
+            </td>
+            <td>
+              {{t.nombre_hacia}}
+            </td>
+            <td>
+              {{t.responsable_nombre}}
+            </td>
+            <td *ngIf="t.status == 1">
+              Pendiente
+            </td>
+            <td *ngIf="t.status == 2">
+              Aprobada
+            </td>
+            <td *ngIf="t.status == 3">
+              Rechazada
+            </td>
+            <td *ngIf="t.status == 1 && t.responsable != client; else notpermited">
+              <button md-icon-button color="primary" (click)="confirm(t)">
+                <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
+              </button>
+              <button md-icon-button color="warn" (click)="cancel(t)">
+                <md-icon class="md-24" aria-label="Eliminar Cliente">clear</md-icon>
+              </button>
+            </td>
+            <ng-template #notpermited>
+              <md-icon class="md-24" aria-label="Eliminar Cliente">block</md-icon>
+            </ng-template>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
 </div>

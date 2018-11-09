@@ -1,8 +1,8 @@
-<form class="example-form" id="client" name="clientForm" [formGroup]="addEquipo" ng-submit="ok(clientForm)" novalidate>
+<form class="example-form" id="client" name="clientForm" [formGroup]="addEquipo" novalidate>
   <table class="example-full-width" cellspacing="0">
     <tr>
       <td colspan="2">
-        <md2-select formControlName="zona_inventario" placeholder="Zona" style="width=100%; min-width: 100%; min-height: 100%;" mdInput>
+        <md2-select formControlName="zona_inventario" floatPlaceholder="never" placeholder="Zona" style="width=100%; min-width: 100%; min-height: 100%;" mdInput>
           <md2-select-header>
             <input class="search" type="text" [(ngModel)]="zona_s" placeholder="Buscar..." style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" formControlName="zona_s" />
           </md2-select-header>
@@ -13,7 +13,7 @@
     <tr>
 
       <td colspan="2">
-        <md2-select formControlName="model_inventario" placeholder="Modelo" style="width=100%; min-width: 100%; min-height: 100%;" mdInput>
+        <md2-select formControlName="model_inventario" floatPlaceholder="never" placeholder="Modelo" style="width=100%; min-width: 100%; min-height: 100%;" mdInput>
           <md2-select-header>
             <input class="search" type="text" [(ngModel)]="model_s" placeholder="Buscar..." style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" formControlName="zona_s" />
           </md2-select-header>
@@ -25,9 +25,9 @@
     <tr>
       <td colspan="2">
         <md-form-field class="example-full-width">
-          <input type="text" name="serial" class="form-control" formControlName="serial_inventario" placeholder="Serial" mdInput>
+          <input type="text" name="serial" class="form-control" floatPlaceholder="never" formControlName="serial_inventario" placeholder="Serial" mdInput (keyup)="onKey($event)">
         </md-form-field>
-        <button md-raised-button class="example-half-width btn " (click)="Agregar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Agregar</button>
+        <!--button md-raised-button class="example-half-width btn " (click)="Agregar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Agregar</button-->
       </td>
 
     </tr>
