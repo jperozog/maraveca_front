@@ -6,6 +6,7 @@
                   placeholder="Clientes"
                   style="width=100%; min-width: 100%; min-height: 100%;"
                   mdInput
+                  floatPlaceholder="never"
                   >
         <md2-select-header>
           <input class="search" name="c_search"
@@ -32,6 +33,7 @@
                 placeholder="Planes"
                 style="width=100%; min-width: 100%;"
                 mdInput
+                floatPlaceholder="never"
                 >
       <md2-select-header>
         <input class="search" name="p_search"
@@ -57,6 +59,7 @@
                 placeholder="AccessPoint"
                 style="width=100%; min-width: 100%;"
                 mdInput
+                floatPlaceholder="never"
                 >
       <md2-select-header>
         <input name="a_search"
@@ -67,6 +70,22 @@
                formControlName="a_search" />
       </md2-select-header>
       <md2-option *ngFor="let i of (aps | dataPipe : {nombre_ap: a_search, ip_ap: a_search})" [value]="i.id">{{i.ip_ap + " " + i.nombre_ap}}</md2-option>
+      </md2-select>
+    </td>
+  </tr>
+  <tr>
+
+    <td colspan="2">
+      <md2-select name="Modo de ajuste"
+                formControlName="pro"
+                placeholder="Ajuste de facturacion"
+                style="width=100%; min-width: 100%;"
+                mdInput
+                floatPlaceholder="never"
+                >
+                <md2-option value=0>Sin ajuste de factura</md2-option>
+                <md2-option value=1>Prorateo de servicio</md2-option>
+                <md2-option value=2>Servicio Completo</md2-option>
       </md2-select>
     </td>
   </tr>

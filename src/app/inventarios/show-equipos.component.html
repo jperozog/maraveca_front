@@ -1,0 +1,35 @@
+<h1 md-dialog-title>Equipos</h1>
+<div class="contenido" [class.submenu]="edit">
+  <table>
+    <tr>
+      <td>
+        Serial de equipo
+      </td>
+      <td>
+        Modelo
+      </td>
+      <td>
+        Ubicacion
+      </td>
+      <td>
+        Acciones
+        </td>
+    </tr>
+      <tr *ngFor="let e of row">
+        <td>
+          {{e.serial_inventario}}
+          </td>
+          <td>
+            {{e.name}}
+            </td>
+            <td>
+              {{e.nombre_zona}}
+              </td>
+              <td>
+                <button md-icon-button color="primary" (click)="show(e)">
+                  <md-icon class="md-24" aria-label="Editar Equipo">mode_edit</md-icon>
+                </button>
+                </td>
+        </tr>
+  </table>
+</div>

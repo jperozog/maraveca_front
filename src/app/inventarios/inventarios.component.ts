@@ -60,7 +60,7 @@ export class InventariosComponent implements OnInit, OnDestroy {
     show(row){
       console.log(row);
       //this.selectedRowIndex = row.id;
-      let dialogRef = this.dialog.open(EditEquipoComponent, {
+      let dialogRef = this.dialog.open(ShowEquipoComponent, {
         //width: '25%',
         data: row
       });
@@ -281,6 +281,46 @@ export class SelectEquipoComponent {
 
     onNoClick(): void {
       this.dialogRef.close({selected: this.selected});
+    }
+}
+@Component({
+  selector: 'app-inventarios',
+  templateUrl: './show-equipos.component.html',
+  styleUrls: ['./inventarios.component.css']
+})
+export class ShowEquipoComponent {
+  equipos:any=null
+  selected:any=null
+  constructor(
+    private fb: FormBuilder,
+    public dialogRef: MdDialogRef<ShowEquipoComponent>,
+    @Inject(MD_DIALOG_DATA) public row: any,
+    private http: Http,
+    public usuario: AuthGuard,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    public router: Router)
+    {
+      console.log(row)
+    }
+
+    onNoClick(): void {
+      this.dialogRef.close();
+    }
+    show(row){
+      console.log(row);
+      //this.selectedRowIndex = row.id;
+      let dialogRef = this.dialog.open(EditEquipoComponent, {
+        //width: '25%',
+        data: row
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+
+      });
+      //this.myService.refresh();
+
     }
 }
 @Component({

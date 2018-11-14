@@ -74,7 +74,7 @@ import { APP_CONFIG } from './app.config';
 import { AppConfig } from './app.interface';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component';
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
-import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent } from './inventarios/inventarios.component';
+import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent, ShowEquipoComponent } from './inventarios/inventarios.component';
 
 
 
@@ -151,7 +151,8 @@ import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEq
     SelectEquipoComponent,
     ConfirmCliente,
     EditEquipoComponent,
-    TransfEquiposComponent
+    TransfEquiposComponent,
+    ShowEquipoComponent
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,
