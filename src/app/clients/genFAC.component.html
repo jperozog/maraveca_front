@@ -1,0 +1,45 @@
+<h1 md-dialog-title>Generar Factura</h1>
+<div md-dialog-content>
+  <p>Formulario de factura para el cliente:</p>
+  <p *ngIf="cliente.kind.toUpperCase() == 'V'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
+  <p *ngIf="cliente.kind.toUpperCase() == 'E'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
+  <p *ngIf="cliente.kind.toUpperCase() == 'G'">{{(cliente.social|capitalize)}}</p>
+  <p *ngIf="cliente.kind.toUpperCase() == 'J'">{{(cliente.social|capitalize)}}</p>
+
+  <form [formGroup]="genFAC" ng-submit="ok(pre)">
+    <table style="width:100%">
+      <tr>
+        <td>
+          <md-select class="example-full-width" mdInput placeholder="Generar Factura" formControlName="pro">
+            <md-option value="2">Completa</md-option>
+            <md-option value="1">Prorateada</md-option>
+          </md-select>
+        </td>
+      </tr>
+      <tr *ngIf="this.genFAC.value.pro == 1">
+        <td>
+          <my-date-picker class="example-full-width"
+                        name="birthdate"
+                        mdInput
+                        placeholder="A Partir De?"
+                        formControlName="fecha"
+                        required
+                        locale=es
+                        [options]="myDatePickerOptions"
+                        ></my-date-picker>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+<div md-dialog-actions>
+  <tr>
+    <td>
+      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="generate()" tabindex="2" [disabled]="!genFAC.valid">Generar Factura</button>
+    </td>
+    <td>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">Cerrar</button>
+
+    </td>
+  </tr>
+</div>
