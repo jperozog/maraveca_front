@@ -145,6 +145,7 @@ export class EquiposComponent {
           this.addClient = this.fb.group({
             name: row.name,
             id: row.id,
+            tipo: row.tipo,
             search: '',
 
 
@@ -155,7 +156,7 @@ export class EquiposComponent {
           this.addClient = this.fb.group({
             search: '',
             name: '',
-
+            tipo:''
           });
           //console.log("llego vacio"+ row)
         }
@@ -170,11 +171,9 @@ export class EquiposComponent {
       Enviar(){
         var client = this.addClient.value;
         console.log(JSON.stringify(this.addClient.value));
-        var body =
-        "name="+client.name;
-        var url = environment.apiEndpoint+"equipos?"+body;
+        var url = environment.apiEndpoint+"equipos";
 
-        this.http.post(url, body).subscribe((data) => {});
+        this.http.post(url, this.addClient.value).subscribe((data) => {});
         this.dialogRef.close();
         this.snackBar.open("Agregando Equipo: Por favor espere", null, {
           duration: 2000,
@@ -186,11 +185,9 @@ export class EquiposComponent {
       Editar(){
         var client = this.addClient.value;
         console.log(JSON.stringify(this.addClient.value));
-        var body =
-        "name="+client.name;
-        var url = environment.apiEndpoint+"equipos/"+client.id+"?"+body;
+        var url = environment.apiEndpoint+"equipos/"+client.id;
 
-        this.http.put(url, body).subscribe((data) => {});
+        this.http.put(url, this.addClient.value).subscribe((data) => {});
         this.dialogRef.close();
         this.snackBar.open("Editando Equipo: Por favor espere", null, {
           duration: 2000,

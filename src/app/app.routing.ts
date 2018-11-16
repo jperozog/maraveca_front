@@ -3,7 +3,7 @@ import { HashLocationStrategy, Location, LocationStrategy } from '@angular/commo
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
-import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddPagoBalance } from './clients/clients.component';
+import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddPagoBalance, GenFactura } from './clients/clients.component';
 import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente, ShowPreComponent, ConfirmCliente } from './pclients/clients.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiciosComponent, AddservicesComponent, AddPendingComponent} from './servicios/servicios.component';
@@ -23,7 +23,7 @@ import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibili
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component'
 import { StatsComponent, PagarComponent, DetallesInstallerComponent, cargarPagocomponent } from './stats/stats.component'
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
-import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent, ShowEquipoComponent } from './inventarios/inventarios.component';
+import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent, ShowEquipoComponent, SelectTipoComponent } from './inventarios/inventarios.component';
 
 const appRoutes: Routes = [
   {path: '', component: LayoutComponent, canActivate: [AuthGuard]},
@@ -57,6 +57,7 @@ const appRoutes: Routes = [
   {path: 'cargarPago', component: cargarPagocomponent},
   {path: 'confirmSend', component: DialogOverviewExampleDialog},
   {path: 'AddPagoBalance', component: AddPagoBalance},
+  {path: 'SelectTipo', component: SelectTipoComponent},
   {path: 'AddZona', component: AddZonaComponent},
   {path: 'fact_det', component: FactibilidadesDetComponent},
   {path: 'showEquipo', component: ShowEquipoComponent},
@@ -89,6 +90,7 @@ const appRoutes: Routes = [
   {path: 'dclie', component: DeleteCliente},
   {path: 'ShowPre', component: ShowPreComponent},
   {path: 'selectEquipo', component: SelectEquipoComponent},
+  {path: 'GenFAC', component: GenFactura},
 
 
 ]

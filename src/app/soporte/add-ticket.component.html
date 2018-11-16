@@ -282,8 +282,31 @@
               {{i.valor | capitalize}}
             </td>
           </tr>
+          <tr *ngIf="addplan.value.nombrer && addplan.value.nombrer=='SerialPTP'">
+            <td colspan="3">
+              <md2-select name="equipo"
+                        formControlName="ptp_equipo"
+                        placeholder="Equipo"
+                        style="width=100%; min-width: 100%; min-height: 100%;"
+                        mdInput
+                        floatPlaceholder="never"
+                        >
+              <md2-select-header>
+                <input class="search" name="S_equipo"
+                       type="text"
+                       [(ngModel)]="S_equipo"
+                       placeholder="Buscar..."
+                       style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                       formControlName="S_servicios" />
+              </md2-select-header>
+              <md2-option *ngFor="let i of (equipos | dataPipe : {name: S_equipo})" [value]="i.id">
+                <span>{{(i.name | capitalize2:true)}}</span><br />
+              </md2-option>
+            </md2-select>
+            </td>
+            </tr>
           <tr>
-            <td >
+            <td>
               <md2-select name="tipo"
               formControlName="nombrer"
               placeholder="Adicional"
@@ -292,7 +315,7 @@
               style="width=100%; min-width: 100%; min-height: 100%;"
               mdInput
               >
-              <md2-option value="Tubo" [disabled]="row" >
+              <md2-option value="Tubo" [disabled]="row && row.tubo" >
                 Tubo
               </md2-option>
               <md2-option value="SerialPTP" >
@@ -303,6 +326,9 @@
               </md2-option>
               <md2-option value="Switch" >
                 Switch
+              </md2-option>
+              <md2-option value="Antena" >
+                Antena
               </md2-option>
 
             </md2-select>
@@ -315,6 +341,18 @@
             </md-form-field>
             </td>
             <td>
+              <button  md-icon-button (click)="selectptp()" *ngIf="addplan.value.nombrer && addplan.value.nombrer=='SerialPTP'" [disabled]="addplan.value.ptp_equipo && addplan.value.ptp_equipo==''">
+                <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
+              </button>
+              <button  md-icon-button (click)="selectrouter()" *ngIf="addplan.value.nombrer && addplan.value.nombrer=='Router'">
+                <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
+              </button>
+              <button  md-icon-button (click)="selectswitch()" *ngIf="addplan.value.nombrer && addplan.value.nombrer=='Switch'">
+                <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
+              </button>
+              <button  md-icon-button (click)="selectantena()" *ngIf="addplan.value.nombrer && addplan.value.nombrer=='Antena'">
+                <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
+              </button>
               <button md-raised-button class="btn example-half-width" type="button" [disabled]="row && row.status_soporte==2" (click)="addr()">
                 <i class="fa fa-times" aria-hidden="true" ></i>Agregar
               </button>

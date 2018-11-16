@@ -15,7 +15,7 @@ import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
 import { Location } from '@angular/common';
 import { environment } from '../../environments/environment'
-import { SelectEquipoComponent } from '../inventarios/inventarios.component'
+import { SelectEquipoComponent, SelectTipoComponent } from '../inventarios/inventarios.component'
 @Component({
   selector: 'app-soporte',
   templateUrl: './soporte.component.html',
@@ -219,6 +219,10 @@ export class AddticketComponent implements OnInit{
   equipo: any;
   celda: any;
   equipos: any;
+  radio: any;
+  antena: any;
+  routers: any;
+  switch: any;
   celdas: any;
   S_servicios:any;
   S_celda:any;
@@ -265,10 +269,14 @@ export class AddticketComponent implements OnInit{
         this.celdas = this.addplan.value.celda_soporte
 
       });
-      this.http.get(environment.apiEndpoint+'equipos/')
+      this.http.get(environment.apiEndpoint+'equit/1')
       .subscribe((data) => {
         this.equipos = data.json();
         this.equipo = this.addplan.value.equipo_soporte
+      });
+      this.http.get(environment.apiEndpoint+'equit/2')
+      .subscribe((data) => {
+        this.radio = data.json();
       });
       this.addplan = this.fb.group({
         tipo_soporte: '1',
@@ -283,6 +291,7 @@ export class AddticketComponent implements OnInit{
         status_soporte: "1",
         user_soporte: this.currentUser.id_user,
         S_servicios:'',
+        ptp_equipo:'',
         adicionales:[],
         nombrer:'',
         valorr:'',
@@ -294,12 +303,10 @@ export class AddticketComponent implements OnInit{
           servicio_soporte: +row.servicio,
           celda_soporte:+row.celda,
           equipo_soporte:+row.equipo,
+          ptp_equipo:+row.ptp,
           user_soporte: +this.currentUser.id_user
         });
         this.requ.push({nombre: 'Tubo', valor: row.tubo})
-        if (row.ptp != null){
-          this.requ.push({nombre: 'PTP', valor: row.ptp})
-        }
         //this.celdas = row.celda;
         //this.equipo = row.equipo;
         //this.cliente = row.servicio;
@@ -315,9 +322,10 @@ export class AddticketComponent implements OnInit{
 
     select(): void {
       //this.router.navigate(['/addticket']);
+      let datos = {'celda':this.addplan.value.celda_soporte, 'equipo':this.addplan.value.equipo_soporte}
       let dialogRef = this.dialog.open(SelectEquipoComponent, {
       width: '30%',
-      data: this.addplan.value
+      data: datos
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -326,6 +334,66 @@ export class AddticketComponent implements OnInit{
         seriale: result.selected
       })
     });
+  }
+  selectptp(): void {
+    //this.router.navigate(['/addticket']);
+    let datos = {'celda':this.addplan.value.celda_soporte, 'equipo':this.addplan.value.ptp_equipo, 'usado':this.addplan.value.seriale}
+    let dialogRef = this.dialog.open(SelectEquipoComponent, {
+    width: '30%',
+    data: datos
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    console.log(result)
+    this.addplan.patchValue({
+      valorr: result.selected
+    })
+  });
+  }
+  selectrouter(): void {
+    //this.router.navigate(['/addticket']);
+    let datos = {'celda':this.addplan.value.celda_soporte, 'equipo':'4'}
+    let dialogRef = this.dialog.open(SelectTipoComponent, {
+    width: '30%',
+    data: datos
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    console.log(result)
+    this.addplan.patchValue({
+      valorr: result.selected
+    })
+  });
+  }
+  selectswitch(): void {
+    //this.router.navigate(['/addticket']);
+    let datos = {'celda':this.addplan.value.celda_soporte, 'equipo':'5'}
+    let dialogRef = this.dialog.open(SelectTipoComponent, {
+    width: '30%',
+    data: datos
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    console.log(result)
+    this.addplan.patchValue({
+      valorr: result.selected
+    })
+  });
+  }
+  selectantena(): void {
+    //this.router.navigate(['/addticket']);
+    let datos = {'celda':this.addplan.value.celda_soporte, 'equipo':'3'}
+    let dialogRef = this.dialog.open(SelectTipoComponent, {
+    width: '30%',
+    data: datos
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    console.log(result)
+    this.addplan.patchValue({
+      valorr: result.selected
+    })
+  });
   }
 
     ngOnInit(){

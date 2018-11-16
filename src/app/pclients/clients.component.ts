@@ -534,6 +534,11 @@ export class ConfirmCliente {
       console.log(this.data);
      }
 
+     register(){
+       this.return = true
+       this.onNoClick()
+     }
+
   onNoClick(): void {
     this.dialogRef.close({response: this.return});
   }

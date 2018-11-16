@@ -638,6 +638,22 @@ export class ClientOverview implements OnInit{
 
        })
      }
+     GenFac(): void {
+       /*let dialogRef = this.dialog.open(AddclientsComponent, {
+         width: '25%'
+       });*/
+       let dialogRef = this.dialog.open(GenFactura, {
+         width: '25%',
+         data: this.cliente
+       });
+
+
+
+       dialogRef.afterClosed().subscribe(result => {
+         console.log('The dialog GenFAC was closed');
+         this.ngOnInit();
+       });
+     }
      Close(){this.location.back();}
      private openLINK(url){
        console.log(url)
@@ -885,6 +901,68 @@ export class AddPagoBalance implements OnInit{
         })
     }
 
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'genFAC.component.html',
+})
+export class GenFactura implements OnInit{
+
+  genFAC: FormGroup;
+  myDatePickerOptions: IMyDpOptions = {
+        dateFormat: 'dd/mm/yyyy',
+        editableDateField: false,
+        inline: true,
+    };
+  cliente: any;
+  constructor(
+    public usuario: AuthGuard,
+    private fb: FormBuilder,
+    public snackBar:MdSnackBar,
+    private http: Http,
+    public dialogRef: MdDialogRef<GenFactura>,
+    @Inject(MD_DIALOG_DATA) public id) {
+      this.cliente = id
+      this.genFAC = this.fb.group({
+        cliente:[id.id, Validators.required],
+        fecha:[''],
+        pro:['2', Validators.required],
+        responsable: usuario.currentUser.id_user
+      })
+    }
+
+    ngOnInit(){
+      this.genFAC.get('fecha').valueChanges.subscribe(
+        (fn) => {
+        if(fn.epoc){
+            setTimeout(()=>{
+            this.genFAC.patchValue({
+              fecha: fn.formatted
+            })
+          }, 100)
+        }
+        })
+        this.genFAC.get('pro').valueChanges.subscribe(
+          (fn) => {
+          if(fn==1){
+              this.genFAC.get('fecha').setValidators([Validators.required]);
+          }else{
+            this.genFAC.get('fecha').setValidators([]);
+          }
+          })
+    }
+    generate(){
+      const req = this.http.post(environment.apiEndpoint+'factura', this.genFAC.value).subscribe(result => {
+        this.dialogRef.close();
+        this.snackBar.open("Factura Generada", null, {
+          duration: 2000,
+        });
+    })
+  }
   onNoClick(): void {
     this.dialogRef.close();
   }

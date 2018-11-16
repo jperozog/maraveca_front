@@ -46,7 +46,7 @@ import { ChartsModule } from 'ng2-charts'
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
-import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddPagoBalance } from './clients/clients.component';
+import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddPagoBalance, GenFactura } from './clients/clients.component';
 import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente, ShowPreComponent, ConfirmCliente } from './pclients/clients.component';
 import { CapitalizePipe2, StringToDatePipe } from './capitalize.pipe';
 import { HttpClientModule } from '@angular/common/http';
@@ -74,7 +74,7 @@ import { APP_CONFIG } from './app.config';
 import { AppConfig } from './app.interface';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component';
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
-import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent, ShowEquipoComponent } from './inventarios/inventarios.component';
+import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent, ShowEquipoComponent, SelectTipoComponent } from './inventarios/inventarios.component';
 
 
 
@@ -152,7 +152,9 @@ import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEq
     ConfirmCliente,
     EditEquipoComponent,
     TransfEquiposComponent,
-    ShowEquipoComponent
+    ShowEquipoComponent,
+    GenFactura,
+    SelectTipoComponent
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,

@@ -66,6 +66,22 @@
             <p style="text-align:center">
               {{p.numero}}
             </p>
+            <br />
+            <p style="text-align:center" *ngIf="p.tipo == 1">
+              Equipo
+            </p>
+            <p style="text-align:center" *ngIf="p.tipo == 2">
+              Radio
+            </p>
+            <p style="text-align:center" *ngIf="p.tipo == 3">
+              Antena
+            </p>
+            <p style="text-align:center" *ngIf="p.tipo == 4">
+              Router
+            </p>
+            <p style="text-align:center" *ngIf="p.tipo == 5">
+              Switch
+            </p>
           </md-card-content>
         </md-card>
       </div>

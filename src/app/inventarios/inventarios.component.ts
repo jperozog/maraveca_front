@@ -273,7 +273,36 @@ export class SelectEquipoComponent {
     public router: Router)
     {
       console.log(row)
-      this.http.get(environment.apiEndpoint+'inventarios/'+row.celda_soporte+'?e='+row.equipo_soporte)
+      this.http.get(environment.apiEndpoint+'inventarios/'+row.celda+'?e='+row.equipo)
+        .subscribe((data) => {
+          this.equipos = data.json()
+        });
+    }
+
+    onNoClick(): void {
+      this.dialogRef.close({selected: this.selected});
+    }
+}
+@Component({
+  selector: 'app-inventarios',
+  templateUrl: './SelectEquipo.component.html',
+  styleUrls: ['./inventarios.component.css']
+})
+export class SelectTipoComponent {
+  equipos:any=null
+  selected:any=null
+  constructor(
+    private fb: FormBuilder,
+    public dialogRef: MdDialogRef<SelectEquipoComponent>,
+    @Inject(MD_DIALOG_DATA) public row: any,
+    private http: Http,
+    public usuario: AuthGuard,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    public router: Router)
+    {
+      console.log(row)
+      this.http.get(environment.apiEndpoint+'equipo/'+row.celda+'?e='+row.equipo)
         .subscribe((data) => {
           this.equipos = data.json()
         });

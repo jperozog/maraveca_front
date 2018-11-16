@@ -1,7 +1,7 @@
 <h1 md-dialog-title>Equipos disponible segun zona</h1>
 <div md-dialog-content>
-<md-radio-group [(ngModel)]="selected">
-<md-radio-button *ngFor="let equipo of equipos" [value]=equipo.serial_inventario>
+<md-radio-group [(ngModel)]="selected" *ngIf="equipos && equipos!=null && equipos.length>=1" >
+<md-radio-button *ngFor="let equipo of equipos" [value]=equipo.serial_inventario [disabled]="row && row.usado && row.usado == equipo.serial_inventario">
   {{ equipo.name+'/'+equipo.serial_inventario }}
 </md-radio-button>
 </md-radio-group>
