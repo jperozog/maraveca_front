@@ -21,6 +21,11 @@
   padding: 0 2px 0;
 }
 
+.dialog-wrap {
+  overflow-y: auto;
+  height: 90%;
+}
+
 @media all and (min-width: 480px) {
 
   .x700{display:block;}

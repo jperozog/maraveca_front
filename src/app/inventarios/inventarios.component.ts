@@ -61,7 +61,7 @@ export class InventariosComponent implements OnInit, OnDestroy {
       console.log(row);
       //this.selectedRowIndex = row.id;
       let dialogRef = this.dialog.open(ShowEquipoComponent, {
-        //width: '25%',
+        height: '80%',
         data: row
       });
 

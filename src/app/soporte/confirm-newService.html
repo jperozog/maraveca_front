@@ -1,3 +1,4 @@
+<form id="client" name="clientForm" [formGroup]="addDetails" novalidate>
 <h1 md-dialog-title>Confirmacion</h1>
 <div md-dialog-content>
   <p>Desea cerrar instalacion para {{data.row.nombre+" "+data.row.apellido}}?</p>
@@ -12,33 +13,33 @@
   <tr>
     <td>
       <md-form-field>
-      <input mdInput type="number" placeholder="Metro Inicial De Cable" class="md2-input" [(ngModel)]="cable1" />
+      <input mdInput type="number" placeholder="Metro Inicial De Cable" class="md2-input" formControlName="cable1"/>
       <span mdSuffix>Metros</span>
       </md-form-field>
 
     </td>
     <td>
       <md-form-field>
-      <input mdInput type="number" placeholder="Metro Final De Cable" class="md2-input" [(ngModel)]="cable2" />
+      <input mdInput type="number" placeholder="Metro Final De Cable" class="md2-input" formControlName="cable2"/>
       <span mdSuffix>Metros</span>
       </md-form-field>
 
     </td>
     <td>
       <md-form-field>
-      <input mdInput type="number" placeholder="Conectores" class="md2-input" [(ngModel)]="conectores" />
+      <input mdInput type="number" placeholder="Conectores" class="md2-input" formControlName="conectores" />
       </md-form-field>
     </td>
   </tr>
   <tr>
     <td>
       <md-form-field>
-      <input mdInput placeholder="IP" class="md2-input" [(ngModel)]="ip" />
+      <input mdInput placeholder="IP" class="md2-input" formControlName="ip"/>
       </md-form-field>
     </td>
     <td *ngIf="aps && aps.length>0">
       <md2-select name="AP"
-                [(ngModel)]="ap"
+                formControlName="ap"
                 placeholder="AccessPoint"
                 style="width=100%; min-width: 100%;"
                 mdInput
@@ -46,6 +47,7 @@
       <md2-select-header>
         <input name="a_search"
                type="text"
+               formControlName="a_search"
                [(ngModel)]="a_search"
                placeholder="Buscar..."
                style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
@@ -56,7 +58,7 @@
     </td>
     <td *ngIf="currentUser && currentUser.installer==0">
       <md2-select name="Installer"
-                [(ngModel)]="installer"
+                formControlName="installer"
                 placeholder="Instalador"
                 style="width=100%; min-width: 100%;"
                 mdInput
@@ -64,6 +66,7 @@
       <md2-select-header>
         <input name="a_search"
                type="text"
+               formControlName="u_search"
                [(ngModel)]="u_search"
                placeholder="Buscar..."
                style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
@@ -75,15 +78,15 @@
   </tr>
     <tr>
 
-    <td colspan="3" *ngIf="data.row.ser1al==0">
+    <td colspan="3" *ngIf="data.row.ser1al==0 || (data.row.ser1al==1&&data.row.serial==0)">
       <md-form-field style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;">
-      <input mdInput placeholder="Serial" class="md2-input" (input)="nosymbol()" [(ngModel)]="serial" style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"/>
+      <input mdInput placeholder="Serial" class="md2-input" (input)="nosymbol()" formControlName="serial" style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"/>
       </md-form-field>
     </td>
   </tr>
-  <tr>
-    <td colspan="2">
-      <button md-raised-button color="primary" class="example-full-width btn btn-primary" (click)="service(data.row)" tabindex="2">Si</button>
+  <tr *ngIf="!sending">
+    <td colspan="2" >
+      <button md-raised-button color="primary" class="example-full-width btn btn-primary" (click)="service(data.row)" [disabled]='!addDetails.valid' tabindex="2">Si</button>
 
     </td>
     <td colspan="2">
@@ -91,5 +94,11 @@
 
     </td>
   </tr>
+  <tr *ngIf="sending">
+      <td colspan="3" style="text-align:center">
+        Enviando....
+      </td>
+  </tr>
 </table>
 </div>
+</form>
