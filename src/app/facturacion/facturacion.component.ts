@@ -207,7 +207,8 @@ export class FacturacionPagos {
   linea: any;
   iva: any = 0
   neto: any = 0
-
+  sending_m = false
+  sending_p = false
   agregarProducto:boolean=false;
   constructor(
     private http:Http,
@@ -416,6 +417,7 @@ export class FacturacionPagos {
   agregar(){
     //let body = "fac_id="+this.row.id+"&pag_tip="+this.tipo+"&pag_monto="+this.nada+"&pag_comment="+this.opcion;
     //console.log(body);
+    this.sending_p = true
     var url = environment.apiEndpoint+"facpag";
     this.http.post(url, this.addPago.value)
     .subscribe((data)=>{
@@ -423,6 +425,7 @@ export class FacturacionPagos {
       this.http.get(environment.apiEndpoint+'facpag/'+this.row.id)
       .subscribe((data) => {
         this.fac_pagos = data.json();
+        this.sending_p = false
         //console.log(this.fac_pagos.slice(0,3));
       });
       this.pagado=this.pagado+this.nada;
@@ -433,7 +436,7 @@ export class FacturacionPagos {
       //this.pagos.push({opcion: this.opcion, nada: this.nada});
       this.opcion = "";
       this.nada = "";
-    })
+    }, error =>{ this.sending_p = false })
   }
 
 }

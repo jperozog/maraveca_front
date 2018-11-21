@@ -590,6 +590,7 @@ export class ClientOverview implements OnInit{
   editclient:boolean=false
   facturado: any = 0;
   pagado:any = 0;
+  autoupdate:boolean=true
   balac:any = 0;
   constructor(
 
@@ -621,6 +622,82 @@ export class ClientOverview implements OnInit{
 
     });
      }
+     ngOnInit(){
+       this.route.params
+       .subscribe(
+         params => {
+           this.id = params.id_user;
+           console.log(params.id_user)
+           this.refresh()
+         }
+       )
+       //console.log(this.usuario)
+       this.pagado=0;
+       this.facturado=0;
+       this.balac=0;
+       IntervalObservable.create(10000)
+       .takeWhile(() => this.autoupdate)
+       .subscribe(() => {
+         this.refresh();
+       });
+     }
+     ngOnDestroy(){
+       this.autoupdate=false
+     }
+     refresh(){
+       var pagado_1=0
+       var facturado_1=0
+       var balac_1=0
+      this.http.get(environment.apiEndpoint+'clientover/' + this.id)
+       .subscribe((data) => {
+         var response = data.json()
+         this.soporte= response.soporte
+         this.facturacion = response.facturacion
+         this.servicios = response.servicios
+         this.cliente = response.cliente
+         this.historial = response.history
+         this.balance = response.balance
+         this.balance.forEach(linea => {
+           if (linea.bal_rest>0){
+             balac_1=this.balac+Number(linea.bal_rest);
+           }
+         })
+         this.facturacion.forEach(linea => {
+           if(linea.denominacion == 'Bs.S'){
+             if(linea.fac_status==1){
+             pagado_1=pagado_1+linea.pagado;
+             facturado_1 = facturado_1+linea.monto;
+           }
+           }else if(linea.denominacion == 'BSF'){
+             if(linea.fac_status == 1){
+             pagado_1=+pagado_1+(+linea.pagado/100000);
+             facturado_1 = +facturado_1+(+linea.monto/100000);
+           }
+           }
+         });
+         this.addClient.patchValue({
+           kind: this.cliente.kind,
+           dni: this.cliente.dni,
+           //email: [row.email, [Validators.required, Validators.pattern(EMAIL_REGEX)]],
+           email: this.cliente.email,
+           nombre: this.cliente.nombre,
+           apellido: this.cliente.apellido,
+           direccion: this.cliente.direccion,
+           day_of_birth: this.cliente.day_of_birth,
+           serie: this.cliente.serie,
+           phone1: this.cliente.phone1,
+           phone2: this.cliente.phone2,
+           comment: this.cliente.comment,
+           id: this.cliente.id,
+           social: this.cliente.social,
+
+         });
+         this.balac=balac_1
+         this.pagado=pagado_1
+         this.facturado=facturado_1
+       });
+     }
+
      SendPre(): void {
        /*let dialogRef = this.dialog.open(AddclientsComponent, {
          width: '25%'
@@ -800,64 +877,7 @@ export class ClientOverview implements OnInit{
 
      }
 
-     ngOnInit(){
-       this.route.params
-       .subscribe(
-         params => {
-           this.id = params.id_user;
-           console.log(params.id_user)
-         }
-       )
-       //console.log(this.usuario)
-       this.pagado=0;
-       this.facturado=0;
-       this.balac=0;
-       this.http.get(environment.apiEndpoint+'clientover/' + this.id)
-       .subscribe((data) => {
-         var response = data.json()
-         this.soporte= response.soporte
-         this.facturacion = response.facturacion
-         this.servicios = response.servicios
-         this.cliente = response.cliente
-         this.historial = response.history
-         this.balance = response.balance
-         this.balance.forEach(linea => {
-           if (linea.bal_rest>0){
-             this.balac=this.balac+Number(linea.bal_rest);
-           }
-         })
-         this.facturacion.forEach(linea => {
-           if(linea.denominacion == 'Bs.S'){
-             if(linea.fac_status==1){
-             this.pagado=this.pagado+linea.pagado;
-             this.facturado = this.facturado+linea.monto;
-           }
-           }else if(linea.denominacion == 'BSF'){
-             if(linea.fac_status == 1){
-             this.pagado=+this.pagado+(+linea.pagado/100000);
-             this.facturado = +this.facturado+(+linea.monto/100000);
-           }
-           }
-         });
-         this.addClient.patchValue({
-           kind: this.cliente.kind,
-           dni: this.cliente.dni,
-           //email: [row.email, [Validators.required, Validators.pattern(EMAIL_REGEX)]],
-           email: this.cliente.email,
-           nombre: this.cliente.nombre,
-           apellido: this.cliente.apellido,
-           direccion: this.cliente.direccion,
-           day_of_birth: this.cliente.day_of_birth,
-           serie: this.cliente.serie,
-           phone1: this.cliente.phone1,
-           phone2: this.cliente.phone2,
-           comment: this.cliente.comment,
-           id: this.cliente.id,
-           social: this.cliente.social,
 
-         });
-       });
-     }
 
 }
 @Component({
