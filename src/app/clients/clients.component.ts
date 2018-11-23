@@ -659,7 +659,7 @@ export class ClientOverview implements OnInit{
          this.balance = response.balance
          this.balance.forEach(linea => {
            if (linea.bal_rest>0){
-             balac_1=this.balac+Number(linea.bal_rest);
+             balac_1=balac_1+Number(linea.bal_rest);
            }
          })
          this.facturacion.forEach(linea => {
@@ -692,9 +692,11 @@ export class ClientOverview implements OnInit{
            social: this.cliente.social,
 
          });
-         this.balac=balac_1
-         this.pagado=pagado_1
-         this.facturado=facturado_1
+         setTimeout(()=>{
+           this.balac=balac_1
+           this.pagado=pagado_1
+           this.facturado=facturado_1
+         }, 50)
        });
      }
 

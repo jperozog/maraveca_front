@@ -17,7 +17,7 @@ export class VersionCheckService {
     // public initVersionCheck(http, url, frequency = 1000 * 60 * 30) {
     public initVersionCheck(http, url, frequency = 1000 * 5) {
         setInterval(() => {
-          if(environment.production == true){
+          if(environment.production){
             this.checkVersion(url);
           }
         }, frequency);
@@ -40,7 +40,7 @@ export class VersionCheckService {
                         // ENTER YOUR CODE TO DO SOMETHING UPON VERSION CHANGE
                         // for an example: location.reload();
                         window.location.reload();
-                        //console.log("refresh")
+                        console.log("refresh")
                     }
                     // store the new hash so we wouldn't trigger versionChange again
                     // only necessary in case you did not force refresh

@@ -221,6 +221,7 @@ export class AddticketComponent implements OnInit {
   radio: any;
   antena: any;
   routers: any;
+  antenas:any;
   switch: any;
   celdas: any;
   S_servicios: any;
@@ -233,6 +234,8 @@ export class AddticketComponent implements OnInit {
   requ = [];
   nombrer: any = "1";
   valorr: any = "2";
+  tes = false;
+  antenna = false;
   EN: boolean = false;
   valorplaceholder = "";
   constructor(private http: Http,
@@ -272,11 +275,15 @@ export class AddticketComponent implements OnInit {
         this.equipos = data.json();
         this.equipo = this.addplan.value.equipo_soporte
       });
-    this.http.get(environment.apiEndpoint + 'equit/2')
-      .subscribe((data) => {
-        this.radio = data.json();
-      });
-    this.addplan = this.fb.group({
+      this.http.get(environment.apiEndpoint + 'equit/2')
+        .subscribe((data) => {
+          this.radio = data.json();
+        });
+        this.http.get(environment.apiEndpoint + 'equit/3')
+          .subscribe((data) => {
+            this.antenas = data.json();
+          });
+        this.addplan = this.fb.group({
       tipo_soporte: '1',
       problema_soporte: '',
       afectacion_soporte: '1',
@@ -284,8 +291,11 @@ export class AddticketComponent implements OnInit {
       comment_soporte: '',
       servicio_soporte: ['', Validators.required],
       celda_soporte: ['', Validators.required],
+      tipo_equipo_soporte: ['', Validators.required],
       equipo_soporte: ['', Validators.required],
+      antenna_soporte: '',
       seriale: ['', Validators.required],
+      seriala: '',
       status_soporte: "1",
       user_soporte: this.currentUser.id_user,
       S_servicios: '',
@@ -389,13 +399,27 @@ export class AddticketComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result)
       this.addplan.patchValue({
-        valorr: result.selected
+        seriala: result.selected
       })
     });
   }
 
   ngOnInit() {
 
+    this.addplan.get('tipo_equipo_soporte').valueChanges.subscribe(
+      ()=>{
+        this.tes = true
+      }
+    )
+    this.addplan.get('seriale').valueChanges.subscribe(
+      (seriale)=>{
+        if(this.tes && this.addplan.value.equipo_soporte != '' && seriale != ''){
+            this.antenna=true
+        }else{
+          this.antenna=false
+        }
+      }
+    )
 
     this.addplan.get('EN').valueChanges.subscribe(
 

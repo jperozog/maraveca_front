@@ -27,10 +27,10 @@
             style="width:100%; min-width: 100%; min-height: 100%;"
             mdInput
             >
-            <md2-option value="2" >
+            <md2-option value="2">
               Ticket
             </md2-option>
-            <md2-option value="1" >
+            <md2-option value="1">
               Instalacion
             </md2-option>
             <md2-option value="3">
@@ -132,7 +132,7 @@
         <!-- Celdas y equipos para instalaciones -->
 
         <tr *ngIf="addplan.value.tipo_soporte == 1">
-          <td>
+          <td colspan="2">
             <md2-select name="celda"
                       formControlName="celda_soporte"
                       placeholder="Celda"
@@ -154,7 +154,41 @@
             </md2-option>
           </md2-select>
           </td>
-          <td>
+          </tr>
+          <tr>
+            <td *ngIf="!tes" colspan="2">
+              <md2-select name="tequip"
+                        formControlName="tipo_equipo_soporte"
+                        placeholder="Tipo de Equipo"
+                        style="width=100%; min-width: 100%; min-height: 100%;"
+                        mdInput
+                        floatPlaceholder="never"
+                        >
+              <md2-option value="1">
+                <span>Equipo</span><br />
+              </md2-option>
+              <md2-option value="2">
+                <span>Radio</span><br />
+              </md2-option>
+            </md2-select>
+              </td>
+            <td *ngIf="tes">
+              <md2-select name="tequip"
+                        formControlName="tipo_equipo_soporte"
+                        placeholder="Tipo de Equipo"
+                        style="width=100%; min-width: 100%; min-height: 100%;"
+                        mdInput
+                        floatPlaceholder="never"
+                        >
+              <md2-option value="1">
+                <span>Equipo</span><br />
+              </md2-option>
+              <md2-option value="2">
+                <span>Radio</span><br />
+              </md2-option>
+            </md2-select>
+              </td>
+            <td *ngIf="tes && addplan.value.tipo_equipo_soporte == 1">
             <md2-select name="equipo"
                       formControlName="equipo_soporte"
                       placeholder="Equipo"
@@ -175,6 +209,27 @@
             </md2-option>
           </md2-select>
           </td>
+          <td *ngIf="tes && addplan.value.tipo_equipo_soporte == 2">
+          <md2-select name="equipo"
+                    formControlName="equipo_soporte"
+                    placeholder="Radios"
+                    style="width=100%; min-width: 100%; min-height: 100%;"
+                    mdInput
+                    floatPlaceholder="never"
+                    >
+          <md2-select-header>
+            <input class="search" name="S_equipo"
+                   type="text"
+                   [(ngModel)]="S_equipo"
+                   placeholder="Buscar..."
+                   style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                   formControlName="S_servicios" />
+          </md2-select-header>
+          <md2-option *ngFor="let i of (radio | dataPipe : {name: S_equipo})" [value]="i.id">
+            <span>{{(i.name | capitalize2:true)}}</span><br />
+          </md2-option>
+        </md2-select>
+        </td>
 
         </tr>
         <!-- fin de celdas y equipos para instalaciones -->
@@ -270,6 +325,34 @@
           </button>
         </td>
         </tr>
+
+        <!-- antennas -->
+        <tr *ngIf="antenna">
+          <td>
+            <md2-select name="equipo"
+                      formControlName="antenna_soporte"
+                      placeholder="antennas"
+                      style="width=100%; min-width: 100%; min-height: 100%;"
+                      mdInput
+                      floatPlaceholder="never"
+                      >
+            <md2-option *ngFor="let i of antenas" [value]="i.id">
+              <span>{{(i.name | capitalize2:true)}}</span><br />
+            </md2-option>
+          </md2-select>
+            </td>
+            <td>
+              <md-form-field class="example-full-width" floatPlaceholder="never">
+              <input autocomplete="off" mdInput placeholder="Serial De Antena" class="md2-input" formControlName="seriala" maxlength="12"/>
+            </md-form-field>
+            <button md-icon-button (click)="selectantena()" [disabled]="addplan.value.celda_soporte && addplan.value.celda_soporte == '' && addplan.value.antena_soporte == ''">
+              <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
+              </button>
+              </td>
+          </tr>
+
+          <!--antennas-->
+
         <tr *ngIf="!edit && addplan.value.tipo_soporte == 1"><td colspan="3" style="text-align: center">Requisitos Adicionales</td></tr>
         <tr *ngIf="!edit && addplan.value.tipo_soporte == 1">
           <td colspan="2">
