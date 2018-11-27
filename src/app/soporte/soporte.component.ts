@@ -39,7 +39,7 @@ export class SoporteComponent implements OnInit, OnDestroy {
   autoupdate: boolean
   //datai= [];
   search: string;
-  modo;
+  modo: any = false;
   position: string = '2';
   constructor(
     private http: Http,
@@ -232,8 +232,6 @@ export class AddticketComponent implements OnInit {
   currentUser: any;
   problemas: any;
   requ = [];
-  nombrer: any = "1";
-  valorr: any = "2";
   tes = false;
   antenna = false;
   EN: boolean = false;
@@ -520,6 +518,7 @@ export class AddticketComponent implements OnInit {
     this.dialogRef.close();
   }
   addr() {
+    console.log(this.addplan.value.valorr)
     this.requ.push({ nombre: this.addplan.value.nombrer, valor: this.addplan.value.valorr })
     this.addplan.patchValue({
       nombrer: '',
@@ -545,8 +544,14 @@ export class AddticketComponent implements OnInit {
     "&tipo_soporte="+plan.tipo
     */
     if (!this.EN) {
-      this.requ.push({ nombre: 'Serial', valor: this.addplan.value.seriale })
+      this.requ.push({ nombre: 'SerialEquipo', valor: this.addplan.value.seriale })
+      this.requ.push({ nombre: 'ModeloEquipo', valor: this.addplan.value.equipo_soporte })
     }
+    if(this.antenna){
+      this.requ.push({ nombre: 'SerialAntenna', valor: this.addplan.value.seriala })
+      this.requ.push({ nombre: 'ModeloAntena', valor: this.addplan.value.antenna_soporte })
+    }
+
     this.addplan.patchValue({
       adicionales: this.requ
     })

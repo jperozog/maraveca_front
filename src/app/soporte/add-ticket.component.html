@@ -331,8 +331,7 @@
           <td>
             <md2-select name="equipo"
                       formControlName="antenna_soporte"
-                      placeholder="antennas"
-                      style="width=100%; min-width: 100%; min-height: 100%;"
+                      placeholder="Antenas"
                       mdInput
                       floatPlaceholder="never"
                       >
@@ -340,15 +339,15 @@
               <span>{{(i.name | capitalize2:true)}}</span><br />
             </md2-option>
           </md2-select>
+          <button md-icon-button (click)="selectantena()" [disabled]="addplan.value.celda_soporte && addplan.value.celda_soporte == '' && addplan.value.antena_soporte == ''">
+            <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
+            </button>
             </td>
             <td>
-              <md-form-field class="example-full-width" floatPlaceholder="never">
+              <md-form-field floatPlaceholder="never" style="width:auto">
               <input autocomplete="off" mdInput placeholder="Serial De Antena" class="md2-input" formControlName="seriala" maxlength="12"/>
             </md-form-field>
-            <button md-icon-button (click)="selectantena()" [disabled]="addplan.value.celda_soporte && addplan.value.celda_soporte == '' && addplan.value.antena_soporte == ''">
-              <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
-              </button>
-              </td>
+            </td>
           </tr>
 
           <!--antennas-->
@@ -362,7 +361,7 @@
               {{i.nombre | capitalize}}
             </td>
             <td colspan="2" class="bor">
-              {{i.valor | capitalize}}
+              {{i.valor}}
             </td>
           </tr>
           <tr *ngIf="addplan.value.nombrer && addplan.value.nombrer=='SerialPTP'">
