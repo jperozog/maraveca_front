@@ -1,6 +1,6 @@
 <md-toolbar class="submenu">
-  <md-form-field floatPlaceholder="never">
-    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  <md-form-field floatPlaceholder="never" (click)="stopPropagation($event)">
+    <input mdInput placeholder="Buscar..." class="md2-input" [(ngModel)]="search" />
   </md-form-field>
   <span class="example-spacer" style="text-align: center;">Servicios</span>
   <button md-raised-button (click)="refresh(true)" >
@@ -11,6 +11,9 @@
   </button>
 
 </md-toolbar>
+
+
+
 <div >
    <md-accordion>
   <md-expansion-panel *ngIf="this.installs && this.installs.length >= 1" hideToggle="true">
@@ -24,7 +27,7 @@
     </md-expansion-panel-header>
 
     <!-- contenido del desplegable de instalaciones -->
-    <table class=addClient [md2Data]="installs | dataPipe: { nombre: search, name_plan: search, nombre_celda: search, social: search, nombre_ap: search, dni: search}" #md2="md2DataTable" [rowsPerPage]="10">
+    <table class=addClient [md2Data]="installs | dataPipe: { nombre: search, nombre_celda: search, social: search, nombre_ap: search, dni: search }" #md2="md2DataTable" [rowsPerPage]="10">
       <thead>
         <tr>
           <td colspan="6">

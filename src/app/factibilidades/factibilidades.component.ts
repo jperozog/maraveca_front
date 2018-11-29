@@ -68,7 +68,7 @@ export class FactibilidadesComponent {
         if (this.usuario.perm && this.usuario.perm.includes('factibilidades_w')){
 
         let dialogRef = this.dialog.open(FactibilidadesDetComponent, {
-          width: '75%',
+          width: '25%',
           data: row
         });
 

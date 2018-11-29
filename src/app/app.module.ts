@@ -35,7 +35,6 @@ import {
   MdCheckboxModule,
   MdExpansionModule,
   MdRadioModule,
-
 } from '@angular/material';
 import { NgMasonryGridModule } from 'ng-masonry-grid';
 import { MyDatePickerModule } from 'mydatepicker';
