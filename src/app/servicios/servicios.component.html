@@ -1,7 +1,28 @@
 <md-toolbar class="submenu">
-  <md-form-field floatPlaceholder="never" (click)="stopPropagation($event)">
+  <md-form-field floatPlaceholder="never">
     <input mdInput placeholder="Buscar..." class="md2-input" [(ngModel)]="search" />
   </md-form-field>
+  <md2-select name="Plan"
+            placeholder="Planes"
+            mdInput
+            floatPlaceholder="never"
+            [(ngModel)]="search_p"
+            floatPlaceholder="never"
+            >
+  <md2-option *ngFor="let i of planes" [tooltip]="i.name_plan" [value]="i.name_plan">{{i.name_plan}}</md2-option>
+  </md2-select>
+  <md2-select name="Estado"
+            placeholder="Estado"
+            mdInput
+            [(ngModel)]="search_s"
+            floatPlaceholder="never"
+            >
+            <md2-option [value]="1">Activo</md2-option>
+            <!--md2-option [value]="2">Moroso</md2-option-->
+            <md2-option [value]="3">Suspendido</md2-option>
+            <md2-option [value]="4">Retirado</md2-option>
+            <md2-option [value]="5">Exonerado</md2-option>
+            </md2-select>
   <span class="example-spacer" style="text-align: center;">Servicios</span>
   <button md-raised-button (click)="refresh(true)" >
     <md-icon [class.updateicon]="update">cached</md-icon> Actualizar Lista
@@ -94,7 +115,7 @@
       </md-panel-description>
     </md-expansion-panel-header>
     <!-- contenido del desplegable de servicios -->
-    <table class=addClient [md2Data]="data | dataPipe: { nombre: search, ip_srv: search, name_plan: search, nombre_celda: search, social: search, nombre_ap: search, dni: search}" #md2="md2DataTable" [rowsPerPage]="10">
+    <table class=addClient [md2Data]="data | dataPipe: { nombre: search, ip_srv: search, nombre_celda: search, social: search, nombre_ap: search, dni: search} | dataPipe: {name_plan: search_p} | dataPipe: {stat_srv: search_s}" #md2="md2DataTable" [rowsPerPage]="10">
       <thead>
         <tr>
           <td colspan="6">

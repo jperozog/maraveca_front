@@ -10,7 +10,7 @@
               <md-chip *ngIf="(!row.social || row.social == null)&& row.tipo_soporte!=3">Nombre: {{(row.nombre | capitalize)+" "+(row.apellido | capitalize)}}</md-chip>
               <md-chip *ngIf="(row.social && row.social != null)&& row.tipo_soporte!=3">Persona de Contacto: {{(row.nombre | capitalize)+" "+(row.apellido | capitalize)}}</md-chip>
               <md-chip *ngIf="(row.social != '' && row.social != null && row.social != 'null') && (row.kind.toUpperCase() == 'J' || row.kind.toUpperCase() == 'G')&& row.tipo_soporte!=3">Razon Social: {{row.social | capitalize}}</md-chip>
-              <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Equipo: {{row.equipos.value}}</md-chip>
+              <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1 && row.equipos" >Equipo: {{row.equipos.value}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Serial: {{row.serial}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 1 && row.router" >Router: {{row.router}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 2" (click)="openLINK(row.ip_srv)">IP: {{row.ip_srv}}</md-chip>
@@ -34,7 +34,7 @@
             <td colspan="4" *ngIf="(row.social != '' && row.social != null && row.social != 'null') && (row.kind.toUpperCase() == 'J' || row.kind.toUpperCase() == 'G')&& row.tipo_soporte!=3">Razon Social: {{row.social | capitalize}}</td>
           </tr>
           <tr *ngIf="edit && row" class="x290">
-            <td colspan="4" *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Equipo: {{row.equipos.value}}</td>
+            <td colspan="4" *ngIf="row.tipo_soporte && row.tipo_soporte == 1 && row.equipos" >Equipo: {{row.equipos.value}}</td>
           </tr>
           <tr *ngIf="edit && row" class="x290">
             <td colspan="4" *ngIf="row.tipo_soporte && row.tipo_soporte == 1" >Serial: {{row.serial}}</td>

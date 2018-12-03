@@ -155,7 +155,7 @@
           </md2-select>
           </td>
           </tr>
-          <tr>
+          <tr *ngIf="addplan.value.tipo_soporte == 1">
             <td *ngIf="!tes" colspan="2">
               <md2-select name="tequip"
                         formControlName="tipo_equipo_soporte"
