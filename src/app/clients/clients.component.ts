@@ -675,23 +675,7 @@ export class ClientOverview implements OnInit{
            }
            }
          });
-         this.addClient.patchValue({
-           kind: this.cliente.kind,
-           dni: this.cliente.dni,
-           //email: [row.email, [Validators.required, Validators.pattern(EMAIL_REGEX)]],
-           email: this.cliente.email,
-           nombre: this.cliente.nombre,
-           apellido: this.cliente.apellido,
-           direccion: this.cliente.direccion,
-           day_of_birth: this.cliente.day_of_birth,
-           serie: this.cliente.serie,
-           phone1: this.cliente.phone1,
-           phone2: this.cliente.phone2,
-           comment: this.cliente.comment,
-           id: this.cliente.id,
-           social: this.cliente.social,
 
-         });
          setTimeout(()=>{
            this.balac=balac_1
            this.pagado=pagado_1
@@ -775,6 +759,23 @@ export class ClientOverview implements OnInit{
      }
      edit(){
        this.editclient=true
+       this.addClient.patchValue({
+         kind: this.cliente.kind,
+         dni: this.cliente.dni,
+         //email: [row.email, [Validators.required, Validators.pattern(EMAIL_REGEX)]],
+         email: this.cliente.email,
+         nombre: this.cliente.nombre,
+         apellido: this.cliente.apellido,
+         direccion: this.cliente.direccion,
+         day_of_birth: this.cliente.day_of_birth,
+         serie: this.cliente.serie,
+         phone1: this.cliente.phone1,
+         phone2: this.cliente.phone2,
+         comment: this.cliente.comment,
+         id: this.cliente.id,
+         social: this.cliente.social,
+
+       });
      }
      show(row){
        console.log(row);
