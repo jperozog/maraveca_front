@@ -427,7 +427,7 @@ export class AddticketComponent implements OnInit {
           console.log(EN);
           this.addplan.get('seriale').setValidators([]);
 
-        } else {
+        } else if(!EN && this.addplan.get('tipo_soporte').value==1) {
           console.log(EN);
           this.addplan.get('seriale').setValidators([Validators.required]);
 
@@ -472,6 +472,8 @@ export class AddticketComponent implements OnInit {
           this.addplan.get('celda_soporte').setValidators([Validators.required]);
           this.addplan.get('equipo_soporte').setValidators([Validators.required]);
           this.addplan.get('seriale').setValidators([Validators.required]);
+          this.addplan.get('tipo_equipo_soporte').setValidators([Validators.required]);
+          this.addplan.get('equipo_soporte').setValidators([Validators.required]);
           this.addplan.get('afectacion_soporte').setValidators([]);
           this.addplan.get('comment_soporte').setValidators([]);
           this.addplan.get('servicio_soporte').setValidators([]);
@@ -483,6 +485,8 @@ export class AddticketComponent implements OnInit {
           this.addplan.get('celda_soporte').setValidators([]);
           this.addplan.get('equipo_soporte').setValidators([]);
           this.addplan.get('seriale').setValidators([]);
+          this.addplan.get('tipo_equipo_soporte').setValidators([]);
+          this.addplan.get('equipo_soporte').setValidators([]);
           this.addplan.get('afectacion_soporte').setValidators([Validators.required]);
           this.addplan.get('comment_soporte').setValidators([]);
           this.addplan.get('servicio_soporte').setValidators([Validators.required]);
@@ -494,6 +498,8 @@ export class AddticketComponent implements OnInit {
           this.addplan.get('celda_soporte').setValidators([]);
           this.addplan.get('equipo_soporte').setValidators([]);
           this.addplan.get('seriale').setValidators([]);
+          this.addplan.get('tipo_equipo_soporte').setValidators([]);
+          this.addplan.get('equipo_soporte').setValidators([]);
           this.addplan.get('afectacion_soporte').setValidators([]);
           this.addplan.get('comment_soporte').setValidators([Validators.required]);
           this.addplan.get('problems').setValidators([]);
@@ -507,6 +513,8 @@ export class AddticketComponent implements OnInit {
         this.addplan.get('afectacion_soporte').updateValueAndValidity();
         this.addplan.get('servicio_soporte').updateValueAndValidity();
         this.addplan.get('problems').updateValueAndValidity();
+        this.addplan.get('tipo_equipo_soporte').updateValueAndValidity();
+        this.addplan.get('equipo_soporte').updateValueAndValidity();
 
       }
 

@@ -573,6 +573,44 @@ export class DeleteCliente {
 
 }
 @Component({
+selector: 'delete-dialog',
+templateUrl: 'anular.component.html',
+styleUrls: ['./clients.component.css']
+})
+export class AnularFactura {
+  myService: MyService | null;
+
+  constructor(
+    public dialogRef: MdDialogRef<AnularFactura>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+      this.myService = new MyService(http, router, usuario);
+      console.log(this.data);
+     }
+
+
+
+
+    anular(): void {
+      this.snackBar.open("Anulando Factura: Por favor espere", null, {
+        duration: 1000,
+      });
+      this.http.put(environment.apiEndpoint+"facturas/anular/"+this.data.id, this.data).subscribe((data)=>{
+      this.dialogRef.close();
+    })
+      //this.myService.refresh();
+    }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+@Component({
 selector: 'OverviewComponent',
 templateUrl: 'client.overview.component.html',
 styleUrls: ['./clients.component.css']
@@ -680,8 +718,38 @@ export class ClientOverview implements OnInit{
            this.balac=balac_1
            this.pagado=pagado_1
            this.facturado=facturado_1
+           if(!this.editclient){
+           this.addClient.patchValue({
+             kind: this.cliente.kind,
+             dni: this.cliente.dni,
+             //email: [row.email, [Validators.required, Validators.pattern(EMAIL_REGEX)]],
+             email: this.cliente.email,
+             nombre: this.cliente.nombre,
+             apellido: this.cliente.apellido,
+             direccion: this.cliente.direccion,
+             day_of_birth: this.cliente.day_of_birth,
+             serie: this.cliente.serie,
+             phone1: this.cliente.phone1,
+             phone2: this.cliente.phone2,
+             comment: this.cliente.comment,
+             id: this.cliente.id,
+             social: this.cliente.social,
+
+           });}
          }, 50)
        });
+     }
+     anularfactura(i):void {
+       let dialogRef = this.dialog.open(AnularFactura, {
+         width: '25%',
+         data: i
+       });
+
+
+       dialogRef.afterClosed().subscribe(result => {
+         console.log('The dialog was closed');
+
+       })
      }
 
      SendPre(): void {
@@ -759,23 +827,7 @@ export class ClientOverview implements OnInit{
      }
      edit(){
        this.editclient=true
-       this.addClient.patchValue({
-         kind: this.cliente.kind,
-         dni: this.cliente.dni,
-         //email: [row.email, [Validators.required, Validators.pattern(EMAIL_REGEX)]],
-         email: this.cliente.email,
-         nombre: this.cliente.nombre,
-         apellido: this.cliente.apellido,
-         direccion: this.cliente.direccion,
-         day_of_birth: this.cliente.day_of_birth,
-         serie: this.cliente.serie,
-         phone1: this.cliente.phone1,
-         phone2: this.cliente.phone2,
-         comment: this.cliente.comment,
-         id: this.cliente.id,
-         social: this.cliente.social,
 
-       });
      }
      show(row){
        console.log(row);
