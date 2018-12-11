@@ -9,6 +9,16 @@
       {{mes.nombre}}
     </md-option>
   </md-select>
+  <md-select placeholder="Mes" [(ngModel)]="mes">
+    <md-option *ngFor="let mes of meses" [value]=mes.numero>
+      {{mes.nombre}}
+    </md-option>
+  </md-select>
+  <md-select placeholder="Año" [(ngModel)]="year">
+    <md-option *ngFor="let year of anos" [value]=year.year>
+      {{year.year}}
+    </md-option>
+  </md-select>
   <button class="x290" md-icon-button (click)="this.myService.refresh()" >
     <md-icon>cached</md-icon>
   </button>

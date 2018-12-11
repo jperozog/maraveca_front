@@ -25,7 +25,9 @@ export class FacturacionComponent implements OnInit, OnDestroy {
   today: number = Date.now();
 
   mes= this.datePipe.transform(Date.now(), 'M')
+  year= this.datePipe.transform(Date.now(), 'y')
   meses=[];
+  anos=[];
   myService: MyService | null;
   facturacion= [];
   facturacion_t = [];
@@ -83,7 +85,10 @@ export class FacturacionComponent implements OnInit, OnDestroy {
       {numero:11, nombre:'Noviembre'},
       {numero:12, nombre:'Diciembre'},
     ]
-
+    this.anos=[
+      {year:2018},
+      {year:2019}
+    ]
     IntervalObservable.create(10000)
     .takeWhile(() => this.autoupdate)
     .subscribe(() => {
@@ -96,7 +101,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
 
   refresh(nf){
     this.update=true;
-    this.http.get(environment.apiEndpoint+'facturas/', {params:{month: this.mes, year: '2018'}})
+    this.http.get(environment.apiEndpoint+'facturas/', {params:{month: this.mes, year: this.year}})
     .subscribe((data) => {
       this.facturacion_t = data.json();
       this.update=false
