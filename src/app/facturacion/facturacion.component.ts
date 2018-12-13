@@ -26,6 +26,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
 
   mes= this.datePipe.transform(Date.now(), 'M')
   year= this.datePipe.transform(Date.now(), 'y')
+  stat='';
   meses=[];
   anos=[];
   myService: MyService | null;
@@ -101,7 +102,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
 
   refresh(nf){
     this.update=true;
-    this.http.get(environment.apiEndpoint+'facturas/', {params:{month: this.mes, year: this.year}})
+    this.http.get(environment.apiEndpoint+'facturas/', {params:{month: this.mes, year: this.year, status: this.stat}})
     .subscribe((data) => {
       this.facturacion_t = data.json();
       this.update=false

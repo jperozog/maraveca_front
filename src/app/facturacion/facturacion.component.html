@@ -4,9 +4,12 @@
   </md-form-field>
 
   <span class="example-spacer" style="text-align: center;">Facturacion</span>
-  <md-select placeholder="Mes" [(ngModel)]="mes">
-    <md-option *ngFor="let mes of meses" [value]=mes.numero>
-      {{mes.nombre}}
+  <md-select placeholder="Estado" [(ngModel)]="stat">
+    <md-option value='0'>
+      Pendiente
+    </md-option>
+    <md-option value='1'>
+      Pagada
     </md-option>
   </md-select>
   <md-select placeholder="Mes" [(ngModel)]="mes">
