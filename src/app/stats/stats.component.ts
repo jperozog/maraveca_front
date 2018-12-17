@@ -104,6 +104,10 @@ colors = [
 }
 ]
 
+goTOfac(i){
+  this.router.navigate(['facturacion', {fecha:i.fecha}]);
+}
+
 // CHART CLICK EVENT.
     onChartClick(event) {
       console.log(event);

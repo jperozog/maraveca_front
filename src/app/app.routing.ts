@@ -18,7 +18,7 @@ import {UsuariosComponent, DetallesUsuarios, AdduserComponent, DeleteuserDialog,
 import { NotifyComponent } from './notify/notify.component'
 import { AuthGuard } from './_guards/index';
 import { PreComponent, DialogOverviewExampleDialog } from './presupuestos/pre.component';
-import { FacturacionComponent, FacturacionPagos } from './facturacion/facturacion.component';
+import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog } from './facturacion/facturacion.component';
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component'
 import { StatsComponent, PagarComponent, DetallesInstallerComponent, cargarPagocomponent } from './stats/stats.component'
@@ -57,6 +57,8 @@ const appRoutes: Routes = [
   {path: 'fac_anu', component: AnularFactura},
   {path: 'cargarPago', component: cargarPagocomponent},
   {path: 'confirmSend', component: DialogOverviewExampleDialog},
+  {path: 'deletepagoDialog', component: deletepagoDialog},
+  {path: 'deleteProductDialog', component: deleteProductDialog},
   {path: 'AddPagoBalance', component: AddPagoBalance},
   {path: 'SelectTipo', component: SelectTipoComponent},
   {path: 'AddZona', component: AddZonaComponent},

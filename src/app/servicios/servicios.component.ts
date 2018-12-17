@@ -1,4 +1,4 @@
-import { Component, Inject, Pipe, PipeTransform, Injectable, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, Pipe, PipeTransform, Injectable, OnInit, OnDestroy, ViewChildren } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -36,6 +36,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
   search_s: string = '';
   p_search = null;
   planes: any;
+  @ViewChildren('servicios') spr;
   constructor(
     public usuario: AuthGuard,
     private http: Http, public dialog: MdDialog, public snackBar: MdSnackBar, private router: Router) {
@@ -48,11 +49,15 @@ export class ServiciosComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log(this.spr)
+    console.log('check')
     IntervalObservable.create(10000)
       .takeWhile(() => this.autoupdate)
       .subscribe(() => {
         this.refresh(false);
-      });
+        console.log(this.spr)
+        console.log('check')
+          });
 
     this.http.get(environment.apiEndpoint + 'planes/')
       .subscribe((data) => {

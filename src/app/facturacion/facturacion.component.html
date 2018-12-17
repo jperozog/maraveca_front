@@ -4,12 +4,15 @@
   </md-form-field>
 
   <span class="example-spacer" style="text-align: center;">Facturacion</span>
-
-  <md-select placeholder="Estado" [(ngModel)]="stat">
-    <md-option value='0'>
+  <md-checkbox [(ngModel)]="stat">Anulados</md-checkbox>
+  <md-select placeholder="Estado" [(ngModel)]="status">
+    <md-option value=''>
+      Todas
+    </md-option>
+    <md-option value='pendiente'>
       Pendiente
     </md-option>
-    <md-option value='1'>
+    <md-option value='pagado'>
       Pagada
     </md-option>
   </md-select>
@@ -59,7 +62,7 @@
 
 <div class="contenido">
     <div class="x700">
-      <table style="width: 97%" [md2Data]="facturacion | dataPipe: {cliente: search, id: search}" #md2="md2DataTable" class="addClient x700" [rowsPerPage]="14">
+      <table style="width: 97%" [md2Data]="facturacion | dataPipe: {cliente: search, id: search} | dataPipe: {estado:status}" #md2="md2DataTable" class="addClient x700" [rowsPerPage]="14">
         <thead>
           <tr>
             <td colspan="5">
@@ -69,7 +72,8 @@
           <tr>
             <th style="width: 15%; margin: 0 1em;">N</th>
             <th style="width: 15%" md2SortBy="cliente">Cliente</th>
-            <th style="width: 15%" md2SortBy="pagado">Estado</th>
+            <th style="width: 15%" md2SortBy="estado">Estado</th>
+            <th style="width: 15%" md2SortBy="monto">Monto</th>
             <th style="width: 15%">Fecha</th>
             <th style="width: 10%">Acciones</th>
           </tr>
@@ -81,9 +85,11 @@
             <td style="width: 15%">{{t.cliente | capitalize2:true}}</td>
 
 
-            <td *ngIf="t.fac_status == 1 && (t.pagado < t.monto || t.pagado == null)" style="width: 15%"><font color="#d10512">Pendiente</font></td>
-            <td *ngIf="t.fac_status == 1 && (t.pagado >= t.monto)" style="width: 15%"><font color="#00c402">Pagada</font></td>
+            <td *ngIf="t.fac_status == 1 && (t.pagado < t.monto || t.pagado == null)" style="width: 15%"><font color="#d10512">{{t.estado | capitalize2:true}}</font></td>
+            <td *ngIf="t.fac_status == 1 && (t.pagado >= t.monto)" style="width: 15%"><font color="#00c402">{{t.estado | capitalize2:true}}</font></td>
             <td *ngIf="t.fac_status == 2" style="width: 15%">Anulado</td>
+
+            <td style="width: 15%">{{t.monto | number : '1.1-3'}}{{t.denominacion}}</td>
 
             <td style="width: 15%">{{t.created_at | stringToDate | date: 'd/M/yy'}}</td>
 

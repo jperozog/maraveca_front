@@ -67,7 +67,7 @@ import { PotencialesComponent } from './potenciales/potenciales.component';
 //import { MyDatePickerModule } from 'mydatepicker';
 import { NotifyComponent } from './notify/notify.component';
 import { PreComponent, DialogOverviewExampleDialog } from './presupuestos/pre.component';
-import { FacturacionComponent, FacturacionPagos } from './facturacion/facturacion.component';
+import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog } from './facturacion/facturacion.component';
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
 import { APP_CONFIG } from './app.config';
 import { AppConfig } from './app.interface';
@@ -154,7 +154,9 @@ import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEq
     ShowEquipoComponent,
     GenFactura,
     SelectTipoComponent,
-    AnularFactura
+    AnularFactura,
+    deletepagoDialog,
+    deleteProductDialog
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,

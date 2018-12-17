@@ -8,7 +8,7 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/material';
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 import 'rxjs/add/operator/takeWhile';
@@ -24,9 +24,10 @@ import { environment } from '../../environments/environment'
 export class FacturacionComponent implements OnInit, OnDestroy {
   today: number = Date.now();
 
-  mes= this.datePipe.transform(Date.now(), 'M')
-  year= this.datePipe.transform(Date.now(), 'y')
-  stat='';
+  mes=''
+  year=''
+  stat=false;
+  status='';
   meses=[];
   anos=[];
   myService: MyService | null;
@@ -42,7 +43,9 @@ export class FacturacionComponent implements OnInit, OnDestroy {
     public usuario: AuthGuard,
     public dialog: MdDialog,
     public snackBar:MdSnackBar,
-    private router: Router) {
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.snackBar.open("Cargando Facturas", null, {
       duration: 2000,
     });
@@ -71,24 +74,50 @@ export class FacturacionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(){
-
+    this.route.params.forEach((urlParams) => {
+        console.log(urlParams)
+        if(urlParams.fecha){
+          var params=urlParams.fecha.split('-')
+          console.log(params)
+          this.mes= params[0]
+          this.year= params[1]
+          this.stat=false;
+          this.status='pendiente';
+        }else{
+          this.mes= this.datePipe.transform(Date.now(), 'M')
+          this.year= this.datePipe.transform(Date.now(), 'y')
+          this.stat=false;
+          this.status='';
+        }
+        console.log('parametros')
+        });
+    this.http.get(environment.apiEndpoint+'facturas/', {params:{month: this.mes, year: this.year, status: this.stat}})
+    .subscribe((data) => {
+      this.facturacion = data.json();
+      this.facturacion_t = this.facturacion;
+      this.update=false;
+      //console.log(this.data);
+    });
+    this.snackBar.open("Facturas Cargadas", null, {
+      duration: 2000,
+    });
     this.meses=[
-      {numero:1, nombre:'Enero'},
-      {numero:2, nombre:'Febrero'},
-      {numero:3, nombre:'Marzo'},
-      {numero:4, nombre:'Abril'},
-      {numero:5, nombre:'Mayo'},
-      {numero:6, nombre:'Junio'},
-      {numero:7, nombre:'Julio'},
-      {numero:8, nombre:'Agosto'},
-      {numero:9, nombre:'Septiembre'},
-      {numero:10, nombre:'Octubre'},
-      {numero:11, nombre:'Noviembre'},
-      {numero:12, nombre:'Diciembre'},
+      {numero:"1", nombre:'Enero'},
+      {numero:"2", nombre:'Febrero'},
+      {numero:"3", nombre:'Marzo'},
+      {numero:"4", nombre:'Abril'},
+      {numero:"5", nombre:'Mayo'},
+      {numero:"6", nombre:'Junio'},
+      {numero:"7", nombre:'Julio'},
+      {numero:"8", nombre:'Agosto'},
+      {numero:"9", nombre:'Septiembre'},
+      {numero:"10", nombre:'Octubre'},
+      {numero:"11", nombre:'Noviembre'},
+      {numero:"12", nombre:'Diciembre'},
     ]
     this.anos=[
-      {year:2018},
-      {year:2019}
+      {year:"2018"},
+      {year:"2019"}
     ]
     IntervalObservable.create(10000)
     .takeWhile(() => this.autoupdate)
@@ -224,7 +253,8 @@ export class FacturacionPagos {
     public snackBar: MdSnackBar,
     public usuario: AuthGuard,
     private router: Router,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    public dialog: MdDialog
   ){
     this.linea = row;
     //console.log("row")
@@ -383,6 +413,43 @@ export class FacturacionPagos {
     //onload="window.print();window.close()"
     this.deuda = moment;
   }
+  deletepagoDialog(row): void {
+    console.log(row);
+  let dialogRef = this.dialog.open(deletepagoDialog, {
+    data: row
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    console.log('The dialog was closed');
+    //this.animal = result;
+    this.http.get(environment.apiEndpoint+'facpag/'+this.row.id)
+    .subscribe((data) => {
+      this.fac_pagos = data.json();
+      this.sending_p = false
+      //console.log(this.fac_pagos.slice(0,3));
+    });
+    this.pagado=this.pagado-this.row.pag_monto;
+    this.deuda=this.monto-this.pagado;
+  });
+}
+deleteProductDialog(row): void {
+    console.log(row);
+  let dialogRef = this.dialog.open(deleteProductDialog, {
+    data: row
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    console.log('The dialog was closed');
+    //this.animal = result;
+    this.http.get(environment.apiEndpoint+'facprod/'+this.row.id)
+    .subscribe((data) => {
+      this.fac_products = data.json();
+      //console.log(this.fac_pagos.slice(0,3));
+    });
+    this.monto=this.monto-row.precio_articulo;
+    this.deuda=this.monto-this.pagado;
+  });
+  }
   activar(){
     this.agregarProducto=true;
     console.log(this.agregarProducto)
@@ -443,6 +510,88 @@ export class FacturacionPagos {
       this.opcion = "";
       this.nada = "";
     }, error =>{ this.sending_p = false })
+  }
+
+}
+
+@Component({
+selector: 'delete-dialog',
+templateUrl: 'confirm-delete-pago.html',
+styleUrls: ['./facturacion.component.css']
+})
+export class deletepagoDialog {
+  myService: MyService | null;
+
+  constructor(
+    public dialogRef: MdDialogRef<deletepagoDialog>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+      console.log(this.data);
+     }
+
+
+
+
+    delete(data): void {
+      console.log(this.data);
+
+      this.http.delete(environment.apiEndpoint+'fac_pago/'+data.id+'?responsable='+this.usuario.currentUser.id_user, {})
+      .subscribe((data)=>{
+        this.dialogRef.close();
+        this.snackBar.open("Pago Borrado: Por favor espere", null, {
+          duration: 1000,
+        });
+
+      });
+
+      //this.myService.refresh();
+    }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+@Component({
+selector: 'delete-dialog',
+templateUrl: 'confirm-delete-producto.html',
+styleUrls: ['./facturacion.component.css']
+})
+export class deleteProductDialog {
+  myService: MyService | null;
+
+  constructor(
+    public dialogRef: MdDialogRef<deleteProductDialog>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+      console.log(this.data);
+     }
+
+
+
+
+    delete(data): void {
+      console.log(this.data);
+      this.http.delete(environment.apiEndpoint+'fac_product/'+data.id+'?responsable='+this.usuario.currentUser.id_user, {})
+      .subscribe((data)=>{
+        this.dialogRef.close();
+        this.snackBar.open("Borrando cliente: Por favor espere", null, {
+          duration: 1000,
+        });
+      })
+      //this.myService.refresh();
+    }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
 }

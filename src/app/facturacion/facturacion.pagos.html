@@ -49,7 +49,7 @@
         <th  class="fact fontz" style="font-weight: bold; text-align: center">Precio unitario</th>
         <th  class="fact fontz" style="font-weight: bold; text-align: center">Cantidad</th>
         <th  class="fact fontz" style="font-weight: bold; text-align: center">Total neto</th>
-        <th  class="fact fontz" style="font-weight: bold; text-align: center" *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1">Acciones</th>
+        <!--th  class="fact fontz" style="font-weight: bold; text-align: center" *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1">Acciones</th-->
 
       </tr>
     </thead>
@@ -80,11 +80,11 @@
         <td class="fontprod" *ngIf="serie == 0" style="text-align:right">
           {{i.precio_articulo | number : '1.0-3'}} {{row.denominacion}}
         </td>
-        <td *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1">
+        <!--td *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1">
           <button  md-icon-button color="warn"(click)="deleteProductDialog(i)">
             <md-icon class="md-24" aria-label="Eliminar Producto">delete</md-icon>
           </button>
-          </td>
+          </td-->
       </tr>
       <tr *ngIf="agregarProducto">
         <td class="fontprod" >
@@ -174,7 +174,7 @@
     <td ><h3>Referencia</h3></td>
     <td ><h3>Monto</h3></td>
     <td ><h3>Fecha</h3></td>
-    <th  *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1"><h3>Acciones</h3></th>
+    <!--th  *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1"><h3>Acciones</h3></th-->
 
   </tr>
   <tr *ngFor="let p of fac_pagos">
@@ -189,11 +189,11 @@
     <td class="fac">{{p.pag_comment | capitalize2:true}}</td>
     <td class="fac">{{p.pag_monto | number : '1.0-3'}} {{row.denominacion}}</td>
     <td class="fac">{{p.created_at | stringToDate | date: 'd/M/yy'}}</td>
-    <td *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1">
+    <!--td *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1">
       <button  md-icon-button color="warn"(click)="deletepagoDialog(p)">
         <md-icon class="md-24" aria-label="Eliminar Pago">delete</md-icon>
       </button>
-      </td>
+      </td-->
   </tr>
   <tr *ngIf="pagado > 0">
     <td></td>
