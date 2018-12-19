@@ -143,6 +143,11 @@ export class FacturacionComponent implements OnInit, OnDestroy {
       }
     });
   }
+  notify(){
+    this.update=true;
+    this.http.post(environment.apiEndpoint+'notificar/', {responsable: this.usuario.currentUser.id_user})
+    .subscribe((data) => {});
+  }
   show(row){
     //console.log(row);
     //this.selectedRowIndex = row.id;
