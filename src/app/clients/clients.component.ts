@@ -682,6 +682,10 @@ export class ClientOverview implements OnInit{
      ngOnDestroy(){
        this.autoupdate=false
      }
+     notify(){
+       this.http.post(environment.apiEndpoint+'clientesn/', {responsable: this.usuario.currentUser.id_user, id:this.id})
+       .subscribe((data) => {});
+     }
      refresh(){
        var pagado_1=0
        var facturado_1=0

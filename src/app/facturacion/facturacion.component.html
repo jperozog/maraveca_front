@@ -26,7 +26,7 @@
       {{year.year}}
     </md-option>
   </md-select>
-  <button md-icon-button color="primary" (click)="notify()" tooltip="Enviar recordatorios de pago">
+  <button md-icon-button color="primary" (click)="notify()" tooltip="Enviar recordatorios de pago" *ngIf="usuario.perm && usuario.perm.includes('notify')">
     <md-icon class="md-24" aria-label="notificar" >notifications</md-icon>
   </button>
   <button class="x490 x700" md-raised-button (click)="refresh(true)" >
