@@ -16,6 +16,7 @@ import { AuthenticationService } from '../_services/index';
 import {AddticketComponent} from '../soporte/soporte.component';
 import { environment } from '../../environments/environment'
 import { PreComponent } from '../presupuestos/pre.component'
+import {IMyDpOptions, IMyDateModel} from 'mydatepicker';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const PHONE_REGEX = /^(0414\d|0412\d|0416\d|0426\d|0424\d|0415\d)+\d{6}/;
@@ -218,7 +219,11 @@ export class AddPclientsComponent{
   form: string;
   addClient: FormGroup;
   myService: MyService | null;
-
+  myDatePickerOptions: IMyDpOptions = {
+        dateFormat: 'dd/mm/yyyy',
+        editableDateField: false,
+        openSelectorOnInputClick: true,
+    };
 
 
   constructor(private http:Http,
@@ -276,7 +281,29 @@ export class AddPclientsComponent{
       }
 
     }
-
+    ngOnInit(){
+      this.addClient.get('kind').valueChanges.subscribe(
+        (kind) => {
+          if ( kind.toLowerCase()==='v'||kind.toLowerCase()==='e'){
+            this.addClient.get('social').setValidators([]);
+            this.addClient.get('social').updateValueAndValidity();
+          }else if(kind.toLowerCase()==='g'||kind.toLowerCase()==='j'){
+            this.addClient.get('social').setValidators([Validators.required]);
+            this.addClient.get('social').updateValueAndValidity();
+          }
+        })
+        this.addClient.get('day_of_birth').valueChanges.subscribe(
+          (fn) => {
+            if(fn.formatted){
+              setTimeout(()=>{
+              this.addClient.patchValue({
+                day_of_birth: fn.formatted
+              })
+            }, 100)
+          }
+          })
+    }
+    
     onNoClick(): void {
       this.dialogRef.close();
     }

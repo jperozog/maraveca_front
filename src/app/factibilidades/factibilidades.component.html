@@ -66,6 +66,7 @@
             <td *ngIf="t.status == 1" style="width: 15%"><font color="#d10512">Pendiente</font></td>
             <td *ngIf="t.status == 2 && t.factible ==1" style="width: 15%"><font color="#00c402">Factible</font></td>
             <td *ngIf="t.status == 2 && t.factible ==2" style="width: 15%"><font color="#d10512">No Factible</font></td>
+            <td *ngIf="t.status == 2 && t.factible ==3" style="width: 15%"><font color="#7a8018">Amerita Visita</font></td>
 
             <td style="width: 15%">{{t.created_at | stringToDate | date: 'd/M/yy'}}</td>
 

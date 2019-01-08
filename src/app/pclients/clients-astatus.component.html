@@ -77,6 +77,11 @@ Cliente: {{(row.nombre+" "+row.apellido) | capitalize2:true }}
         No Factible
         </font>
     </td>
+    <td class="fac montos" *ngIf="i.status == 2 && i.factible == 3">
+      <font color="#7a8018">
+        Amerita Visita
+        </font>
+    </td>
     <td class="fac montos" *ngIf="i.status == 1">
       <font color="#d10512">
       Pendiente

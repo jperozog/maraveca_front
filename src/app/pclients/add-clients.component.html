@@ -186,23 +186,16 @@
     </td>
   </tr><tr>
     <td colspan="2">
-      <md-form-field class="example-full-width">
-        <input type="date" name="birthdate" data-ng-model="user.birthdate"
-        class="form-control"
-
-        formControlName="day_of_birth"
-        placeholder="Fecha de nacimiento"
-        required mdInput>
-      </md-form-field>
-      <!--md2-datepicker placeholder="Fecha De Nacimiento"
-                      required
-                      data-ng-model="user.birthdate"
-                      openOnFocus
-                      startView="year"
-                      format="d/M/y"
-                      formControlName="day_of_birth"
-                      class="form-control example-full-width"
-                      ></md2-datepicker-->
+      <my-date-picker class="example-full-width"
+                    name="birthdate"
+                    mdInput
+                    data-ng-model="user.birthdate"
+                    placeholder="Fecha de nacimiento"
+                    formControlName="day_of_birth"
+                    required
+                    locale=es
+                    [options]="myDatePickerOptions"
+></my-date-picker>
     </td>
 
 

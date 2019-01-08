@@ -20,6 +20,7 @@
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 2" >Plan: {{row.name_plan | capitalize}}</md-chip>
               <md-chip  class="x700" *ngIf="row.tipo_soporte && row.tipo_soporte !=3">Telefono: {{row.phone1}}</md-chip>
               <md-chip *ngIf="row.phone2">Otros Telefono: {{row.phone2}}</md-chip>
+              <md-chip *ngIf="row.email">Email: {{row.email}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 2" >AccessPoint: {{row.nombre_ap}}</md-chip>
             </md-chip-list>
           </td>
