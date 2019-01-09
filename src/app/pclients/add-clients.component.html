@@ -186,7 +186,8 @@
     </td>
   </tr><tr>
     <td colspan="2">
-      <my-date-picker class="example-full-width"
+      <!--m
+      y-date-picker class="example-full-width"
                     name="birthdate"
                     mdInput
                     data-ng-model="user.birthdate"
@@ -195,7 +196,22 @@
                     required
                     locale=es
                     [options]="myDatePickerOptions"
-></my-date-picker>
+></my-date-picker-->
+<!--md2-datepicker class="example-full-width"
+              name="birthdate"
+              mdInput
+              data-ng-model="user.birthdate"
+              placeholder="Fecha de nacimiento"
+              formControlName="day_of_birth"
+              required
+              openOnFocus
+              type="date"
+              mode="auto"
+              startView="year"
+              format="dd/MM/y"
+
+              ></md2-datepicker-->
+              <nl-datepicker name="day_of_birth" [options]="departureOptions" formControlName="day_of_birth"></nl-datepicker>
     </td>
 
 

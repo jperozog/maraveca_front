@@ -37,18 +37,22 @@ import {
   MdRadioModule,
 } from '@angular/material';
 import { NgMasonryGridModule } from 'ng-masonry-grid';
-import { MyDatePickerModule } from 'mydatepicker';
+//import { MyDatePickerModule } from 'mydatepicker';
+import { DatepickerModule } from '@novalinc/datepicker';
+import { ChartsModule } from 'ng2-charts'
+import { CapitalizePipe2, StringToDatePipe } from './capitalize.pipe';
+import { HttpClientModule } from '@angular/common/http';
+import { Md2Module} from 'md2';
+import { DatePipe, CurrencyPipe, DecimalPipe } from '@angular/common';
+import { APP_CONFIG } from './app.config';
+import { AppConfig } from './app.interface';
 
 import { StatsComponent, PagarComponent, DetallesInstallerComponent, cargarPagocomponent } from './stats/stats.component';
-
-import { ChartsModule } from 'ng2-charts'
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddPagoBalance, GenFactura, AnularFactura } from './clients/clients.component';
 import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente, ShowPreComponent, ConfirmCliente } from './pclients/clients.component';
-import { CapitalizePipe2, StringToDatePipe } from './capitalize.pipe';
-import { HttpClientModule } from '@angular/common/http';
 import { ServiciosComponent, AddservicesComponent, AddPendingComponent} from './servicios/servicios.component';
 import { ServidoresComponent, AddServidoresComponent, DeleteRouterDialog } from './servidores/servidores.component';
 import { CeldasComponent, AddceldasComponent } from './celdas/celdas.component';
@@ -56,21 +60,17 @@ import { PlanesComponent, AddplanesComponent, DeletePlanDialog, UpdatePlanPrices
 import { EquiposComponent, AddequipoComponent } from './equipos/equipos.component';
 import { LoginComponent } from './login/login.component';
 import { ApsComponent, AddapsComponent, DeleteApsDialog } from './aps/aps.component';
-import { Md2Module} from 'md2';
-import { DatePipe, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { SoporteComponent, DeleteticketDialog, DeleteInstallDialog, AddticketComponent, EditticketComponent } from './soporte/soporte.component';
 import { AuthGuard } from './_guards/index';
 import { AlertService, AuthenticationService, UserService, PingService, VersionCheckService } from './_services/index';
 import { User } from './_models/index';
 import { UsuariosComponent, DetallesUsuarios, AdduserComponent, DeleteuserDialog, ResetCounter } from './usuarios/usuarios.component';
 import { PotencialesComponent } from './potenciales/potenciales.component';
-//import { MyDatePickerModule } from 'mydatepicker';
+import { MyDatePickerModule } from 'mydatepicker';
 import { NotifyComponent } from './notify/notify.component';
 import { PreComponent, DialogOverviewExampleDialog } from './presupuestos/pre.component';
 import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog } from './facturacion/facturacion.component';
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
-import { APP_CONFIG } from './app.config';
-import { AppConfig } from './app.interface';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component';
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
 import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent, ShowEquipoComponent, SelectTipoComponent } from './inventarios/inventarios.component';
@@ -194,9 +194,9 @@ import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEq
     MdCheckboxModule,
     MdExpansionModule,
     NgMasonryGridModule,
-    MyDatePickerModule,
     MdRadioModule,
-    //MyDatePickerModule,
+    DatepickerModule,
+    MyDatePickerModule,
 
   ],
   providers: [

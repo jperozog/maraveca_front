@@ -17,9 +17,7 @@ export class VersionCheckService {
     // public initVersionCheck(http, url, frequency = 1000 * 60 * 30) {
     public initVersionCheck(http, url, frequency = 1000 * 5) {
         setInterval(() => {
-          if(environment.production){
             this.checkVersion(url);
-          }
         }, frequency);
     }
 

@@ -8,7 +8,6 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/material';
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
-import { FacturacionPagos } from '../facturacion/facturacion.component'
 import {Router, ActivatedRoute} from '@angular/router';
 import { User } from '../_models/index';
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
@@ -20,10 +19,11 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/takeWhile';
 import { Location } from '@angular/common';
+import {IMyDpOptions, IMyDateModel} from 'mydatepicker';
 import { environment } from '../../environments/environment'
+import { FacturacionPagos } from '../facturacion/facturacion.component'
 import { PreComponent } from '../presupuestos/pre.component'
 import { AddservicesComponent } from '../servicios/servicios.component'
-import {IMyDpOptions, IMyDateModel} from 'mydatepicker';
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const PHONE_REGEX = /^(0414\d|0412\d|0416\d|0426\d|0424\d|0415\d)+\d{6}/;
 const KIND_REGEX= /^(V|J|E|G)/
@@ -326,16 +326,17 @@ export class AddclientsComponent implements OnInit{
             this.addClient.get('social').updateValueAndValidity();
           }
         })
-        this.addClient.get('day_of_birth').valueChanges.subscribe(
+        /*this.addClient.get('day_of_birth').valueChanges.subscribe(
           (fn) => {
+            console.log(fn)
             if(fn.formatted){
               setTimeout(()=>{
               this.addClient.patchValue({
-                day_of_birth: fn.formatted
+                day_of_birth: fn.epoc
               })
             }, 100)
           }
-          })
+        })*/
     }
 
     onNoClick(): void {
