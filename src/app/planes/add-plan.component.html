@@ -1,57 +1,69 @@
 <form class="example-form" id="client" name="clientForm" [formGroup]="addplan" ng-submit="ok(clientForm)" novalidate>
   <table class="example-full-width" cellspacing="0">
     <tr>
-    <td colspan="2">
-      <md-form-field class="example-full-width">
-        <input type="text" name="nombre"
-        class="form-control"
-        formControlName="name_plan"
-        placeholder="Nombre"
+      <td colspan="2">
+        <md-form-field class="example-full-width">
+          <input type="text" name="nombre"
+          class="form-control"
+          formControlName="name_plan"
+          placeholder="Nombre"
 
-        required
-        mdInput
-        >
-      </md-form-field>
+          required
+          mdInput
+          >
+        </md-form-field>
 
+      </td>
+    </tr>
+    <tr>
+
+      <td colspan="2">
+
+        <md-form-field class="example-full-width">
+          <input type="text" name="costo"
+          class="form-control"
+          placeholder="Costo"
+          formControlName="cost_plan"
+
+          required
+          mdInput
+          >
+        </md-form-field>
+
+      </td>
+    </tr>
+    <tr>
+
+      <td colspan="2">
+
+        <md-form-field class="example-full-width">
+          <input type="text" name="taza"
+          class="form-control"
+          placeholder="Costo $"
+          formControlName="taza"
+
+          required
+          mdInput
+          >
+        </md-form-field>
+
+      </td>
+    </tr>
+    <tr>
+
+      <td colspan="2">
+        <md2-select formControlName="tipo_plan"
+        placeholder="Tipo de servicio"
+        style="width=100%; min-width: 100%; min-height: 100%;"
+        mdInput>
+        <md2-option value="1">Planes</md2-option>
+        <md2-option value="2">Otros</md2-option>
+      </md2-select>
     </td>
+
   </tr>
+
   <tr>
-
-    <td colspan="2">
-
-      <md-form-field class="example-full-width">
-        <input type="text" name="costo"
-        class="form-control"
-        placeholder="Costo"
-        formControlName="cost_plan"
-
-        required
-        mdInput
-        >
-      </md-form-field>
-
-    </td>
-  </tr>
-  <tr>
-
-    <td colspan="2">
-
-      <md-form-field class="example-full-width">
-        <input type="text" name="taza"
-        class="form-control"
-        placeholder="Costo $"
-        formControlName="taza"
-
-        required
-        mdInput
-        >
-      </md-form-field>
-
-    </td>
-  </tr>
-
-
-<tr>
     <td>
 
 

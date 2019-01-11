@@ -161,6 +161,7 @@ export class PlanesComponent {
             cost_plan: row.cost_plan,
             name_plan: row.name_plan,
             taza: row.taza,
+            tipo_plan: row.tipo_plan,
             id_plan: row.id_plan
 
           });
@@ -171,6 +172,7 @@ export class PlanesComponent {
             cost_plan: '',
             name_plan: '',
             taza: '',
+            tipo_plan: '',
 
 
           });
@@ -187,13 +189,9 @@ export class PlanesComponent {
       Enviar(){
         var plan = this.addplan.value;
         console.log(JSON.stringify(this.addplan.value));
-        var body =
-        "cost_plan=" + plan.cost_plan +
-        "&taza=" + plan.taza +
-        "&name_plan="+plan.name_plan;
-        var url = environment.apiEndpoint+"planes?"+body;
+        var url = environment.apiEndpoint+"planes";
 
-        this.http.post(url, body).subscribe((data) => {
+        this.http.post(url, plan).subscribe((data) => {
           this.dialogRef.close();
           this.snackBar.open("Agregando Plan: Por favor espere", null, {
             duration: 2000,
@@ -205,12 +203,7 @@ export class PlanesComponent {
       Editar(){
         var plan = this.addplan.value;
         console.log(JSON.stringify(this.addplan.value));
-        var body =
-        "cost_plan=" + plan.cost_plan +
-        "&taza=" + plan.taza +
-        "&name_plan="+plan.name_plan;
-        var url = environment.apiEndpoint+"planes/"+plan.id_plan+"?"+body;
-
+        var url = environment.apiEndpoint+"planes/"+plan.id_plan;
         this.http.put(url, plan).subscribe((data) => {
           this.dialogRef.close();
           this.snackBar.open("Editando Plan: Por favor espere", null, {

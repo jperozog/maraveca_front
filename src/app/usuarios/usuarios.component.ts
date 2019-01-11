@@ -263,6 +263,7 @@ export class DeleteuserDialog {
     equipos_w:boolean = false;
     factibilidades_w:boolean = false;
     facturacion_w:boolean = false;
+    facturacion_esp:boolean = false;
     instalaciones_w:boolean = false;
     notificaciones_w:boolean = false;
     potenciales_w:boolean = false;
