@@ -42,8 +42,10 @@ export class PClientsComponent {
   myService: MyService | null;
   data: any = null;
   search: string = '';
+  NewService:FormGroup;
   constructor(
     private http: Http,
+    private fb: FormBuilder,
     public dialog: MdDialog,
     public snackBar:MdSnackBar,
     private router: Router,
@@ -122,6 +124,38 @@ export class PClientsComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
 
+    })
+  }
+  dinstall(row){
+    let dialogRef = this.dialog.open(ConfirmCliente, {
+      data: row
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result.response){
+        row.responsable = this.usuario.currentUser.id_user
+        var url = environment.apiEndpoint+"pclienttc/";
+        this.http.post(url, row).subscribe((data) => {
+          row.id_cli= data.json().id
+          console.log("prueba")
+          console.log(row)
+          this.NewService = this.fb.group({
+            servicio: row.id_cli,
+            celda: "",
+            equipo: "",
+            tubo:"",
+            ptp: "",
+          });
+          row = this.NewService.value;
+          let dialogRef = this.dialog.open(AddticketComponent, {
+            width: '30%',
+            data: row
+          });
+          dialogRef.afterClosed().subscribe(result => {
+
+          });
+        });
+
+      }
     })
   }
   show(row){
@@ -272,8 +306,8 @@ export class AddPclientsComponent implements OnInit{
         this.addClient = this.fb.group({
           kind: ['', [Validators.required, Validators.pattern(KIND_REGEX)]],
           dni:['', [Validators.required]],
-          //email: ['', [Validators.required, Validators.pattern(EMAIL_REGEX)]],
-          email: ['', [Validators.pattern(EMAIL_REGEX)]],
+          email: ['', [Validators.required, Validators.pattern(EMAIL_REGEX)]],
+          //email: ['', [Validators.pattern(EMAIL_REGEX)]],
           nombre: ['', [Validators.required]],
           apellido: ['', [Validators.required]],
           direccion: ['', [Validators.required]],
