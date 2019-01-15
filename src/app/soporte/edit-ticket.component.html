@@ -22,6 +22,7 @@
               <md-chip *ngIf="row.phone2">Otros Telefono: {{row.phone2}}</md-chip>
               <md-chip *ngIf="row.email">Email: {{row.email}}</md-chip>
               <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 2" >AccessPoint: {{row.nombre_ap}}</md-chip>
+              <md-chip *ngIf="row.tipo_soporte && row.tipo_soporte == 3 && row.comment_soporte" >Informacion: {{row.comment_soporte}}</md-chip>
             </md-chip-list>
           </td>
         </thead>

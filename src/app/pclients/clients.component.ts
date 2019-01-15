@@ -133,6 +133,7 @@ export class PClientsComponent {
     dialogRef.afterClosed().subscribe(result => {
       if(result.response){
         row.responsable = this.usuario.currentUser.id_user
+        row.id_pot = row.id
         var url = environment.apiEndpoint+"pclienttc/";
         this.http.post(url, row).subscribe((data) => {
           row.id_cli= data.json().id
