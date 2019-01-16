@@ -51,7 +51,7 @@ import { StatsComponent, PagarComponent, DetallesInstallerComponent, cargarPagoc
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
-import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddPagoBalance, GenFactura, AnularFactura } from './clients/clients.component';
+import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddAdic, AddPagoBalance, GenFactura, AnularFactura } from './clients/clients.component';
 import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente, ShowPreComponent, ConfirmCliente } from './pclients/clients.component';
 import { ServiciosComponent, AddservicesComponent, AddPendingComponent} from './servicios/servicios.component';
 import { ServidoresComponent, AddServidoresComponent, DeleteRouterDialog } from './servidores/servidores.component';
@@ -155,6 +155,7 @@ import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEq
     GenFactura,
     SelectTipoComponent,
     AnularFactura,
+    AddAdic,
     deletepagoDialog,
     deleteProductDialog
     //CeldasPipe,

@@ -793,10 +793,26 @@ export class ClientOverview implements OnInit{
          this.ngOnInit();
        });
      }
+     AddAdic(): void {
+       /*let dialogRef = this.dialog.open(AddclientsComponent, {
+         width: '25%'
+       });*/
+       let dialogRef = this.dialog.open(AddAdic, {
+         width: '25%',
+         data: this.cliente
+       });
+
+
+
+       dialogRef.afterClosed().subscribe(result => {
+         console.log('The dialog GenFAC was closed');
+         this.ngOnInit();
+       });
+     }
      Close(){this.location.back();}
      private openLINK(url){
        console.log(url)
-       window.open("http://186.167.32.27:81/maraveca/test.php?ip="+url, '_blank');
+       window.open("/maraveca/test.php?ip="+url, '_blank');
      }
      generate(fecha){
        const req = this.http.post(environment.apiEndpoint+'factura', {
@@ -1040,6 +1056,62 @@ export class GenFactura implements OnInit{
     }
     generate(){
       const req = this.http.post(environment.apiEndpoint+'factura', this.genFAC.value).subscribe(result => {
+        this.dialogRef.close();
+        this.snackBar.open("Factura Generada", null, {
+          duration: 2000,
+        });
+    })
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'add-adic.html',
+})
+export class AddAdic implements OnInit{
+
+  AddAdic: FormGroup;
+  myDatePickerOptions: IMyDpOptions = {
+        dateFormat: 'dd/mm/yyyy',
+        editableDateField: false,
+        inline: true,
+    };
+    cliente: any;
+  planes: any;
+  selected: any;
+  constructor(
+    public usuario: AuthGuard,
+    private fb: FormBuilder,
+    public snackBar:MdSnackBar,
+    private http: Http,
+    public dialogRef: MdDialogRef<AddAdic>,
+    @Inject(MD_DIALOG_DATA) public id) {
+      this.cliente = id
+      console.log(this.cliente)
+      this.AddAdic = this.fb.group({
+        id_cli:[id.id, Validators.required],
+        codigo_articulo:['', Validators.required],
+        precio_articulo:[''],
+        cantidad:['1', Validators.required],
+        comment_articulo: ['', Validators.required]
+      })
+    }
+    remind(i){
+      this.selected=i
+      console.log(this.selected)
+    }
+    ngOnInit(){
+      this.http.get(environment.apiEndpoint+'planes/')
+        .subscribe((data) => {
+          this.planes = data.json();
+          //console.log(this.data);
+        });
+    }
+    generate(){
+      const req = this.http.post(environment.apiEndpoint+'addadic', this.AddAdic.value).subscribe(result => {
         this.dialogRef.close();
         this.snackBar.open("Factura Generada", null, {
           duration: 2000,

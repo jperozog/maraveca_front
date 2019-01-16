@@ -1,0 +1,52 @@
+<h1 md-dialog-title style="text-align:center">Agregar adicional a factura</h1>
+<div>
+  <table [formGroup]="AddAdic" style="width=100%; min-width: 100%;">
+    <tr>
+      <md-select formControlName='codigo_articulo' style="width=100%; min-width: 100%;" placeholder="Planes">
+        <md-option *ngFor="let p of planes" [value]="p.id_plan" (click)="remind(p)">{{p.name_plan | capitalize}}</md-option>
+      </md-select>
+    </tr>
+    <tr>
+      <td>
+      <md-form-field style="width=100%; min-width: 100%;">
+        <input
+        formControlName='cantidad'
+        placeholder="Cantidad"
+        style="width=100%; min-width: 100%;"
+        type="number"
+        mdInput
+        autocomplete="off">
+      </md-form-field>
+    </td>
+    </tr>
+    <tr *ngIf="selected">
+      <td>
+      Total: {{selected.cost_plan*AddAdic.value.cantidad | number : '1.1-3'}} Bs.S.
+    </td>
+      </tr>
+    <tr>
+      <td>
+      <md-form-field style="width=100%; min-width: 100%;">
+        <input
+
+      formControlName='comment_articulo'
+      placeholder="Comentario"
+      style="width=100%; min-width: 100%;"
+      mdInput
+      autocomplete="off">
+    </md-form-field>
+  </td>
+    </tr>
+  </table>
+</div>
+<div md-dialog-actions>
+  <tr>
+    <td style="width=100%; min-width: 100%;">
+      <button style="width=100%; min-width: 100%;" md-button (click)="generate()">Si</button>
+    </td>
+    <td style="width=100%; min-width: 100%;">
+      <button md-raised-button color="warn" style="width=100%; min-width: 100%;" class="btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">NO</button>
+
+    </td>
+  </tr>
+</div>

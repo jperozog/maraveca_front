@@ -3,7 +3,7 @@ import { HashLocationStrategy, Location, LocationStrategy } from '@angular/commo
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
-import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, AnularFactura, DeleteCliente, ClientOverview, AddPagoBalance, GenFactura } from './clients/clients.component';
+import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, AnularFactura, DeleteCliente, ClientOverview, AddAdic, AddPagoBalance, GenFactura } from './clients/clients.component';
 import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente, ShowPreComponent, ConfirmCliente } from './pclients/clients.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiciosComponent, AddservicesComponent, AddPendingComponent} from './servicios/servicios.component';
@@ -62,6 +62,7 @@ const appRoutes: Routes = [
   {path: 'AddPagoBalance', component: AddPagoBalance},
   {path: 'SelectTipo', component: SelectTipoComponent},
   {path: 'AddZona', component: AddZonaComponent},
+  {path: 'AddAdic', component: AddAdic},
   {path: 'fact_det', component: FactibilidadesDetComponent},
   {path: 'showEquipo', component: ShowEquipoComponent},
   {path: 'confirmclient', component: ConfirmCliente},

@@ -496,8 +496,8 @@
 
   <md-card class="example-card card-body text-center">
     <md-card-content>
-      <md-tab-group selectedIndex=0>
-        <md-tab label="Resumen de Facturacion">
+      <md-tab-group>
+        <md-tab label="Resumen de Facturacion" selected>
           <table [md2Data]="facturacion" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="facturacion.length>0; else elseblock">
             <thead>
               <tr>
@@ -505,7 +505,7 @@
                   <md2-pagination>
                   </md2-pagination>
                 </td><td>
-                  <button md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura</button>
+                  <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura</button>
 
                 </td>
               </tr>
@@ -557,19 +557,43 @@
 
         </table>
         <ng-template #elseblock>
-          <font color="#00c402"><h1>Cliente solvente o sin servicios contratados</h1></font>
+          <table>
+            <thead>
+              <tr>
+                <td colspan="4">
+
+                </td><td>
+                  <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura</button>
+
+                </td>
+              </tr>
+              <tr >
+                <th style="text-align: center; width: 10%" >N</th>
+                <th style="text-align: center" >Fecha</th>
+                <th style="text-align: center" >Monto</th>
+                <th style="text-align: center">Pagado</th>
+                <th style="text-align: center">Acciones</th>
+
+              </tr>
+            </thead>
+            <tr>
+              <td colspan="5">
+                <font color="#00c402" style="text-align:center;"><h1>No posee facturas</h1></font>
+              </td>
+            </tr>
+          </table>
         </ng-template>
 
       </md-tab>
       <md-tab label="Cargos Adicionales">
-        <table [md2Data]="adicionales" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="adicionales.length>0; else elseblock">
+        <table [md2Data]="adicionales" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="adicionales.length>0; else elseblock1">
           <thead>
             <tr>
               <td colspan="4">
                 <md2-pagination>
                 </md2-pagination>
               </td><td>
-                <button md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Agregar adicional</button>
+                <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="AddAdic()">Agregar adicional</button>
 
               </td>
             </tr>
@@ -584,24 +608,52 @@
           </thead>
           <tbody>
             <tr *ngFor="let a of md2.data">
-              <td>
+              <td class="fac montos">
                 {{a.nombre_articulo}}
               </td>
-              <td>
+              <td class="fac montos">
                 {{a.cantidad}}
               </td>
-              <td>
+              <td class="fac montos">
                 {{a.precio_articulo}}
               </td>
-              <td>
+              <td class="fac montos">
                 {{a.comment_articulo}}
               </td>
-              <td>
+              <td class="fac montos">
                 {{a.id_fac}}
               </td>
             </tr>
           </tbody>
         </table>
+        <ng-template #elseblock1>
+          <table>
+            <thead>
+              <tr>
+                <td colspan="4">
+                </td><td>
+                  <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="AddAdic()">Agregar adicional</button>
+
+                </td>
+              </tr>
+              <tr >
+                <th style="text-align: center" >Nombre</th>
+                <th style="text-align: center" >Cantidad</th>
+                <th style="text-align: center">Precio</th>
+                <th style="text-align: center">Comentario</th>
+                <th style="text-align: center">Cargado en factura</th>
+
+              </tr>
+            </thead>
+            <tbody>
+                <tr>
+                  <td colspan="5">
+                    <font color="#00c402" style="text-align:center;"><h1>No posee cargos adicionales</h1></font>
+                    </td>
+                  </tr>
+            </tbody>
+          </table>
+        </ng-template>
       </md-tab>
 
     </md-tab-group>
