@@ -8,14 +8,14 @@
 </md-toolbar>
 
 <ng-masonry-grid [masonryOptions]="{ transitionDuration: '0.8s', gutter: 5 }"
-                    [useAnimation]="true"
-                    [useImagesLoaded]="true"
-                    [scrollAnimationOptions]="{ animationEffect: 'effect-4', minDuration : 0.4, maxDuration : 0.7 }"
-                    *ngIf="cliente">
+[useAnimation]="true"
+[useImagesLoaded]="true"
+[scrollAnimationOptions]="{ animationEffect: 'effect-4', minDuration : 0.4, maxDuration : 0.7 }"
+*ngIf="cliente">
 
 <ng-masonry-grid-item class="card" *ngIf="cliente">
 
-<!-- card de datos de usuario -->
+  <!-- card de datos de usuario -->
   <md-card class="example-card card-body text-center">
     <md-card-header>
       <md-card-title><h4>Datos de Cliente</h4></md-card-title>
@@ -69,8 +69,8 @@
       </tr>
       <tr>
         <td colspan="2">
-              <span *ngIf="addClient.value.serie==0">No Facturable</span>
-              <span *ngIf="addClient.value.serie==1">Facturable</span>
+          <span *ngIf="addClient.value.serie==0">No Facturable</span>
+          <span *ngIf="addClient.value.serie==1">Facturable</span>
         </td>
       </tr><tr *ngIf="addClient.value.day_of_birth">
         <td colspan="2">
@@ -93,12 +93,12 @@
       Enviar Presupuesto
     </button>
 
-    </md-card-content>
+  </md-card-content>
 
-    <!-- si es editable a partir de aqui-->
+  <!-- si es editable a partir de aqui-->
 
-    <md-card-content *ngIf="editclient">
-      <form class="example-form" id="client" name="clientForm" [formGroup]="addClient" ng-submit="ok(clientForm)" novalidate>
+  <md-card-content *ngIf="editclient">
+    <form class="example-form" id="client" name="clientForm" [formGroup]="addClient" ng-submit="ok(clientForm)" novalidate>
       <table class="example-full-width" cellspacing="0"><tr>
         <td>
           <md-form-field class="example-full-width">
@@ -128,36 +128,36 @@
 
         </td>
 
-        </tr>
+      </tr>
 
 
-        <td>
-          <md-input-container class="example-full-width">
-            <input mdInput placeholder="Tipo:" maxlength="1" required formControlName="kind" [mdAutocomplete]="tipo" />
-            <md-autocomplete #tipo="mdAutocomplete">
-              <md-option value="E">E</md-option>
-              <md-option value="V">V</md-option>
-              <md-option value="J">J</md-option>
-              <md-option value="G">G</md-option>
-            </md-autocomplete>
-          </md-input-container>
+      <td>
+        <md-input-container class="example-full-width">
+          <input mdInput placeholder="Tipo:" maxlength="1" required formControlName="kind" [mdAutocomplete]="tipo" />
+          <md-autocomplete #tipo="mdAutocomplete">
+            <md-option value="E">E</md-option>
+            <md-option value="V">V</md-option>
+            <md-option value="J">J</md-option>
+            <md-option value="G">G</md-option>
+          </md-autocomplete>
+        </md-input-container>
+      </td>
+      <td>
+        <md-form-field class="example-full-width">
+          <input type="text" name="dni"
+          class="form-control"
+          formControlName="dni"
+          placeholder="Cedula o Rif"
+          autocomplete="off"
+          required
+          mdInput>
+        </md-form-field>
+      </td>
+      <tr >
+        <td colspan="2">
+          <md-error *ngIf="!addClient.controls.kind.valid">Por favor ingrese un tipo valido de identificacion</md-error>
         </td>
-        <td>
-          <md-form-field class="example-full-width">
-            <input type="text" name="dni"
-            class="form-control"
-            formControlName="dni"
-            placeholder="Cedula o Rif"
-            autocomplete="off"
-            required
-            mdInput>
-          </md-form-field>
-        </td>
-        <tr >
-          <td colspan="2">
-            <md-error *ngIf="!addClient.controls.kind.valid">Por favor ingrese un tipo valido de identificacion</md-error>
-          </td>
-        </tr>
+      </tr>
       <tr>
         <th colspan="2">
 
@@ -269,82 +269,82 @@
 
       <tr>
         <td colspan="2">
-            <md-select class="example-full-width" mdInput placeholder="Facturable" formControlName="serie">
-              <md-option value="0">No Facturable</md-option>
-              <md-option value="1">Facturable</md-option>
+          <md-select class="example-full-width" mdInput placeholder="Facturable" formControlName="serie">
+            <md-option value="0">No Facturable</md-option>
+            <md-option value="1">Facturable</md-option>
 
-            </md-select>
+          </md-select>
 
         </td>
       </tr><tr>
         <!--td colspan="2">
-          <md-form-field class="example-full-width">
-            <input type="date" name="birthdate" data-ng-model="user.birthdate"
-            class="form-control"
+        <md-form-field class="example-full-width">
+        <input type="date" name="birthdate" data-ng-model="user.birthdate"
+        class="form-control"
 
-            formControlName="day_of_birth"
-            placeholder="Fecha de nacimiento"
-            required mdInput>
-          </md-form-field>
-        </td-->
-        <md2-datepicker class="example-full-width"
-                      name="birthdate"
-                      mdInput
-                      data-ng-model="user.birthdate"
-                      placeholder="Fecha de nacimiento"
-                      formControlName="day_of_birth"
-                      required
-                      openOnFocus
-                      type="date"
-                      mode="auto"
-                      startView="year"
-                      format="dd/MM/y"
+        formControlName="day_of_birth"
+        placeholder="Fecha de nacimiento"
+        required mdInput>
+      </md-form-field>
+    </td-->
+    <md2-datepicker class="example-full-width"
+    name="birthdate"
+    mdInput
+    data-ng-model="user.birthdate"
+    placeholder="Fecha de nacimiento"
+    formControlName="day_of_birth"
+    required
+    openOnFocus
+    type="date"
+    mode="auto"
+    startView="year"
+    format="dd/MM/y"
 
-                      ></md2-datepicker>
+    ></md2-datepicker>
 
-      </tr>
-      <tr>
-        <th colspan="2">
-          <md-form-field class="example-full-width">
-            <input type="text" name="phone2" formControlName="phone2" data-ng-model="user.phone2"
-            mdInput
-            class="form-control"
-            autocomplete="off"
-            placeholder="Otros Telefonos De Contacto"
-            required>
-          </md-form-field>
-        </th>
-      </tr><tr>
-        <td>
+  </tr>
+  <tr>
+    <th colspan="2">
+      <md-form-field class="example-full-width">
+        <input type="text" name="phone2" formControlName="phone2" data-ng-model="user.phone2"
+        mdInput
+        class="form-control"
+        autocomplete="off"
+        placeholder="Otros Telefonos De Contacto"
+        required>
+      </md-form-field>
+    </th>
+  </tr><tr>
+    <td>
 
-          <md-form-field class="example-full-width">
-            <textarea name="address"
-            data-ng-model="user.contact_people.description"
-            mdInput
-            formControlName="direccion"
-            #address
-            class="form-control"
-            placeholder="Direccion"
-            maxlength="256"
-            required></textarea>
-            <md-hint align="end">{{address.value.length}} / 256</md-hint>
-          </md-form-field>
-        </td><td>
-          <md-form-field class="example-full-width">
-            <textarea mdInput name="address" data-ng-model="user.comments"
-            class="form-control"
-            maxlength="256"
-            formControlName="comment"
-            placeholder="Comentarios"></textarea>
-            <md-hint align="end">{{address.value.length}} / 256</md-hint>
-          </md-form-field>
-        </td>
-      </tr>
-    </table>
-  </form>
-    </md-card-content>
+      <md-form-field class="example-full-width">
+        <textarea name="address"
+        data-ng-model="user.contact_people.description"
+        mdInput
+        formControlName="direccion"
+        #address
+        class="form-control"
+        placeholder="Direccion"
+        maxlength="256"
+        required></textarea>
+        <md-hint align="end">{{address.value.length}} / 256</md-hint>
+      </md-form-field>
+    </td><td>
+      <md-form-field class="example-full-width">
+        <textarea mdInput name="address" data-ng-model="user.comments"
+        class="form-control"
+        maxlength="256"
+        formControlName="comment"
+        placeholder="Comentarios"></textarea>
+        <md-hint align="end">{{address.value.length}} / 256</md-hint>
+      </md-form-field>
+    </td>
+  </tr>
+</table>
+</form>
+</md-card-content>
 
-  </md-card>
+</md-card>
 </ng-masonry-grid-item>
 
 <!-- card de Servicios -->
@@ -358,76 +358,76 @@
     <md-card-content>
       <div class="example-form">
 
-      <table class=example-full-width [md2Data]="servicios" #md2="md2DataTable" class="addClient" [rowsPerPage]="3">
-        <thead>
-          <tr>
-            <td colspan="3">
-              <md2-pagination></md2-pagination>
-            </td>
-          </tr>
-          <tr>
-            <th  md2SortBy="name_plan">Plan</th>
-            <th md2SortBy='comment_srv'> Zona</th>
-            <th style="text-align: center"  md2SortBy="stat_srv">Estado</th>
-            <th style="text-align: center" >Acciones</th>
-          </tr>
-        </thead>
-        <tbody class='fac'>
-          <tr class="fac montos" *ngFor="let i of md2.data">
-            <td class="fac montos" style="text-align: center; width: 40%; max-height:34px" >{{i.name_plan}}</td>
-            <td class="fac montos" style="text-align: center" >{{i.comment_srv}}</td>
+        <table class=example-full-width [md2Data]="servicios" #md2="md2DataTable" class="addClient" [rowsPerPage]="3">
+          <thead>
+            <tr>
+              <td colspan="3">
+                <md2-pagination></md2-pagination>
+              </td>
+            </tr>
+            <tr>
+              <th  md2SortBy="name_plan">Plan</th>
+              <th md2SortBy='comment_srv'> Zona</th>
+              <th style="text-align: center"  md2SortBy="stat_srv">Estado</th>
+              <th style="text-align: center" >Acciones</th>
+            </tr>
+          </thead>
+          <tbody class='fac'>
+            <tr class="fac montos" *ngFor="let i of md2.data">
+              <td class="fac montos" style="text-align: center; width: 40%; max-height:34px" >{{i.name_plan}}</td>
+              <td class="fac montos" style="text-align: center" >{{i.comment_srv}}</td>
 
 
-            <td class="fac montos" style="text-align: center; width: 15%" >
-              <button md-icon-button *ngIf="i.stat_srv == 1" >
-                <span>Activo</span>
-              </button>
-              <button md-icon-button *ngIf="i.stat_srv == 2" >
-                <span>Moroso</span>
-              </button>
-              <button md-icon-button *ngIf="i.stat_srv == 3" >
-                <span>Suspendido</span>
-              </button>
-              <button md-icon-button *ngIf="i.stat_srv == 4" >
-                <span>Retirado</span>
-              </button>
-              <button md-icon-button *ngIf="i.stat_srv == 5" >
-                <span>Exonerado</span>
-              </button>
-            </td>
-            <td class="fac montos" style="text-align: center; width: 20%"  *ngIf="usuario.perm && !usuario.perm.includes('servicios_w')">
-              No Autorizado
-            </td>
-            <td class="fac montos" style="text-align: center; width: 20%"  *ngIf="usuario.perm && usuario.perm.includes('servicios_w')">
-              <!--botones de acciones-->
+              <td class="fac montos" style="text-align: center; width: 15%" >
+                <button md-icon-button *ngIf="i.stat_srv == 1" >
+                  <span>Activo</span>
+                </button>
+                <button md-icon-button *ngIf="i.stat_srv == 2" >
+                  <span>Moroso</span>
+                </button>
+                <button md-icon-button *ngIf="i.stat_srv == 3" >
+                  <span>Suspendido</span>
+                </button>
+                <button md-icon-button *ngIf="i.stat_srv == 4" >
+                  <span>Retirado</span>
+                </button>
+                <button md-icon-button *ngIf="i.stat_srv == 5" >
+                  <span>Exonerado</span>
+                </button>
+              </td>
+              <td class="fac montos" style="text-align: center; width: 20%"  *ngIf="usuario.perm && !usuario.perm.includes('servicios_w')">
+                No Autorizado
+              </td>
+              <td class="fac montos" style="text-align: center; width: 20%"  *ngIf="usuario.perm && usuario.perm.includes('servicios_w')">
+                <!--botones de acciones-->
 
-              <button md-icon-button color="primary" (click)="show(i)">
-                <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
-              </button>
-              <button md-icon-button color="primary"(click)="openLINK(i.ip_srv)" >
-                <md-icon class="md-24" aria-label="Ubiquiti Admin">language</md-icon>
-              </button>
-              <button md-icon-button *ngIf="i.stat_srv == 1" >
-                <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
-              </button>
-              <button md-icon-button *ngIf="i.stat_srv == 2" >
-                <md-icon class="md-24" style="color:rgb(186, 198, 58);text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
-              </button>
-              <button md-icon-button *ngIf="i.stat_srv == 3" >
-                <md-icon class="md-24" style="color:rgb(236, 46, 46);text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
-              </button>
-              <button md-icon-button *ngIf="i.stat_srv == 4" >
-                <md-icon class="md-24" style="color:grey;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
-              </button>
-              <!--terminan los botones-->
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
+                <button md-icon-button color="primary" (click)="show(i)">
+                  <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
+                </button>
+                <button md-icon-button color="primary"(click)="openLINK(i.ip_srv)" >
+                  <md-icon class="md-24" aria-label="Ubiquiti Admin">language</md-icon>
+                </button>
+                <button md-icon-button *ngIf="i.stat_srv == 1" >
+                  <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+                </button>
+                <button md-icon-button *ngIf="i.stat_srv == 2" >
+                  <md-icon class="md-24" style="color:rgb(186, 198, 58);text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+                </button>
+                <button md-icon-button *ngIf="i.stat_srv == 3" >
+                  <md-icon class="md-24" style="color:rgb(236, 46, 46);text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+                </button>
+                <button md-icon-button *ngIf="i.stat_srv == 4" >
+                  <md-icon class="md-24" style="color:grey;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
+                </button>
+                <!--terminan los botones-->
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
 
-        </tfoot>
-      </table>
-    </div>
+          </tfoot>
+        </table>
+      </div>
     </md-card-content>
 
   </md-card>
@@ -446,41 +446,41 @@
     <md-card-content>
       <div class="example-form">
 
-      <table class=example-full-width [md2Data]="historial" #md2="md2DataTable" class="addClient" [rowsPerPage]="3">
-        <thead>
-          <tr>
-            <td colspan="3">
-              <md2-pagination></md2-pagination>
-            </td>
-          </tr>
-          <tr>
-            <th  md2SortBy="name_plan">Detalle</th>
-            <th md2SortBy='comment_srv'> Modulo</th>
-            <th style="text-align: center"  md2SortBy="stat_srv">Responsable</th>
-            <th style="text-align: center" >Fecha</th>
-          </tr>
-        </thead>
-        <tbody class='fac'>
-          <tr class="fac montos" *ngFor="let i of md2.data">
-            <td class="fac">
-              {{i.history}}
-            </td>
-            <td class="fac">
-              {{i.modulo}}
-            </td>
-            <td class="fac">
-              {{i.nombre_user}}
-            </td>
-            <td class="fac">
-              {{i.created_at  | stringToDate | date: 'd/M/yy'}}
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
+        <table class=example-full-width [md2Data]="historial" #md2="md2DataTable" class="addClient" [rowsPerPage]="3">
+          <thead>
+            <tr>
+              <td colspan="3">
+                <md2-pagination></md2-pagination>
+              </td>
+            </tr>
+            <tr>
+              <th  md2SortBy="name_plan">Detalle</th>
+              <th md2SortBy='comment_srv'> Modulo</th>
+              <th style="text-align: center"  md2SortBy="stat_srv">Responsable</th>
+              <th style="text-align: center" >Fecha</th>
+            </tr>
+          </thead>
+          <tbody class='fac'>
+            <tr class="fac montos" *ngFor="let i of md2.data">
+              <td class="fac">
+                {{i.history}}
+              </td>
+              <td class="fac">
+                {{i.modulo}}
+              </td>
+              <td class="fac">
+                {{i.nombre_user}}
+              </td>
+              <td class="fac">
+                {{i.created_at  | stringToDate | date: 'd/M/yy'}}
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
 
-        </tfoot>
-      </table>
-    </div>
+          </tfoot>
+        </table>
+      </div>
     </md-card-content>
 
   </md-card>
@@ -490,87 +490,126 @@
 <!--===============================================================================================-->
 
 
-  <!-- card de historial -->
+<!-- card de historial -->
 
-<ng-masonry-grid-item class="card" *ngIf="usuario.perm && usuario.perm.includes('facturacion') && facturacion">
+<ng-masonry-grid-item class="card" *ngIf="usuario.perm && usuario.perm.includes('facturacion') && (facturacion || adicionales)">
 
   <md-card class="example-card card-body text-center">
     <md-card-content>
       <md-tab-group selectedIndex=0>
         <md-tab label="Resumen de Facturacion">
           <table [md2Data]="facturacion" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="facturacion.length>0; else elseblock">
-        <thead>
-          <tr>
-            <td colspan="4">
-              <md2-pagination>
-              </md2-pagination>
-            </td><td>
-              <button md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura</button>
+            <thead>
+              <tr>
+                <td colspan="4">
+                  <md2-pagination>
+                  </md2-pagination>
+                </td><td>
+                  <button md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura</button>
 
-            </td>
-          </tr>
-          <tr >
-            <th style="text-align: center; width: 10%" ><h3>N</h3></th>
-            <th style="text-align: center" ><h3>Fecha</h3></th>
-            <th style="text-align: center" ><h3>Monto</h3></th>
-            <th style="text-align: center"><h3>Pagado</h3></th>
-            <th style="text-align: center"><h3>Acciones</h3></th>
+                </td>
+              </tr>
+              <tr >
+                <th style="text-align: center; width: 10%" >N</th>
+                <th style="text-align: center" >Fecha</th>
+                <th style="text-align: center" >Monto</th>
+                <th style="text-align: center">Pagado</th>
+                <th style="text-align: center">Acciones</th>
 
-          </tr>
-        </thead>
-          <tbody class="fac">
-          <tr class="fac montos" *ngFor="let i of md2.data">
-            <td class="fac montos" style="border-right: 1px solid #000000; text-align: right">
-            {{i.id}}
-            </td>
-            <td class="fac montos" style="text-align: center">
-              {{i.created_at | stringToDate | date: 'M/yy'}}
-            </td>
-            <td class="fac montos">
-              {{i.monto | number : '1.0-2'}} {{i.denominacion}}
-            </td>
-            <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado != null)">
-              {{i.pagado | number : '1.0-2'}}  {{i.denominacion}}
-            </td>
-            <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado == null)">
+              </tr>
+            </thead>
+            <tbody class="fac">
+              <tr class="fac montos" *ngFor="let i of md2.data">
+                <td class="fac montos" style="border-right: 1px solid #000000; text-align: right">
+                  {{i.id}}
+                </td>
+                <td class="fac montos" style="text-align: center">
+                  {{i.created_at | stringToDate | date: 'M/yy'}}
+                </td>
+                <td class="fac montos">
+                  {{i.monto | number : '1.0-2'}} {{i.denominacion}}
+                </td>
+                <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado != null)">
+                  {{i.pagado | number : '1.0-2'}}  {{i.denominacion}}
+                </td>
+                <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado == null)">
 
-            </td>
-            <td class="fac montos" *ngIf="i.fac_status == 2">
-              Anulado
-            </td>
-            <td  class="fac montos" >
-              <button md-icon-button color="primary" (click)="status(i)">
-              <md-icon class="md-24" aria-label="Detalles De Factura" >find_in_page</md-icon>
-            </button>
-            <button md-icon-button color="primary" *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && facturacion && i.fac_status == 1" (click)="anularfactura(i)">
-            <md-icon class="md-24" aria-label="Detalles De Factura" >block</md-icon>
-          </button>
-            </td>
-            <!--td class="fac" #obf>
-              0BSF
-            </td-->
+                </td>
+                <td class="fac montos" *ngIf="i.fac_status == 2">
+                  Anulado
+                </td>
+                <td  class="fac montos" >
+                  <button md-icon-button color="primary" (click)="status(i)">
+                    <md-icon class="md-24" aria-label="Detalles De Factura" >find_in_page</md-icon>
+                  </button>
+                  <button md-icon-button color="primary" *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && facturacion && i.fac_status == 1" (click)="anularfactura(i)">
+                    <md-icon class="md-24" aria-label="Detalles De Factura" >block</md-icon>
+                  </button>
+                </td>
+                <!--td class="fac" #obf>
+                0BSF
+              </td-->
 
-          </tr>
+            </tr>
 
 
-        </tbody>
+          </tbody>
 
         </table>
         <ng-template #elseblock>
           <font color="#00c402"><h1>Cliente solvente o sin servicios contratados</h1></font>
         </ng-template>
 
-        </md-tab>
-        <md-tab label="Cargos Adicionales">
-          contenido pendiente
-        </md-tab>
+      </md-tab>
+      <md-tab label="Cargos Adicionales">
+        <table [md2Data]="adicionales" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="adicionales.length>0; else elseblock">
+          <thead>
+            <tr>
+              <td colspan="4">
+                <md2-pagination>
+                </md2-pagination>
+              </td><td>
+                <button md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Agregar adicional</button>
 
-      </md-tab-group>
-    </md-card-content>
-    <md-card-actions style="text-align: center">
+              </td>
+            </tr>
+            <tr >
+              <th style="text-align: center" >Nombre</th>
+              <th style="text-align: center" >Cantidad</th>
+              <th style="text-align: center">Precio</th>
+              <th style="text-align: center">Comentario</th>
+              <th style="text-align: center">Cargado en factura</th>
 
-    </md-card-actions>
-  </md-card>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of md2.data">
+              <td>
+                {{a.nombre_articulo}}
+              </td>
+              <td>
+                {{a.cantidad}}
+              </td>
+              <td>
+                {{a.precio_articulo}}
+              </td>
+              <td>
+                {{a.comment_articulo}}
+              </td>
+              <td>
+                {{a.id_fac}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </md-tab>
+
+    </md-tab-group>
+  </md-card-content>
+  <md-card-actions style="text-align: center">
+
+  </md-card-actions>
+</md-card>
 </ng-masonry-grid-item>
 
 <!--===================================card de balance==========================================-->
@@ -584,43 +623,43 @@
 
     </md-card-header>
     <md-card-content>
-        <table [md2Data]="balance" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="balance && balance.length>0; else elsebal">
-      <thead>
-        <tr>
-          <td colspan="4">
-            <md2-pagination>
-            </md2-pagination>
-          </td><td>
+      <table [md2Data]="balance" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="balance && balance.length>0; else elsebal">
+        <thead>
+          <tr>
+            <td colspan="4">
+              <md2-pagination>
+              </md2-pagination>
+            </td><td>
 
-          </td>
-        </tr>
-        <tr >
-          <th style="text-align: center; width: 10%" ><h3>N</h3></th>
-          <th style="text-align: center" ><h3>Fecha</h3></th>
-          <th style="text-align: center" ><h3>Monto</h3></th>
-          <th style="text-align: center"><h3>Banco</h3></th>
+            </td>
+          </tr>
+          <tr >
+            <th style="text-align: center; width: 10%" ><h3>N</h3></th>
+            <th style="text-align: center" ><h3>Fecha</h3></th>
+            <th style="text-align: center" ><h3>Monto</h3></th>
+            <th style="text-align: center"><h3>Banco</h3></th>
 
-        </tr>
-      </thead>
+          </tr>
+        </thead>
         <tbody class="fac">
-        <tr class="fac montos" *ngFor="let i of md2.data">
-          <td class="fac montos" style="border-right: 1px solid #000000; text-align: right">
-          {{i.id_bal}}
-          </td>
-          <td class="fac montos" style="text-align: center">
-            {{i.created_at | stringToDate | date: 'dd/M/yy'}}
-          </td>
-          <td class="fac montos">
-            {{i.bal_monto | number : '1.0-2'}} Bs.S
-          </td>
-          <td class="fac" *ngIf="i.bal_tip==2">Transferencia Banesco</td>
-          <td class="fac" *ngIf="i.bal_tip==6">Transferencia Bicentenario</td>
-          <td class="fac" *ngIf="i.bal_tip==1">Transferencia BOD</td>
-          <td class="fac" *ngIf="i.bal_tip==3">Transferencia Venezuela</td>
-          <td class="fac" *ngIf="i.bal_tip==4">Retencion ISLR</td>
-          <td class="fac" *ngIf="i.bal_tip==5">Retencion IVA</td>
-          <td class="fac" *ngIf="i.bal_tip==7">Exonerado</td>
-          <!--td class="fac" #obf>
+          <tr class="fac montos" *ngFor="let i of md2.data">
+            <td class="fac montos" style="border-right: 1px solid #000000; text-align: right">
+              {{i.id_bal}}
+            </td>
+            <td class="fac montos" style="text-align: center">
+              {{i.created_at | stringToDate | date: 'dd/M/yy'}}
+            </td>
+            <td class="fac montos">
+              {{i.bal_monto | number : '1.0-2'}} Bs.S
+            </td>
+            <td class="fac" *ngIf="i.bal_tip==2">Transferencia Banesco</td>
+            <td class="fac" *ngIf="i.bal_tip==6">Transferencia Bicentenario</td>
+            <td class="fac" *ngIf="i.bal_tip==1">Transferencia BOD</td>
+            <td class="fac" *ngIf="i.bal_tip==3">Transferencia Venezuela</td>
+            <td class="fac" *ngIf="i.bal_tip==4">Retencion ISLR</td>
+            <td class="fac" *ngIf="i.bal_tip==5">Retencion IVA</td>
+            <td class="fac" *ngIf="i.bal_tip==7">Exonerado</td>
+            <!--td class="fac" #obf>
             0BSF
           </td-->
 
@@ -629,27 +668,27 @@
 
       </tbody>
 
-      </table>
-      <ng-template #elsebal>
-        <font><h1>no tiene abonos en su balance</h1></font>
-      </ng-template>
+    </table>
+    <ng-template #elsebal>
+      <font><h1>no tiene abonos en su balance</h1></font>
+    </ng-template>
 
-    </md-card-content>
-    <md-card-actions style="text-align: center">
-            <span *ngIf="balac>0" style="color: rgb(75, 170, 78)">
-              Saldo a favor: {{(balac) | number:'1.0-2'}} Bs.S
-            </span>
-            <span *ngIf="(facturado - pagado)>0" style="color: rgb(191, 76, 76)">
-              Total Adeudado: {{(facturado - pagado) | number:'1.0-2'}} Bs.S
-            </span>
-    </md-card-actions>
-  </md-card>
+  </md-card-content>
+  <md-card-actions style="text-align: center">
+    <span *ngIf="balac>0" style="color: rgb(75, 170, 78)">
+      Saldo a favor: {{(balac) | number:'1.0-2'}} Bs.S
+    </span>
+    <span *ngIf="(facturado - pagado)>0" style="color: rgb(191, 76, 76)">
+      Total Adeudado: {{(facturado - pagado) | number:'1.0-2'}} Bs.S
+    </span>
+  </md-card-actions>
+</md-card>
 </ng-masonry-grid-item>
 
 <!--====================================================================================-->
 
 
-  <!-- card de Tickets -->
+<!-- card de Tickets -->
 
 <ng-masonry-grid-item class="card" *ngIf="usuario.perm && usuario.perm.includes('soporte') && soporte && soporte.length > 0">
 
@@ -704,9 +743,9 @@
 
       </tfoot>
     </table>
-    </md-card-content>
+  </md-card-content>
 
-  </md-card>
+</md-card>
 </ng-masonry-grid-item>
 
 </ng-masonry-grid>

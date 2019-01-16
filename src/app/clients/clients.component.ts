@@ -624,6 +624,8 @@ export class ClientOverview implements OnInit{
   servicios:any
   historial:any
   balance:any;
+  adicionales:any;
+
   addClient: FormGroup;
   facturacion:any
   editclient:boolean=false
@@ -700,6 +702,7 @@ export class ClientOverview implements OnInit{
          this.cliente = response.cliente
          this.historial = response.history
          this.balance = response.balance
+         this.adicionales = response.adicionales
          this.balance.forEach(linea => {
            if (linea.bal_rest>0){
              balac_1=balac_1+Number(linea.bal_rest);

@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: "http://200.209.74.4:81/maraveca-test/public/index.php/api/"
+  apiEndpoint: "http://190.142.197.106:81/maraveca-test/public/index.php/api/"
 };
