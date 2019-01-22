@@ -593,7 +593,7 @@
                 <md2-pagination>
                 </md2-pagination>
               </td><td>
-                <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="AddAdic()">Agregar adicional</button>
+                <button style="float: right" md-raised-button color="#888888" [disabled]="!(usuario.perm && usuario.perm.includes('facturacion_esp'))" (click)="AddAdic()">Agregar adicional</button>
 
               </td>
             </tr>
@@ -632,7 +632,7 @@
               <tr>
                 <td colspan="4">
                 </td><td>
-                  <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="AddAdic()">Agregar adicional</button>
+                  <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp')" (click)="AddAdic()">Agregar adicional</button>
 
                 </td>
               </tr>
