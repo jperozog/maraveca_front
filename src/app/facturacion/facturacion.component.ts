@@ -600,3 +600,42 @@ export class deleteProductDialog {
   }
 
 }
+@Component({
+selector: 'AprovPagos-dialog',
+templateUrl: 'aprov.pagos.component.html',
+styleUrls: ['./facturacion.component.css']
+})
+export class AprovPagos {
+  myService: MyService | null;
+
+  constructor(
+    public dialogRef: MdDialogRef<deleteProductDialog>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+      console.log(this.data);
+     }
+
+
+
+
+    delete(data): void {
+      console.log(this.data);
+      this.http.delete(environment.apiEndpoint+'fac_product/'+data.id+'?responsable='+this.usuario.currentUser.id_user, {})
+      .subscribe((data)=>{
+        this.dialogRef.close();
+        this.snackBar.open("Borrando cliente: Por favor espere", null, {
+          duration: 1000,
+        });
+      })
+      //this.myService.refresh();
+    }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}

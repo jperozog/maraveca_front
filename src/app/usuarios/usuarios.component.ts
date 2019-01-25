@@ -265,6 +265,8 @@ export class DeleteuserDialog {
     facturacion_w:boolean = false;
     facturacion_esp:boolean = false;
     instalaciones_w:boolean = false;
+    inventarios_w:boolean = false;
+    inventarios:boolean = false;
     notificaciones_w:boolean = false;
     potenciales_w:boolean = false;
     planes_w:boolean = false;
@@ -455,6 +457,8 @@ export class DeleteuserDialog {
           else if(perm == 'facturacion_w'){ this.facturacion_w=true }
           else if(perm == 'instalaciones'){ this.instalaciones=true }
           else if(perm == 'instalaciones_w'){ this.instalaciones_w=true }
+          else if(perm == 'inventarios'){ this.inventarios=true }
+          else if(perm == 'inventarios_w'){ this.inventarios_w=true }
           else if(perm == 'notify'){ this.notificaciones=true }
           else if(perm == 'notify_w'){ this.notificaciones_w=true }
           else if(perm == 'planes'){ this.planes=true }
