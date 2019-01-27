@@ -1,0 +1,93 @@
+<md-toolbar class="submenu">
+  <button md-raised-button class="btn" (click)="Close()">Atras</button>
+  <span class="example-spacer" style="text-align: center;">Verificar Pagos</span>
+  <!--button color="warn" md-raised-button (click)="sendSMS()" [disabled]="!notify.valid" class="btn btn-danger">Enviar Mensajes Masivos</button-->
+
+</md-toolbar>
+
+
+
+<div class="contenido" style="margin: auto; align-content: center; text-align: center ;">
+  <div>
+    <table [md2Data]="balance" #md2="md2DataTable" [rowsPerPage]="14">
+      <thead>
+        <tr>
+          <td colspan="7">
+            <md2-pagination></md2-pagination>
+          </td>
+        </tr>
+        <tr>
+
+          <td>
+            Cliente
+          </td>
+          <td>
+            Banco
+          </td>
+          <td>
+            Origen
+          </td>
+          <td>
+            Monto
+          </td>
+          <td>
+            Referencia
+          </td>
+          <td>
+            Estado
+          </td>
+          <td>
+            Acciones
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr *ngFor="let i of md2.data">
+          <td *ngIf="i.kind.toUpperCase() == 'V'">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'E'">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'G'">{{(i.social|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'J'">{{(i.social|capitalize)}}</td>
+          <td *ngIf="i.bal_tip==2">Transferencia Banesco</td>
+          <td *ngIf="i.bal_tip==6">Transferencia Bicentenario</td>
+          <td *ngIf="i.bal_tip==1">Transferencia BOD</td>
+          <td *ngIf="i.bal_tip==3">Transferencia Venezuela</td>
+          <td *ngIf="i.bal_tip==4">Retencion ISLR</td>
+          <td *ngIf="i.bal_tip==5">Retencion IVA</td>
+          <td *ngIf="i.bal_tip==7">Exonerado</td>
+
+          <td *ngIf="i.bal_from==1">Mismo Banco</td>
+          <td *ngIf="i.bal_from==2">Otro Banco</td>
+          <td *ngIf="i.bal_from==3">Deposito Bancario</td>
+
+          <td style="text-align: right;">
+            {{i.bal_monto  | number : '1.0-3'}} Bs.S.
+          </td>
+          <td style="text-align: right;">
+            {{i.bal_comment}}
+          </td>
+          <td *ngIf="i.bal_stat == 1">
+            Aprobada
+          </td>
+          <td *ngIf="i.bal_stat == 2">
+            Pendiente
+          </td>
+          <td *ngIf="i.bal_stat == 3">
+            Rechazada
+          </td>
+          <td *ngIf="i.bal_stat == 2; else notpermited">
+            <button md-icon-button color="primary" (click)="confirm(i)">
+              <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
+            </button>
+            <button md-icon-button color="warn" (click)="cancel(i)">
+              <md-icon class="md-24" aria-label="Eliminar Cliente">clear</md-icon>
+            </button>
+          </td>
+          <ng-template #notpermited>
+            <md-icon class="md-24" aria-label="Eliminar Cliente">block</md-icon>
+          </ng-template>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

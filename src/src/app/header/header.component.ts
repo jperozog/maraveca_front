@@ -6,6 +6,7 @@ OnInit } from '@angular/core';
 import { User } from '../_models/index';
 import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
+import {Http, Response} from '@angular/http';
 
 
 
@@ -16,8 +17,8 @@ import { AuthenticationService } from '../_services/index';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(public usuario: AuthGuard, public test: AuthenticationService) {
-
+  constructor(public usuario: AuthGuard, public test: AuthenticationService, public http:Http) {
+    
     //console.log("hola");
    }
 

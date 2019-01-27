@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: "http://190.142.197.106:81/maraveca-test/public/index.php/api/"
+  //apiEndpoint: "http://190.142.197.106:81/maraveca-test/public/index.php/api/"//inter
+  apiEndpoint: "http://186.167.32.30:81/maraveca-test/public/index.php/api/" //digitel
 };

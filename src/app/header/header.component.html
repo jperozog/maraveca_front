@@ -3,18 +3,45 @@
 <md-toolbar color="primary">
   <img routerLink="/" style="max-width:20%" src="assets/images/logo-normal.jpg" alt="Maraveca">
     <span class="example-spacer"></span>
+    <button *ngIf="dash && dash.total > 0" md-button [mdMenuTriggerFor]="dash_r" style="color:rgb(104, 103, 112)">
+      <md-icon>notifications_active</md-icon> {{dash.total}} Pendientes
+    </button>
     <md-chip-list>
     <md-chip *ngIf="usuario.currentUser && usuario.currentUser.nombre_user && usuario.currentUser.apellido_user"  md-button [mdMenuTriggerFor]="usuarios" style="color:rgb(255, 255, 255); background-color:rgb(36, 156, 200)">{{usuario.currentUser.nombre_user + " " + usuario.currentUser.apellido_user}}</md-chip>
     <md-chip *ngIf="usuario.currentUser && !usuario.currentUser.nombre_user && usuario.currentUser.apellido_user"  md-button [mdMenuTriggerFor]="usuarios" style="color:rgb(255, 255, 255); background-color:rgb(36, 156, 200)">{{usuario.currentUser.apellido_user}}</md-chip>
     <md-chip *ngIf="usuario.currentUser && usuario.currentUser.nombre_user && !usuario.currentUser.apellido_user"  md-button [mdMenuTriggerFor]="usuarios" style="color:rgb(255, 255, 255); background-color:rgb(36, 156, 200)">{{usuario.currentUser.nombre_user}}</md-chip>
   </md-chip-list>
-  <md-icon class="connected" mdTooltip="No Connection" *ngIf="ping>0">signal_wifi_off</md-icon>
+
   <button *ngIf="usuario.currentUser" md-button [mdMenuTriggerFor]="appMenu" style="color:rgb(104, 103, 112)">
     <md-icon>menu</md-icon> Menu
   </button>
 </md-toolbar>
 
 </header>
+
+<md-menu #dash_r="mdMenu">
+  <button *ngIf="dash && dash.balance > 0" md-menu-item routerLink="/Pagos">
+    <md-icon>credit_card</md-icon>
+    <span>{{dash.balance}} pagos pendienes</span>
+  </button>
+  <button *ngIf="dash && dash.instalaciones > 0" md-menu-item routerLink="/instalaciones">
+    <md-icon>assignment</md-icon>
+    <span>{{dash.instalaciones}} Instalaciones</span>
+  </button>
+  <button *ngIf="dash && dash.tickets > 0" md-menu-item routerLink="/soporte">
+    <md-icon>headset_mic</md-icon>
+    <span>{{dash.tickets}} Tickets</span>
+  </button>
+  <button *ngIf="dash && dash.averias > 0" md-menu-item routerLink="/soporte">
+    <md-icon>headset_mic</md-icon>
+    <span>{{dash.averias}} Averias</span>
+  </button>
+  <button *ngIf="dash && dash.factibilidades > 0" md-menu-item routerLink="/factibilidades">
+    <md-icon>perm_scan_wifi</md-icon>
+    <span>{{dash.factibilidades}} Factibilidades</span>
+  </button>
+
+</md-menu>
 
 <md-menu #Red="mdMenu">
   <button *ngIf="usuario.perm && usuario.perm.includes('ap')" md-menu-item routerLink="/aps">

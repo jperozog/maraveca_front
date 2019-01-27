@@ -605,28 +605,44 @@ selector: 'AprovPagos-dialog',
 templateUrl: 'aprov.pagos.component.html',
 styleUrls: ['./facturacion.component.css']
 })
-export class AprovPagos {
+export class AprovPagos implements OnInit, OnDestroy {
   myService: MyService | null;
-
+  balance=[];
+  balance_t=[];
+  autoupdate=true
   constructor(
-    public dialogRef: MdDialogRef<deleteProductDialog>,
-    @Inject(MD_DIALOG_DATA) public data: any,
     private http: Http,
     public dialog: MdDialog,
     public snackBar:MdSnackBar,
     private router: Router,
     private usuario: AuthGuard) {
-      console.log(this.data);
      }
 
+     ngOnInit(){
+       IntervalObservable.create(10000)
+       .takeWhile(() => (this.autoupdate))
+       .subscribe(() => {
+         this.refresh(false);
+       });
+       this.refresh(false);
+       
+     }
+     ngOnDestroy(){
+       this.autoupdate=false
+     }
+     refresh(test){
+       this.http.get(environment.apiEndpoint+'balance/', {params:{uid: this.usuario.currentUser.id_user}})
+       .subscribe((data) => {
+         this.balance_t = data.json();
+         this.balance = this.balance_t;
+         //console.log(this.dash);
 
-
+       });
+     }
 
     delete(data): void {
-      console.log(this.data);
       this.http.delete(environment.apiEndpoint+'fac_product/'+data.id+'?responsable='+this.usuario.currentUser.id_user, {})
       .subscribe((data)=>{
-        this.dialogRef.close();
         this.snackBar.open("Borrando cliente: Por favor espere", null, {
           duration: 1000,
         });
@@ -635,7 +651,6 @@ export class AprovPagos {
     }
 
   onNoClick(): void {
-    this.dialogRef.close();
   }
 
 }

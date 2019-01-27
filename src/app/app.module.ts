@@ -8,6 +8,7 @@ ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { routing }        from './app.routing';
 import 'rxjs/add/operator/map';
+//import 'rxjs';
 import 'rxjs/add/operator/toPromise';
 // importing @angular/material and @angular/animations
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -35,7 +36,9 @@ import {
   MdCheckboxModule,
   MdExpansionModule,
   MdRadioModule,
+
 } from '@angular/material';
+//import { MatBadgeModule } from '@angular/material/badge';
 import { NgMasonryGridModule } from 'ng-masonry-grid';
 //import { MyDatePickerModule } from 'mydatepicker';
 import { DatepickerModule } from '@novalinc/datepicker';
@@ -69,7 +72,7 @@ import { PotencialesComponent } from './potenciales/potenciales.component';
 import { MyDatePickerModule } from 'mydatepicker';
 import { NotifyComponent } from './notify/notify.component';
 import { PreComponent, DialogOverviewExampleDialog } from './presupuestos/pre.component';
-import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog } from './facturacion/facturacion.component';
+import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog, AprovPagos } from './facturacion/facturacion.component';
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component';
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
@@ -157,7 +160,8 @@ import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEq
     AnularFactura,
     AddAdic,
     deletepagoDialog,
-    deleteProductDialog
+    deleteProductDialog,
+    AprovPagos
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,
