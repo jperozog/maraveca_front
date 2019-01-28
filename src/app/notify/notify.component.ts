@@ -44,6 +44,7 @@ export class NotifyComponent implements OnInit{
     private date: DatePipe) {
     this.notify = this.fb.group({
       tipo: ['', [Validators.required]],
+      via: ['', [Validators.required]],
       detail: ['', [Validators.required]],
       message: ['', [Validators.required]],
       responsable: this.usuario.currentUser.id_user,

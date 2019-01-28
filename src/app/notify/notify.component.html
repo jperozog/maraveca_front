@@ -12,34 +12,55 @@
       <tr>
         <td colspan="2">
           <md2-select name="Tipo"
-            placeholder="Tipo"
+            placeholder="Via de notificacion"
+            floatPlaceholder="never"
             class="example-full-width"
-            formControlName="tipo"
+            formControlName="via"
             mdInput
             >
-            <md2-option value="6">
-              <span>Cliente</span>
+            <md2-option value="0">
+              <span>SMS</span>
             </md2-option>
             <md2-option value="1">
-              <span>Router</span>
+              <span>Email</span>
             </md2-option>
-            <md2-option value="2">
-              <span>Celda</span>
-            </md2-option>
-            <md2-option value="3">
-              <span>AP</span>
-            </md2-option>
-            <md2-option value="4">
-              <span>Plan</span>
-            </md2-option>
-            <md2-option value="5">
-              <span>Todos</span>
-            </md2-option>
+
           </md2-select>
 
       </td>
     </tr>
     <tr>
+      <td colspan="2">
+        <md2-select name="Tipo"
+          placeholder="Tipo"
+          floatPlaceholder="never"
+          class="example-full-width"
+          formControlName="tipo"
+          mdInput
+          >
+          <md2-option value="6">
+            <span>Cliente</span>
+          </md2-option>
+          <md2-option value="1">
+            <span>Router</span>
+          </md2-option>
+          <md2-option value="2">
+            <span>Celda</span>
+          </md2-option>
+          <md2-option value="3">
+            <span>AP</span>
+          </md2-option>
+          <md2-option value="4">
+            <span>Plan</span>
+          </md2-option>
+          <md2-option value="5">
+            <span>Todos</span>
+          </md2-option>
+        </md2-select>
+
+    </td>
+  </tr>
+  <tr>
       <td *ngIf="notify.value.tipo == '3'" colspan="2">
           <md2-select multiple name="AP"
           floatPlaceholder="never"

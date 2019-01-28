@@ -37,6 +37,9 @@
             Estado
           </td>
           <td>
+            Fecha
+          </td>
+          <td>
             Acciones
           </td>
         </tr>
@@ -66,14 +69,17 @@
           <td style="text-align: right;">
             {{i.bal_comment}}
           </td>
-          <td *ngIf="i.bal_stat == 1">
+          <td style="text-align: center" *ngIf="i.bal_stat == 1">
             Aprobada
           </td>
-          <td *ngIf="i.bal_stat == 2">
+          <td style="text-align: center" *ngIf="i.bal_stat == 2">
             Pendiente
           </td>
-          <td *ngIf="i.bal_stat == 3">
+          <td style="text-align: center" *ngIf="i.bal_stat == 0">
             Rechazada
+          </td>
+          <td style="text-align: center">
+            {{i.created_at | stringToDate | date: 'dd/M/yy'}}
           </td>
           <td *ngIf="i.bal_stat == 2; else notpermited">
             <button md-icon-button color="primary" (click)="aprov(i)">

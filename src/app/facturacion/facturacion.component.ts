@@ -641,14 +641,14 @@ export class AprovPagos implements OnInit, OnDestroy {
      }
 
      aprov(i): void{
-       this.http.put(environment.apiEndpoint+'balance/', {params:{i}})
+       this.http.put(environment.apiEndpoint+'balance/', i)
          .subscribe((data) => {
 
          })
 
      }
      rem(i): void{
-       this.http.delete(environment.apiEndpoint+'balance/', {params:{i}})
+       this.http.delete(environment.apiEndpoint+'balance/', {params: {id_bal: i.id_bal, bal_cli: i.bal_cli}})
          .subscribe((data) => {
 
          })
