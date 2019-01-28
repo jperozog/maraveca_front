@@ -625,7 +625,7 @@ export class AprovPagos implements OnInit, OnDestroy {
          this.refresh(false);
        });
        this.refresh(false);
-       
+
      }
      ngOnDestroy(){
        this.autoupdate=false
@@ -638,6 +638,21 @@ export class AprovPagos implements OnInit, OnDestroy {
          //console.log(this.dash);
 
        });
+     }
+
+     aprov(i): void{
+       this.http.put(environment.apiEndpoint+'balance/', {params:{i}})
+         .subscribe((data) => {
+
+         })
+
+     }
+     rem(i): void{
+       this.http.delete(environment.apiEndpoint+'balance/', {params:{i}})
+         .subscribe((data) => {
+
+         })
+
      }
 
     delete(data): void {
