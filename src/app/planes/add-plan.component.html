@@ -62,6 +62,50 @@
     </td>
 
   </tr>
+  <tr *ngIf="addplan.value.tipo_plan==1">
+
+    <td colspan="2">
+
+      <md-form-field class="example-full-width">
+        <input type="text" name="dmb"
+        class="form-control"
+        placeholder="MB de descarga"
+        formControlName="dmb_plan"
+        mdInput
+        >
+      </md-form-field>
+
+    </td>
+  </tr>
+  <tr *ngIf="addplan.value.tipo_plan==1">
+
+    <td colspan="2">
+
+      <md-form-field class="example-full-width">
+        <input type="text" name="umb"
+        class="form-control"
+        placeholder="MB de subida"
+        formControlName="umb_plan"
+        mdInput
+        >
+      </md-form-field>
+
+    </td>
+  </tr>
+
+  <tr *ngIf="addplan.value.tipo_plan==1">
+
+    <td colspan="2">
+      <md2-select formControlName="carac_plan"
+      placeholder="Caracteristica de servicio"
+      style="width=100%; min-width: 100%; min-height: 100%;"
+      mdInput>
+      <md2-option value="1">Asimetrico</md2-option>
+      <md2-option value="2">Simetrico</md2-option>
+    </md2-select>
+  </td>
+
+  </tr>
 
   <tr>
     <td>

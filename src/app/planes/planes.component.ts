@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit, OnDestroy} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -11,18 +11,21 @@ import 'rxjs/add/operator/startWith';
 import { AuthGuard } from '../_guards/index';
 import {Router} from '@angular/router';
 import { environment } from '../../environments/environment'
+import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 
 @Component({
   selector: 'app-planes',
   templateUrl: './planes.component.html',
   styleUrls: ['./planes.component.css']
 })
-export class PlanesComponent {
+export class PlanesComponent implements OnInit, OnDestroy{
 
 
     myService: MyService | null;
     data:any = null;
+    data_t:any = null;
     search: string = '';
+    autoupdate = false;
     constructor(
       public usuario: AuthGuard,
       private http: Http,
@@ -32,18 +35,34 @@ export class PlanesComponent {
       this.snackBar.open("Cargando Planes", null, {
         duration: 2000,
       });
-      this.myService = new MyService(http, router);
-      this.http.get(environment.apiEndpoint+'planes/')
+      //this.myService = new MyService(http, router);
+      this.refresh(false);
+    }
+
+    ngOnInit(){
+      IntervalObservable.create(10000)
+      .takeWhile(() => this.autoupdate)
+      .subscribe(() => {
+        this.refresh(false);
+      });
+    }
+
+    ngOnDestroy(){
+
+    }
+
+    refresh(nf){
+      this.http.get(environment.apiEndpoint+'planes/', {params:{responsable: this.usuario.currentUser.id_user}})
         .subscribe((data) => {
-          this.data = data.json();
+          this.data_t = data.json();
+          this.data=this.data_t;
           //console.log(this.data);
         });
       this.snackBar.open("Planes Cargadas", null, {
         duration: 2000,
       });
+
     }
-
-
 
     openDialog(): void {
       let dialogRef = this.dialog.open(AddplanesComponent, {
@@ -75,7 +94,7 @@ export class PlanesComponent {
         console.log('The dialog was closed');
 
       });
-      this.myService.refresh();
+      this.refresh(false);
 
     }
     deleteDialog(row): void {
@@ -96,7 +115,7 @@ export class PlanesComponent {
       this.snackBar.open("Borrando Plan: Por favor espere", null, {
         duration: 2000,
       });
-      this.myService.refresh();
+      this.refresh(false);
 
     }
 
@@ -162,8 +181,11 @@ export class PlanesComponent {
             name_plan: row.name_plan,
             taza: row.taza,
             tipo_plan: row.tipo_plan,
-            id_plan: row.id_plan
-
+            id_plan: row.id_plan,
+            carac_plan: row.carac_plan,
+            dmb_plan: row.dmb_plan,
+            umb_plan: row.umb_plan,
+            descripcion: row.descripcion
           });
           //console.log(row)
         }else{
@@ -173,6 +195,11 @@ export class PlanesComponent {
             name_plan: '',
             taza: '',
             tipo_plan: '',
+            id_plan: '',
+            carac_plan: '',
+            dmb_plan: '',
+            umb_plan: '',
+            descripcion: ''
 
 
           });
