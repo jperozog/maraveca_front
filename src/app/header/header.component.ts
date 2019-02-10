@@ -26,17 +26,19 @@ dash=[];
     public test: AuthenticationService,
     public http: Http,
     ) {
-      if(this.autoupdate && this.usuario.currentUser){
+      if(this.usuario.currentUser){
         this.refresh(true);
       }
    }
 
   ngOnInit() {
     IntervalObservable.create(10000)
-    .takeWhile(() => (this.autoupdate && this.usuario.currentUser))
+    .takeWhile(() => (this.usuario.currentUser))
     .subscribe(() => {
       this.refresh(false);
     });
+
+
   }
 
   refresh(test){

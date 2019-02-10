@@ -18,7 +18,7 @@ import {UsuariosComponent, DetallesUsuarios, AdduserComponent, DeleteuserDialog,
 import { NotifyComponent } from './notify/notify.component'
 import { AuthGuard } from './_guards/index';
 import { PreComponent, DialogOverviewExampleDialog } from './presupuestos/pre.component';
-import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog, AprovPagos } from './facturacion/facturacion.component';
+import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog, AprovPagos, DeclinePagoDialog, ConfirmPagoDialog } from './facturacion/facturacion.component';
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component'
 import { StatsComponent, PagarComponent, DetallesInstallerComponent, cargarPagocomponent } from './stats/stats.component'
@@ -54,6 +54,8 @@ const appRoutes: Routes = [
   {path: 'PreComponent', component: PreComponent, canActivate: [AuthGuard]},
   {path: 'TransfEquipo', component: TransfEquiposComponent, canActivate: [AuthGuard]},
   {path: 'Pagos', component: AprovPagos, canActivate: [AuthGuard]},
+  {path: 'DPagos', component: DeclinePagoDialog, canActivate: [AuthGuard]},
+  {path: 'CPagos', component: ConfirmPagoDialog, canActivate: [AuthGuard]},
   {path: 'fac_det', component: FacturacionPagos},
   {path: 'fac_anu', component: AnularFactura},
   {path: 'cargarPago', component: cargarPagocomponent},

@@ -75,22 +75,22 @@ export class FacturacionComponent implements OnInit, OnDestroy {
 
   ngOnInit(){
     this.route.params.forEach((urlParams) => {
-        console.log(urlParams)
-        if(urlParams.fecha){
-          var params=urlParams.fecha.split('-')
-          console.log(params)
-          this.mes= params[0]
-          this.year= params[1]
-          this.stat=false;
-          this.status='pendiente';
-        }else{
-          this.mes= this.datePipe.transform(Date.now(), 'M')
-          this.year= this.datePipe.transform(Date.now(), 'y')
-          this.stat=false;
-          this.status='';
-        }
-        console.log('parametros')
-        });
+      console.log(urlParams)
+      if(urlParams.fecha){
+        var params=urlParams.fecha.split('-')
+        console.log(params)
+        this.mes= params[0]
+        this.year= params[1]
+        this.stat=false;
+        this.status='pendiente';
+      }else{
+        this.mes= this.datePipe.transform(Date.now(), 'M')
+        this.year= this.datePipe.transform(Date.now(), 'y')
+        this.stat=false;
+        this.status='';
+      }
+      console.log('parametros')
+    });
     this.http.get(environment.apiEndpoint+'facturas/', {params:{month: this.mes, year: this.year, status: this.stat}})
     .subscribe((data) => {
       this.facturacion = data.json();
@@ -152,31 +152,31 @@ export class FacturacionComponent implements OnInit, OnDestroy {
     //console.log(row);
     //this.selectedRowIndex = row.id;
     let dialogRef = this.dialog.open(FacturacionPagos, {
-    width: '75%',
-    data: row
-  });
-
-  dialogRef.afterClosed().subscribe(result => {
-    //console.log('The dialog was closed');
-    this.refresh(false);
-    this.snackBar.open("Facturas Actualizadas", null, {
-      duration: 2000,
+      width: '75%',
+      data: row
     });
-  });
-  //this.myService.refresh();
 
-}
+    dialogRef.afterClosed().subscribe(result => {
+      //console.log('The dialog was closed');
+      this.refresh(false);
+      this.snackBar.open("Facturas Actualizadas", null, {
+        duration: 2000,
+      });
+    });
+    //this.myService.refresh();
 
-private delete(id):void{
-  //console.log(id); //show`s id
-  this.myService.deleteData(id)
-  .subscribe((data) => {console.log(data)});
-  this.snackBar.open("Borrando Equipo: Por favor espere", null, {
-    duration: 1000,
-  });
-  this.myService.refresh();
+  }
 
-}
+  private delete(id):void{
+    //console.log(id); //show`s id
+    this.myService.deleteData(id)
+    .subscribe((data) => {console.log(data)});
+    this.snackBar.open("Borrando Equipo: Por favor espere", null, {
+      duration: 1000,
+    });
+    this.myService.refresh();
+
+  }
 
 }
 
@@ -337,89 +337,89 @@ export class FacturacionPagos {
       var post = this.fb.group({
         responsable: this.usuario.currentUser.id_user
       }
-      )
-      this.http.post(url, post.value)
-      .subscribe((data)=>{
-        this.snackBar.open("Correo Enviado", null, {
-          duration: 2000,
-        });
-      })
-
-    }else{
-      this.snackBar.open("Cliente no tiene correo registrado", null, {
+    )
+    this.http.post(url, post.value)
+    .subscribe((data)=>{
+      this.snackBar.open("Correo Enviado", null, {
         duration: 2000,
       });
+    })
+
+  }else{
+    this.snackBar.open("Cliente no tiene correo registrado", null, {
+      duration: 2000,
+    });
+  }
+}
+
+print(): void {
+  let moment = this.deuda;
+  this.deuda = 0;
+  let printContents, popupWin;
+  printContents = document.getElementById('print-section').innerHTML;
+  popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+  popupWin.document.open();
+  popupWin.document.write(`
+    <html>
+    <head>
+    <title></title>
+    <style>
+    @page {
+      size: A4;
+      margin: 0 10px 0 10px;
     }
-  }
 
-  print(): void {
-    let moment = this.deuda;
-    this.deuda = 0;
-    let printContents, popupWin;
-    printContents = document.getElementById('print-section').innerHTML;
-    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-    popupWin.document.open();
-    popupWin.document.write(`
-      <html>
-      <head>
-      <title></title>
-      <style>
-      @page {
-        size: A4;
-        margin: 0 10px 0 10px;
-      }
+    table.fac, th.fac, td.fac {
+      border:1px solid black;
+      font-size: 12px
+    }
+    table.fact, th.fact, td.fact {
+      border-bottom: 1px solid black;
+      font-size: 12px
+    }
+    table.fontprod, th.fontprod, td.fontprod {
+      font-size: 10px
+    }
+    table.fontna, th.fontna, td.fontna {
+      min-width: 35%;
+    }
+    table.fontc, th.fontc, td.fontc {
+      min-width: 20%;
+    }
+    table.fontz, th.fontz, td.fontz {
+      font-size: 12px
+    }
 
-      table.fac, th.fac, td.fac {
-        border:1px solid black;
-        font-size: 12px
-      }
-      table.fact, th.fact, td.fact {
-        border-bottom: 1px solid black;
-        font-size: 12px
-      }
-      table.fontprod, th.fontprod, td.fontprod {
-        font-size: 10px
-      }
-      table.fontna, th.fontna, td.fontna {
-          min-width: 35%;
-      }
-      table.fontc, th.fontc, td.fontc {
-          min-width: 20%;
-      }
-      table.fontz, th.fontz, td.fontz {
-        font-size: 12px
+    .boto {
+      border-top: 1px solid black;
+    }
+    .bobo {
+      border-bottom: 1px solid black
+    }
+
+    @media print {
+      html, body {
+        width: 210mm;
+        height: 297mm;
       }
 
-      .boto {
-        border-top: 1px solid black;
-      }
-      .bobo {
-        border-bottom: 1px solid black
-      }
-
-      @media print {
-        html, body {
-          width: 210mm;
-          height: 297mm;
-        }
-
-      }
-      </style>
-      </head>
-      <body onload="window.print();window.close()">
-      <table>
-      <tr><td style="height:130px"></td></tr>
-      </table>
-      `+printContents+`
-      </body>
-      </html>`
-    );
-    popupWin.document.close();
-    //onload="window.print();window.close()"
-    this.deuda = moment;
-  }
-  deletepagoDialog(row): void {
-    console.log(row);
+    }
+    </style>
+    </head>
+    <body onload="window.print();window.close()">
+    <table>
+    <tr><td style="height:130px"></td></tr>
+    </table>
+    `+printContents+`
+    </body>
+    </html>`
+  );
+  popupWin.document.close();
+  //onload="window.print();window.close()"
+  this.deuda = moment;
+}
+deletepagoDialog(row): void {
+  console.log(row);
   let dialogRef = this.dialog.open(deletepagoDialog, {
     data: row
   });
@@ -438,7 +438,7 @@ export class FacturacionPagos {
   });
 }
 deleteProductDialog(row): void {
-    console.log(row);
+  console.log(row);
   let dialogRef = this.dialog.open(deleteProductDialog, {
     data: row
   });
@@ -454,75 +454,75 @@ deleteProductDialog(row): void {
     this.monto=this.monto-row.precio_articulo;
     this.deuda=this.monto-this.pagado;
   });
-  }
-  activar(){
-    this.agregarProducto=true;
-    console.log(this.agregarProducto)
-  }
-  addProducto(){
-    if(this.serie == 1){
+}
+activar(){
+  this.agregarProducto=true;
+  console.log(this.agregarProducto)
+}
+addProducto(){
+  if(this.serie == 1){
     this.precio_articulo=(this.addProduct.value.precio_unitario*((+this.fac_products[0].IVA+100)/100))*this.addProduct.value.cantidad;
   }else{
     this.precio_articulo=this.addProduct.value.precio_unitario*this.addProduct.value.cantidad;
   }
-    this.addProduct.patchValue({
-      precio_articulo: this.precio_articulo,
-      IVA: this.fac_products[0].IVA
-    })
-    var url = environment.apiEndpoint+"facprod";
-    this.http.post(url, this.addProduct.value)
-    .subscribe((data)=>{
-      this.agregarProducto=false;
-      this.http.get(environment.apiEndpoint+'facprod/'+this.row.id)
-      .subscribe((data) => {
-        this.fac_products = data.json();
-        //console.log(this.fac_pagos.slice(0,3));
-      });
-      this.monto=this.monto+this.precio_articulo;
-      this.deuda=this.monto-this.pagado;
-      if (this.deuda <= 0) {
+  this.addProduct.patchValue({
+    precio_articulo: this.precio_articulo,
+    IVA: this.fac_products[0].IVA
+  })
+  var url = environment.apiEndpoint+"facprod";
+  this.http.post(url, this.addProduct.value)
+  .subscribe((data)=>{
+    this.agregarProducto=false;
+    this.http.get(environment.apiEndpoint+'facprod/'+this.row.id)
+    .subscribe((data) => {
+      this.fac_products = data.json();
+      //console.log(this.fac_pagos.slice(0,3));
+    });
+    this.monto=this.monto+this.precio_articulo;
+    this.deuda=this.monto-this.pagado;
+    if (this.deuda <= 0) {
 
-      }
-      //this.pagos.push({opcion: this.opcion, nada: this.nada});
-      this.codigo_factura='';
-      this.nombre_articulo='';
-      this.precio_unitario='';
-      this.cantidad='';
-      this.precio_articulo='';
-      this.comment_articulo='';
-    })
-  }
-  agregar(){
-    //let body = "fac_id="+this.row.id+"&pag_tip="+this.tipo+"&pag_monto="+this.nada+"&pag_comment="+this.opcion;
-    //console.log(body);
-    this.sending_p = true
-    var url = environment.apiEndpoint+"facpag";
-    this.http.post(url, this.addPago.value)
-    .subscribe((data)=>{
-      this.agregarProducto=false;
-      this.http.get(environment.apiEndpoint+'facpag/'+this.row.id)
-      .subscribe((data) => {
-        this.fac_pagos = data.json();
-        this.sending_p = false
-        //console.log(this.fac_pagos.slice(0,3));
-      });
-      this.pagado=this.pagado+this.nada;
-      this.deuda=this.monto-this.pagado;
-      if (this.deuda <= 0) {
+    }
+    //this.pagos.push({opcion: this.opcion, nada: this.nada});
+    this.codigo_factura='';
+    this.nombre_articulo='';
+    this.precio_unitario='';
+    this.cantidad='';
+    this.precio_articulo='';
+    this.comment_articulo='';
+  })
+}
+agregar(){
+  //let body = "fac_id="+this.row.id+"&pag_tip="+this.tipo+"&pag_monto="+this.nada+"&pag_comment="+this.opcion;
+  //console.log(body);
+  this.sending_p = true
+  var url = environment.apiEndpoint+"facpag";
+  this.http.post(url, this.addPago.value)
+  .subscribe((data)=>{
+    this.agregarProducto=false;
+    this.http.get(environment.apiEndpoint+'facpag/'+this.row.id)
+    .subscribe((data) => {
+      this.fac_pagos = data.json();
+      this.sending_p = false
+      //console.log(this.fac_pagos.slice(0,3));
+    });
+    this.pagado=this.pagado+this.nada;
+    this.deuda=this.monto-this.pagado;
+    if (this.deuda <= 0) {
 
-      }
-      //this.pagos.push({opcion: this.opcion, nada: this.nada});
-      this.opcion = "";
-      this.nada = "";
-    }, error =>{ this.sending_p = false })
-  }
+    }
+    //this.pagos.push({opcion: this.opcion, nada: this.nada});
+    this.opcion = "";
+    this.nada = "";
+  }, error =>{ this.sending_p = false })
+}
 
 }
 
 @Component({
-selector: 'delete-dialog',
-templateUrl: 'confirm-delete-pago.html',
-styleUrls: ['./facturacion.component.css']
+  selector: 'delete-dialog',
+  templateUrl: 'confirm-delete-pago.html',
+  styleUrls: ['./facturacion.component.css']
 })
 export class deletepagoDialog {
   myService: MyService | null;
@@ -536,7 +536,7 @@ export class deletepagoDialog {
     private router: Router,
     private usuario: AuthGuard) {
       console.log(this.data);
-     }
+    }
 
 
 
@@ -556,116 +556,198 @@ export class deletepagoDialog {
       //this.myService.refresh();
     }
 
-  onNoClick(): void {
-    this.dialogRef.close();
+    onNoClick(): void {
+      this.dialogRef.close();
+    }
+
   }
+  @Component({
+    selector: 'delete-dialog',
+    templateUrl: 'confirm-delete-producto.html',
+    styleUrls: ['./facturacion.component.css']
+  })
+  export class deleteProductDialog {
+    myService: MyService | null;
 
-}
-@Component({
-selector: 'delete-dialog',
-templateUrl: 'confirm-delete-producto.html',
-styleUrls: ['./facturacion.component.css']
-})
-export class deleteProductDialog {
-  myService: MyService | null;
-
-  constructor(
-    public dialogRef: MdDialogRef<deleteProductDialog>,
-    @Inject(MD_DIALOG_DATA) public data: any,
-    private http: Http,
-    public dialog: MdDialog,
-    public snackBar:MdSnackBar,
-    private router: Router,
-    private usuario: AuthGuard) {
-      console.log(this.data);
-     }
+    constructor(
+      public dialogRef: MdDialogRef<deleteProductDialog>,
+      @Inject(MD_DIALOG_DATA) public data: any,
+      private http: Http,
+      public dialog: MdDialog,
+      public snackBar:MdSnackBar,
+      private router: Router,
+      private usuario: AuthGuard) {
+        console.log(this.data);
+      }
 
 
 
 
-    delete(data): void {
-      console.log(this.data);
-      this.http.delete(environment.apiEndpoint+'fac_product/'+data.id+'?responsable='+this.usuario.currentUser.id_user, {})
-      .subscribe((data)=>{
+      delete(data): void {
+        console.log(this.data);
+        this.http.delete(environment.apiEndpoint+'fac_product/'+data.id+'?responsable='+this.usuario.currentUser.id_user, {})
+        .subscribe((data)=>{
+          this.dialogRef.close();
+          this.snackBar.open("Borrando cliente: Por favor espere", null, {
+            duration: 1000,
+          });
+        })
+        //this.myService.refresh();
+      }
+
+      onNoClick(): void {
         this.dialogRef.close();
-        this.snackBar.open("Borrando cliente: Por favor espere", null, {
-          duration: 1000,
-        });
-      })
-      //this.myService.refresh();
+      }
+
     }
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
+    @Component({
+      templateUrl: 'confirm.pago.component.html',
+      styleUrls: ['./facturacion.component.css']
+    })
+    export class ConfirmPagoDialog implements OnInit, OnDestroy {
+      constructor(
+        public dialogRef: MdDialogRef<DeclinePagoDialog>,
+        @Inject(MD_DIALOG_DATA) public data: any,
+        private http: Http,
+        public dialog: MdDialog,
+        public snackBar:MdSnackBar,
+        private router: Router,
+        private usuario: AuthGuard) {
+          console.log(this.data);
+        }
 
-}
-@Component({
-selector: 'AprovPagos-dialog',
-templateUrl: 'aprov.pagos.component.html',
-styleUrls: ['./facturacion.component.css']
-})
-export class AprovPagos implements OnInit, OnDestroy {
-  myService: MyService | null;
-  balance=[];
-  balance_t=[];
-  autoupdate=true
-  constructor(
-    private http: Http,
-    public dialog: MdDialog,
-    public snackBar:MdSnackBar,
-    private router: Router,
-    private usuario: AuthGuard) {
-     }
+      ngOnInit(){
 
-     ngOnInit(){
-       IntervalObservable.create(10000)
-       .takeWhile(() => (this.autoupdate))
-       .subscribe(() => {
-         this.refresh(false);
-       });
-       this.refresh(false);
+      }
+      ngOnDestroy(){
 
-     }
-     ngOnDestroy(){
-       this.autoupdate=false
-     }
-     refresh(test){
-       this.http.get(environment.apiEndpoint+'balance/', {params:{uid: this.usuario.currentUser.id_user}})
-       .subscribe((data) => {
-         this.balance_t = data.json();
-         this.balance = this.balance_t;
-         //console.log(this.dash);
+      }
+      aprov(): void{
+        this.http.put(environment.apiEndpoint+'balance/', this.data.i)
+        .subscribe((data) => {
 
-       });
-     }
+        })
 
-     aprov(i): void{
-       this.http.put(environment.apiEndpoint+'balance/', i)
-         .subscribe((data) => {
-
-         })
-
-     }
-     rem(i): void{
-       this.http.delete(environment.apiEndpoint+'balance/', {params: {id_bal: i.id_bal, bal_cli: i.bal_cli}})
-         .subscribe((data) => {
-
-         })
-
-     }
-
-    delete(data): void {
-      this.http.delete(environment.apiEndpoint+'fac_product/'+data.id+'?responsable='+this.usuario.currentUser.id_user, {})
-      .subscribe((data)=>{
-        this.snackBar.open("Borrando cliente: Por favor espere", null, {
-          duration: 1000,
-        });
-      })
-      //this.myService.refresh();
+      }
+      // rem(i): void{
+      //   this.http.delete(environment.apiEndpoint+'balance/', {params: {id_bal: i.id_bal, bal_cli: i.bal_cli}})
+      //   .subscribe((data) => {
+      //
+      //   })
+      // }
     }
+    @Component({
+      templateUrl: 'decline.pago.component.html',
+      styleUrls: ['./facturacion.component.css']
+    })
+    export class DeclinePagoDialog implements OnInit, OnDestroy {
+      DeclinePagos: FormGroup
+      constructor(
+        public dialogRef: MdDialogRef<DeclinePagoDialog>,
+        @Inject(MD_DIALOG_DATA) public data: any,
+        private http: Http,
+        private _fb: FormBuilder,
+        private fb: FormBuilder,
+        public dialog: MdDialog,
+        public snackBar:MdSnackBar,
+        private router: Router,
+        private usuario: AuthGuard) {
+        }
 
-  onNoClick(): void {
-  }
+      ngOnInit(){
+        console.log(this.data);
+        this.DeclinePagos = this.fb.group({
+          id_bal: this.data.id_bal,
+          reason: ['', [Validators.required]]
+        })
+      }
+      ngOnDestroy(){
 
-}
+      }
+      // aprov(i): void{
+      //   this.http.put(environment.apiEndpoint+'balance/', i)
+      //   .subscribe((data) => {
+      //
+      //   })
+      //
+      // }
+      rem(): void{
+        this.http.delete(environment.apiEndpoint+'balance/', {params: {id_bal: this.data.i.id_bal, bal_cli: this.data.i.bal_cli}})
+        .subscribe((data) => {
+
+        })
+      }
+    }
+    @Component({
+      templateUrl: 'aprov.pagos.component.html',
+      styleUrls: ['./facturacion.component.css']
+    })
+    export class AprovPagos implements OnInit, OnDestroy {
+      myService: MyService | null;
+      balance=[];
+      balance_t=[];
+      autoupdate=true
+      constructor(
+        private http: Http,
+        public dialog: MdDialog,
+        public snackBar:MdSnackBar,
+        private router: Router,
+        private usuario: AuthGuard) {
+        }
+
+        ngOnInit(){
+          IntervalObservable.create(10000)
+          .takeWhile(() => (this.autoupdate))
+          .subscribe(() => {
+            this.refresh(false);
+          });
+          this.refresh(false);
+
+        }
+        ngOnDestroy(){
+          this.autoupdate=false
+        }
+        refresh(test){
+          this.http.get(environment.apiEndpoint+'balance/', {params:{uid: this.usuario.currentUser.id_user}})
+          .subscribe((data) => {
+            this.balance_t = data.json();
+            this.balance = this.balance_t;
+            //console.log(this.dash);
+
+          });
+        }
+        aprov(i): void{
+          let dialogRef = this.dialog.open(ConfirmPagoDialog, {
+            data: i,
+            width: '25%'
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+
+          })
+        }
+        rem(i): void{
+          let dialogRef = this.dialog.open(DeclinePagoDialog, {
+            data: i,
+            width: '25%'
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+
+          })
+        }
+        // aprov(i): void{
+        //   this.http.put(environment.apiEndpoint+'balance/', i)
+        //   .subscribe((data) => {
+        //
+        //   })
+        //
+        // }
+        // rem(i): void{
+        //   this.http.delete(environment.apiEndpoint+'balance/', {params: {id_bal: i.id_bal, bal_cli: i.bal_cli}})
+        //   .subscribe((data) => {
+        //
+        //   })
+        // }
+      }

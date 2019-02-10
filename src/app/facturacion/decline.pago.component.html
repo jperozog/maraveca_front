@@ -1,11 +1,30 @@
-<h1 md-dialog-title>Confirmacion</h1>
+<h1 md-dialog-title>Declinar Pago</h1>
 <div md-dialog-content>
-  <p>Esta seguro que desea eliminar?</p>
+  <p>
+    Esta seguro que desea rechazar el pago por: <br /> {{data.bal_monto | number : '1.0-3'}} Bs.S.?
+    </p>
+  <form class="example-form" id="client" name="clientForm" [formGroup]="DeclinePagos" ng-submit="ok(clientForm)" novalidate>
+  <p>
+    <md-form-field class="example-full-width">
+      <textarea
+      data-ng-model="user.contact_people.description"
+      mdInput
+      formControlName="reason"
+      #address
+      class="form-control"
+      placeholder="Motivo"
+      maxlength="256"
+      required></textarea>
+      <md-hint align="end">{{DeclinePagos.value.reason.length}} / 256</md-hint>
+    </md-form-field>
+  </p>
+</form>
 </div>
 <div md-dialog-actions>
   <tr>
     <td>
-      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="delete(data)" tabindex="2">Ok</button>
+      <button md-raised-button color="primary" class="example-half-width btn btn-primary" [disabled]="!DeclinePagos.valid" (click)="rem()"><i class="fa fa-paper-plane" aria-hidden="true"></i>OK</button>
+      <!-- <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="delete(data)" [disabled]="!DeclinePagos.valid" tabindex="2">Ok</button> -->
 
     </td>
     <td>

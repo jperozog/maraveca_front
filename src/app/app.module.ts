@@ -72,7 +72,7 @@ import { PotencialesComponent } from './potenciales/potenciales.component';
 import { MyDatePickerModule } from 'mydatepicker';
 import { NotifyComponent } from './notify/notify.component';
 import { PreComponent, DialogOverviewExampleDialog } from './presupuestos/pre.component';
-import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog, AprovPagos } from './facturacion/facturacion.component';
+import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog, AprovPagos, DeclinePagoDialog, ConfirmPagoDialog } from './facturacion/facturacion.component';
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component';
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
@@ -161,7 +161,9 @@ import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEq
     AddAdic,
     deletepagoDialog,
     deleteProductDialog,
-    AprovPagos
+    AprovPagos,
+    DeclinePagoDialog,
+    ConfirmPagoDialog
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,
