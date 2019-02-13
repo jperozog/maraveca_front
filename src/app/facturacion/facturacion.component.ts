@@ -623,6 +623,9 @@ export class deletepagoDialog {
       ngOnDestroy(){
 
       }
+      onNoClick(): void {
+        this.dialogRef.close();
+      }
       aprov(): void{
         this.http.put(environment.apiEndpoint+'balance/', this.data.i)
         .subscribe((data) => {
@@ -630,12 +633,6 @@ export class deletepagoDialog {
         })
 
       }
-      // rem(i): void{
-      //   this.http.delete(environment.apiEndpoint+'balance/', {params: {id_bal: i.id_bal, bal_cli: i.bal_cli}})
-      //   .subscribe((data) => {
-      //
-      //   })
-      // }
     }
     @Component({
       templateUrl: 'decline.pago.component.html',
@@ -659,21 +656,28 @@ export class deletepagoDialog {
         console.log(this.data);
         this.DeclinePagos = this.fb.group({
           id_bal: this.data.id_bal,
-          reason: ['', [Validators.required]]
+          option: ['', [Validators.required]],
+          reason: ['']
         })
+        this.DeclinePagos.get('option').valueChanges.subscribe(
+          (op) => {
+            if ( op != 1){
+              this.DeclinePagos.get('reason').setValidators([]);
+              this.DeclinePagos.get('reason').updateValueAndValidity();
+            }else if( op == 1 ){
+              this.DeclinePagos.get('reason').setValidators([Validators.required]);
+              this.DeclinePagos.get('reason').updateValueAndValidity();
+            }
+          })
       }
       ngOnDestroy(){
 
       }
-      // aprov(i): void{
-      //   this.http.put(environment.apiEndpoint+'balance/', i)
-      //   .subscribe((data) => {
-      //
-      //   })
-      //
-      // }
+      onNoClick(): void {
+        this.dialogRef.close();
+      }
       rem(): void{
-        this.http.delete(environment.apiEndpoint+'balance/', {params: {id_bal: this.data.i.id_bal, bal_cli: this.data.i.bal_cli}})
+        this.http.delete(environment.apiEndpoint+'balance/', {params: this.DeclinePagos.value})
         .subscribe((data) => {
 
         })

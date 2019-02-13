@@ -4,20 +4,35 @@
     Esta seguro que desea rechazar el pago por: <br /> {{data.bal_monto | number : '1.0-3'}} Bs.S.?
     </p>
   <form class="example-form" id="client" name="clientForm" [formGroup]="DeclinePagos" ng-submit="ok(clientForm)" novalidate>
-  <p>
-    <md-form-field class="example-full-width">
-      <textarea
-      data-ng-model="user.contact_people.description"
-      mdInput
-      formControlName="reason"
-      #address
-      class="form-control"
-      placeholder="Motivo"
-      maxlength="256"
-      required></textarea>
-      <md-hint align="end">{{DeclinePagos.value.reason.length}} / 256</md-hint>
-    </md-form-field>
-  </p>
+    <table>
+      <tr>
+        <td>
+          <md-select class="example-full-width" mdInput placeholder="Motivo" formControlName="option">
+            <md-option value="2">Referencia errada</md-option>
+            <md-option value="3">Cuenta invalida</md-option>
+            <md-option value="4">Datos Incompletos</md-option>
+            <md-option value="1">Otro</md-option>
+          </md-select>
+        </td>
+      </tr>
+      <tr *ngIf="DeclinePagos.value.option == 1">
+        <td>
+          <md-form-field class="example-full-width">
+            <textarea
+            data-ng-model="user.contact_people.description"
+            mdInput
+            formControlName="reason"
+            #address
+            class="form-control"
+            placeholder="Motivo"
+            maxlength="256"
+            required></textarea>
+            <md-hint align="end">{{DeclinePagos.value.reason.length}} / 256</md-hint>
+          </md-form-field>
+        </td>
+        </tr>
+      </table>
+
 </form>
 </div>
 <div md-dialog-actions>
