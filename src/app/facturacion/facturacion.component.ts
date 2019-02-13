@@ -629,7 +629,7 @@ export class deletepagoDialog {
       aprov(): void{
         this.http.put(environment.apiEndpoint+'balance/', this.data.i)
         .subscribe((data) => {
-
+          this.dialogRef.close();
         })
 
       }
@@ -679,7 +679,7 @@ export class deletepagoDialog {
       rem(): void{
         this.http.delete(environment.apiEndpoint+'balance/', {params: this.DeclinePagos.value})
         .subscribe((data) => {
-
+          this.dialogRef.close();
         })
       }
     }

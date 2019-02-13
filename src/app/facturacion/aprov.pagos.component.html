@@ -51,6 +51,7 @@
           <td *ngIf="i.kind.toUpperCase() == 'E'">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
           <td *ngIf="i.kind.toUpperCase() == 'G'">{{(i.social|capitalize)}}</td>
           <td *ngIf="i.kind.toUpperCase() == 'J'">{{(i.social|capitalize)}}</td>
+
           <td *ngIf="i.bal_tip==2">Transferencia Banesco</td>
           <td *ngIf="i.bal_tip==6">Transferencia Bicentenario</td>
           <td *ngIf="i.bal_tip==1">Transferencia BOD</td>
@@ -91,7 +92,9 @@
             </button>
           </td>
           <ng-template #notpermited>
+            <td>
             <md-icon class="md-24" aria-label="Eliminar Cliente">block</md-icon>
+          </td>
           </ng-template>
         </tr>
       </tbody>

@@ -59,11 +59,8 @@ table.addClient {
     position: relative;
     height: 36px;
     vertical-align: middle;
-
-    &:hover {
-      background-color: #868686;
-    }
   }
+
 
   th {
     padding: 0 16px;
@@ -85,6 +82,9 @@ table.addClient {
   }
 }
 
+tr.hover:hover{
+  background-color: rgb(62, 166, 251);
+}
 
 table{
   width: 100%;

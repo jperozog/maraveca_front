@@ -270,6 +270,7 @@ export class DeleteuserDialog {
     notificaciones_w:boolean = false;
     potenciales_w:boolean = false;
     planes_w:boolean = false;
+    planes_esp:boolean = false;
     routers_w:boolean = false;
     servicios_w:boolean = false;
     soporte_w:boolean = false;
@@ -475,6 +476,7 @@ export class DeleteuserDialog {
           else if(perm == 'cobrar_w'){ this.cobrar_w=true }
           else if(perm == 'pagar'){ this.pagar=true }
           else if(perm == 'pagar_w'){ this.pagar_w=true }
+          else if(perm == 'planes_esp'){ this.planes_esp=true }
         })
       });
 
