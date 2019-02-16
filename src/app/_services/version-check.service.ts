@@ -62,6 +62,7 @@ export class VersionCheckService {
         if (!currentHash || currentHash === '{{POST_BUILD_ENTERS_HASH_HERE}}') {
             return false;
         }
+        console.log(currentHash +" | "+ newHash)
         return currentHash !== newHash;
     }
 }

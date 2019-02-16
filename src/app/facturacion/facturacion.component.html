@@ -1,11 +1,18 @@
 <md-toolbar class="submenu">
-  <md-form-field  floatPlaceholder="never">
-    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
-  </md-form-field>
 
+  <button md-button [mdMenuTriggerFor]="filtros" style="color:rgb(104, 103, 112)">
+    <md-icon>menu</md-icon> filtros
+  </button>
   <span class="example-spacer" style="text-align: center;">Facturacion</span>
-  <md-checkbox [(ngModel)]="stat">Anulados</md-checkbox>
-  <md-select placeholder="Estado" [(ngModel)]="status">
+  <md-menu #filtros="mdMenu">
+
+      <input mdInput class="example-full-width" floatPlaceholder="never" (click)="stopPropagation($event)" placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+    <br />
+    <md-checkbox class="example-full-width" [(ngModel)]="stat" (click)="stopPropagation($event)">Anulados</md-checkbox>
+    <br />
+    <md-checkbox class="example-full-width" [(ngModel)]="fac" (click)="stopPropagation($event)">Solo facturables</md-checkbox>
+    <br />
+    <md-select class="example-full-width" placeholder="Estado" [(ngModel)]="status" (click)="stopPropagation($event)" >
     <md-option value=''>
       Todas
     </md-option>
@@ -16,19 +23,22 @@
       Pagada
     </md-option>
   </md-select>
-  <md-select placeholder="Mes" [(ngModel)]="mes">
+  <br />
+  <md-select class="example-full-width" placeholder="Mes" [(ngModel)]="mes" (click)="stopPropagation($event)" >
     <md-option *ngFor="let mes of meses" [value]=mes.numero>
       {{mes.nombre}}
     </md-option>
   </md-select>
-  <md-select placeholder="Año" [(ngModel)]="year">
+  <br />
+  <md-select class="example-full-width" placeholder="Año" [(ngModel)]="year" (click)="stopPropagation($event)" >
     <md-option *ngFor="let year of anos" [value]=year.year>
       {{year.year}}
     </md-option>
   </md-select>
-  <button md-icon-button color="primary" (click)="notify()" tooltip="Enviar recordatorios de pago" *ngIf="usuario.perm && usuario.perm.includes('notify')">
-    <md-icon class="md-24" aria-label="notificar" >notifications</md-icon>
-  </button>
+</md-menu>
+<button md-icon-button color="primary" (click)="stopPropagation($event)" (click)="notify()" tooltip="Enviar recordatorios de pago" *ngIf="usuario.perm && usuario.perm.includes('notify')">
+  <md-icon class="md-24" aria-label="notificar" >notifications</md-icon>
+</button>
   <button class="x490 x700" md-raised-button (click)="refresh(true)" >
     <md-icon [class.updateicon]="update">cached</md-icon>
     Actualizar
@@ -70,7 +80,8 @@
             <th style="width: 15%; margin: 0 1em;">N</th>
             <th style="width: 15%" md2SortBy="cliente">Cliente</th>
             <th style="width: 15%" md2SortBy="estado">Estado</th>
-            <th style="width: 15%" md2SortBy="monto">Monto</th>
+            <th style="width: 15%" md2SortBy="monto">Monto Facturado</th>
+            <th style="width: 15%" md2SortBy="deuda">Monto Adeudado</th>
             <th style="width: 15%">Fecha</th>
             <th style="width: 10%">Acciones</th>
           </tr>
@@ -87,6 +98,7 @@
             <td *ngIf="t.fac_status == 2" style="width: 15%">Anulado</td>
 
             <td style="width: 15%">{{t.monto | number : '1.1-3'}}{{t.denominacion}}</td>
+            <td style="width: 15%">{{t.deuda | number : '1.1-3'}}{{t.denominacion}}</td>
 
             <td style="width: 15%">{{t.created_at | stringToDate | date: 'd/M/yy'}}</td>
 

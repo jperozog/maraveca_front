@@ -27,6 +27,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
   mes=''
   year=''
   stat=false;
+  fac=false;
   status='';
   meses=[];
   anos=[];
@@ -72,7 +73,10 @@ export class FacturacionComponent implements OnInit, OnDestroy {
 
     })
   }
-
+  stopPropagation(event){
+  event.stopPropagation();
+  // console.log("Clicked!");
+}
   ngOnInit(){
     this.route.params.forEach((urlParams) => {
       console.log(urlParams)
@@ -91,16 +95,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
       }
       console.log('parametros')
     });
-    this.http.get(environment.apiEndpoint+'facturas/', {params:{month: this.mes, year: this.year, status: this.stat}})
-    .subscribe((data) => {
-      this.facturacion = data.json();
-      this.facturacion_t = this.facturacion;
-      this.update=false;
-      //console.log(this.data);
-    });
-    this.snackBar.open("Facturas Cargadas", null, {
-      duration: 2000,
-    });
+    this.refresh(true)
     this.meses=[
       {numero:"1", nombre:'Enero'},
       {numero:"2", nombre:'Febrero'},
@@ -131,7 +126,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
 
   refresh(nf){
     this.update=true;
-    this.http.get(environment.apiEndpoint+'facturas/', {params:{month: this.mes, year: this.year, status: this.stat}})
+    this.http.get(environment.apiEndpoint+'facturas/', {params:{month: this.mes, year: this.year, status: this.stat, fac: this.fac}})
     .subscribe((data) => {
       this.facturacion_t = data.json();
       this.update=false
@@ -627,7 +622,7 @@ export class deletepagoDialog {
         this.dialogRef.close();
       }
       aprov(): void{
-        this.http.put(environment.apiEndpoint+'balance/', this.data.i)
+        this.http.put(environment.apiEndpoint+'balance/', this.data)
         .subscribe((data) => {
           this.dialogRef.close();
         })
