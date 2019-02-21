@@ -61,7 +61,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
 
     this.http.get(environment.apiEndpoint + 'planes/')
       .subscribe((data) => {
-        this.planes = data.json();
+        this.planes = data.json().planes;
         console.log(this.data);
       });
 
