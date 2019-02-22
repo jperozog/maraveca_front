@@ -21,7 +21,7 @@ import 'rxjs/add/operator/takeWhile';
 import { Location } from '@angular/common';
 import {IMyDpOptions, IMyDateModel} from 'mydatepicker';
 import { environment } from '../../environments/environment'
-import { FacturacionPagos } from '../facturacion/facturacion.component'
+import { FacturacionPagos, ConfirmPagoDialog, DeclinePagoDialog } from '../facturacion/facturacion.component'
 import { PreComponent } from '../presupuestos/pre.component'
 import { AddservicesComponent } from '../servicios/servicios.component'
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -689,6 +689,28 @@ export class ClientOverview implements OnInit{
        this.http.post(environment.apiEndpoint+'clientesn/', {responsable: this.usuario.currentUser.id_user, id:this.id})
        .subscribe((data) => {});
      }
+
+     aprov(i): void{
+       let dialogRef = this.dialog.open(ConfirmPagoDialog, {
+         data: i,
+         width: '25%'
+       });
+       dialogRef.afterClosed().subscribe(result => {
+         console.log('The dialog was closed');
+
+       })
+     }
+     rem(i): void{
+       let dialogRef = this.dialog.open(DeclinePagoDialog, {
+         data: i,
+         width: '25%'
+       });
+       dialogRef.afterClosed().subscribe(result => {
+         console.log('The dialog was closed');
+
+       })
+     }
+
      refresh(){
        var pagado_1=0
        var facturado_1=0
