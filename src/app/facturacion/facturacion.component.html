@@ -1,16 +1,19 @@
 <md-toolbar class="submenu">
 
   <button md-button [mdMenuTriggerFor]="filtros" style="color:rgb(104, 103, 112)">
-    <md-icon>menu</md-icon> filtros
+    <md-icon>menu</md-icon> Filtros
   </button>
   <span class="example-spacer" style="text-align: center;">Facturacion</span>
   <md-menu #filtros="mdMenu">
 
       <input mdInput class="example-full-width" floatPlaceholder="never" (click)="stopPropagation($event)" placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
     <br />
-    <md-checkbox class="example-full-width" [(ngModel)]="stat" (click)="stopPropagation($event)">Anulados</md-checkbox>
-    <br />
-    <md-checkbox class="example-full-width" [(ngModel)]="fac" (click)="stopPropagation($event)">Solo facturables</md-checkbox>
+    <md-radio-group [(ngModel)]="fac" (click)="stopPropagation($event)">
+      <md-radio-button class="example-full-width" value="tod">Mostrar todas</md-radio-button>
+      <md-radio-button class="example-full-width" value="nfac">Mostrar solo no facturables</md-radio-button>
+      <md-radio-button class="example-full-width" value="fac">Mostrar solo facturables</md-radio-button>
+      <md-radio-button class="example-full-width" value="null">Mostrar solo anuladas</md-radio-button>
+  </md-radio-group>
     <br />
     <md-select class="example-full-width" placeholder="Estado" [(ngModel)]="status" (click)="stopPropagation($event)" >
     <md-option value=''>

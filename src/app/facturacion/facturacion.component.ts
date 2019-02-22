@@ -27,7 +27,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
   mes=''
   year=''
   stat=false;
-  fac=false;
+  fac='tod';
   status='';
   meses=[];
   anos=[];
@@ -652,7 +652,9 @@ export class deletepagoDialog {
         this.DeclinePagos = this.fb.group({
           id_bal: this.data.id_bal,
           option: ['', [Validators.required]],
-          reason: ['']
+          reason: [''],
+          obs: [''],
+
         })
         this.DeclinePagos.get('option').valueChanges.subscribe(
           (op) => {

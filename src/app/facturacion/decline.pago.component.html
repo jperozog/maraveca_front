@@ -2,7 +2,7 @@
 <div md-dialog-content>
   <p>
     Esta seguro que desea rechazar el pago por: <br /> {{data.bal_monto | number : '1.0-3'}} Bs.S.?
-    </p>
+  </p>
   <form class="example-form" id="client" name="clientForm" [formGroup]="DeclinePagos" ng-submit="ok(clientForm)" novalidate>
     <table>
       <tr>
@@ -30,10 +30,26 @@
             <md-hint align="end">{{DeclinePagos.value.reason.length}} / 256</md-hint>
           </md-form-field>
         </td>
-        </tr>
-      </table>
+      </tr>
+      <tr>
+        <td>
+          <md-form-field class="example-full-width">
+            <textarea
+            data-ng-model="user.contact_people.description"
+            mdInput
+            formControlName="obs"
+            #address
+            class="form-control"
+            placeholder="Observaciones Adicionales"
+            maxlength="256"
+            required></textarea>
+            <md-hint align="end">{{DeclinePagos.value.reason.length}} / 256</md-hint>
+          </md-form-field>
+        </td>
+      </tr>
+    </table>
 
-</form>
+  </form>
 </div>
 <div md-dialog-actions>
   <tr>

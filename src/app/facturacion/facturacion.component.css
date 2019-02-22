@@ -65,6 +65,19 @@ table.fontprod, th.fontprod, td.fontprod {
   font-size: 12px
 }
 
+md-radio-button {
+  /*rgb(23, 151, 168)
+  color: rgb(23, 151, 168);*/
+    /deep/ .md-radio-button-background {
+        background-color: rgb(23, 151, 168);
+    }
+
+    /deep/ &.md-radio-button-focused{
+        .mat-ink-ripple{
+            background-color: rgb(19, 118, 131);
+        }
+    }
+}
 
 
 .sidenav{

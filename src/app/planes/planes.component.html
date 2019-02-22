@@ -17,7 +17,7 @@
   </md-form-field>
   <span class="example-spacer" style="text-align: center;">Planes</span>
   <button md-raised-button (click)="refresh(true)" >
-    <md-icon>cached</md-icon> Actualizar Lista
+    <md-icon [class.updateicon]="update">cached</md-icon> Actualizar Lista
   </button>
   <button md-raised-button (click)="updatePrices()" *ngIf="usuario.perm && usuario.perm.includes('planes_w')">
     <!--md-icon>cached</md-icon--> Actualizar Precios
@@ -77,18 +77,31 @@
   <md-tab label="Megas Contratados">
     <div class="contenido">
 
-      <table class=addClient [md2Data]="mb | dataPipe: { name_plan: search}" #md2="md2DataTable" [rowsPerPage]="15">
+      <table class=addClient [md2Data]="mb | dataPipe: { name_plan: search}" #md2="md2DataTable" [rowsPerPage]="15" *ngIf="mb">
         <thead>
           <tr>
-            <td colspan="6">
+            <td colspan="3">
               <md2-pagination></md2-pagination>
             </td>
+            <td>
+            <md-radio-group [(ngModel)]="plan">
+              <td>
+              <md-radio-button value="p">Plan</md-radio-button>
+            </td>
+            <td>
+              <md-radio-button value="r">Router</md-radio-button>
+            </td>
+            <td>
+              <md-radio-button value="c">Celda</md-radio-button>
+            </td>
+            </md-radio-group>
+          </td>
           </tr>
           <tr>
-            <th style="width: 25%" md2SortBy="ip_srvidor">Nombre</th>
-            <th style="width: 25%" md2SortBy="nombre_srvidor">Cantidad de servicios</th>
-            <th style="width: 25%" md2SortBy="user_srvidor">Total de descarga</th>
-            <th style="width: 25%" md2SortBy="user_srvidor">Total de subida</th>
+            <th style="width: 25%" md2SortBy="name_plan">Nombre</th>
+            <th style="width: 25%" md2SortBy="cantidad">Cantidad de servicios</th>
+            <th style="width: 25%" md2SortBy="descarga">Total de descarga</th>
+            <th style="width: 25%" md2SortBy="subida">Total de subida</th>
 
           </tr>
         </thead>

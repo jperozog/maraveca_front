@@ -27,7 +27,9 @@ export class PlanesComponent implements OnInit, OnDestroy{
     mb:any = null;
     mb_t:any = null;
     search: string = '';
+    update:boolean=true;
     autoupdate = true;
+    plan="p";
     constructor(
       public usuario: AuthGuard,
       private http: Http,
@@ -55,12 +57,14 @@ export class PlanesComponent implements OnInit, OnDestroy{
     }
 
     refresh(nf){
-      this.http.get(environment.apiEndpoint+'planes/', {params:{responsable: this.usuario.currentUser.id_user}})
+      this.update=true;
+      this.http.get(environment.apiEndpoint+'planes/', {params:{responsable: this.usuario.currentUser.id_user, plan: this.plan}})
         .subscribe((data) => {
           this.data_t = data.json().planes;
           this.data=this.data_t;
           this.mb_t = data.json().mb;
           this.mb=this.mb_t;
+          this.update=false
           if(nf){
             this.snackBar.open("Planes Cargadas", null, {
               duration: 2000,
