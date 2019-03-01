@@ -468,8 +468,11 @@
               <td class="fac">
                 {{i.modulo}}
               </td>
-              <td class="fac">
+              <td class="fac" *ngIf="i.responsable != -1">
                 {{i.nombre_user}}
+              </td>
+              <td class="fac" *ngIf="i.responsable == -1">
+                Cliente
               </td>
               <td class="fac">
                 {{i.created_at  | stringToDate | date: 'd/M/yy'}}
@@ -703,8 +706,11 @@
             <td class="fac montos" style="text-align: center">
               {{i.created_at | stringToDate | date: 'dd/M/yy'}}
             </td>
-            <td class="fac montos">
+            <td class="fac montos" *ngIf="i.bal_tip!=8 && i.bal_tip!=9 && i.bal_tip!=10 && i.bal_tip!=11">
               {{i.bal_monto | number : '1.0-2'}} Bs.S
+            </td>
+            <td class="fac montos" *ngIf="i.bal_tip==8 || i.bal_tip==9 || i.bal_tip==10 || i.bal_tip==11">
+              {{i.bal_monto | number : '1.0-2'}} US$
             </td>
             <td class="fac montos">
               {{i.bal_comment}}
@@ -718,7 +724,10 @@
             <td class="fac" *ngIf="i.bal_tip==4">Retencion ISLR</td>
             <td class="fac" *ngIf="i.bal_tip==5">Retencion IVA</td>
             <td class="fac" *ngIf="i.bal_tip==7">Exonerado</td>
-
+            <td class="fac" *ngIf="i.bal_tip==8">Moneda Extranjera</td>
+            <td class="fac" *ngIf="i.bal_tip==9">Zelle</td>
+            <td class="fac" *ngIf="i.bal_tip==10">Wire Transfer</td>
+            <td class="fac" *ngIf="i.bal_tip==11">Efectivo</td>
 
             <td *ngIf="i.bal_stat == 2; else notpermited">
               <button md-icon-button color="primary" (click)="aprov(i)">
@@ -747,8 +756,14 @@
 
   </md-card-content>
   <md-card-actions style="text-align: center">
-    <span *ngIf="balac>0" style="color: rgb(75, 170, 78)">
-      Saldo a favor: {{(balac) | number:'1.0-2'}} Bs.S
+    <span *ngIf="balac>0 || balac_$>0" style="color: rgb(75, 170, 78)">
+      Saldo a favor: <span *ngIf="balac>0">
+        {{(balac) | number:'1.0-2'}} Bs.S
+        </span>
+        <span *ngIf="balac>0 && balac_$ >0">|</span>
+        <span *ngIf="balac_$>0">
+        {{balac_$ | number:'1.0-2'}} US$.
+          </span>
     </span>
     <span *ngIf="(facturado - pagado)>0" style="color: rgb(191, 76, 76)">
       Total Adeudado: {{(facturado - pagado) | number:'1.0-2'}} Bs.S

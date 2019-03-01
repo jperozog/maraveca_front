@@ -68,17 +68,17 @@
           {{i.IVA}}%
         </td>
         <td class="fontprod"*ngIf="serie == 1" style="text-align:right">
-          {{(i.precio_articulo*neto)/+i.cantidad | number : '1.1-3'}} {{row.denominacion}}
+          {{(i.precio_articulo*neto)/+i.cantidad | number : '1.1-2'}} {{row.denominacion}}
         </td>
         <td class="fontprod"*ngIf="serie == 0" style="text-align:right">
-          {{+i.precio_articulo/+i.cantidad | number : '1.0-3'}} {{row.denominacion}}
+          {{+i.precio_articulo/+i.cantidad | number : '1.0-2'}} {{row.denominacion}}
         </td>
         <td class="fontprod" style="text-align:right" >{{i.cantidad}}</td>
         <td class="fontprod" *ngIf="serie == 1" style="text-align:right">
-          {{(i.precio_articulo)*neto | number : '1.0-3'}} {{row.denominacion}}
+          {{(i.precio_articulo)*neto | number : '1.0-2'}} {{row.denominacion}}
         </td>
         <td class="fontprod" *ngIf="serie == 0" style="text-align:right">
-          {{i.precio_articulo | number : '1.0-3'}} {{row.denominacion}}
+          {{i.precio_articulo | number : '1.0-2'}} {{row.denominacion}}
         </td>
         <!--td *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1">
           <button  md-icon-button color="warn"(click)="deleteProductDialog(i)">
@@ -141,19 +141,19 @@
         Base Imponible
       </td>
       <td class="fontz boto bobo">
-        {{monto | number : '1.0-3'}} {{row.denominacion}}
+        {{monto | number : '1.0-2'}} {{row.denominacion}}
       </td>
       <td class="fontz bobo boto" *ngIf="serie == 1 && fac_products">
         Total I.V.A. {{iva}}%
       </td>
       <td class="fontz bobo boto" *ngIf="serie == 1">
-        {{impuesto|number : '1.0-3'}} {{row.denominacion}}
+        {{impuesto|number : '1.0-2'}} {{row.denominacion}}
       </td>
       <td class="fontz bobo boto">
         Total General
       </td>
       <td class="fontz bobo boto">
-        {{montosi | number : '1.0-3'}} {{row.denominacion}}
+        {{montosi | number : '1.0-2'}} {{row.denominacion}}
       </td>
     </tr>
   </tfoot>
@@ -188,7 +188,7 @@
     <td class="fac" *ngIf="p.pag_tip==5">Retencion IVA</td>
     <td class="fac" *ngIf="p.pag_tip==7">Exonerado</td>
     <td class="fac">{{p.pag_comment | capitalize2:true}}</td>
-    <td class="fac">{{p.pag_monto | number : '1.0-3'}} {{row.denominacion}}</td>
+    <td class="fac">{{p.pag_monto | number : '1.0-2'}} {{row.denominacion}}</td>
     <td class="fac">{{p.created_at | stringToDate | date: 'd/M/yy'}}</td>
     <!--td *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1">
       <button  md-icon-button color="warn"(click)="deletepagoDialog(p)">
@@ -200,15 +200,15 @@
     <td></td>
     <td></td>
     <td>Pagado:</td>
-    <td>{{pagado | number : '1.0-3'}} {{row.denominacion}}</td>
+    <td>{{pagado | number : '1.0-2'}} {{row.denominacion}}</td>
     <td></td>
   </tr><tr>
     <td *ngIf="serie == 0"></td>
     <td *ngIf="serie == 0"></td>
     <td *ngIf="deuda > 0"><font color="#d10512"><h3>Deuda: </h3></font></td>
     <td *ngIf="deuda <= 0"><font color="#00c402"><h3>Saldo: </h3></font></td>
-    <td *ngIf="deuda > 0"><font color="#d10512">{{deuda|number : '1.0-3'}} {{row.denominacion}}</font></td>
-    <td *ngIf="deuda <= 0"><font color="#00c402">{{deuda|number : '1.0-3'}} {{row.denominacion}}</font></td>
+    <td *ngIf="deuda > 0"><font color="#d10512">{{deuda|number : '1.0-2'}} {{row.denominacion}}</font></td>
+    <td *ngIf="deuda <= 0"><font color="#00c402">{{deuda|number : '1.0-2'}} {{row.denominacion}}</font></td>
     <td></td>
   </tr>
 </table>

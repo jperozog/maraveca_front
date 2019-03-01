@@ -16,6 +16,10 @@ import { AuthenticationService } from '../_services/index';
 import { Location } from '@angular/common';
 import { environment } from '../../environments/environment'
 import { SelectEquipoComponent, SelectTipoComponent } from '../inventarios/inventarios.component'
+
+const MAC_REGEX = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/
+const PHONE_REGEX = /^(0414\d|0412\d|0416\d|0426\d|0424\d|0415\d)+\d{6}/;
+
 @Component({
   selector: 'app-soporte',
   templateUrl: './soporte.component.html',
@@ -807,6 +811,7 @@ export class DeleteInstallDialog implements OnInit {
   a_search: any = "";
   u_search: any = "";
   sending = false;
+  used = false;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -831,10 +836,12 @@ export class DeleteInstallDialog implements OnInit {
       user: '',
       installer: ['', [Validators.required]],
       u_search: '',
-      a_search: ''
+      a_search: '',
+      tmp:''
     })
     if(data.row.ser1al==0 || (data.row.ser1al==1&&data.row.serial==0)){
       this.addDetails.get('serial').setValidators([Validators.required])
+
     }
   }
 
@@ -859,6 +866,39 @@ export class DeleteInstallDialog implements OnInit {
         installer: this.currentUser.id_user
       })
     }
+    this.addDetails.get('serial').valueChanges.subscribe(
+      (EN) => {
+        setTimeout(() => {
+          var pre = this.addDetails.value.serial.replace(/(.{2})/g, '$&:')
+          this.addDetails.patchValue(
+            {
+              serial: this.addDetails.value.serial.replace(/[^a-zA-Z0-9 ]/g, ""),
+              mac_srv: pre.replace(/(^:+|:+$)/g, "")
+              //mac_srv: pre.replace(/(.{16})/g, '$&')
+            }
+          )
+          if(this.addDetails.value.tmp != EN){
+
+            this.addDetails.patchValue({tmp: EN})
+            this.http.get(environment.apiEndpoint + 'verificar', {params:{serial: EN}})
+            .subscribe((data) => {
+              console.log(data.json())
+              setTimeout(()=>{if (data.json()==0){
+                this.addDetails.get('tmp').setValidators([Validators.required, Validators.pattern(PHONE_REGEX)])
+                this.addDetails.updateValueAndValidity();
+                this.used=false;
+              }else{
+                this.addDetails.get('tmp').setValidators([])
+                this.addDetails.updateValueAndValidity();
+                this.used=true;
+              }}, 200)
+
+            });
+          }
+          //this.addDetails.get('tmp').setValidators([Validators.required])
+        }, 200);
+        this.addDetails.updateValueAndValidity();
+      })
   }
 
   nosymbol() {

@@ -81,6 +81,7 @@
     <td colspan="3" *ngIf="data.row.ser1al==0 || (data.row.ser1al==1&&data.row.serial==0)">
       <md-form-field style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;">
       <input mdInput placeholder="Serial" class="md2-input" (input)="nosymbol()" formControlName="serial" style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"/>
+      <md-error *ngIf="used">El equipo ya se encuentra asignado o esta en inventario</md-error>
       </md-form-field>
     </td>
   </tr>

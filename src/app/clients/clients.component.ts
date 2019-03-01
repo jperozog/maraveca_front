@@ -633,6 +633,7 @@ export class ClientOverview implements OnInit{
   pagado:any = 0;
   autoupdate:boolean=true
   balac:any = 0;
+  balac_$:any = 0;
   constructor(
 
     private route: ActivatedRoute,
@@ -715,6 +716,7 @@ export class ClientOverview implements OnInit{
        var pagado_1=0
        var facturado_1=0
        var balac_1=0
+       var balac_$_1=0
       this.http.get(environment.apiEndpoint+'clientover/' + this.id)
        .subscribe((data) => {
          var response = data.json()
@@ -726,8 +728,10 @@ export class ClientOverview implements OnInit{
          this.balance = response.balance
          this.adicionales = response.adicionales
          this.balance.forEach(linea => {
-           if (linea.bal_rest>0){
+           if (linea.bal_rest>0 && linea.bal_stat==1 && (linea.bal_tip!=8 && linea.bal_tip!=9 &&linea.bal_tip!=10 &&linea.bal_tip!=11 &&linea.bal_tip!=12)){
              balac_1=balac_1+Number(linea.bal_rest);
+           }else if(linea.bal_rest>0 && linea.bal_stat==1 && (linea.bal_tip==8 || linea.bal_tip==9 || linea.bal_tip==10 ||linea.bal_tip==11 ||linea.bal_tip==12)){
+             balac_$_1=balac_$_1+Number(linea.bal_rest);
            }
          })
          this.facturacion.forEach(linea => {
@@ -746,6 +750,7 @@ export class ClientOverview implements OnInit{
 
          setTimeout(()=>{
            this.balac=balac_1
+           this.balac_$=balac_$_1
            this.pagado=pagado_1
            this.facturado=facturado_1
            if(!this.editclient){

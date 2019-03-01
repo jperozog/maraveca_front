@@ -31,7 +31,7 @@
             Monto
           </td>
           <td>
-            Referencia
+            Referencia / Titular
           </td>
           <td>
             Estado
@@ -71,8 +71,11 @@
           <td *ngIf="i.bal_from==4">Coro</td>
           <td *ngIf="i.bal_from==6">Taquilla Dabajuro</td>
 
-          <td style="text-align: right;">
+          <td style="text-align: right;" *ngIf="i.bal_tip!=8 && i.bal_tip!=9 && i.bal_tip!=10 && i.bal_tip!=11">
             {{i.bal_monto  | number : '1.0-3'}} Bs.S.
+          </td>
+          <td style="text-align: right;" *ngIf="i.bal_tip==8 || i.bal_tip==9 || i.bal_tip==10 || i.bal_tip==11">
+            {{i.bal_monto  | number : '1.0-3'}} US$.
           </td>
           <td style="text-align: right;">
             {{i.bal_comment}}

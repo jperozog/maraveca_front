@@ -6,7 +6,7 @@
   <span class="example-spacer" style="text-align: center;">Facturacion</span>
   <md-menu #filtros="mdMenu">
 
-      <input mdInput class="example-full-width" floatPlaceholder="never" (click)="stopPropagation($event)" placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+      <input mdInput class="md2-input" style="width:93%" floatPlaceholder="never" (click)="stopPropagation($event)" placeholder="Filtrar" [(ngModel)]="search" />
     <br />
     <md-radio-group [(ngModel)]="fac" (click)="stopPropagation($event)">
       <md-radio-button class="example-full-width" value="tod">Mostrar todas</md-radio-button>
@@ -100,8 +100,8 @@
             <td *ngIf="t.fac_status == 1 && (t.pagado >= t.monto)" style="width: 15%"><font color="#00c402">{{t.estado | capitalize2:true}}</font></td>
             <td *ngIf="t.fac_status == 2" style="width: 15%">Anulado</td>
 
-            <td style="width: 15%">{{t.monto | number : '1.1-3'}}{{t.denominacion}}</td>
-            <td style="width: 15%">{{t.deuda | number : '1.1-3'}}{{t.denominacion}}</td>
+            <td style="width: 15%">{{t.monto | number : '1.0-2'}}{{t.denominacion}}</td>
+            <td style="width: 15%">{{t.deuda | number : '1.0-2'}}{{t.denominacion}}</td>
 
             <td style="width: 15%">{{t.created_at | stringToDate | date: 'd/M/yy'}}</td>
 

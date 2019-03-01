@@ -3,6 +3,7 @@
   <table [formGroup]="addAbono" style="width=100%; min-width: 100%;">
     <tr>
       <md-select formControlName='bal_tip' style="width=100%; min-width: 100%;" placeholder="Banco">
+        <md-option value="11" >Efectivo $</md-option>
         <md-option value="2" >Transferencia Banesco</md-option>
         <md-option value="6" >Transferencia Bicentenario</md-option>
         <md-option value="1" >Transferencia BOD</md-option>
@@ -10,6 +11,8 @@
         <md-option value="8" >Moneda Extranjera</md-option>
         <md-option value="4" >Retencion ISLR</md-option>
         <md-option value="5" >Retencion IVA</md-option>
+        <md-option value="10" >Wire Transfer</md-option>
+        <md-option value="9" >Zelle</md-option>
       </md-select>
     </tr>
     <tr>
