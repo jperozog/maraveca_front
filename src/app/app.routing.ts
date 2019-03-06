@@ -24,7 +24,7 @@ import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } fro
 import { StatsComponent, PagarComponent, DetallesInstallerComponent, cargarPagocomponent } from './stats/stats.component'
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
 import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent, ShowEquipoComponent, SelectTipoComponent } from './inventarios/inventarios.component';
-
+import { ActivosComponent, ActivosDetComponent } from './activos/activos.component'
 const appRoutes: Routes = [
   {path: '', component: LayoutComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
@@ -56,6 +56,8 @@ const appRoutes: Routes = [
   {path: 'Pagos', component: AprovPagos, canActivate: [AuthGuard]},
   {path: 'DPagos', component: DeclinePagoDialog, canActivate: [AuthGuard]},
   {path: 'CPagos', component: ConfirmPagoDialog, canActivate: [AuthGuard]},
+  {path: 'activos', component: ActivosComponent, canActivate: [AuthGuard]},
+  {path: 'ActivosDet/:det', component: ActivosDetComponent, canActivate: [AuthGuard]},
   {path: 'fac_det', component: FacturacionPagos},
   {path: 'fac_anu', component: AnularFactura},
   {path: 'cargarPago', component: cargarPagocomponent},

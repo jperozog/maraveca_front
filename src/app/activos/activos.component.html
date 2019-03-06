@@ -1,0 +1,40 @@
+<md-toolbar class="submenu">
+  <md-form-field floatPlaceholder="never">
+    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer" style="text-align: center;">Activos</span>
+  <button md-button [mdMenuTriggerFor]="botones" style="color:rgb(104, 103, 112)">
+    Acciones<md-icon>more_vert</md-icon>
+  </button>
+</md-toolbar>
+<div class="contenido">
+
+  <md-menu #botones="mdMenu">
+    <button md-raised-button (click)="this.myService.refresh()">
+      <md-icon [class.updateicon]="update">cached</md-icon> Actualizar Lista
+    </button>
+    <button md-raised-button (click)="openDialog()" *ngIf="usuario.perm && usuario.perm.includes('inventarios_w')">
+      <md-icon>group_add</md-icon> Agregar activos
+    </button>
+    <button md-raised-button class="btn" routerLink="/TransfEquipo">Transferir activos</button>
+  </md-menu>
+
+  <div class="card-container">
+        <md-card *ngFor="let p of activos" class="card" [routerLink]="['/ActivosDet', p.id_activos]">
+          <md-card-header>
+            <md-card-title *ngIf="p.ubi_activos==1" style="text-align:center">
+              Oficina:<br />{{p.nombre_zona}}
+            </md-card-title>
+            <md-card-title *ngIf="p.ubi_activos==2" style="text-align:center">
+              Celda:<br />{{p.nombre_celda}}
+            </md-card-title>
+          </md-card-header>
+          <md-card-content>
+            <p style="text-align:center">
+              {{p.cantidad}}
+            </p>
+            <br />
+          </md-card-content>
+        </md-card>
+      </div>
+    </div>
