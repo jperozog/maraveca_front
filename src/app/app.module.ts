@@ -77,7 +77,7 @@ import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibili
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component';
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
 import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent, ShowEquipoComponent, SelectTipoComponent } from './inventarios/inventarios.component';
-import { ActivosComponent, ActivosDetComponent } from './activos/activos.component';
+import { ActivosComponent, ActivosDetComponent, AddActivoComponent } from './activos/activos.component';
 
 
 
@@ -166,7 +166,8 @@ import { ActivosComponent, ActivosDetComponent } from './activos/activos.compone
     DeclinePagoDialog,
     ConfirmPagoDialog,
     ActivosComponent,
-    ActivosDetComponent
+    ActivosDetComponent,
+    AddActivoComponent
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,
