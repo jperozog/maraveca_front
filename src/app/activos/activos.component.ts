@@ -59,6 +59,22 @@ export class ActivosComponent implements OnInit, OnDestroy {
 
   }
 
+  transfEquipo(){
+    //console.log(row);
+    //this.selectedRowIndex = row.id;
+    let dialogRef = this.dialog.open(transfActivoComponent, {
+      //height: '80%',
+      //data: row
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    });
+    //this.myService.refresh();
+
+  }
+
   refresh(nf){
     this.update=true
     this.http.get(environment.apiEndpoint+'activos/')
@@ -132,6 +148,81 @@ export class ActivosDetComponent implements OnInit, OnDestroy {
   styleUrls: ['./activos.component.css']
 })
 export class AddActivoComponent implements OnInit {
+  zonas:any
+  celdas:any
+  cla_activos:any
+  seriales:any=[]
+  addActivo1:FormGroup
+  constructor(
+    private fb: FormBuilder,
+    public dialogRef: MdDialogRef<AddActivoComponent>,
+    //@Inject(MD_DIALOG_DATA) public row: any,
+    private http: Http,
+    public usuario: AuthGuard,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    public router: Router)
+    {
+      this.addActivo1 = this.fb.group({
+        obj_activos:['', [Validators.required]],
+        cla_activos:['', [Validators.required]],
+        cla_activos_s:['', [Validators.required]],
+        ubi_activos:[[], [Validators.required]],
+        ubi_activos_s:[[], [Validators.required]],
+        det_activos:[[], [Validators.required]],
+        det_activos_s:[[], [Validators.required]],
+        com_activos:[[], [Validators.required]],
+
+      })
+      this.http.get(environment.apiEndpoint+'preloadActivos/')
+      .subscribe((data)=>{
+        this.zonas=data.json().zonas
+        this.celdas=data.json().celdas
+        this.cla_activos=data.json().cla_activos
+        }
+      )
+    }
+
+    ngOnInit(){
+      // this.addActivo1.get('serial_inventario').valueChanges.subscribe(
+      //   (EN)=>{
+      //     setTimeout(()=>{
+      //       //this.Agregar()
+      //     }, 10)
+      //   }
+      // )
+    }
+
+    Agregar(){
+        this.seriales.push(this.addActivo1.value.serial_inventario)
+        setTimeout(()=>{
+          this.addActivo1.patchValue({serial_inventario: '', seriales: this.seriales})
+        }, 5)
+
+    }
+
+    Enviar(){
+        this.addActivo1.addControl('responsable', new FormControl(this.usuario.currentUser.id_user))
+        this.http.post(environment.apiEndpoint+'inventarios/', this.addActivo1.value)
+        .subscribe((data)=>{
+          this.addActivo1.removeControl('responsable')
+          this.dialogRef.close();
+          this.snackBar.open("Zona Editada", null, {
+            duration: 2000,
+          });
+        })
+
+    }
+    onNoClick(): void {
+      this.dialogRef.close();
+    }
+
+}
+@Component({
+  templateUrl: './addActivos.component.html',
+  styleUrls: ['./activos.component.css']
+})
+export class transfActivoComponent implements OnInit {
   zonas:any
   celdas:any
   cla_activos:any
