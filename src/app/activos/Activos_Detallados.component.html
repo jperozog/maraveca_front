@@ -20,7 +20,7 @@
     <button md-raised-button (click)="this.myService.refresh()">
       <md-icon [class.updateicon]="update">cached</md-icon> Actualizar Lista
     </button>
-    <button md-raised-button (click)="openDialog()" *ngIf="usuario.perm && usuario.perm.includes('inventarios_w')">
+    <button md-raised-button (click)="AddEquipo()">
       <md-icon>group_add</md-icon> Agregar activos
     </button>
     <button md-raised-button class="btn" routerLink="/TransfEquipo">Transferir activos</button>

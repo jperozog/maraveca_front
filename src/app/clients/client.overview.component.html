@@ -720,14 +720,14 @@
             <td class="fac" *ngIf="i.bal_tip==6">Transferencia Bicentenario</td>
             <td class="fac" *ngIf="i.bal_tip==1">Transferencia BOD</td>
             <td class="fac" *ngIf="i.bal_tip==3">Transferencia Venezuela</td>
-            <td class="fac" *ngIf="i.bal_tip==8">Moneda Extranjera</td>
             <td class="fac" *ngIf="i.bal_tip==4">Retencion ISLR</td>
             <td class="fac" *ngIf="i.bal_tip==5">Retencion IVA</td>
             <td class="fac" *ngIf="i.bal_tip==7">Exonerado</td>
+            <td class="fac" *ngIf="i.bal_tip==8">Moneda Extranjera</td>
             <td class="fac" *ngIf="i.bal_tip==9">Zelle</td>
             <td class="fac" *ngIf="i.bal_tip==10">Wire Transfer</td>
             <td class="fac" *ngIf="i.bal_tip==11">Efectivo</td>
-
+            
             <td *ngIf="i.bal_stat == 2; else notpermited">
               <button md-icon-button color="primary" (click)="aprov(i)">
                 <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>

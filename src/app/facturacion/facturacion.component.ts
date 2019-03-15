@@ -602,7 +602,7 @@ export class deletepagoDialog {
     })
     export class ConfirmPagoDialog implements OnInit, OnDestroy {
       constructor(
-        public dialogRef: MdDialogRef<DeclinePagoDialog>,
+        public dialogRef: MdDialogRef<ConfirmPagoDialog>,
         @Inject(MD_DIALOG_DATA) public data: any,
         private http: Http,
         public dialog: MdDialog,
@@ -613,7 +613,7 @@ export class deletepagoDialog {
         }
 
       ngOnInit(){
-
+        console.log(this.data)
       }
       ngOnDestroy(){
 

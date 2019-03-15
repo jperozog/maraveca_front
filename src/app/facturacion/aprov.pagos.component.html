@@ -70,6 +70,15 @@
           <td *ngIf="i.bal_from==5">Maracaibo</td>
           <td *ngIf="i.bal_from==4">Coro</td>
           <td *ngIf="i.bal_from==6">Taquilla Dabajuro</td>
+          <td *ngIf="i.bal_from==12">otros bancos (Venezuela)</td>
+          <td *ngIf="i.bal_from==13">otros bancos (Bicentenario)</td>
+          <td *ngIf="i.bal_from==14">otros bancos (BNC)</td>
+          <td *ngIf="i.bal_from==15">otros bancos (Provincial)</td>
+          <td *ngIf="i.bal_from==16">otros bancos (Mercantil)</td>
+          <td *ngIf="i.bal_from==17">otros bancos (Banco del tesoro)</td>
+          <td *ngIf="i.bal_from==18">otros bancos (Banco Venezolano de credito)</td>
+          <td *ngIf="i.bal_from==19">otros bancos (Banplus)</td>
+          <td *ngIf="i.bal_from==20">otros bancos (BFC)</td>
 
           <td style="text-align: right;" *ngIf="i.bal_tip!=8 && i.bal_tip!=9 && i.bal_tip!=10 && i.bal_tip!=11">
             {{i.bal_monto  | number : '1.0-3'}} Bs.S.

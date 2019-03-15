@@ -128,6 +128,22 @@ export class ActivosDetComponent implements OnInit, OnDestroy {
     this.autoupdate=false
   }
 
+  AddEquipo(){
+    //console.log(row);
+    //this.selectedRowIndex = row.id;
+    let dialogRef = this.dialog.open(AddActivoComponent, {
+      //height: '80%',
+      //data: row
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    });
+    //this.myService.refresh();
+
+  }
+
   refresh(nf){
     this.update=true
     this.http.get(environment.apiEndpoint+'activosdet/', {params: {id: this.det}})
