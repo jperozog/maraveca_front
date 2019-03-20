@@ -183,11 +183,11 @@ export class AddActivoComponent implements OnInit {
         obj_activos:['', [Validators.required]],
         cla_activos:['', [Validators.required]],
         cla_activos_s:['', [Validators.required]],
-        ubi_activos:[[], [Validators.required]],
+        ubi_activos:['', [Validators.required]],
         ubi_activos_s:[[], [Validators.required]],
-        det_activos:[[], [Validators.required]],
+        det_activos:['', [Validators.required]],
         det_activos_s:[[], [Validators.required]],
-        com_activos:[[], [Validators.required]],
+        com_activos:['', [Validators.required]],
 
       })
       this.http.get(environment.apiEndpoint+'preloadActivos/')

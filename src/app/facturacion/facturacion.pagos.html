@@ -179,17 +179,17 @@
   </tr>
   <tr *ngFor="let p of fac_pagos">
     <td class="fac">Pago Registrado</td>
-    <td class="fac" *ngIf="p.bal_tip==2">Transferencia Banesco</td>
-    <td class="fac" *ngIf="p.bal_tip==6">Transferencia Bicentenario</td>
-    <td class="fac" *ngIf="p.bal_tip==1">Transferencia BOD</td>
-    <td class="fac" *ngIf="p.bal_tip==3">Transferencia Venezuela</td>
-    <td class="fac" *ngIf="p.bal_tip==4">Retencion ISLR</td>
-    <td class="fac" *ngIf="p.bal_tip==5">Retencion IVA</td>
-    <td class="fac" *ngIf="p.bal_tip==7">Exonerado</td>
-    <td class="fac" *ngIf="p.bal_tip==8">Moneda Extranjera</td>
-    <td class="fac" *ngIf="p.bal_tip==9">Zelle</td>
-    <td class="fac" *ngIf="p.bal_tip==10">Wire Transfer</td>
-    <td class="fac" *ngIf="p.bal_tip==11">Efectivo</td>
+    <td class="fac" *ngIf="p.pag_tip==2">Transferencia Banesco</td>
+    <td class="fac" *ngIf="p.pag_tip==6">Transferencia Bicentenario</td>
+    <td class="fac" *ngIf="p.pag_tip==1">Transferencia BOD</td>
+    <td class="fac" *ngIf="p.pag_tip==3">Transferencia Venezuela</td>
+    <td class="fac" *ngIf="p.pag_tip==4">Retencion ISLR</td>
+    <td class="fac" *ngIf="p.pag_tip==5">Retencion IVA</td>
+    <td class="fac" *ngIf="p.pag_tip==7">Exonerado</td>
+    <td class="fac" *ngIf="p.pag_tip==8">Moneda Extranjera</td>
+    <td class="fac" *ngIf="p.pag_tip==9">Zelle</td>
+    <td class="fac" *ngIf="p.pag_tip==10">Wire Transfer</td>
+    <td class="fac" *ngIf="p.pag_tip==11">Efectivo</td>
 
     <td class="fac">{{p.pag_comment | capitalize2:true}}</td>
     <td class="fac">{{p.pag_monto | number : '1.0-2'}} {{row.denominacion}}</td>
