@@ -219,7 +219,7 @@ export class AddActivoComponent implements OnInit {
 
     Enviar(){
         this.addActivo1.addControl('responsable', new FormControl(this.usuario.currentUser.id_user))
-        this.http.post(environment.apiEndpoint+'inventarios/', this.addActivo1.value)
+        this.http.post(environment.apiEndpoint+'activos/', this.addActivo1.value)
         .subscribe((data)=>{
           this.addActivo1.removeControl('responsable')
           this.dialogRef.close();

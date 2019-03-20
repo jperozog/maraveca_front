@@ -11,7 +11,7 @@
     </tr>
     <tr>
       <td colspan="2">
-        <md2-select formControlName="cla_activos" floatPlaceholder="never" placeholder="Zona" style="width=100%; min-width: 100%; min-height: 100%;" mdInput>
+        <md2-select formControlName="cla_activos" floatPlaceholder="never" placeholder="Clasificacion" style="width=100%; min-width: 100%; min-height: 100%;" mdInput>
           <md2-select-header>
             <input class="search" type="text" [(ngModel)]="cla_activos_s" placeholder="Buscar..." style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" formControlName="cla_activos_s" />
           </md2-select-header>
@@ -19,14 +19,36 @@
         </md2-select>
       </td>
     </tr>
-    <tr>
+    <tr *ngIf="addActivo1.value.ubi_activos == ''">
 
       <td colspan="2">
-        <md2-select formControlName="det_activos" floatPlaceholder="never" placeholder="Modelo" style="width=100%; min-width: 100%; min-height: 100%;" mdInput>
+        <md2-select formControlName="ubi_activos" floatPlaceholder="never" placeholder="Ubicacion" style="width=100%; min-width: 100%; min-height: 100%;" mdInput>
+          <md2-option  value="1">Oficina</md2-option>
+          <md2-option  value="2">Celda</md2-option>
+        </md2-select>
+      </td>
+
+    </tr>
+    <tr *ngIf="addActivo1.value.ubi_activos == '1'">
+
+      <td colspan="2">
+        <md2-select formControlName="det_activos" floatPlaceholder="never" placeholder="Zona" style="width=100%; min-width: 100%; min-height: 100%;" mdInput>
           <md2-select-header>
             <input class="search" type="text" [(ngModel)]="model_s" placeholder="Buscar..." style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" formControlName="det_activos_s" />
           </md2-select-header>
-          <md2-option *ngFor="let i of (zonas | dataPipe : {nombre_zona: det_activos_s})" [value]="i.id">{{i.nombre_zona}}</md2-option>
+          <md2-option *ngFor="let i of (zonas | dataPipe : {nombre_zona: addActivo1.value.det_activos_s})" [value]="i.id">{{i.nombre_zona}}</md2-option>
+        </md2-select>
+      </td>
+
+    </tr>
+    <tr *ngIf="addActivo1.value.ubi_activos == '2'">
+
+      <td colspan="2">
+        <md2-select formControlName="det_activos" floatPlaceholder="never" placeholder="Celdas" style="width=100%; min-width: 100%; min-height: 100%;" mdInput>
+          <md2-select-header>
+            <input class="search" type="text" [(ngModel)]="model_s" placeholder="Buscar..." style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" formControlName="det_activos_s" />
+          </md2-select-header>
+          <md2-option *ngFor="let i of (celdas | dataPipe : {nombre_celda: addActivo1.value.det_activos_s})" [value]="i.id">{{i.nombre_celda}}</md2-option>
         </md2-select>
       </td>
 
