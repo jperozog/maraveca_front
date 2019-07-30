@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { AuthGuard } from '../_guards/index';
 import { DatePipe } from '@angular/common';
 import { environment } from '../../environments/environment'
+import {DeleteticketDialog} from '../soporte/soporte.component';
 
 const MAC_REGEX = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/
 
@@ -26,7 +27,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
 
   update = true;
   autoupdate: boolean
-  myService: MyService | null;
+
   data: any = [];
   installs: any = [];
   data_t: any = [];
@@ -36,6 +37,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
   search_s: string = '';
   p_search = null;
   planes: any;
+
   @ViewChildren('servicios') spr;
   constructor(
     public usuario: AuthGuard,
@@ -43,8 +45,8 @@ export class ServiciosComponent implements OnInit, OnDestroy {
     this.autoupdate = true;
     this.snackBar.open("Cargando Clientes", null, {
       duration: 2000,
+
     });
-    this.myService = new MyService(http, router, usuario);
 
   }
 
@@ -67,6 +69,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
 
     this.http.get(environment.apiEndpoint + 'servicios/')
       .subscribe((data) => {
+
         this.data = data.json().servicios;
         this.installs = data.json().soportes;
         this.data_t = this.data;
@@ -169,13 +172,26 @@ export class ServiciosComponent implements OnInit, OnDestroy {
     });
     //this.myService.refresh();
   }
+  deleteservice(row) : void {
+    console.log(row); //show`s id
+    let dialogRef = this.dialog.open(DeleteserviceDialog, {
+      width: '250px',
+      data:row
 
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      //this.animal = result;
+    });
+
+  }
   private openLINK(url) {
     console.log(url)
     window.open("http://186.167.32.27:81/maraveca/test.php?ip=" + url, '_blank');
   }
 
-  private delete(id): void {
+  /*private delete(id): void {
     console.log(id); //show`s id
     this.myService.deleteData(id)
       .subscribe((data) => { console.log(data) });
@@ -184,13 +200,53 @@ export class ServiciosComponent implements OnInit, OnDestroy {
     });
     //this.myService.refresh();
 
-  }
+  }*/
 
 }
 
 function capitalizeName(name) {
   return name.replace(/\b(\w)/g, s => s.toUpperCase());
 }
+@Component({
+  selector: 'delete-dialog',
+  templateUrl: 'confirm-delete.html',
+  styleUrls: ['./servicios.component.css']
+})
+
+export class DeleteserviceDialog {
+  myService: MyService | null;
+
+
+  constructor(
+    public dialogRef: MdDialogRef<DeleteserviceDialog>,
+    @Inject(MD_DIALOG_DATA) public data: any, private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router, private usuario: AuthGuard) {
+    this.myService = new MyService(http, router, usuario);
+ console.log(data);
+
+  }
+
+
+delete(): void {
+
+  console.log("borrando"+" "+this.data+"...");
+  this.myService.deleteData(this.data)
+      .subscribe((data) => { console.log(data) });
+
+    this.snackBar.open("Borrando Servicio: Por favor espere", null, {
+      duration: 3000,
+    });
+    //this.myService.refresh();*!/
+  this.dialogRef.close(
+
+  );
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+
 
 export class MyService {
 
@@ -437,7 +493,7 @@ export class AddPendingComponent implements OnInit {
         this.equipo = data.json().equipos;
         this.aps = data.json().aps;
         this.planes = data.json().planes;
-
+console.log(this.equipo);
       });
     this.funciones = new MyService(http, router, usuario);
 
@@ -643,3 +699,5 @@ export class AddPendingComponent implements OnInit {
 
 
 //sshfs oroxo@186.167.32.27:81:/var/www/htdocs/filemanager Plantillas && scrot 'screen.png' -e 'mv $f ~/shots/' && fusermount -u Plantillas
+
+

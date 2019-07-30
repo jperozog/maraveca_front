@@ -138,7 +138,8 @@ export class MyService {
   styleUrls: ['./instalaciones.component.css']
 })
 export class AddInstallComponent{
-
+edit: any;
+S_equipo: any;
   /*dit : any;
   costo : any;
   nombre :string;

@@ -1,5 +1,7 @@
 <h1 *ngIf="addplan.value.tipo_soporte == 2" md-dialog-title>Apertura de Ticket</h1>
 <h1 *ngIf="addplan.value.tipo_soporte == 1" md-dialog-title>Agendar Instalacion</h1>
+<h1 *ngIf="addplan.value.tipo_soporte == 4" md-dialog-title>Otros Trabajos e instalaciones</h1>
+<h1 *ngIf="addplan.value.tipo_soporte == 3" md-dialog-title>Averias</h1>
 <div class="contenido" [class.submenu]="edit">
   <div style="width:90%; margin: 0 auto;">
     <form id="client" name="clientForm" [formGroup]="addplan" ng-submit="ok(clientForm)" novalidate>
@@ -36,6 +38,9 @@
             <md2-option value="3">
               Averia
             </md2-option>
+              <md2-option value="4">
+                Otros trabajos e instalaciones
+              </md2-option>
           </md2-select>
         </td>
           <td>
@@ -53,7 +58,7 @@
             </md2-option>
           </md2-select>
         </td>
-    </tr><tr *ngIf="!edit && (addplan.value.tipo_soporte == 1 || addplan.value.tipo_soporte == 3)"> <!-- esto mostrara los campos para un nuevo ticket solo si no se esta editando -->
+    </tr><tr *ngIf="!edit && (addplan.value.tipo_soporte == 1 || addplan.value.tipo_soporte == 4)"> <!-- esto mostrara los campos para un nuevo ticket solo si no se esta editando -->
       <td colspan="2">
         <md2-select name="tipo"
         formControlName="tipo_soporte"
@@ -71,10 +76,13 @@
         <md2-option value="3" >
           Averia
         </md2-option>
+          <md2-option value="4">
+            Otros trabajos e instalaciones
+          </md2-option>
       </md2-select>
     </td>
 </tr>
-
+<br>
         <!--  comienza el campo de servicios / clientes  -->
 
         <tr *ngIf="!edit"> <!-- esto mostrara los campos para un nuevo ticket solo si no se esta editando -->
@@ -264,14 +272,15 @@
         <tr *ngIf="addplan.value.tipo_soporte == 3">
           <td colspan="2">
             <md-form-field class="example-full-width">
-              <input type="text" name="last"
+              <textarea type="text" name="last"
               class="form-control"
               formControlName="comment_soporte"
               placeholder="Comentario"
               autocomplete="off"
               required
               mdInput
-              >
+                     rows ="3"
+              ></textarea>
             </md-form-field>
           </td>
         </tr>
@@ -279,6 +288,55 @@
 
         <!-- fin de celdas y equipos para averias -->
 
+        <!-- Celdas y equipos para Otros trabajos e instalaciones -->
+
+        <tr *ngIf="addplan.value.tipo_soporte == 4">
+          <td colspan="2">
+            <md2-select name="celda"
+                        formControlName="servicio_soporte"
+                        placeholder="Celda"
+                        style="width=100%; min-width: 100%; min-height: 100%;"
+                        mdInput
+                        floatPlaceholder="never">
+<!--                        [disabled]="row"-->
+            
+              <md2-select-header>
+                <input class="search" name="S_celda"
+                       type="text"
+                       [(ngModel)]="S_celda"
+                       placeholder="Buscar..."
+                       style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                       formControlName="S_servicios" />
+              </md2-select-header>
+              <md2-option *ngFor="let i of (celda | dataPipe : {nombre_celda: S_celda})" [value]="i.id_celda">
+                <span>{{(i.nombre_celda | capitalize2)}}</span><br />
+              </md2-option>
+            </md2-select>
+          </td>
+
+
+
+        </tr>
+        <br>
+
+        <tr *ngIf="addplan.value.tipo_soporte == 4">
+          <td colspan="4">
+            <md-form-field class="example-full-width">
+              <textarea  type="text" name="last"
+                     class="form-control"
+                     formControlName="comment_soporte"
+                     placeholder="Trabajo o instalacion a realizar "
+                     autocomplete="off"
+                     required
+                     mdInput
+                         rows ="3"
+              ></textarea>
+            </md-form-field>
+          </td>
+        </tr>
+
+
+        <!-- fin de celdas y equipos para Otros trabajos e instalaciones -->
 
 
 
@@ -315,6 +373,7 @@
           <td>
             <md-form-field class="example-full-width" *ngIf="!EN" floatPlaceholder="never">
             <input autocomplete="off" mdInput placeholder="Serial De Equipo" class="md2-input" formControlName="seriale" maxlength="12"/>
+
           </md-form-field>
           </td>
           <td>

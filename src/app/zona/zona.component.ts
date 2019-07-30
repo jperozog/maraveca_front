@@ -12,6 +12,7 @@ import 'rxjs/add/operator/startWith';
 import {Router} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
 import { environment } from '../../environments/environment'
+import {MyService} from '../../src/app/servicios/servicios.component';
 
 @Component({
   selector: 'app-zona',
@@ -19,10 +20,12 @@ import { environment } from '../../environments/environment'
   styleUrls: ['./zona.component.css']
 })
 export class ZonaComponent implements OnInit, OnDestroy {
-  zonas:any
-  zonas_t:any
-  update:boolean=true
-  autoupdate:boolean=true
+  search:any;
+  zonas:any;
+  zonas_t:any;
+  update:boolean=true;
+  autoupdate:boolean=true;
+  myService: MyService | null;
   constructor(
     private http: Http,
     public usuario: AuthGuard,
@@ -30,7 +33,7 @@ export class ZonaComponent implements OnInit, OnDestroy {
     public snackBar:MdSnackBar,
     public router: Router)
     {
-
+      this.myService = new MyService(http, router);
     }
 
   ngOnInit() {

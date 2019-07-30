@@ -1,0 +1,55 @@
+<form id="client" name="clientForm" [formGroup]="addDetails" novalidate>
+<h1 md-dialog- align="center">Confirmacion</h1>
+<div md-dialog-content>
+
+
+</div>
+
+
+  <td *ngIf="currentUser ">
+    <label for="client">Por favor ingrese el nombre del instalador para el cierre del ticket</label><br> <br>
+  <md2-select name="Installer"
+              formControlName="installer"
+              placeholder="Instalador"
+              style="width=100%; min-width: 100%;"
+              mdInput
+  >
+    <md2-select-header>
+      <input name="a_search"
+             type="text"
+             formControlName="u_search"
+             [(ngModel)]="u_search"
+             placeholder="Buscar..."
+             style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+      />
+    </md2-select-header>
+    <md2-option *ngFor="let i of (installers | dataPipe : {nombre_user: u_search, apellido_user: u_search})" [value]="i.id_user">{{i.nombre_user + " " + i.apellido_user}}</md2-option>
+  </md2-select>
+
+</td>
+
+<div md-dialog-actions>
+
+  <!--<tr>
+
+    <td>
+      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="delete()" tabindex="2">SI</button>
+
+    </td>
+    <td>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">NO</button>
+
+    </td>
+  </tr>-->
+  <tr *ngIf="!sending">
+    <td colspan="2" >
+      <button md-raised-button color="primary" class="example-full-width btn btn-primary" (click)="service(data.row)" [disabled]='!addDetails.valid' tabindex="2">Si</button>
+
+    </td>
+    <td colspan="2">
+      <button md-raised-button color="warn" class="example-full-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">No</button>
+
+    </td>
+  </tr>
+</div>
+</form>

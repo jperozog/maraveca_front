@@ -173,12 +173,12 @@ export class FactibilidadesDetComponent {
 
   });
   this.EditFact=this.fb.group({
-    equipo:'',
-    celda:'',
-    factible:'',
+    equipo:['', Validators.required],
+    celda:['', Validators.required],
+    factible:['', Validators.required],
     ptp: '',
     ptp_det:'',
-    altura: '',
+    altura: ['', Validators.required],
     status:'2',
     e_search:'',
     c_search:'',

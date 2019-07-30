@@ -12,9 +12,8 @@ import {Router, ActivatedRoute} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 import 'rxjs/add/operator/takeWhile';
-import { DatePipe } from '@angular/common';
-import { environment } from '../../environments/environment'
-
+import {DatePipe, Location} from '@angular/common';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-facturacion',
@@ -626,7 +625,10 @@ export class deletepagoDialog {
         .subscribe((data) => {
           this.dialogRef.close();
         })
-
+        this.snackBar.open("aprovando pago: Por favor espere", null, {
+          duration: 4000,
+        });
+        this.dialogRef.close();
       }
     }
     @Component({
@@ -694,6 +696,7 @@ export class deletepagoDialog {
         public dialog: MdDialog,
         public snackBar:MdSnackBar,
         private router: Router,
+        private location: Location,
         private usuario: AuthGuard) {
         }
 
@@ -727,6 +730,7 @@ export class deletepagoDialog {
             console.log('The dialog was closed');
 
           })
+
         }
         rem(i): void{
           let dialogRef = this.dialog.open(DeclinePagoDialog, {
@@ -738,6 +742,7 @@ export class deletepagoDialog {
 
           })
         }
+      Close(){this.location.back();}
         // aprov(i): void{
         //   this.http.put(environment.apiEndpoint+'balance/', i)
         //   .subscribe((data) => {

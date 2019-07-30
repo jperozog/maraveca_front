@@ -79,13 +79,13 @@
               {{fechas[i].fecha}}
             </td>
             <td class="fac" style="text-align:right; ">
-              {{item.facturado | number: "1.0-2"}} Bs.S
+              {{item.facturado | number: "1.2"}} Bs.S
             </td>
             <td class="fac" style="text-align:right; ">
-              {{item.pagado | number: "1.0-2"}} Bs.S
+              {{item.pagado | number: "1.2"}} Bs.S
             </td>
             <td class="fac pointer hover" style="text-align:right;" (click)="goTOfac(item)">
-              {{(item.facturado-item.pagado)  | number: "1.0-2"}} Bs.S
+              {{(item.facturado-item.pagado)  | number: "1.2"}} Bs.S
             </td>
           </tr>
         </tbody>

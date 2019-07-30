@@ -69,7 +69,7 @@
 <tr>
 <td style="width:200px, min-width:200px">
   <md-form-field class="example-full-width">
-  <input type="text" name="Altura"
+  <input type="number" name="Altura"
   class="form-control"
   formControlName="altura"
   placeholder="Altura en Metros"
@@ -100,7 +100,7 @@
 <tr>
 <td>
   <md2-select
-  placeholder="Factible"
+  placeholder="Factibilidad"
   formControlName="factible"
   style="width=25%; min-width: 25%;">
   <md2-option value="1" >Factible</md2-option>
@@ -108,8 +108,8 @@
   <md2-option value="3" >Amerita Visita</md2-option>
 </md2-select>
 </td>
-<td><button
-  md-raised-button (click)="agregar()">Consolidar</button></td>
+<td><button color="primary"
+  md-raised-button [disabled]="!EditFact.valid"(click)="agregar()">Consolidar</button></td>
 </tr>
 </table>
 </form>

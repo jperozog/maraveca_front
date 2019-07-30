@@ -530,10 +530,10 @@
                   {{i.created_at | stringToDate | date: 'M/yy'}}
                 </td>
                 <td class="fac montos">
-                  {{i.monto | number : '1.0-2'}} {{i.denominacion}}
+                  {{i.monto | number : '1.2'}} {{i.denominacion}}
                 </td>
                 <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado != null)">
-                  {{i.pagado | number : '1.0-2'}}  {{i.denominacion}}
+                  {{i.pagado | number : '1.2'}}  {{i.denominacion}}
                 </td>
                 <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado == null)">
 
@@ -707,10 +707,10 @@
               {{i.created_at | stringToDate | date: 'dd/M/yy'}}
             </td>
             <td class="fac montos" *ngIf="i.bal_tip!=8 && i.bal_tip!=9 && i.bal_tip!=10 && i.bal_tip!=11">
-              {{i.bal_monto | number : '1.0-2'}} Bs.S
+              {{i.bal_monto | number : '1.2'}} Bs.S
             </td>
             <td class="fac montos" *ngIf="i.bal_tip==8 || i.bal_tip==9 || i.bal_tip==10 || i.bal_tip==11">
-              {{i.bal_monto | number : '1.0-2'}} US$
+              {{i.bal_monto | number : '1.2'}} US$
             </td>
             <td class="fac montos">
               {{i.bal_comment}}
@@ -757,7 +757,7 @@
   <md-card-actions style="text-align: center">
     <span *ngIf="balac>0 || balac_$>0" style="color: rgb(75, 170, 78)">
       Saldo a favor: <span *ngIf="balac>0">
-        {{(balac) | number:'1.0-2'}} Bs.S
+        {{(balac) | number:'1.2'}} Bs.S
         </span>
         <span *ngIf="balac>0 && balac_$ >0">|</span>
         <span *ngIf="balac_$>0">
@@ -765,7 +765,7 @@
           </span>
     </span>
     <span *ngIf="(facturado - pagado)>0" style="color: rgb(191, 76, 76)">
-      Total Adeudado: {{(facturado - pagado) | number:'1.0-2'}} Bs.S
+      Total Adeudado: {{(facturado - pagado) | number:'1.2'}} Bs.S <!--cambio el 14/06/2019 para que las facturas contenga dos decimales-->
     </span>
   </md-card-actions>
 </md-card>

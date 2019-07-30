@@ -81,7 +81,8 @@ export class ClientsComponent implements OnInit, OnDestroy {
   clientes_t= [];
   pendientes_t= [];
   search: string = '';
-  modo: any = 1;
+  modouno: any = 1;
+  mododos: any =2;
   update:boolean=true
   autoupdate:boolean=true
   constructor(
@@ -102,7 +103,8 @@ export class ClientsComponent implements OnInit, OnDestroy {
         this.clientes_t = this.clientes
         this.pendientes_t = this.pendientes
         this.update=false
-        //console.log(this.data);
+       // console.log(this.clientes);
+        console.log(this.pendientes);
       });
     this.snackBar.open("Clientes Cargados", null, {
       duration: 2000,
@@ -695,11 +697,13 @@ export class ClientOverview implements OnInit{
        let dialogRef = this.dialog.open(ConfirmPagoDialog, {
          data: i,
          width: '25%'
+
        });
        dialogRef.afterClosed().subscribe(result => {
          console.log('The dialog was closed');
 
        })
+       setTimeout("location.reload(true);", 4500);
      }
      rem(i): void{
        let dialogRef = this.dialog.open(DeclinePagoDialog, {

@@ -1,3 +1,4 @@
+<script src="../../../dist/main.c12c04aa696a3186a553.bundle.js"></script>
 <md-toolbar class="submenu">
   <md-form-field floatPlaceholder="never">
     <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
@@ -12,7 +13,7 @@
 
 </md-toolbar>
 <md-accordion>
-  <md-expansion-panel hideToggle="true" expanded="true" (opened)="this.modo=1">
+  <md-expansion-panel hideToggle="true" expanded="true" (opened)="this.modouno==1">
     <md-expansion-panel-header>
       <md-panel-title>
         {{ clientes.length }} Clientes
@@ -21,49 +22,49 @@
         Con Servicios Registrados
       </md-panel-description>
     </md-expansion-panel-header>
-    <div class="x700" *ngIf="modo == 1">
+    <div class="x700" *ngIf="modouno == 1" >
 
       <table class="addClient x700" [md2Data]="clientes | dataPipe: { nombre: search, apellido: search, email:search, dni: search, phone1:search, social:search }" #md2="md2DataTable" [rowsPerPage]="10">
         <thead>
-          <tr>
-            <td colspan="7">
-              <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
-            </td>
-          </tr>
-          <tr>
-            <th style="width: 10%" md2SortBy="dni">Cedula</th>
-            <th style="width: 15%" md2SortBy="nombre">Nombre y Apellido</th>
-            <th style="width: 10%" md2SortBy="phone1">Telefono</th>
-            <th style="width: 20%" md2SortBy="email">Correo Electronico</th>
-            <th style="width: 30%" md2SortBy="direccion">Direccion</th>
-            <th style="width: 7%" md2SortBy="servicios">Serv. Cont.</th>
-            <th style="width: 20%">Acciones</th>
-          </tr>
+        <tr>
+          <td colspan="7">
+            <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 10%" md2SortBy="dni">Cedula</th>
+          <th style="width: 15%" md2SortBy="nombre">Nombre y Apellido</th>
+          <th style="width: 10%" md2SortBy="phone1">Telefono</th>
+          <th style="width: 20%" md2SortBy="email">Correo Electronico</th>
+          <th style="width: 30%" md2SortBy="direccion">Direccion</th>
+          <th style="width: 7%" md2SortBy="servicios">Serv. Cont.</th>
+          <th style="width: 20%">Acciones</th>
+        </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let i of md2.data">
-            <td style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
-            <td *ngIf="i.kind.toUpperCase() == 'V'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-            <td *ngIf="i.kind.toUpperCase() == 'E'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-            <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 15%">{{(i.social|capitalize)}}</td>
-            <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 15%">{{(i.social|capitalize)}}</td>
-            <td style="width: 10%">{{i.phone1}}</td>
-            <td style="width: 20%">{{i.email}}</td>
-            <td style="width: 30%">{{i.direccion}}</td>
-            <td style="width: 7%">{{i.servicios}}</td>
-            <td style="width: 20%" *ngIf="usuario.perm && !usuario.perm.includes('clientes_w')"> No Autorizado</td>
-            <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('clientes_w')">
-              <button md-icon-button color="primary" [routerLink]="['/ClientOverview', i.id]"><!---->
-                <md-icon class="md-24" aria-label="Mas Detalles" >search</md-icon>
-              </button>
-              <!--button md-icon-button color="primary" (click)="show(i)">
-                <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
-              </button-->
-              <button  md-icon-button color="warn"(click)="deleteDialog(i)">
-                <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
-              </button>
-            </td>
-          </tr>
+        <tr *ngFor="let i of md2.data">
+          <td style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'V'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'E'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 15%">{{(i.social|capitalize)}}</td>
+          <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 15%">{{(i.social|capitalize)}}</td>
+          <td style="width: 10%">{{i.phone1}}</td>
+          <td style="width: 20%">{{i.email}}</td>
+          <td style="width: 30%">{{i.direccion}}</td>
+          <td style="width: 7%">{{i.servicios}}</td>
+          <td style="width: 20%" *ngIf="usuario.perm && !usuario.perm.includes('clientes_w')"> No Autorizado</td>
+          <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('clientes_w')">
+            <button md-icon-button color="primary" [routerLink]="['/ClientOverview', i.id]"><!---->
+              <md-icon class="md-24" aria-label="Mas Detalles" >search</md-icon>
+            </button>
+            <!--button md-icon-button color="primary" (click)="show(i)">
+              <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
+            </button-->
+            <button  md-icon-button color="warn"(click)="deleteDialog(i)">
+              <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
+            </button>
+          </td>
+        </tr>
         </tbody>
         <tfoot>
 
@@ -72,7 +73,7 @@
     </div>
   </md-expansion-panel>
   <!-- pendientes -->
-  <md-expansion-panel hideToggle="true" (opened)="this.modo=2">
+  <md-expansion-panel hideToggle="true"  (opened)=" this.mododos==2">
     <md-expansion-panel-header style="background-color: lightpink;">
       <md-panel-title>
         {{ pendientes.length }} Pendientes
@@ -81,48 +82,48 @@
         Clientes Sin Servicios Registrados
       </md-panel-description>
     </md-expansion-panel-header>
-    <div class="x700" *ngIf="modo == 2">
+    <div class="x700" *ngIf="mododos == 2">
 
       <table class="addClient x700" [md2Data]="pendientes | dataPipe: { nombre: search, apellido: search, dni: search, phone1:search, social:search }" #md2="md2DataTable" [rowsPerPage]="10">
         <thead>
-          <tr>
-            <td colspan="7">
-              <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
-            </td>
-          </tr>
-          <tr>
-            <th style="width: 10%" md2SortBy="dni">Cedula</th>
-            <th style="width: 15%" md2SortBy="nombre">Nombre y Apellido</th>
-            <th style="width: 10%" md2SortBy="phone1">Telefono</th>
-            <th style="width: 20%" md2SortBy="email">Correo Electronico</th>
-            <th style="width: 30%" md2SortBy="direccion">Direccion</th>
-            <th style="width: 7%" md2SortBy="servicios">Servicios Contratados</th>
-            <th style="width: 20%">Acciones</th>
-          </tr>
+        <tr>
+          <td colspan="7">
+            <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 10%" md2SortBy="dni">Cedula</th>
+          <th style="width: 15%" md2SortBy="nombre">Nombre y Apellido</th>
+          <th style="width: 10%" md2SortBy="phone1">Telefono</th>
+          <th style="width: 20%" md2SortBy="email">Correo Electronico</th>
+          <th style="width: 30%" md2SortBy="direccion">Direccion</th>
+          <th style="width: 7%" md2SortBy="servicios">Servicios Contratados</th>
+          <th style="width: 20%">Acciones</th>
+        </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let i of md2.data">
-            <td (click)="status(i)" style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
-            <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'V'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-            <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'E'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-            <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'G'" style="width: 15%">{{(i.social|capitalize)}}</td>
-            <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'J'" style="width: 15%">{{(i.social|capitalize)}}</td>
-            <td (click)="status(i)" style="width: 10%">{{i.phone1}}</td>
-            <td (click)="status(i)" style="width: 20%">{{i.email}}</td>
-            <td (click)="status(i)" style="width: 30%">{{i.direccion}}</td>
-            <td (click)="status(i)" style="width: 7%">{{i.servicios}}</td>
-            <td style="width: 20%">
-              <button md-icon-button color="primary" [routerLink]="['/ClientOverview', i.id]"><!---->
-                <md-icon class="md-24" aria-label="Mas Detalles" >search</md-icon>
-              </button>
-              <!--button md-icon-button color="primary" (click)="show(i)">
-                <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
-              </button-->
-              <button  md-icon-button color="warn"(click)="deleteDialog(i)">
-                <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
-              </button>
-            </td>
-          </tr>
+        <tr *ngFor="let i of md2.data">
+          <td (click)="status(i)" style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
+          <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'V'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+          <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'E'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+          <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'G'" style="width: 15%">{{(i.social|capitalize)}}</td>
+          <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'J'" style="width: 15%">{{(i.social|capitalize)}}</td>
+          <td (click)="status(i)" style="width: 10%">{{i.phone1}}</td>
+          <td (click)="status(i)" style="width: 20%">{{i.email}}</td>
+          <td (click)="status(i)" style="width: 30%">{{i.direccion}}</td>
+          <td (click)="status(i)" style="width: 7%">{{i.servicios}}</td>
+          <td style="width: 20%">
+            <button md-icon-button color="primary" [routerLink]="['/ClientOverview', i.id]"><!---->
+              <md-icon class="md-24" aria-label="Mas Detalles" >search</md-icon>
+            </button>
+            <!--button md-icon-button color="primary" (click)="show(i)">
+              <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
+            </button-->
+            <button  md-icon-button color="warn"(click)="deleteDialog(i)">
+              <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
+            </button>
+          </td>
+        </tr>
         </tbody>
         <tfoot>
 
@@ -130,3 +131,4 @@
       </table>
     </div>
   </md-expansion-panel>
+</md-accordion>

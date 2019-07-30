@@ -1,3 +1,4 @@
+
 <md-toolbar class="submenu">
   <md-form-field floatPlaceholder="never">
     <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
@@ -10,55 +11,58 @@
     <md-icon>group_add</md-icon> Agregar equipos
   </button>
   <button md-raised-button class="btn" routerLink="/TransfEquipo">Transferir Equipos</button>
+  <button md-raised-button class="btn" routerLink="/EquiposAsignados">Equipos Asignados</button>
 </md-toolbar>
+
 <md-accordion>
-  <md-expansion-panel hideToggle='true' expanded='false' (opened)="this.modo && this.modo=2">
+  <md-expansion-panel hideToggle='true' expanded='false' (opened)="this.modo=1">
     <md-expansion-panel-header>
-      <md-panel-title>
+      <md-panel-title style="font-weight:bold;">
         Listado de equipos
       </md-panel-title>
     </md-expansion-panel-header>
     <div class="contenido">
       <table class="addClient x700" [md2Data]="inventarios | dataPipe: { nombre_zona: search}" #md2="md2DataTable" [rowsPerPage]="10">
+
         <thead>
-          <tr>
-            <td colspan="5">
-              <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
-            </td>
-          </tr>
-          <tr>
-            <th style="width: 25%" md2SortBy="name">Equipo</th>
-            <th style="width: 25%" md2SortBy="serial_inventario">Cantidad</th>
-            <th style="width: 25%">Acciones</th>
-          </tr>
+        <tr>
+          <td colspan="5">
+            <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 25%" md2SortBy="name">Equipo</th>
+          <th style="width: 25%" md2SortBy="serial_inventario">Cantidad</th>
+          <th style="width: 25%">Acciones</th>
+        </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let i of md2.data">
-            <td>{{i.name | capitalize}}</td>
-            <td>{{i.equipos.length}}</td>
-            <td>
-              <button md-icon-button color="primary" (click)="show(i.equipos)">
-                <md-icon class="md-24" aria-label="Editar Equipo">mode_edit</md-icon>
-              </button>
-            </td>
-          </tr>
+        <tr *ngFor="let i of md2.data">
+          <td>{{i.name | capitalize}}</td>
+          <td>{{i.equipos.length}}</td>
+          <td>
+            <button md-icon-button color="primary" (click)="show(i.equipos)">
+              <md-icon class="md-24" aria-label="Editar Equipo">mode_edit</md-icon>
+            </button>
+          </td>
+        </tr>
         </tbody>
       </table>
 
     </div>
   </md-expansion-panel>
-  <md-expansion-panel hideToggle='true' expanded='false' (opened)="this.modo && this.modo=1">
+  <md-expansion-panel hideToggle='true' expanded='false' (opened)="this.modo && this.modo=2">
     <md-expansion-panel-header>
-      <md-panel-title>
+      <md-panel-title style="font-weight:bold;">
         Inventario Por Zonas
       </md-panel-title>
     </md-expansion-panel-header>
-    <div *ngFor="let z of zonas" style="width:100%">
-      <span>{{z.id+"-) "+z.nombre_zona}}</span>
+    <div *ngFor="let z of zonas" style="width:100%;">
+      <span style="font-weight:bold;">{{z.id+"-) "+z.nombre_zona}}</span>
       <div class="card-container">
         <md-card *ngFor="let p of z.equipos" class="card">
           <md-card-header>
-            <md-card-title style="text-align:center">
+            <md-card-title style="text-align:center; ">
               {{p.name}}
             </md-card-title>
           </md-card-header>
@@ -87,4 +91,8 @@
       </div>
     </div>
   </md-expansion-panel>
+
 </md-accordion>
+
+
+

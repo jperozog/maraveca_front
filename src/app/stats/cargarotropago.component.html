@@ -1,0 +1,96 @@
+<h1 md-dialog-title>Confirmacion</h1>
+<div md-dialog-content>
+  <p *ngIf="instalador[0].nombre_user">Pagar instalaciones para: {{instalador[0].nombre_user+" "+instalador[0].apellido_user}}?</p>
+</div>
+<div md-dialog-actions>
+  <table>
+    <tr *ngIf="instalador[0].id_user">
+      <td colspan="2">
+        <md2-select multiple name="prueba" class="example-full-width" placeholder="seleccion el trabajo realizado" [(ngModel)]="prueba"> <!--style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"-->
+          <md2-option  *ngFor="let i of instalaciones" [value]="i.ticket" [disabled]="i.status_pgo == 2" > {{i.ticket + "  "+i.comment_tr}}</md2-option>
+        </md2-select>
+      </td>
+    </tr>
+      <tr>
+      <!--<td>
+        <md-form-field>
+     <input mdInput type="number" placeholder="Nro de ticket de la instalacion" class="md2-input" [(ngModel)]="n" />
+
+        </md-form-field>
+
+      </td>-->
+
+      <td>
+        <md-form-field>
+          <input mdInput type="number" placeholder="Monto" class="md2-input" [(ngModel)]="monto" />
+          <span mdSuffix>Bs.S.</span>
+        </md-form-field>
+
+      </td>
+      <td>
+        <md-form-field>
+          <input mdInput type="number" placeholder="Referencia" class="md2-input" [(ngModel)]="refer" />
+        </md-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <md2-select [(ngModel)]="banco" style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" placeholder="Banco">
+          <md2-option value="2" >Transferencia Banesco</md2-option>
+          <md2-option value="6" >Transferencia Bicentenario</md2-option>
+          <md2-option value="1" >Transferencia BOD</md2-option>
+          <md2-option value="3" >Transferencia Venezuela</md2-option>
+        </md2-select>
+      </td>
+
+      <td>
+        <md-form-field>
+          <input mdInput placeholder="fecha"  type="date" class="md2-input" [(ngModel)]="fecha" />
+        </md-form-field>
+      </td>
+    </tr>
+    <!--<td colspan="2">
+      <md2-select name="celda"
+                  formControlName="servicio_soporte"
+                  placeholder="Celda"
+                  style="width=100%; min-width: 100%; min-height: 100%;"
+                  mdInput
+                  floatPlaceholder="never"
+                  [disabled]="row"
+      >
+        <md2-select-header>
+          <input class="search" name="prueba"
+                 type="text"
+                 [(ngModel)]="prueba"
+                 placeholder="Buscar..."
+                 style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                 formControlName="S_servicios" />
+        </md2-select-header>
+        <md2-option *ngFor="let i of (instalaciones | dataPipe : {comment_tr: prueba})" [value]="i.id">
+          <span>{{i.comment_tr }}</span><br />
+        </md2-option>
+      </md2-select>
+    </td>-->
+    <!--<select >
+      <option [value]="prueba" *ngFor="let i of instalaciones"> {{i.comment_tr}}</option>
+    </select>-->
+    <tr>
+      <td colspan="3">
+        <md-form-field class="example-full-width">
+          <input mdInput placeholder="Comentario" class="example-full-width" [(ngModel)]="comment" />
+        </md-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" >
+
+        <button md-raised-button color="primary" class="example-full-width btn btn-primary"  (click)="pagar()" >Cargar Pago</button>
+
+      </td>
+      <td colspan="2">
+        <button md-raised-button color="warn" class="example-full-width btn btn-danger" type="button" (click)="onNoClick()">No</button>
+
+      </td>
+    </tr>
+  </table>
+</div>

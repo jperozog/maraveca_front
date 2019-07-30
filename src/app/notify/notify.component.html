@@ -94,6 +94,7 @@
         <md2-select-header>
           <input class="search" name="p_search"
           type="text"
+
           formControlName="p_search"
           placeholder="Buscar..."
           mdInput
@@ -148,7 +149,7 @@
 <td *ngIf="notify.value.tipo == '6'" colspan="2">
     <md2-select multiple placeholder="Clientes"
     floatPlaceholder="never"
-    class="example-full-width"
+    class="example-full-width "
     mdInput
     formControlName="detail" [(ngModel)]="detail"
     >
@@ -157,14 +158,16 @@
       formControlName="u_celda"
       placeholder="Buscar..."
       mdInput
+
       style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
       />
     </md2-select-header>
-    <md2-option *ngFor="let i of (clientes | dataPipe : {apellido: notify.value.u_celda, nombre: notify.value.u_celda, dni: notify.value.u_celda})" [value]="i.id">{{i.kind+i.dni +" | "+(i.nombre|capitalize)+' '+ (i.apellido|capitalize)}}</md2-option>
+    <md2-option   *ngFor="let i of (clientes | dataPipe : {apellido: notify.value.u_celda, nombre: notify.value.u_celda, dni: notify.value.u_celda})" [value]="i.id">{{i.kind+i.dni +" | "+(i.nombre|capitalize)+' '+ (i.apellido|capitalize)}}</md2-option>
   </md2-select>
 
 </td>
 </tr>
+      <br>
 <tr>
   <td>
 
@@ -176,6 +179,7 @@
         class="form-control"
         class="example-full-width"
         formControlName="message"
+                  rows ="4"
         placeholder="Escribe Aqui El Mensaje De Notificacion"></textarea>
 
       </md-form-field>

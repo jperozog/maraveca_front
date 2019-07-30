@@ -1,0 +1,45 @@
+<md-toolbar class="submenu">
+  <md-form-field floatPlaceholder="never">
+    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer" style="text-align: center;">Pagar otros trabajos e instalaciones</span>
+  <button md-raised-button (click)="this.myService.refresh()" >
+    <md-icon>cached</md-icon> Actualizar Lista
+  </button>
+
+</md-toolbar>
+<div class="contenido">
+
+  <table class=addClient [md2Data]="data | dataPipe: { nombre: search, apellido: search}" #md2="md2DataTable" [rowsPerPage]="15">
+    <thead>
+    <tr>
+      <td colspan="6">
+        <md2-pagination [rowsPerPageSet]="[5,10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+      </td>
+    </tr>
+    <tr>
+      <th style="width: 20%" md2SortBy="ip_srvidor">Nombre</th>
+      <th style="width: 20%" md2SortBy="nombre_srvidor">Apellido</th>
+      <th align= "center" style="width: 20% ; padding: 0px 18% 0px 0px" md2SortBy="user_srvidor">Otros trabajos e instalaciones</th>
+      <th style="width: 20%" >Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let i of md2.data">
+      <td style="width: 20%">{{i.nombre_user}}</td>
+      <td style="width: 20%">{{i.apellido_user}}</td>
+      <td align= "center "style="width: 20%; padding: 0px 20% 0px 0px">{{i.installs}}</td>
+      <td style="width: 20%" *ngIf="usuario.perm && !usuario.perm.includes('pagar_w')">No Autorizado</td>
+      <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('pagar_w')">
+        <button md-icon-button color="primary" [routerLink]="['/detailworks/', i.id_user]">
+          <md-icon class="md-24" aria-label="Editar AP" >receipt</md-icon>
+        </button>
+
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+
+    </tfoot>
+  </table>
+</div>

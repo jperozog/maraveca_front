@@ -85,7 +85,9 @@ confirm():void {
       if(result&&result==1){
         this.enviar()
       }
+
     });
+  //this.dialogRef.close();
   }
 
 enviar(){
@@ -94,18 +96,26 @@ enviar(){
   this.snackBar.open("Enviando Presupuesto: Por favor espere", null, {
     duration: 2000,
   });
+
   this.http.post(url, client).subscribe(data => {
     this.dialogRef.close();
     this.snackBar.open("Presupuesto Enviado", null, {
-      duration: 2000,
+      duration: 4000,
     });
-
+    this.dialogRef.close();
   }, error => {
   });
+  {
+    this.dialogRef.close();
+  }
   //this.myService.refresh();
-  //this.router.navigate(['/clientes']);
-}
 
+  //this.router.navigate(['/clientes']);
+
+}
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }
 @Component({
   selector: 'dialog-overview-example-dialog',

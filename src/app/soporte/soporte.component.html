@@ -21,7 +21,7 @@
 
 </md-toolbar>
 <md-accordion>
-  <md-expansion-panel hideToggle="true" expanded="false" (opened)="this.modo && this.modo=1">
+  <md-expansion-panel hideToggle="true" expanded="false" (opened)="this.modouno==1">
     <md-expansion-panel-header style="background-color: lightpink;">
       <md-panel-title>
         Instalaciones
@@ -32,7 +32,7 @@
     </md-expansion-panel-header>
 
     <!-- instalaciones-->
-    <div class="x700" *ngIf="modo && modo == 1">
+    <div class="x700" *ngIf="modouno== 1">
 
       <table class="addClient x700" [md2Data]="datai | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="10">
         <thead>
@@ -99,7 +99,7 @@
         </tfoot>
       </table>
     </div>
-    <div class="x290" *ngIf="modo && modo == 1">
+    <div class="x290" *ngIf="modouno == 1">
 
       <table class="addClient x290" [md2Data]="datai | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="15">
         <thead>
@@ -140,7 +140,7 @@
     </div>
   </md-expansion-panel>
   <!-- soportes -->
-  <md-expansion-panel hideToggle="true" expanded="false" (opened)="this.modo=2">
+  <md-expansion-panel hideToggle="true" expanded="false" (opened)="this.modouno==1">
     <md-expansion-panel-header>
       <md-panel-title>
         Soportes
@@ -149,7 +149,7 @@
         {{ this.pt }} Tickets Abiertos
       </md-panel-description>
     </md-expansion-panel-header>
-    <div class="x700" *ngIf="modo && modo == 2">
+    <div class="x700" *ngIf="modouno == 1">
       <table [md2Data]="datat | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="10" class="addClient x700">
         <thead>
           <tr>
@@ -158,12 +158,12 @@
             </td>
           </tr>
           <tr>
-            <th style="width: 10%; margin: 0 1em;">Ticket</th>
-            <th style="width: 15%">Cliente</th>
-            <th style="width: 15%">Zona</th>
+            <th md2SortBy="id_soporte" style="width: 10%; margin: 0 1em;">Ticket</th>
+            <th md2SortBy="nombre"  style="width: 15%">Cliente</th>
+            <th md2SortBy="nombre_celda" style="width: 15%">Zona</th>
             <th style="width: 15%">Router</th>
-            <th style="width: 15%">Estado</th>
-            <th style="width: 15%">Usuario</th>
+            <th md2SortBy="status_soporte" style="width: 15%">Estado</th>
+            <th md2SortBy="nombre_use"rstyle="width: 15%">Usuario</th>
             <th style="width: 10%">Acciones</th>
           </tr>
         </thead>
@@ -209,7 +209,7 @@
         </tfoot>
       </table>
     </div>
-    <div class="x290" *ngIf="modo && modo == 2">
+    <div class="x290" *ngIf="modouno == 1">
 
       <table class="addClient x290" [md2Data]="datat | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="15">
         <thead>
@@ -251,7 +251,7 @@
   </md-expansion-panel>
 
   <!-- Averias -->
-  <md-expansion-panel hideToggle="true" (opened)="this.modo=3">
+  <md-expansion-panel hideToggle="true" (opened)="this.mododos=2">
     <md-expansion-panel-header>
       <md-panel-title>
         Averias
@@ -260,7 +260,7 @@
         {{ this.pa }} Averias Abiertas
       </md-panel-description>
     </md-expansion-panel-header>
-    <div class="x700" *ngIf="modo && modo == 3">
+    <div class="x700" *ngIf="modouno ==1">
       <table [md2Data]="dataa | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="10" class="addClient x700">
         <thead>
           <tr>
@@ -269,10 +269,10 @@
             </td>
           </tr>
           <tr>
-            <th style="width: 10%; margin: 0 1em;">Ticket</th>
-            <th style="width: 15%">Celda</th>
+            <th md2SortBy="id_soporte" style="width: 10%; margin: 0 1em;">Ticket</th>
+            <th md2SortBy="nombre_celda" style="width: 15%">Celda</th>
             <th style="width: 15%">Router</th>
-            <th style="width: 15%">Estado</th>
+            <th md2SortBy="status_soporte" style="width: 15%">Estado</th>
             <th style="width: 15%">Afectacion</th>
             <th style="width: 10%">Acciones</th>
           </tr>
@@ -313,7 +313,7 @@
         </tfoot>
       </table>
     </div>
-    <div class="x290" *ngIf="modo && modo == 2">
+    <div class="x290" *ngIf="modouno == 1">
 
       <table class="addClient x290" [md2Data]="datat | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="15">
         <thead>
@@ -354,5 +354,108 @@
     </div>
   </md-expansion-panel>
 
+  <!-- Otras instalaciones -->
+  <md-expansion-panel hideToggle="true" (opened)="this.modouno== 1">
+    <md-expansion-panel-header>
+      <md-panel-title>
+        Otros trabajos e instalaciones
+      </md-panel-title>
+      <md-panel-description>
+        {{ this.po }} Otros trabajos e instalaciones Abiertas
+      </md-panel-description>
+    </md-expansion-panel-header>
+    <div class="x700" *ngIf=" modouno == 1">
+      <table [md2Data]="datao | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="10" class="addClient x700">
+        <thead>
+        <tr>
+          <td colspan="7">
+            <md2-pagination [rowsPerPageSet]="[10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+          </td>
+        </tr>
+        <tr>
+          <th md2SortBy="id_soporte" style="width: 10%; margin: 0 1em;">Ticket</th>
+          <th md2SortBy="nombre_celda" style="width: 15%">Celda</th>
+          <th style="width: 15%">Router</th>
+          <th md2SortBy="status_soporte" style="width: 15%">Estado</th>
+          <th style="width: 15%">Trabajo Realizado</th>
+          <th style="width: 10%">Acciones</th>
+        </tr>
 
+        </thead>
+        <tbody>
+        <tr *ngFor="let t of md2.data">
+          <td style="width: 10%; margin: 0 1em;">{{t.id_soporte}}</td>
+
+          <td style="width: 15%">{{(t.nombre_celda|capitalize2: true)}}</td>
+
+
+          <td style="width: 15%">{{t.nombre_srvidor}}</td>
+
+          <td *ngIf="t.status_soporte == 1" style="width: 15%">Abierto</td>
+          <td *ngIf="t.status_soporte == 2" style="width: 15%">Cerrado</td>
+          <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
+
+          <td style="width: 15%">{{t.comment_soporte}}</td>
+
+          <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
+            No Autorizado
+          </td>
+          <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
+            <button md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+              <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
+            </button>
+            <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
+          <button md-icon-button color="warn"(click)="deleteDialog(i)">
+          <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
+        </button-->
+
+
+          </td>
+        </tr>
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+      </table>
+    </div>
+    <div class="x290" *ngIf="mododos == 2">
+
+      <table class="addClient x290" [md2Data]="datat | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="15">
+        <thead>
+        <tr>
+          <td colspan="6">
+            <md2-pagination [rowsPerPageSet]="[5,10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 15%; margin: 0 1em;">Ticket</th>
+          <th style="width: 15%">Celda</th>
+          <th style="width: 10%">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let t of md2.data">
+          <td style="width: 15%; margin: 0 1em;">{{t.id_soporte}}</td>
+
+          <td *ngIf="(t.nombre != null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre | capitalize2: true)+" "+(t.apellido | capitalize2: true)}}</td>
+          <td *ngIf="(t.nombre != null) && (t.apellido == null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{t.nombre | capitalize2: true}}</td>
+          <td *ngIf="(t.nombre == null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{t.apellido | capitalize2: true}}</td>
+          <td *ngIf="(t.social != '' && t.social != null && t.social != 'null')" style="width: 15%">{{t.social | capitalize2: true}}</td>
+
+          <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
+            No Autorizado
+          </td>
+          <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
+            <button md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+              <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
+            </button>
+
+          </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        </tfoot>
+      </table>
+    </div>
+  </md-expansion-panel>
 </md-accordion>

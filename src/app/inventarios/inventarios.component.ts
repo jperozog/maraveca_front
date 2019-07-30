@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import {Component, OnInit, OnDestroy, Inject, ViewChildren} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -12,7 +12,8 @@ import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} fr
 import 'rxjs/add/operator/startWith';
 import {Router} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
-import { environment } from '../../environments/environment'
+import { environment } from '../../environments/environment';
+import {MyService} from '../planes/planes.component';
 
 @Component({
   selector: 'app-inventarios',
@@ -26,15 +27,20 @@ export class InventariosComponent implements OnInit, OnDestroy {
   zonas_t:any
   update:boolean=false
   autoupdate:boolean=true
-
+  myService: MyService | null;
+  search: string = '';
+  modo: any = 1;
   constructor(
     private http: Http,
     public usuario: AuthGuard,
     public dialog: MdDialog,
     public snackBar:MdSnackBar,
-    public router: Router)
-    {
-
+    public router: Router) {
+    this.snackBar.open("Cargando inventario", null, {
+        duration: 2000,
+      });
+      //this.myService = new MyService(http, router);
+      this.refresh(false);
     }
 
     ngOnInit() {
@@ -96,6 +102,8 @@ export class InventariosComponent implements OnInit, OnDestroy {
   styleUrls: ['./inventarios.component.css']
 })
 export class AddEquipoComponent implements OnInit {
+  zona_s:any;
+  model_s:any;
   zonas:any
   equipos:any
   seriales:any=[]
@@ -187,10 +195,12 @@ export class AddEquipoComponent implements OnInit {
   styleUrls: ['./inventarios.component.css']
 })
 export class EditEquipoComponent implements OnInit {
-  zonas:any
-  equipos:any
-  seriales:any=[]
-  addEquipo:FormGroup
+  model_s:any;
+  zonas:any;
+  equipos:any;
+  seriales:any=[];
+  addEquipo:FormGroup;
+  zona_s:any;
   constructor(
     private fb: FormBuilder,
     public dialogRef: MdDialogRef<EditEquipoComponent>,
@@ -318,6 +328,7 @@ export class SelectTipoComponent {
   styleUrls: ['./inventarios.component.css']
 })
 export class ShowEquipoComponent {
+  edit:any;
   equipos:any=null
   selected:any=null
   constructor(
@@ -440,4 +451,49 @@ export class TransfEquiposComponent implements OnInit, OnDestroy {
       })
     }
 
+}
+@Component({
+  selector: 'app-inventarios',
+  templateUrl: './EquiAsig.component.html',
+  styleUrls: ['./inventarios.component.css']
+})
+export class  EquiposasigndosComponent  {
+
+  autoupdate: boolean
+  data: any = [];
+  data_t: any = [];
+  search: string = '';
+
+  @ViewChildren('servicios') spr;
+  constructor(
+    public usuario: AuthGuard,
+    private location: Location,
+    private http: Http, public dialog: MdDialog, public snackBar: MdSnackBar, private router: Router) {
+    this.autoupdate = true;
+    this.snackBar.open("Cargando Clientes", null, {
+      duration: 2000,
+    });
+  }
+  ngOnInit() {
+    console.log(this.spr)
+    console.log('check')
+    IntervalObservable.create(10000)
+      .takeWhile(() => this.autoupdate)
+      .subscribe(() => {
+
+        console.log(this.spr)
+        console.log('check')
+      });
+  this.http.get(environment.apiEndpoint + 'equiposasignados/')
+.subscribe((data) => {
+
+  this.data = data.json().servicios;
+  this.data_t = this.data;
+  this.snackBar.open("Equipos cargados", null, {
+  duration: 2000,
+});
+ console.log(this.data);
+});
+  }
+  Close(){this.location.back();}
 }

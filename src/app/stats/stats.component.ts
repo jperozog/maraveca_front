@@ -12,7 +12,10 @@ import {Router, ActivatedRoute} from '@angular/router';
 import { Location } from '@angular/common';
 import { AuthGuard } from '../_guards/index';
 import { environment } from '../../environments/environment'
-import { BaseChartDirective }   from 'ng2-charts/ng2-charts';//import 'rxjs/add/operator/map';
+import { BaseChartDirective }   from 'ng2-charts/ng2-charts';
+import {MyService} from '../../src/app/servidores/servidores.component';
+
+
 
 @Component({
   selector: 'app-stat',
@@ -78,9 +81,12 @@ export class StatsComponent {
         xAxes: [{
             title: 'meses/años'
         }],
-        yAxes: [{
+        yAxes: [/*{
           title: 'Bs.S'
-        }],
+        },*/
+          { ticks: {
+  beginAtZero: true // se agrega la siguiente linea para que la grafica comience desde 0
+}}],
 
       }
   }
@@ -143,9 +149,13 @@ goTOfac(i){
               xAxes: [{
                   title: 'meses/años'
               }],
-              yAxes: [{
-                title: data_mes[0].denominacion
-              }],
+              yAxes: [/*{
+                title: data_mes[0].denominacion se comenta la siguiente linea para que la grafica comience desde 0
+              }*/
+                { ticks: {
+                    beginAtZero: true // se agrega la siguiente linea para que la grafica comience desde 0
+                  }}
+              ],
 
             }
         }
@@ -154,6 +164,15 @@ goTOfac(i){
           })
       console.log(this.chartData)
     }
+  refresh(){
+    this.http.get(environment.apiEndpoint+'stat/')
+      .subscribe((data) => {
+        this.data= data.json();
+        console.log(this.data);
+      });
+
+}
+
   }
 
 
@@ -164,7 +183,7 @@ goTOfac(i){
   })
 
   export class PagarComponent{
-
+    myService: MyService | null;
     data:any = null;
     search: string = '';
     constructor(
@@ -173,14 +192,18 @@ goTOfac(i){
       public dialog: MdDialog,
       public snackBar:MdSnackBar,
       public router: Router) {
+
+      this.myService = new MyService(http, router);
         this.snackBar.open("Cargando Usuarios", null, {
           duration: 2000,
         });
         this.http.get(environment.apiEndpoint+'installers/')
         .subscribe((data) => {
           this.data = data.json();
-          //console.log(this.data);
+          console.log(this.data);
+        
         });
+
         this.snackBar.open("Usuarios Cargadas", null, {
           duration: 2000,
         });
@@ -191,6 +214,7 @@ goTOfac(i){
 
   }
 
+
   @Component({
     selector: 'app-installer',
     templateUrl: './detallePagar.component.html',
@@ -198,7 +222,7 @@ goTOfac(i){
   })
 
   export class DetallesInstallerComponent{
-
+    modo: any = 1;
     instalaciones:any = null;
     pagos:any = null;
     search: string = '';
@@ -218,6 +242,7 @@ goTOfac(i){
             console.log(this.instalador)
           }
         );
+
         this.http.get(environment.apiEndpoint+'installer/'+this.instalador)
         .subscribe((data) => {
           this.instalaciones = data.json().instalaciones;
@@ -234,7 +259,10 @@ goTOfac(i){
         });
 
       }
-      pagar(row): void {
+
+
+
+    pagar(): void {
         let dialogRef = this.dialog.open(cargarPagocomponent, {
           panelClass: 'my-full-screen-dialog',
           data: this.instalador
@@ -258,16 +286,17 @@ goTOfac(i){
     styleUrls: ['./stats.component.css']
   })
 
-  export class cargarPagocomponent{
-    addPago:FormGroup;
-    data:any = null;
+  export class cargarPagocomponent {
+    addPago: FormGroup;
+    data: any = null;
     search: string = '';
-    n:any=null;
-    monto:any=null;
-    refer:any=null;
-    banco:any=null;
-    fecha:any=null;
-    comment:any=null;
+    n: any = null;
+    monto: any = null;
+    refer: any = null;
+    banco: any = null;
+    fecha: any = null;
+    comment: any = null;
+
     //instalador: any = '';
     constructor(
       public usuario: AuthGuard,
@@ -278,28 +307,218 @@ goTOfac(i){
       private http: Http,
       private location: Location,
       public dialog: MdDialog,
-      public snackBar:MdSnackBar,
+      public snackBar: MdSnackBar,
       public router: Router) {
-        console.log(instalador)
-      }
-      pagar(){
-        this.addPago=this.fb.group({
-          n: this.n,
-          monto: this.monto,
-          referencia: this.refer,
-          banco: this.banco,
-          fecha: this.fecha,
-          responsable: this.usuario.currentUser.id_user,
-          installer: this.instalador[0].id_user,
-          comment: this.comment
-        })
-        var url = environment.apiEndpoint+"instpagos/";
-        this.http.post(url, this.addPago.value).subscribe((data) => {
-          this.dialogRef.close();
+      console.log(instalador)
+    }
 
-        });
-      }
+    pagar() {
+      this.addPago = this.fb.group({
+        n: this.n,
+        monto: this.monto,
+        referencia: this.refer,
+        banco: this.banco,
+        fecha: this.fecha,
+        responsable: this.usuario.currentUser.id_user,
+        installer: this.instalador[0].id_user,
+        comment: this.comment
+      })
+      var url = environment.apiEndpoint + "instpagos/";
+      this.http.post(url, this.addPago.value).subscribe((data) => {
+        this.dialogRef.close();
 
-    Close(){this.location.back();}
+      });
+    }
+
+   /* Close() {
+      this.location.back();
+    }*/
+    onNoClick(): void {
+      this.dialogRef.close();
 
   }
+  }
+@Component({
+  selector: 'app-installer',
+  templateUrl: './otrospago.component.html',
+  styleUrls: ['./stats.component.css']
+})
+export class OtrosPagosComponent{
+  myService: MyService | null;
+  data:any = null;
+  search: string = '';
+  constructor(
+    public usuario: AuthGuard,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    public router: Router) {
+    this.myService = new MyService(http, router);
+    this.snackBar.open("Cargando Usuarios", null, {
+      duration: 2000,
+    });
+    this.http.get(environment.apiEndpoint+'oinstallers/')
+      .subscribe((data) => {
+        this.data = data.json();
+        console.log(this.data);
+      });
+
+    this.snackBar.open("Usuarios Cargadas", null, {
+      duration: 2000,
+    });
+  }
+  show(row){
+
+  }
+
+}
+
+@Component({
+  selector: 'app-installer',
+  templateUrl: './odetallePagar.component.html',
+  styleUrls: ['./stats.component.css']
+})
+export class DetallesotherInstallerComponent{
+  modo: any = 1;
+  instalaciones:any = null;
+  pagos:any = null;
+  search: string = '';
+  instalador: any = '';
+  constructor(
+    public usuario: AuthGuard,
+    private route: ActivatedRoute,
+    private http: Http,
+    private location: Location,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    public router: Router) {
+    this.route.params
+      .subscribe(
+        params => {
+          this.instalador = params.inst;
+          console.log(this.instalador)
+        }
+      );
+    this.http.get(environment.apiEndpoint+'oinstaller/'+this.instalador)
+      .subscribe((data) => {
+        this.instalaciones = data.json().instalaciones;
+        this.pagos = data.json().pagos;
+        console.log(this.instalaciones);
+      });
+    this.http.get(environment.apiEndpoint+'users/'+this.instalador)
+      .subscribe((data) => {
+        this.instalador = data.json();
+        console.log( this.instalador);
+      });
+    this.snackBar.open("Instaladores Cargados", null, {
+      duration: 2000,
+    });
+
+  }
+
+  pagar2(): void {
+    let dialogRef = this.dialog.open(cargarOpagocomponent, {
+      panelClass: 'my-full-screen-dialog',
+      data: this.instalador
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    })
+  }
+  show(row){
+
+  }
+  Close(){this.location.back();}
+
+}
+@Component({
+  selector: 'app-installer',
+  templateUrl: './cargarotropago.component.html',
+  styleUrls: ['./stats.component.css']
+})
+
+export class cargarOpagocomponent {
+
+  addPago: FormGroup;
+  data: any = null;
+  search: string = '';
+  n: any = null;
+  monto: any = null;
+  refer: any = null;
+  banco: any = null;
+  fecha: any = null;
+  comment: any = null;
+  c_otr: any;
+  S_otr: any;
+instalaciones: any=null;
+oinstalador: any=null;
+ prueba: [any];
+
+
+
+ //pagos: any= null;
+trabajo
+  //instalador: any = '';
+
+  constructor(
+    public usuario: AuthGuard,
+    @Inject(MD_DIALOG_DATA) public instalador: any,
+
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    public dialogRef: MdDialogRef<cargarPagocomponent>,
+    private http: Http,
+    private location: Location,
+    public dialog: MdDialog,
+    public snackBar: MdSnackBar,
+    public router: Router) {
+
+   console.log(instalador)
+    //console.log(instalaciones);
+
+
+   this.http.get(environment.apiEndpoint + 'oinstaller/' +instalador[0].id_user)
+      .subscribe((data) => {
+        this.instalaciones = data.json().instalaciones;
+        //this.pagos = data.json().pagos;
+        console.log(this.instalaciones);
+      });
+  }
+
+  pagar() {
+    for (let i in this.prueba) {
+    this.addPago = this.fb.group({
+      prueba: this.prueba[i],
+      monto: this.monto,
+      referencia: this.refer,
+      banco: this.banco,
+      fecha: this.fecha,
+      responsable: this.usuario.currentUser.id_user,
+      installer: this.instalador[0].id_user,
+      comment: this.comment
+
+
+
+    })
+
+    var url = environment.apiEndpoint + "oinstallpgo/";
+    this.http.post(url, this.addPago.value).subscribe((data) => {
+      console.log(this.addPago.value);
+
+      this.dialogRef.close();
+      console.log(this.prueba);
+
+
+    });
+ }
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+ /* Close() {
+    this.location.back();
+  }*/
+
+
+}

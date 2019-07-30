@@ -35,7 +35,13 @@ import {
   MdTabsModule,
   MdCheckboxModule,
   MdExpansionModule,
-  MdRadioModule,
+  MatToolbarModule,  
+  MatTabsModule,
+  MatButtonModule,
+  MatIconModule,
+  MatCardModule,
+  MdRadioModule, MdListModule,
+
 
 } from '@angular/material';
 //import { MatBadgeModule } from '@angular/material/badge';
@@ -50,20 +56,21 @@ import { DatePipe, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { APP_CONFIG } from './app.config';
 import { AppConfig } from './app.interface';
 
-import { StatsComponent, PagarComponent, DetallesInstallerComponent, cargarPagocomponent } from './stats/stats.component';
+import {
+  StatsComponent, PagarComponent, DetallesInstallerComponent, DetallesotherInstallerComponent, cargarPagocomponent, OtrosPagosComponent, cargarOpagocomponent } from './stats/stats.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddAdic, AddPagoBalance, GenFactura, AnularFactura } from './clients/clients.component';
 import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente, ShowPreComponent, ConfirmCliente } from './pclients/clients.component';
-import { ServiciosComponent, AddservicesComponent, AddPendingComponent} from './servicios/servicios.component';
+import { ServiciosComponent, AddservicesComponent, DeleteserviceDialog, AddPendingComponent} from './servicios/servicios.component';
 import { ServidoresComponent, AddServidoresComponent, DeleteRouterDialog } from './servidores/servidores.component';
 import { CeldasComponent, AddceldasComponent } from './celdas/celdas.component';
 import { PlanesComponent, AddplanesComponent, DeletePlanDialog, UpdatePlanPricesDialog } from './planes/planes.component';
 import { EquiposComponent, AddequipoComponent } from './equipos/equipos.component';
 import { LoginComponent } from './login/login.component';
 import { ApsComponent, AddapsComponent, DeleteApsDialog } from './aps/aps.component';
-import { SoporteComponent, DeleteticketDialog, DeleteInstallDialog, AddticketComponent, EditticketComponent } from './soporte/soporte.component';
+import { SoporteComponent, DeleteticketDialog, Deleteotherinstall, DeleteInstallDialog, AddticketComponent, EditticketComponent } from './soporte/soporte.component';
 import { AuthGuard } from './_guards/index';
 import { AlertService, AuthenticationService, UserService, PingService, VersionCheckService } from './_services/index';
 import { User } from './_models/index';
@@ -76,8 +83,8 @@ import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProduct
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component';
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
-import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent, ShowEquipoComponent, SelectTipoComponent } from './inventarios/inventarios.component';
-import { ActivosComponent, ActivosDetComponent, AddActivoComponent } from './activos/activos.component';
+import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent, ShowEquipoComponent, SelectTipoComponent,EquiposasigndosComponent } from './inventarios/inventarios.component';
+
 
 
 
@@ -126,6 +133,7 @@ import { ActivosComponent, ActivosDetComponent, AddActivoComponent } from './act
     AddticketComponent,
     DeleteticketDialog,
     DeleteInstallDialog,
+    Deleteotherinstall,
     EditticketComponent,
     PotencialesComponent,
     NotifyComponent,
@@ -165,9 +173,12 @@ import { ActivosComponent, ActivosDetComponent, AddActivoComponent } from './act
     AprovPagos,
     DeclinePagoDialog,
     ConfirmPagoDialog,
-    ActivosComponent,
-    ActivosDetComponent,
-    AddActivoComponent
+    OtrosPagosComponent,
+    DetallesotherInstallerComponent,
+    cargarOpagocomponent,
+    DeleteserviceDialog,
+    EquiposasigndosComponent,
+
     //CeldasPipe,
     //MyFilterPipe,
     //DatePipe,
@@ -175,6 +186,13 @@ import { ActivosComponent, ActivosDetComponent, AddActivoComponent } from './act
 
   ],
   imports: [
+    FormsModule,
+  MatToolbarModule,
+  MatTableModule,
+    MatTabsModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
     BrowserModule,
     FormsModule,
     HttpModule,
@@ -208,6 +226,8 @@ import { ActivosComponent, ActivosDetComponent, AddActivoComponent } from './act
     MdRadioModule,
     DatepickerModule,
     MyDatePickerModule,
+    MdListModule,
+
 
   ],
   providers: [

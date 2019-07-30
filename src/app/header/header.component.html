@@ -3,9 +3,11 @@
 <md-toolbar color="primary">
   <img routerLink="/" style="max-width:20%" src="assets/images/logo-normal.jpg" alt="Maraveca">
     <span class="example-spacer"></span>
-    <button *ngIf="dash && dash.total > 0" md-button [mdMenuTriggerFor]="dash_r" style="color:rgb(104, 103, 112)">
-      <md-icon>notifications_active</md-icon> {{dash.total}} Pendientes
+  <ng-container *ngIf="usuario.currentUser">
+    <button [disabled]="!total" md-button [mdMenuTriggerFor]="dash_r" style="color:rgb(104, 103, 112)">
+      <md-icon>notifications_active</md-icon> {{total}} Pendientes
     </button>
+  </ng-container>
     <md-chip-list>
     <md-chip *ngIf="usuario.currentUser && usuario.currentUser.nombre_user && usuario.currentUser.apellido_user"  md-button [mdMenuTriggerFor]="usuarios" style="color:rgb(255, 255, 255); background-color:rgb(36, 156, 200)">{{usuario.currentUser.nombre_user + " " + usuario.currentUser.apellido_user}}</md-chip>
     <md-chip *ngIf="usuario.currentUser && !usuario.currentUser.nombre_user && usuario.currentUser.apellido_user"  md-button [mdMenuTriggerFor]="usuarios" style="color:rgb(255, 255, 255); background-color:rgb(36, 156, 200)">{{usuario.currentUser.apellido_user}}</md-chip>
@@ -20,27 +22,44 @@
 </header>
 
 <md-menu #dash_r="mdMenu">
-  <button *ngIf="dash && dash.balance > 0" md-menu-item routerLink="/Pagos">
+  <ng-container *ngIf="(balance > 0)">
+  <button  md-menu-item routerLink="/Pagos">
     <md-icon>credit_card</md-icon>
-    <span>{{dash.balance}} pagos pendienes</span>
+    <span>{{balance}} pagos pendienes</span>
   </button>
-  <button *ngIf="dash && dash.instalaciones > 0" md-menu-item routerLink="/instalaciones">
-    <md-icon>assignment</md-icon>
-    <span>{{dash.instalaciones}} Instalaciones</span>
-  </button>
-  <button *ngIf="dash && dash.tickets > 0" md-menu-item routerLink="/soporte">
-    <md-icon>headset_mic</md-icon>
-    <span>{{dash.tickets}} Tickets</span>
-  </button>
-  <button *ngIf="dash && dash.averias > 0" md-menu-item routerLink="/soporte">
-    <md-icon>headset_mic</md-icon>
-    <span>{{dash.averias}} Averias</span>
-  </button>
-  <button *ngIf="dash && dash.factibilidades > 0" md-menu-item routerLink="/factibilidades">
-    <md-icon>perm_scan_wifi</md-icon>
-    <span>{{dash.factibilidades}} Factibilidades</span>
-  </button>
+  </ng-container>
 
+  <ng-container *ngIf="(instalaciones > 0)">
+  <button md-menu-item routerLink="/instalaciones">
+    <md-icon>assignment</md-icon>
+    <span>{{instalaciones}} Instalaciones</span>
+  </button>
+  </ng-container>
+
+  <ng-container *ngIf="(otrost > 0)">
+  <button  md-menu-item routerLink="/soporte">
+    <md-icon>assignment</md-icon>
+    <span>{{otrost}} Otros trabajos e instalaciones</span>
+  </button>
+  </ng-container>
+  <ng-container *ngIf="(tickets > 0)">
+  <button  md-menu-item routerLink="/soporte">
+    <md-icon>headset_mic</md-icon>
+    <span>{{tickets}} Tickets</span>
+  </button>
+  </ng-container>
+    <ng-container *ngIf="(averias > 0)">
+  <button  md-menu-item routerLink="/soporte">
+    <md-icon>headset_mic</md-icon>
+    <span>{{averias}} Averias</span>
+  </button>
+    </ng-container>
+      <ng-container *ngIf="(factibilidades > 0)">
+  <button  md-menu-item routerLink="/factibilidades">
+    <md-icon>perm_scan_wifi</md-icon>
+    <span>{{factibilidades}} Factibilidades</span>
+  </button>
+      </ng-container>
 </md-menu>
 
 <md-menu #Red="mdMenu">
@@ -93,10 +112,10 @@
     <span>Inventarios</span>
   </button>
 
-  <button *ngIf="usuario.perm && usuario.perm.includes('inventarios')" md-menu-item routerLink="/activos">
+  <!--<button *ngIf="usuario.perm && usuario.perm.includes('inventarios')" md-menu-item routerLink="/activos">
     <md-icon>format_list_numbered</md-icon>
     <span>Inventarios de Activos</span>
-  </button>
+  </button>-->
 
   <button *ngIf="usuario.perm && usuario.perm.includes('planes')" md-menu-item routerLink="/planes">
     <md-icon>dashboard</md-icon>
@@ -116,11 +135,24 @@
     <md-icon>show_chart</md-icon>
     <span>Cuentas por cobrar</span>
   </button>
-  <button md-menu-item routerLink="/pagarInstalaciones" *ngIf="usuario.perm && (usuario.perm.includes('pagar'))">
+  <button md-menu-item  *ngIf="usuario.perm && (usuario.perm.includes('pagar'))"[matMenuTriggerFor]="pgar">
+
     <md-icon>credit_card</md-icon>
     <span>Cuentas por pagar</span>
   </button>
 
+</md-menu>
+<md-menu #pgar="mdMenu">
+
+  <button md-menu-item routerLink="/pagarInstalaciones"*ngIf="usuario.perm && (usuario.perm.includes('pagar'))">
+    <md-icon>wifi_tethering</md-icon>
+    <span>Instalaciones</span>
+  </button>
+  <button md-menu-item routerLink="/pagarOtrasInstalaciones"*ngIf="usuario.perm && (usuario.perm.includes('pagar'))">
+    <md-icon>build</md-icon>
+    <span>Otros trabajos e instalaciones</span>
+
+  </button>
 </md-menu>
 
 <md-menu #conf="mdMenu">
