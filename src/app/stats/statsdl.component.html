@@ -1,0 +1,98 @@
+<head>
+  <script src="node_modules/chart.js/src/chart.js"></script>
+</head>
+<md-toolbar class="submenu">
+  <md-form-field floatPlaceholder="never">
+    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer" style="text-align: center;">Status</span>
+  <button md-raised-button (click)="refresh()" >
+    <md-icon>cached</md-icon> Actualizar Lista
+  </button>
+
+</md-toolbar>
+<div class="container">
+
+  <div class="card" *ngIf="datos">
+
+    <!-- card de graficos -->
+    <md-card class="example-card card-body text-center">
+      <md-card-header>
+        <md-card-title><h4>{{tittle}}</h4></md-card-title>
+        <span class="example-spacer" style="text-align: center;"></span>
+      </md-card-header>
+
+      <md-card-content>
+
+        <div style="display: block;">
+          <canvas
+          #chart
+          id="grafico"
+          baseChart
+        [chartType]="lineChartType"
+          [datasets]="chartData"
+          [labels]="labels"
+          [options]="chartOptions"
+          [legend]="true"
+          [colors]="colors"
+          (chartClick)="onChartClick()"
+          width="900" height="400">
+        </canvas>
+      </div>
+    </md-card-content>
+  </md-card>
+</div>
+
+
+<div class="card" *ngIf="datos">
+
+  <!-- card de Tabla -->
+  <md-card class="example-card card-body text-center">
+    <md-card-header>
+      <md-card-title><h4>Tabla de estado a 4 meses</h4></md-card-title>
+      <span class="example-spacer" style="text-align: center;"></span>
+    </md-card-header>
+
+    <md-card-content>
+
+      <table class="stat" style="width:400px; height:400px">
+        <thead>
+          <tr>
+            <td style="text-align:center">
+              Mes
+            </td>
+            <td style="text-align:center">
+              Facturado
+            </td>
+            <td style="text-align:center">
+              Pagado
+            </td>
+            <td style="text-align:center">
+              Pendiente
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let item of data; let i =index">
+            <td class="fac pointer hover" style="text-align:center;" (click)="changeTYPE(item)">
+              {{fechas[i].fecha}}
+            </td>
+            <td class="fac" style="text-align:right; ">
+              {{item.facturado | number: "1.2"}} US$.
+            </td>
+            <td class="fac" style="text-align:right; ">
+              {{item.pagado | number: "1.2"}} US$.
+            </td>
+            <td class="fac pointer hover" style="text-align:right;" (click)="goTOfac(item)">
+              {{(item.facturado-item.pagado)  | number: "1.2"}} US$.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </md-card-content>
+  </md-card>
+</div>
+
+</div>
