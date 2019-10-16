@@ -195,6 +195,9 @@
           <td>
             <h3>Especiales</h3>
           </td>
+          <td>
+            <h3>Modificar</h3>
+          </td>
         </tr>
         </thead>
         <tbody>
@@ -292,6 +295,9 @@
             <td>
               <md-checkbox [(ngModel)]="facturacion_esp"  (change)="listToglePermisos('facturacion_esp', facturacion_esp)"></md-checkbox>
             </td>
+            <td>
+              <md-checkbox [(ngModel)]="facturacion_mod"  (change)="listToglePermisos('facturacion_mod', facturacion_mod)"></md-checkbox>
+            </td>
           </tr>
           <!--tr>
             <td>
@@ -349,6 +355,9 @@
             </td>
             <td>
               <md-checkbox [(ngModel)]="planes_esp"  (change)="listToglePermisos('planes_esp', planes_esp)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="planes_mod"  (change)="listToglePermisos('planes_mod', planes_mod)"></md-checkbox>
             </td>
           </tr>
           <tr>

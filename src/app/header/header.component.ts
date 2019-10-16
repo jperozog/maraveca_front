@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit {
   averias: number;
   total: number;
   balance: number;
+  balance_in: number;
   instalaciones: number;
   tickets: number;
   factibilidades: number;
@@ -61,14 +62,15 @@ export class HeaderComponent implements OnInit {
         this.balance = data.json().balance;
         this.factibilidades = data.json().factibilidades;
         this.otrost = data.json().otrost;
+        this.balance_in = data.json().balance_in;
 
-       // console.log(this.dash);
-        //console.log(this.total);
-       // console.log(this.averias);
-        console.log(this.instalaciones );
-        //console.log(this.balance)
-        //console.log(this.factibilidades);
-        //console.log(this.otrost);
+      /* console.log(this.dash);
+        console.log(this.total);
+       console.log(this.averias);
+       console.log(this.dash_t );
+        console.log(this.balance_in);
+        console.log(this.factibilidades);
+        console.log(this.otrost);*/
 
 
       });

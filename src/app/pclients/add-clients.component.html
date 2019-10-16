@@ -166,25 +166,27 @@
 
 
 
-
+<!--
   <tr>
     <td colspan="2">
-      <!--md-form-field class="example-full-width"-->
-        <!--input mdInput placeholder="Serie" formControlName="serie" required [mdAutocomplete]="serie" autocomplete="off"/>
+      &lt;!&ndash;md-form-field class="example-full-width"&ndash;&gt;
+        &lt;!&ndash;input mdInput placeholder="Serie" formControlName="serie" required [mdAutocomplete]="serie" autocomplete="off"/>
 
         <md-autocomplete #serie="mdAutocomplete">
           <md-option value="0">Sin Impuesto</md-option>
           <md-option value="1">Con Impuesto</md-option>
-        </md-autocomplete-->
+        </md-autocomplete&ndash;&gt;
         <md-select class="example-full-width" mdInput placeholder="Facturable" formControlName="serie">
           <md-option value="0">No Facturable</md-option>
           <md-option value="1">Facturable</md-option>
 
         </md-select>
 
-      <!--/md-form-field-->
+      &lt;!&ndash;/md-form-field&ndash;&gt;
     </td>
-  </tr><tr>
+  </tr>-->
+    <!--    comentado para que no pregunte si es facturable el cliente 26/08/2019-->
+    <tr>
     <td colspan="2">
       <!--m
       y-date-picker class="example-full-width"
@@ -227,7 +229,10 @@
         required>
       </md-form-field>
     </th>
-  </tr><tr>
+  </tr>
+
+    <tr>
+
     <td>
 
       <md-form-field class="example-full-width">

@@ -14,6 +14,7 @@ import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 import 'rxjs/add/operator/takeWhile';
 import {DatePipe, Location} from '@angular/common';
 import { environment } from '../../environments/environment';
+import {DeletePlanDialog, UpdatePlanPricesDialog} from '../planes/planes.component';
 
 @Component({
   selector: 'app-facturacion',
@@ -55,7 +56,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
       this.facturacion = data.json();
       this.facturacion_t = this.facturacion;
       this.update=false;
-      //console.log(this.data);
+    // console.log(this.facturacion );
     });
     this.snackBar.open("Facturas Cargadas", null, {
       duration: 2000,
@@ -136,6 +137,15 @@ export class FacturacionComponent implements OnInit, OnDestroy {
         })
       }
     });
+  }
+  updatePricesfac(): void {
+    let dialogRef = this.dialog.open(UpdatePlanPricesFacDialog, {
+      width: '25%'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    })
   }
   notify(){
     this.update=true;
@@ -287,41 +297,45 @@ export class FacturacionPagos {
     }else{
       this.pagado = row.pagado;
     }
+    console.log(row);
     this.deuda=this.monto-this.pagado;
     this.http.get(environment.apiEndpoint+'facprod/'+row.id)
-    .subscribe((data) => {
-      this.fac_products = data.json();
-      this.iva= this.fac_products[0].IVA;
-      this.neto = (100/(+this.iva+100))
-      if(this.fac_products.length <=12){
-        this.num_products = 12-this.fac_products.length;
-        //this.numbers = Array(5).fill().map((x,i)=>i); // [0,1,2,3,4]
-        console.log(this.num_products);
-      }
-      //console.log(this.fac_products.slice(0,3));
-    });
+      .subscribe((data) => {
+        this.fac_products = data.json();
+        this.iva= this.fac_products[0].IVA;
+        this.neto = (100/(+this.iva+100))
+        if(this.fac_products.length <=12){
+          this.num_products = 12-this.fac_products.length;
+          //this.numbers = Array(5).fill().map((x,i)=>i); // [0,1,2,3,4]
+          console.log(this.num_products);
+        }
+        //console.log(this.fac_products.slice(0,3));
+      });
     this.http.get(environment.apiEndpoint+'facpag/'+row.id)
-    .subscribe((data) => {
-      this.fac_pagos = data.json();
-      //console.log(this.fac_pagos.slice(0,3));
-    });
+      .subscribe((data) => {
+        this.fac_pagos = data.json();
+        //console.log(this.fac_pagos.slice(0,3));
+      });
     this.http.get(environment.apiEndpoint+'clientes/'+row.id_cliente)
-    .subscribe((data) => {
-      this.serie = data.json().serie;
-      this.client = data.json()
-      if(this.serie == 1)
-      {
-        console.log(this.monto)
-        console.log(this.iva)
-        this.impuesto = ((this.monto / (+this.iva+100)) * this.iva);
-        console.log(this.impuesto)
-        this.montosi = this.monto;
-        this.monto = this.monto * (100/(+this.iva+100));
-      }if(this.serie != 1){
-        this.montosi = this.monto;
-      }
-      //console.log(this.fac_pagos.slice(0,3));
-    });
+      .subscribe((data) => {
+
+        this.client = data.json()
+        this.serie = row.serie_fac
+        console.log(this.serie);
+        if(this.serie == 1)
+        {
+
+          console.log(this.monto)
+          console.log(this.iva)
+          this.impuesto = ((this.monto / (+this.iva+100)) * this.iva);
+          console.log(this.impuesto)
+          this.montosi = this.monto;
+          this.monto = this.monto * (100/(+this.iva+100));
+        }if(this.serie != 1){
+          this.montosi = this.monto;
+        }
+        //console.log(this.fac_pagos.slice(0,3));
+      });
 
   }
 
@@ -329,31 +343,31 @@ export class FacturacionPagos {
     var url = environment.apiEndpoint+"facturas/"+this.row.id;
     if(this.client.email!= null && this.client.email.toUpperCase()!="NULL"){
       var post = this.fb.group({
-        responsable: this.usuario.currentUser.id_user
-      }
-    )
-    this.http.post(url, post.value)
-    .subscribe((data)=>{
-      this.snackBar.open("Correo Enviado", null, {
+          responsable: this.usuario.currentUser.id_user
+        }
+      )
+      this.http.post(url, post.value)
+        .subscribe((data)=>{
+          this.snackBar.open("Correo Enviado", null, {
+            duration: 2000,
+          });
+        })
+
+    }else{
+      this.snackBar.open("Cliente no tiene correo registrado", null, {
         duration: 2000,
       });
-    })
-
-  }else{
-    this.snackBar.open("Cliente no tiene correo registrado", null, {
-      duration: 2000,
-    });
+    }
   }
-}
 
-print(): void {
-  let moment = this.deuda;
-  this.deuda = 0;
-  let printContents, popupWin;
-  printContents = document.getElementById('print-section').innerHTML;
-  popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-  popupWin.document.open();
-  popupWin.document.write(`
+  print(): void {
+    let moment = this.deuda;
+    this.deuda = 0;
+    let printContents, popupWin;
+    printContents = document.getElementById('print-section').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
     <html>
     <head>
     <title></title>
@@ -407,109 +421,109 @@ print(): void {
     `+printContents+`
     </body>
     </html>`
-  );
-  popupWin.document.close();
-  //onload="window.print();window.close()"
-  this.deuda = moment;
-}
-deletepagoDialog(row): void {
-  console.log(row);
-  let dialogRef = this.dialog.open(deletepagoDialog, {
-    data: row
-  });
-
-  dialogRef.afterClosed().subscribe(result => {
-    console.log('The dialog was closed');
-    //this.animal = result;
-    this.http.get(environment.apiEndpoint+'facpag/'+this.row.id)
-    .subscribe((data) => {
-      this.fac_pagos = data.json();
-      this.sending_p = false
-      //console.log(this.fac_pagos.slice(0,3));
-    });
-    this.pagado=this.pagado-this.row.pag_monto;
-    this.deuda=this.monto-this.pagado;
-  });
-}
-deleteProductDialog(row): void {
-  console.log(row);
-  let dialogRef = this.dialog.open(deleteProductDialog, {
-    data: row
-  });
-
-  dialogRef.afterClosed().subscribe(result => {
-    console.log('The dialog was closed');
-    //this.animal = result;
-    this.http.get(environment.apiEndpoint+'facprod/'+this.row.id)
-    .subscribe((data) => {
-      this.fac_products = data.json();
-      //console.log(this.fac_pagos.slice(0,3));
-    });
-    this.monto=this.monto-row.precio_articulo;
-    this.deuda=this.monto-this.pagado;
-  });
-}
-activar(){
-  this.agregarProducto=true;
-  console.log(this.agregarProducto)
-}
-addProducto(){
-  if(this.serie == 1){
-    this.precio_articulo=(this.addProduct.value.precio_unitario*((+this.fac_products[0].IVA+100)/100))*this.addProduct.value.cantidad;
-  }else{
-    this.precio_articulo=this.addProduct.value.precio_unitario*this.addProduct.value.cantidad;
+    );
+    popupWin.document.close();
+    //onload="window.print();window.close()"
+    this.deuda = moment;
   }
-  this.addProduct.patchValue({
-    precio_articulo: this.precio_articulo,
-    IVA: this.fac_products[0].IVA
-  })
-  var url = environment.apiEndpoint+"facprod";
-  this.http.post(url, this.addProduct.value)
-  .subscribe((data)=>{
-    this.agregarProducto=false;
-    this.http.get(environment.apiEndpoint+'facprod/'+this.row.id)
-    .subscribe((data) => {
-      this.fac_products = data.json();
-      //console.log(this.fac_pagos.slice(0,3));
+  deletepagoDialog(row): void {
+    console.log(row);
+    let dialogRef = this.dialog.open(deletepagoDialog, {
+      data: row
     });
-    this.monto=this.monto+this.precio_articulo;
-    this.deuda=this.monto-this.pagado;
-    if (this.deuda <= 0) {
 
-    }
-    //this.pagos.push({opcion: this.opcion, nada: this.nada});
-    this.codigo_factura='';
-    this.nombre_articulo='';
-    this.precio_unitario='';
-    this.cantidad='';
-    this.precio_articulo='';
-    this.comment_articulo='';
-  })
-}
-agregar(){
-  //let body = "fac_id="+this.row.id+"&pag_tip="+this.tipo+"&pag_monto="+this.nada+"&pag_comment="+this.opcion;
-  //console.log(body);
-  this.sending_p = true
-  var url = environment.apiEndpoint+"facpag";
-  this.http.post(url, this.addPago.value)
-  .subscribe((data)=>{
-    this.agregarProducto=false;
-    this.http.get(environment.apiEndpoint+'facpag/'+this.row.id)
-    .subscribe((data) => {
-      this.fac_pagos = data.json();
-      this.sending_p = false
-      //console.log(this.fac_pagos.slice(0,3));
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      //this.animal = result;
+      this.http.get(environment.apiEndpoint+'facpag/'+this.row.id)
+        .subscribe((data) => {
+          this.fac_pagos = data.json();
+          this.sending_p = false
+          //console.log(this.fac_pagos.slice(0,3));
+        });
+      this.pagado=this.pagado-this.row.pag_monto;
+      this.deuda=this.monto-this.pagado;
     });
-    this.pagado=this.pagado+this.nada;
-    this.deuda=this.monto-this.pagado;
-    if (this.deuda <= 0) {
+  }
+  deleteProductDialog(row): void {
+    console.log(row);
+    let dialogRef = this.dialog.open(deleteProductDialog, {
+      data: row
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      //this.animal = result;
+      this.http.get(environment.apiEndpoint+'facprod/'+this.row.id)
+        .subscribe((data) => {
+          this.fac_products = data.json();
+          //console.log(this.fac_pagos.slice(0,3));
+        });
+      this.monto=this.monto-row.precio_articulo;
+      this.deuda=this.monto-this.pagado;
+    });
+  }
+  activar(){
+    this.agregarProducto=true;
+    console.log(this.agregarProducto)
+  }
+  addProducto(){
+    if(this.serie == 1){
+      this.precio_articulo=(this.addProduct.value.precio_unitario*((+this.fac_products[0].IVA+100)/100))*this.addProduct.value.cantidad;
+    }else{
+      this.precio_articulo=this.addProduct.value.precio_unitario*this.addProduct.value.cantidad;
     }
-    //this.pagos.push({opcion: this.opcion, nada: this.nada});
-    this.opcion = "";
-    this.nada = "";
-  }, error =>{ this.sending_p = false })
-}
+    this.addProduct.patchValue({
+      precio_articulo: this.precio_articulo,
+      IVA: this.fac_products[0].IVA
+    })
+    var url = environment.apiEndpoint+"facprod";
+    this.http.post(url, this.addProduct.value)
+      .subscribe((data)=>{
+        this.agregarProducto=false;
+        this.http.get(environment.apiEndpoint+'facprod/'+this.row.id)
+          .subscribe((data) => {
+            this.fac_products = data.json();
+            //console.log(this.fac_pagos.slice(0,3));
+          });
+        this.monto=this.monto+this.precio_articulo;
+        this.deuda=this.monto-this.pagado;
+        if (this.deuda <= 0) {
+
+        }
+        //this.pagos.push({opcion: this.opcion, nada: this.nada});
+        this.codigo_factura='';
+        this.nombre_articulo='';
+        this.precio_unitario='';
+        this.cantidad='';
+        this.precio_articulo='';
+        this.comment_articulo='';
+      })
+  }
+  agregar(){
+    //let body = "fac_id="+this.row.id+"&pag_tip="+this.tipo+"&pag_monto="+this.nada+"&pag_comment="+this.opcion;
+    //console.log(body);
+    this.sending_p = true
+    var url = environment.apiEndpoint+"facpag";
+    this.http.post(url, this.addPago.value)
+      .subscribe((data)=>{
+        this.agregarProducto=false;
+        this.http.get(environment.apiEndpoint+'facpag/'+this.row.id)
+          .subscribe((data) => {
+            this.fac_pagos = data.json();
+            this.sending_p = false
+            //console.log(this.fac_pagos.slice(0,3));
+          });
+        this.pagado=this.pagado+this.nada;
+        this.deuda=this.monto-this.pagado;
+        if (this.deuda <= 0) {
+
+        }
+        //this.pagos.push({opcion: this.opcion, nada: this.nada});
+        this.opcion = "";
+        this.nada = "";
+      }, error =>{ this.sending_p = false })
+  }
 
 }
 
@@ -625,12 +639,50 @@ export class deletepagoDialog {
         .subscribe((data) => {
           this.dialogRef.close();
         })
+
         this.snackBar.open("aprovando pago: Por favor espere", null, {
           duration: 4000,
         });
         this.dialogRef.close();
       }
     }
+@Component({
+  templateUrl: 'confirm.pago_int.component.html',
+  styleUrls: ['./facturacion.component.css']
+})
+export class ConfirmPagoDialog2 implements OnInit, OnDestroy {
+  constructor(
+    public dialogRef: MdDialogRef<ConfirmPagoDialog2>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+    console.log(this.data);
+  }
+
+  ngOnInit(){
+    console.log(this.data)
+  }
+  ngOnDestroy(){
+
+  }
+  onNoClick2(): void {
+    this.dialogRef.close();
+  }
+  aprov2(): void{
+    this.http.put(environment.apiEndpoint+'balance_in/', this.data)
+      .subscribe((data) => {
+        this.dialogRef.close();
+      })
+
+    this.snackBar.open("aprovando pago: Por favor espere", null, {
+      duration: 4000,
+    });
+    this.dialogRef.close();
+  }
+}
     @Component({
       templateUrl: 'decline.pago.component.html',
       styleUrls: ['./facturacion.component.css']
@@ -732,6 +784,7 @@ export class deletepagoDialog {
           })
 
         }
+
         rem(i): void{
           let dialogRef = this.dialog.open(DeclinePagoDialog, {
             data: i,
@@ -757,3 +810,176 @@ export class deletepagoDialog {
         //   })
         // }
       }
+
+@Component({
+  templateUrl: 'aprov.pagos.in.component.html',
+  styleUrls: ['./facturacion.component.css']
+})
+export class AprovPagosin implements OnInit, OnDestroy {
+  myService: MyService | null;
+  balance=[];
+  balance_t=[];
+  autoupdate=true
+  constructor(
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private location: Location,
+    private usuario: AuthGuard) {
+  }
+
+  ngOnInit(){
+    IntervalObservable.create(10000)
+      .takeWhile(() => (this.autoupdate))
+      .subscribe(() => {
+        this.refresh(false);
+      });
+    this.refresh(false);
+
+  }
+  ngOnDestroy(){
+    this.autoupdate=false
+  }
+  refresh(test){
+    this.http.get(environment.apiEndpoint+'balance_in/', {params:{uid: this.usuario.currentUser.id_user}})
+      .subscribe((data) => {
+        this.balance_t = data.json();
+        this.balance = this.balance_t;
+        //console.log(this.dash);
+
+      });
+  }
+  aprov2(i): void{
+    let dialogRef = this.dialog.open(ConfirmPagoDialog2, {
+      data: i,
+      width: '25%'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    })
+
+  }
+
+  rem2(i): void{
+    let dialogRef = this.dialog.open(DeclinePagoDialog, {
+      data: i,
+      width: '25%'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    })
+  }
+  Close(){this.location.back();}
+  // aprov(i): void{
+  //   this.http.put(environment.apiEndpoint+'balance/', i)
+  //   .subscribe((data) => {
+  //
+  //   })
+  //
+  // }
+  // rem(i): void{
+  //   this.http.delete(environment.apiEndpoint+'balance/', {params: {id_bal: i.id_bal, bal_cli: i.bal_cli}})
+  //   .subscribe((data) => {
+  //
+  //   })
+  // }
+}
+@Component({
+  templateUrl: 'decline.pago.in.component.html',
+  styleUrls: ['./facturacion.component.css']
+})
+export class DeclinePagoDialog2 implements OnInit, OnDestroy {
+  DeclinePagos: FormGroup
+  constructor(
+    public dialogRef: MdDialogRef<DeclinePagoDialog>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    private _fb: FormBuilder,
+    private fb: FormBuilder,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+  }
+
+  ngOnInit(){
+    console.log(this.data);
+    this.DeclinePagos = this.fb.group({
+      id_bal_in: this.data.id_bal,
+      option: ['', [Validators.required]],
+      reason: [''],
+      obs: [''],
+
+    })
+    this.DeclinePagos.get('option').valueChanges.subscribe(
+      (op) => {
+        if ( op != 1){
+          this.DeclinePagos.get('reason').setValidators([]);
+          this.DeclinePagos.get('reason').updateValueAndValidity();
+        }else if( op == 1 ){
+          this.DeclinePagos.get('reason').setValidators([Validators.required]);
+          this.DeclinePagos.get('reason').updateValueAndValidity();
+        }
+      })
+  }
+  ngOnDestroy(){
+
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+  rem2(): void{
+    this.http.delete(environment.apiEndpoint+'balance_in/', {params: this.DeclinePagos.value})
+      .subscribe((data) => {
+        this.dialogRef.close();
+      })
+  }
+}
+
+@Component({
+  selector: 'Update-Prices',
+  templateUrl: 'UpdatePrices_Fac.component.html',
+  styleUrls: ['./facturacion.component.css']
+})
+export class UpdatePlanPricesFacDialog{
+  myService: MyService | null;
+  addplan: FormGroup;
+  constructor(
+    public dialogRef: MdDialogRef<DeletePlanDialog>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private fb: FormBuilder) {
+    this.myService = new MyService(http, router);
+    this.addplan = this.fb.group({
+      taza: '',
+
+    });
+  }
+
+  update(): void {
+    var plan = this.addplan.value;
+    console.log(JSON.stringify(this.addplan.value));
+    var body = "taza=" + plan.taza;
+    var url = environment.apiEndpoint+"price_fac/update";
+
+    this.http.post(url, this.addplan.value).subscribe((data) => {
+      this.dialogRef.close();
+      this.snackBar.open("Editando Plan: Por favor espere", null, {
+        duration: 2000,
+      });
+
+    });
+
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}

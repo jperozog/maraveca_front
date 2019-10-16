@@ -25,8 +25,15 @@
   <ng-container *ngIf="(balance > 0)">
   <button  md-menu-item routerLink="/Pagos">
     <md-icon>credit_card</md-icon>
-    <span>{{balance}} pagos pendienes</span>
+    <span>{{balance}} pagos pendientes</span>
   </button>
+  </ng-container>
+
+  <ng-container *ngIf="(balance_in > 0)">
+    <button  md-menu-item routerLink="/Pagos_in">
+      <md-icon>credit_card</md-icon>
+      <span>{{balance_in}} pagos pendienes para planes en dolares</span>
+    </button>
   </ng-container>
 
   <ng-container *ngIf="(instalaciones > 0)">
@@ -131,7 +138,7 @@
 
 <md-menu #stat="mdMenu">
 
-  <button md-menu-item routerLink="/EstadodeCuenta" *ngIf="usuario.perm && (usuario.perm.includes('cobrar'))">
+  <button md-menu-item  *ngIf="usuario.perm && (usuario.perm.includes('cobrar'))" [matMenuTriggerFor]="cobrar">
     <md-icon>show_chart</md-icon>
     <span>Cuentas por cobrar</span>
   </button>
@@ -142,6 +149,19 @@
   </button>
 
 </md-menu>
+<md-menu #cobrar="mdMenu">
+
+  <button md-menu-item routerLink="/EstadodeCuenta"*ngIf="usuario.perm && (usuario.perm.includes('cobrar'))">
+    <md-icon>money</md-icon>
+    <span>Moneda Local</span>
+  </button>
+  <button md-menu-item routerLink="/EstadodeCuenta_in"*ngIf="usuario.perm && (usuario.perm.includes('cobrar'))">
+    <md-icon>attach_money</md-icon>
+    <span>Moneda Internacional</span>
+
+  </button>
+</md-menu>
+
 <md-menu #pgar="mdMenu">
 
   <button md-menu-item routerLink="/pagarInstalaciones"*ngIf="usuario.perm && (usuario.perm.includes('pagar'))">

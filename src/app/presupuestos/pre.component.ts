@@ -53,6 +53,7 @@ ngOnInit(){
     cliente: [this.cliente.id, Validators.required],
     tipo: [this.tipo, Validators.required],
     planes: ['', Validators.required],
+    tipo_plan: ['', Validators.required],
     instalacion: ['', Validators.required],
     moneda: ['', Validators.required],
     responsable: [this.usuario.currentUser.id_user, Validators.required]

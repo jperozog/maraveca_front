@@ -43,6 +43,7 @@ export class PClientsComponent {
   data: any = null;
   search: string = '';
   NewService:FormGroup;
+  factibi: any= null;
   constructor(
     private http: Http,
     private fb: FormBuilder,
@@ -64,6 +65,8 @@ export class PClientsComponent {
     this.snackBar.open("Clientes Cargados", null, {
       duration: 2000,
     });
+
+
   }
   SendPre(row): void {
     /*let dialogRef = this.dialog.open(AddclientsComponent, {
@@ -126,8 +129,10 @@ export class PClientsComponent {
 
     })
   }
+
   dinstall(row){
-    let dialogRef = this.dialog.open(ConfirmCliente, {
+
+    let dialogRef = this.dialog.open(ConfirmCliente2, {
       data: row
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -141,10 +146,10 @@ export class PClientsComponent {
           console.log(row)
           this.NewService = this.fb.group({
             servicio: row.id_cli,
-            celda: "",
+           /* celda: "",
             equipo: "",
             tubo:"",
-            ptp: "",
+            ptp: "",*/
           });
           row = this.NewService.value;
           let dialogRef = this.dialog.open(AddticketComponent, {
@@ -163,7 +168,7 @@ export class PClientsComponent {
     console.log(row);
     //this.selectedRowIndex = row.id;
     let dialogRef = this.dialog.open(AddPclientsComponent, {
-      width: '25%',
+      width: '20%',
       data: row
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -256,7 +261,7 @@ export class AddPclientsComponent implements OnInit{
   social : string;
   phone : string;
   phone2 : string;
-  serie : string;
+ // serie : string;
   address : string;
   comment: string;
   form: string;
@@ -292,7 +297,7 @@ export class AddPclientsComponent implements OnInit{
           apellido: [row.apellido, [Validators.required]],
           direccion: [row.direccion, [Validators.required]],
           day_of_birth: [row.day_of_birth, [Validators.required]],
-          serie: [row.serie, [Validators.required]],
+         // serie: [row.serie, [Validators.required]],
           phone1: [row.phone1, [Validators.required, Validators.pattern(PHONE_REGEX)]],
           phone2: [row.phone2, [Validators.required]],
           comment: row.comment,
@@ -313,7 +318,7 @@ export class AddPclientsComponent implements OnInit{
           apellido: ['', [Validators.required]],
           direccion: ['', [Validators.required]],
           day_of_birth: ['', [Validators.required]],
-          serie: ['', [Validators.required]],
+         // serie: ['', [Validators.required]],
           phone1: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
           phone2: ['', [Validators.required]],
           comment: '',
@@ -450,6 +455,7 @@ export class PClientesStatus {
   id: any;
   NewService:FormGroup;
   resp: any;
+  confirnfac: any;
   constructor(
     private http:Http,
     private fb: FormBuilder,
@@ -461,7 +467,7 @@ export class PClientesStatus {
     private _fb: FormBuilder,
     private usuario: AuthGuard,
 ){
-  //console.log(row);
+  console.log(row);
   this.http.get(environment.apiEndpoint+'factibi/'+row.id)
   .subscribe((data) => {
     this.fac_products = data.json();
@@ -470,8 +476,10 @@ export class PClientesStatus {
     });
     this.id = row.id;
   });
-
-}
+    console.log(row);
+this.confirnfac = row;
+console.log(this.confirnfac);
+  }
 
 //aqui comenzara el dialog de detalles de una facturas
 ConfirmNewClient(row): void {
@@ -479,7 +487,7 @@ ConfirmNewClient(row): void {
     width: '25%'
   });*/
   let dialogRef = this.dialog.open(ConfirmCliente, {
-    data: row
+    data: this.confirnfac
   });
 
 
@@ -594,8 +602,53 @@ export class DeletePCliente {
 }
 @Component({
 selector: 'delete-dialog',
-templateUrl: 'confirm-client.html',
+templateUrl: 'confirm-client2.html',
 styleUrls: ['./clients.component.css']
+})
+
+
+export class ConfirmCliente2 {
+  return = false;
+  id: any;
+  factibi: any;
+  fac_products:any;
+  constructor(
+    public dialogRef: MdDialogRef<ConfirmCliente2>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+      console.log(this.data);
+
+ this.http.get(environment.apiEndpoint+'factible/'+data.id)
+.subscribe((data) => {
+  this.fac_products = data.json().factibilidades;
+  this.factibi = data.json().fact
+  console.log(this.fac_products.slice(0,3));
+  console.log(this.factibi);
+
+
+
+});
+  }
+  register(){
+       this.return = true
+       this.onNoClick()
+     }
+
+
+  onNoClick(): void {
+    this.dialogRef.close({response: this.return});
+  }
+
+}
+
+@Component({
+  selector: 'delete-dialog',
+  templateUrl: 'confirm-client.html',
+  styleUrls: ['./clients.component.css']
 })
 export class ConfirmCliente {
   return = false
@@ -607,13 +660,13 @@ export class ConfirmCliente {
     public snackBar:MdSnackBar,
     private router: Router,
     private usuario: AuthGuard) {
-      console.log(this.data);
-     }
+    console.log(this.data);
+  }
 
-     register(){
-       this.return = true
-       this.onNoClick()
-     }
+  register(){
+    this.return = true
+    this.onNoClick()
+  }
 
   onNoClick(): void {
     this.dialogRef.close({response: this.return});
@@ -658,6 +711,7 @@ export class AddFactComponent{
           id_pot: [row.id, [Validators.required]],
           coordenadaslat: ['', [Validators.required]],
           coordenadaslon: ['', [Validators.required]],
+          ciudad: ['', [Validators.required]],
           comentario: ['', [Validators.required]],
           status: '1',
           c_search: '',
@@ -670,6 +724,7 @@ export class AddFactComponent{
           id_pot: ['', [Validators.required]],
           coordenadaslat: ['', [Validators.required]],
           coordenadaslon: ['', [Validators.required]],
+          ciudad: ['', [Validators.required]],
           comentario: ['', [Validators.required]],
           status: '1',
           c_search: '',

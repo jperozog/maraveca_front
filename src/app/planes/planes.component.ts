@@ -30,6 +30,9 @@ export class PlanesComponent implements OnInit, OnDestroy{
     update:boolean=true;
     autoupdate = true;
     plan="p";
+    planes2: any;
+    planesd: any;
+    planesn:any;
     constructor(
       public usuario: AuthGuard,
       private http: Http,
@@ -61,6 +64,9 @@ export class PlanesComponent implements OnInit, OnDestroy{
       this.http.get(environment.apiEndpoint+'planes/', {params:{responsable: this.usuario.currentUser.id_user, plan: this.plan}})
         .subscribe((data) => {
           this.data_t = data.json().planes;
+          this.planesn = data.json().planesn;
+          this.planesd = data.json().planesd;
+          this.planes2 = data.json().planes2;
           this.data=this.data_t;
           this.mb_t = data.json().mb;
           this.mb=this.mb_t;
@@ -69,6 +75,10 @@ export class PlanesComponent implements OnInit, OnDestroy{
             this.snackBar.open("Planes Cargadas", null, {
               duration: 2000,
             });
+            console.log(this.data);
+            console.log(this.planesd);
+            console.log(this.planesn);
+            console.log(this.planes2);
           }
         });
 
@@ -197,13 +207,13 @@ export class PlanesComponent implements OnInit, OnDestroy{
             umb_plan: row.umb_plan,
             descripcion: row.descripcion
           });
-          //console.log(row)
+         console.log(row)
         }else{
 
           this.addplan = this.fb.group({
-            cost_plan: '',
+            cost_plan: 0,
             name_plan: '',
-            taza: '',
+            taza: 0,
             tipo_plan: '',
             id_plan: '',
             carac_plan: '',
@@ -213,7 +223,7 @@ export class PlanesComponent implements OnInit, OnDestroy{
 
 
           });
-          //console.log("llego vacio"+ row)
+          console.log("llego vacio"+ row)
         }
 
       }

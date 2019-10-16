@@ -80,13 +80,13 @@
           <td *ngIf="i.bal_from==19">otros bancos (Banplus)</td>
           <td *ngIf="i.bal_from==20">otros bancos (BFC)</td>
 
-          <td style="text-align: right;" *ngIf="i.bal_tip!=8 && i.bal_tip!=9 && i.bal_tip!=10 && i.bal_tip!=11">
+          <td style="text-align: left;" *ngIf="i.bal_tip!=8 && i.bal_tip!=9 && i.bal_tip!=10 && i.bal_tip!=11">
             {{i.bal_monto  | number : '1.0-3'}} Bs.S.
           </td>
-          <td style="text-align: right;" *ngIf="i.bal_tip==8 || i.bal_tip==9 || i.bal_tip==10 || i.bal_tip==11">
+          <td style="text-align: left;" *ngIf="i.bal_tip==8 || i.bal_tip==9 || i.bal_tip==10 || i.bal_tip==11">
             {{i.bal_monto  | number : '1.0-3'}} US$.
           </td>
-          <td style="text-align: right;">
+          <td style="text-align: left;">
             {{i.bal_comment}}
           </td>
           <td style="text-align: center" *ngIf="i.bal_stat == 1">

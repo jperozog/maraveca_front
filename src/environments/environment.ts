@@ -8,4 +8,6 @@ export const environment = {
   //apiEndpoint: "http://190.142.197.106:81/maraveca-test/public/index.php/api/"//inter
   //apiEndpoint: "http://172.16.28.4/maraveca-test/public/index.php/api/" //digitel
   apiEndpoint: 'http://127.0.0.1:8000/api/'
+  //apiEndpoint: 'http://127.0.0.1/maraveca-laravel/public/index.php/api/'
+
 };

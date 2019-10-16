@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, OnDestroy} from '@angular/core';
+import {Component, Inject, OnInit, OnDestroy, ViewChildren} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -13,9 +13,12 @@ import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 import 'rxjs/add/operator/takeWhile';
 import {AuthGuard} from '../_guards/index';
 import {AuthenticationService} from '../_services/index';
-import {Location} from '@angular/common';
+import {DatePipe, Location} from '@angular/common';
 import {environment} from '../../environments/environment';
 import {SelectEquipoComponent, SelectTipoComponent} from '../inventarios/inventarios.component';
+import {IpValidators} from '../servicios/validar_ip';
+import {SerialValidators} from '../servicios/validar_serial';
+
 
 const MAC_REGEX = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
 const PHONE_REGEX = /^(0414\d|0412\d|0416\d|0426\d|0424\d|0415\d)+\d{6}/;
@@ -224,7 +227,8 @@ export class MyService {
 @Component({
   selector: 'app-add-ticket',
   templateUrl: './add-ticket.component.html',
-  styleUrls: ['./soporte.component.css']
+  styleUrls: ['./soporte.component.css'],
+  providers: [SerialValidators, IpValidators ]
 })
 export class AddticketComponent implements OnInit {
   edit: any;
@@ -254,6 +258,11 @@ export class AddticketComponent implements OnInit {
   antenna = false;
   EN: boolean = false;
   valorplaceholder = '';
+  p_search: string;
+  planes: any;
+  planes1: any;
+  planes2: any;
+  planesd: any;
 
   constructor(private http: Http,
               private fb: FormBuilder,
@@ -261,7 +270,9 @@ export class AddticketComponent implements OnInit {
               @Inject(MD_DIALOG_DATA) public row: any,
               //private route: ActivatedRoute,
               public dialog: MdDialog,
+              private validacion_serial: SerialValidators,
               public snackBar: MdSnackBar,
+              private validacion_ip: IpValidators,
               public usuario: AuthGuard,
               private router: Router) {
     this.edit = false;
@@ -300,18 +311,28 @@ export class AddticketComponent implements OnInit {
       .subscribe((data) => {
         this.antenas = data.json();
       });
+    this.http.get(environment.apiEndpoint + 'add_preload/')
+      .subscribe((data) => {
+        this.planes = data.json().planes;
+        this.planes1 = data.json().planes1;
+        this.planes2 = data.json().planes2;
+        this.planesd = data.json().planesd;
+
+      });
     this.addplan = this.fb.group({
       tipo_soporte: '1',
       problema_soporte: '',
       afectacion_soporte: '1',
       problems: '',
       comment_soporte: '',
+      plan_srv: '',
+      tipo_plan_srv: '',
       servicio_soporte: ['', Validators.required],
       celda_soporte: ['', Validators.required],
       tipo_equipo_soporte: ['', Validators.required],
       equipo_soporte: ['', Validators.required],
       antenna_soporte: '',
-      seriale: ['', Validators.required],
+      seriale: '', /*['', [Validators.required],[this.validacion_serial.serialValidator()]],*/
       seriala: '',
       status_soporte: '1',
       user_soporte: this.currentUser.id_user,
@@ -320,6 +341,8 @@ export class AddticketComponent implements OnInit {
       adicionales: [],
       nombrer: '',
       valorr: '',
+      ip_srv: '', /*['', [Validators.required], [this.validacion_ip.ipValidator()]],*/
+      p_search: '',
       EN: false,
     });
     if (row != null) {
@@ -486,20 +509,29 @@ export class AddticketComponent implements OnInit {
 
         if (tipo_soporte === '1') {
           console.log('instalacion');
+          this.addplan.get('plan_srv').setValidators([Validators.required]);
+          this.addplan.get('tipo_plan_srv').setValidators([Validators.required]);
           this.addplan.get('servicio_soporte').setValidators([Validators.required]);
           this.addplan.get('celda_soporte').setValidators([Validators.required]);
           this.addplan.get('equipo_soporte').setValidators([Validators.required]);
           this.addplan.get('seriale').setValidators([Validators.required]);
+          this.addplan.get('seriale').setAsyncValidators([this.validacion_serial.serialValidator()]);
           this.addplan.get('tipo_equipo_soporte').setValidators([Validators.required]);
           this.addplan.get('equipo_soporte').setValidators([Validators.required]);
           this.addplan.get('afectacion_soporte').setValidators([]);
           this.addplan.get('comment_soporte').setValidators([]);
           this.addplan.get('servicio_soporte').setValidators([]);
           this.addplan.get('problems').setValidators([]);
+          this.addplan.get('ip_srv').setValidators([Validators.required]);
+          this.addplan.get('ip_srv').setAsyncValidators([this.validacion_ip.ipValidator()]);
+
 
         } else if (tipo_soporte === '2') {
-          console.log('ticket');
-          this.addplan.get('servicio_soporte').setValidators([]);
+      console.log('ticket');
+      this.addplan.get('plan_srv').setValidators([]);
+      this.addplan.get('tipo_plan_srv').setValidators([]);
+      this.addplan.get('ip_srv').setValidators([]);
+      this.addplan.get('servicio_soporte').setValidators([]);
           this.addplan.get('celda_soporte').setValidators([]);
           this.addplan.get('equipo_soporte').setValidators([]);
           this.addplan.get('seriale').setValidators([]);
@@ -521,6 +553,9 @@ export class AddticketComponent implements OnInit {
           this.addplan.get('afectacion_soporte').setValidators([]);
           this.addplan.get('comment_soporte').setValidators([Validators.required]);
           this.addplan.get('problems').setValidators([]);
+          this.addplan.get('plan_srv').setValidators([]);
+          this.addplan.get('tipo_plan_srv').setValidators([]);
+          this.addplan.get('ip_srv').setValidators([]);
 
         } else if (tipo_soporte === '4') {
           console.log('Otros trabajos e instalaciones');
@@ -533,6 +568,9 @@ export class AddticketComponent implements OnInit {
           this.addplan.get('afectacion_soporte').setValidators([]);
           this.addplan.get('comment_soporte').setValidators([Validators.required]);
           this.addplan.get('problems').setValidators([]);
+          this.addplan.get('plan_srv').setValidators([]);
+          this.addplan.get('tipo_plan_srv').setValidators([]);
+          this.addplan.get('ip_srv').setValidators([]);
 
         }
 
@@ -545,6 +583,9 @@ export class AddticketComponent implements OnInit {
         this.addplan.get('problems').updateValueAndValidity();
         this.addplan.get('tipo_equipo_soporte').updateValueAndValidity();
         this.addplan.get('equipo_soporte').updateValueAndValidity();
+        this.addplan.get('plan_srv').updateValueAndValidity();
+        this.addplan.get('tipo_plan_srv').updateValueAndValidity();
+        this.addplan.get('ip_srv').updateValueAndValidity();
 
       }
     );
@@ -599,6 +640,7 @@ export class AddticketComponent implements OnInit {
     var url = environment.apiEndpoint + 'soporte2';
     this.http.post(url, plan).subscribe((data) => {
       this.row = data.json();
+    console.log(plan);
     });
     setTimeout(() => {
       /*          var body1=
@@ -664,6 +706,7 @@ export class EditticketComponent implements OnInit, OnDestroy {
     this.http.get(environment.apiEndpoint + 'soporte/' + this.id)
       .subscribe((data) => {
         this.row = data.json()[0];
+        console.log(this.row);
         this.addplan.value.status_soporte = this.row.status_soporte;
         this.addplan.value.tipo = this.row.tipo_soporte;
         console.log(this.addplan.value);
@@ -852,7 +895,8 @@ export class DeleteticketDialog {
 @Component({
   selector: 'delete-dialog',
   templateUrl: 'confirm-newService.html',
-  styleUrls: ['./soporte.component.css']
+  styleUrls: ['./soporte.component.css'],
+  providers: [IpValidators]
 })
 export class DeleteInstallDialog implements OnInit {
   myService: MyService | null;
@@ -866,6 +910,8 @@ export class DeleteInstallDialog implements OnInit {
   u_search: any = '';
   sending = false;
   used = false;
+  ip: any;
+
 
   constructor(
     private fb: FormBuilder,
@@ -874,30 +920,74 @@ export class DeleteInstallDialog implements OnInit {
     @Inject(MD_DIALOG_DATA) public data: any,
     private http: Http,
     public dialog: MdDialog,
+    private validar: IpValidators,
     public snackBar: MdSnackBar,
     private router: Router,
     public usuario: AuthGuard) {
-    this.addDetails = this.fb.group({
-      ap: ['', [Validators.required]],
-      ip: ['', [Validators.required]],
-      conectores: ['', [Validators.required]],
-      cable: '',
-      cable1: ['', [Validators.required]],
-      cable2: ['', [Validators.required]],
-      serial: '',
-      ser1al: '',
-      id: '',
-      status_soporte: '2',
-      user: '',
-      installer: ['', [Validators.required]],
-      u_search: '',
-      a_search: '',
-      tmp: ''
-    });
-    if (data.row.ser1al == 0 || (data.row.ser1al == 1 && data.row.serial == 0)) {
-      this.addDetails.get('serial').setValidators([Validators.required]);
+    console.log(data.row);
+    this.ip = data.row.ipP;
+    console.log(this.ip);
+    if (data.row.ipP) {
+      this.addDetails = this.fb.group({
+        ap: ['', [Validators.required]],
+        ip: this.ip,
+        conectores: ['', [Validators.required]],
+        cable: '',
+        cable1: ['', [Validators.required]],
+        cable2: ['', [Validators.required]],
+        serial: '',
+        ser1al: '',
+        id: '',
+        status_soporte: '2',
+        user: '',
+        installer: ['', [Validators.required]],
+        u_search: '',
+        a_search: '',
+        tmp: '',
+        servicio_soporte: '',
+        plan: '',
+        celda: ''
+      });
+      /* if (!this.ip) {
+         this.addDetails.get('ip').setValidators([ Validators.required, this.validar.ipValidator()] );
 
+       }*/
+      if (data.row.ser1al == 0 || (data.row.ser1al == 1 && data.row.serial == 0)) {
+        this.addDetails.get('serial').setValidators([Validators.required]);
+
+      }
+    } else if (!data.row.ipP) {
+
+      this.addDetails = this.fb.group({
+        ap: ['', [Validators.required]],
+        ip: ['', [Validators.required], [this.validar.ipValidator()]],
+        conectores: ['', [Validators.required]],
+        cable: '',
+        cable1: ['', [Validators.required]],
+        cable2: ['', [Validators.required]],
+        serial: '',
+        ser1al: '',
+        id: '',
+        status_soporte: '2',
+        user: '',
+        installer: ['', [Validators.required]],
+        u_search: '',
+        a_search: '',
+        tmp: '',
+        servicio_soporte: '',
+        plan: '',
+        celda: ''
+      });
+      /* if (!this.ip) {
+         this.addDetails.get('ip').setValidators([ Validators.required, this.validar.ipValidator()] );
+
+       }*/
+      if (data.row.ser1al == 0 || (data.row.ser1al == 1 && data.row.serial == 0)) {
+        this.addDetails.get('serial').setValidators([Validators.required]);
+
+      }
     }
+
   }
 
   ngOnInit() {
@@ -979,6 +1069,9 @@ export class DeleteInstallDialog implements OnInit {
       id: this.data.row.id_soporte,
       status_soporte: '2',
       user: this.currentUser.id_user,
+      servicio_soporte: this.data.row.servicio_soporte,
+      plan: this.data.row.plan,
+      celda: this.data.row.celda
     });
   console.log(test);
     var url = environment.apiEndpoint + 'install/' + this.data.row.id_soporte;
@@ -1103,4 +1196,57 @@ export class Deleteotherinstall implements OnInit {
     this.dialogRef.close();
   }
 
+}
+
+@Component({
+  selector: 'show-ip',
+  templateUrl: './show-IP.component.html',
+  styleUrls: ['./soporte.component.css']
+})
+export class Ipasignadascomponent  {
+
+  autoupdate: boolean
+  ip_asig: any = [];
+  ip_p: any = [];
+  search: string = '';
+  modouno: any = 1;
+  mododos: any =2;
+
+  @ViewChildren('servicios') spr;
+  constructor(
+    public usuario: AuthGuard,
+    private location: Location,
+    private http: Http, public dialog: MdDialog, public snackBar: MdSnackBar, private router: Router) {
+    this.autoupdate = true;
+    this.snackBar.open("Cargando Clientes", null, {
+      duration: 2000,
+    });
+  }
+  ngOnInit() {
+    console.log(this.spr)
+    console.log('check')
+    IntervalObservable.create(10000)
+      .takeWhile(() => this.autoupdate)
+      .subscribe(() => {
+
+        console.log(this.spr)
+        console.log('check')
+      });
+    this.http.get(environment.apiEndpoint + 'show_ip')
+      .subscribe((data) => {
+
+        this.ip_asig = data.json().ip_asignadas;
+        this.ip_p = data.json().ip_pendientes;
+
+
+
+
+        this.snackBar.open("Clientes cargados", null, {
+          duration: 2000,
+        });
+        console.log(this.ip_asig);
+        console.log(this.ip_p);
+      });
+  }
+  Close(){this.location.back();}
 }

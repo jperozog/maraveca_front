@@ -1,0 +1,57 @@
+<h1 md-dialog-title>Cargar Pago</h1>
+<div>
+  <table [formGroup]="addAbono" style="width=100%; min-width: 100%;">
+    <tr>
+      <md-select formControlName='bal_tip_in' style="width=100%; min-width: 100%;" placeholder="Modo de pago">
+        <md-option value="14" >Efectivo $</md-option>
+        <md-option value="13" >Wire Transfer</md-option>
+        <md-option value="12" >Zelle</md-option>
+      </md-select>
+    </tr>
+    <tr>
+      <md-form-field class="example-full-width">
+        <input
+          formControlName='bal_comment_in'
+          placeholder="Referencia"
+          style="width=100%; min-width: 100%;"
+          mdInput
+          autocomplete="off">
+      </md-form-field>
+    </tr>
+    <tr>
+      <span>Fecha de pago</span>
+      <my-date-picker class="example-full-width"
+                      name="birthdate"
+                      mdInput
+                      placeholder="Fecha de nacimiento"
+                      formControlName='created_at'
+                      required
+                      locale=es
+                      [options]="myDatePickerOptions"
+      ></my-date-picker>
+    </tr>
+    <tr>
+      <md-form-field class="example-full-width">
+        <input
+
+          formControlName='bal_monto_in'
+          type="number"
+          placeholder="Monto"
+          style="width=100%; min-width: 100%;"
+          mdInput
+          autocomplete="off">
+      </md-form-field>
+    </tr>
+  </table>
+</div>
+<div md-dialog-actions>
+  <tr>
+    <td>
+      <button [disabled]=" !addAbono.valid " md-button [mat-dialog-close]="addAbono.value" cdkFocusInitial>Si</button>
+    </td>
+    <td>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">NO</button>
+
+    </td>
+  </tr>
+</div>

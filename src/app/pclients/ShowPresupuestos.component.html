@@ -32,16 +32,39 @@
         {{i.instalacion+i.moneda}}
       </td>
       <td *ngIf="i.planes == 'r'" class="fac " colspan="1">
-        Residenciales
+        Residenciales (Antiguos)
       </td>
       <td *ngIf="i.planes == 'c'" class="fac " colspan="1">
-        Comerciales
+        Comerciales (Antiguos)
       </td>
       <td *ngIf="i.planes == 'd'" class="fac " colspan="1">
-        Dedicados
+        Dedicados (Antiguos)
       </td>
       <td *ngIf="i.planes == 'h'" class="fac " colspan="1">
-        Happy Time
+        Happy Time (Antiguos)
+      </td><td *ngIf="i.planes == 'r2'" class="fac " colspan="1">
+        Residenciales (Nuevos)
+      </td>
+      <td *ngIf="i.planes == 'c2'" class="fac " colspan="1">
+        Comerciales (Nuevos)
+      </td>
+      <td *ngIf="i.planes == 'd2'" class="fac " colspan="1">
+        Dedicados (Nuevos)
+      </td>
+      <td *ngIf="i.planes == 'h2'" class="fac " colspan="1">
+        Happy Time (Nuevos)
+      </td>
+      <td *ngIf="i.planes == 'r3'" class="fac " colspan="1">
+        Residenciales (planes exclusivos en dolares)
+      </td>
+      <td *ngIf="i.planes == 'c3'" class="fac " colspan="1">
+        Comerciales (planes exclusivos en dolares)
+      </td>
+      <td *ngIf="i.planes == 'd3'" class="fac " colspan="1">
+        Dedicados (planes exclusivos en dolares)
+      </td>
+      <td *ngIf="i.planes == 'h3'" class="fac " colspan="1">
+        Happy Time (planes exclusivos en dolares)
       </td>
       <td class="fac">{{i.created_at | stringToDate | date: 'd/M/yy'}}</td>
   </tr>

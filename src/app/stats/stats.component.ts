@@ -175,7 +175,163 @@ goTOfac(i){
 
   }
 
+@Component({
+  selector: 'app-stat',
+  templateUrl: './statsdl.component.html',
+  styleUrls: ['./stats.component.css']
+})
+export class StatsdlComponent {
+  @ViewChild(BaseChartDirective)
+  chart: BaseChartDirective;
+  data:any = null;
+  fechas:any = null;
+  search: string = '';
+  pagado  = [];
+  tittle="Grafico Comparativo 4 meses"
+  facturado  = [];
+  numero_pagos=[];
+  monto_pagos=[];
+  dias_pagos=[];
+  _chartData:any;
+  datos:boolean=false
+  lineChartType:string = 'line';
+  constructor(private http: Http, public usuario: AuthGuard, public dialog: MdDialog, public snackBar:MdSnackBar, public router: Router) {
+    this.snackBar.open("Cargando AccessPoints", null, {
+      duration: 2000,
+    });
+    this.http.get(environment.apiEndpoint+'statdl/')
+      .subscribe((data) => {
+        this.fechas = data.json().fechas;
+        this.data = data.json().datos;
+        data.json().datos.forEach(fecha =>{
+          this.pagado.push(fecha.pagado)
+          this.facturado.push(fecha.facturado)
+console.log(this.data);
+        })
+        this.labels = [this.fechas[3].fecha,this.fechas[2].fecha,this.fechas[1].fecha,this.fechas[0].fecha]
+        var _chartData=[
+          {label:'Facturado',
+            data: [this.facturado[3], this.facturado[2], this.facturado[1], this.facturado[0]]},
+          {label: 'Pagado',
+            data: [this.pagado[3], this.pagado[2], this.pagado[1], this.pagado[0]]},
+        ]
+        this.chartData = _chartData;
+        this.datos = true
+      });
+    this.snackBar.open("AccessPoints Cargados", null, {
+      duration: 2000,
+    });
+  }
 
+  // ADD CHART OPTIONS.
+  chartOptions = {
+    responsive: true,    // THIS WILL MAKE THE CHART RESPONSIVE (VISIBLE IN ANY DEVICE).
+    tooltips: {
+      mode: 'index',
+      intersect: false ,
+      callbacks: {
+        label: function (tooltipItem, data) {
+          const datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+          return  datasetLabel + ': ' +tooltipItem.yLabel.toLocaleString('en-us') + ' US$.';
+        }
+      }},
+    scales: {
+      xAxes: [{
+        title: 'meses/años'
+      }],
+      yAxes: [/*{
+          title: 'Bs.S'
+        },*/
+        { ticks: {
+            beginAtZero: true // se agrega la siguiente linea para que la grafica comience desde 0
+          }}],
+
+    }
+  }
+
+  labels = [];
+
+  // STATIC DATA FOR THE CHART IN JSON FORMAT.
+  chartData=[
+    {label:'Facturado',
+      data: this.facturado},
+    {label: 'Pagado',
+      data: this.pagado},
+  ]
+// CHART COLOR.
+  colors = [
+    { // Facturado.
+      backgroundColor: 'rgba(77,83,96,0.2)'
+    },
+    { // Pagado.
+      backgroundColor: 'rgba(30, 169, 224, 0.8)'
+    }
+  ]
+
+  goTOfac(i){
+    this.router.navigate(['facturacion', {fecha:i.fecha}]);
+  }
+
+// CHART CLICK EVENT.
+  onChartClick(event) {
+    console.log(event);
+  }
+  changeTYPE(dat){
+    this.tittle="Grafico con detalles del mes "+dat.fecha
+    this.http.get(environment.apiEndpoint+'incidencia/?mes='+dat.fecha)
+      .subscribe((data) => {
+        var data_mes = data.json()
+        this.labels.length = 0;
+        this.chartData[0].data.length=0
+        this.chartData[1].data.length=0
+        this.chartData[0].label="Numero de Pagos"
+        this.chartData[1].label="Monto de Pagos"
+
+        data_mes.forEach(dia =>{
+          this.chartData[1].data.push(dia.monto_pagos);
+          this.chartData[0].data.push(dia.numero_pagos);
+          this.labels.push(dia.fecha);
+        })
+        this.chartOptions = {
+          responsive: true,    // THIS WILL MAKE THE CHART RESPONSIVE (VISIBLE IN ANY DEVICE).
+          tooltips: {
+            mode: 'index',
+            intersect: false ,
+            callbacks: {
+              label: function (tooltipItem, data) {
+                const datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+                return  datasetLabel + ': ' +tooltipItem.yLabel.toLocaleString('en-us') + ' ' +data_mes[0].denominacion;
+              }
+            }},
+          scales: {
+            xAxes: [{
+              title: 'meses/años'
+            }],
+            yAxes: [/*{
+                title: data_mes[0].denominacion se comenta la siguiente linea para que la grafica comience desde 0
+              }*/
+              { ticks: {
+                  beginAtZero: true // se agrega la siguiente linea para que la grafica comience desde 0
+                }}
+            ],
+
+          }
+        }
+        this.lineChartType='bar'
+        this.chart.chart.update()
+      })
+    console.log(this.chartData)
+  }
+  refresh(){
+    this.http.get(environment.apiEndpoint+'statdl/')
+      .subscribe((data) => {
+        this.data= data.json();
+        console.log(this.data);
+      });
+
+  }
+
+}
   @Component({
     selector: 'app-installer',
     templateUrl: './pagar.component.html',

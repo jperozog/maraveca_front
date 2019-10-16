@@ -170,7 +170,7 @@ export class FactibilidadesDetComponent {
     this.celdas = data.json()[2].celdas;
     this.user = this.fact_details.adicionales[2];
     this.cliente = this.fact_details.nombre+" "+this.fact_details.apellido;
-
+console.log(this.fact_details );
   });
   this.EditFact=this.fb.group({
     equipo:['', Validators.required],

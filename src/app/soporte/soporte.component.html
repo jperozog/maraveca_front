@@ -18,7 +18,7 @@
     <md-icon>add_circle_outline</md-icon>
     Agregar
   </button>
-
+  <button md-raised-button class="btn" routerLink="/show_ip">Lista de IP asignadas</button>
 </md-toolbar>
 <md-accordion>
   <md-expansion-panel hideToggle="true" expanded="false" (opened)="this.modouno==1">
@@ -67,8 +67,8 @@
 
             <td style="width: 15%">{{t.nombre_srvidor}}</td>
 
-            <td *ngIf="t.status_soporte == 1" style="width: 15%">Abierto</td>
-            <td *ngIf="t.status_soporte == 2 || t.status_soporte == 4" style="width: 15%">Cerrado</td>
+            <td *ngIf="t.status_soporte == 1" style="width: 15%; color:#00c402;">Abierto</td>
+            <td *ngIf="t.status_soporte == 2 || t.status_soporte == 4" style="width: 15%; color:#d10512">Cerrado</td>
             <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
 
             <td style="width: 15%">{{t.serial}}</td>
@@ -180,8 +180,8 @@
             <td style="width: 15%">{{t.nombre_celda}}</td>
             <td style="width: 15%">{{t.nombre_srvidor}}</td>
 
-            <td *ngIf="t.status_soporte == 1" style="width: 15%">Abierto</td>
-            <td *ngIf="t.status_soporte == 2" style="width: 15%">Cerrado</td>
+            <td *ngIf="t.status_soporte == 1" style="width: 15%;  color:#00c402;">Abierto</td>
+            <td *ngIf="t.status_soporte == 2" style="width: 15%; color:#d10512">Cerrado</td>
             <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
 
             <td *ngIf="(t.nombre_user == null) && (t.apellido_user != null)" style="width: 15%">{{t.apellido_user}}</td>
@@ -268,17 +268,25 @@
               <md2-pagination [rowsPerPageSet]="[10,15]" paginationLabel="Filas por pagina"></md2-pagination>
             </td>
           </tr>
+
           <tr>
+
             <th md2SortBy="id_soporte" style="width: 10%; margin: 0 1em;">Ticket</th>
             <th md2SortBy="nombre_celda" style="width: 15%">Celda</th>
             <th style="width: 15%">Router</th>
             <th md2SortBy="status_soporte" style="width: 15%">Estado</th>
             <th style="width: 15%">Afectacion</th>
             <th style="width: 10%">Acciones</th>
+
           </tr>
+
         </thead>
-        <tbody>
+
+        <tbody >
+
           <tr *ngFor="let t of md2.data">
+
+
             <td style="width: 10%; margin: 0 1em;">{{t.id_soporte}}</td>
 
             <td style="width: 15%">{{(t.nombre_celda|capitalize2: true)}}</td>
@@ -286,11 +294,11 @@
 
             <td style="width: 15%">{{t.nombre_srvidor}}</td>
 
-            <td *ngIf="t.status_soporte == 1" style="width: 15%">Abierto</td>
-            <td *ngIf="t.status_soporte == 2" style="width: 15%">Cerrado</td>
+            <td *ngIf="t.status_soporte == 1" style="width: 15%;color:#00c402;">Abierto</td>
+            <td *ngIf="t.status_soporte == 2" style="width: 15%;color:#d10512">Cerrado</td>
             <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
 
-            <td style="width: 15%">{{t.comment_soporte}}</td>
+            <td style="width: 15%"><hr>{{t.comment_soporte}}  </td>
 
             <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
               No Autorizado
@@ -306,7 +314,9 @@
 
 
             </td>
+
           </tr>
+
         </tbody>
         <tfoot>
 
@@ -391,8 +401,8 @@
 
           <td style="width: 15%">{{t.nombre_srvidor}}</td>
 
-          <td *ngIf="t.status_soporte == 1" style="width: 15%">Abierto</td>
-          <td *ngIf="t.status_soporte == 2" style="width: 15%">Cerrado</td>
+          <td *ngIf="t.status_soporte == 1" style="width: 15%; color:#00c402;">Abierto</td>
+          <td *ngIf="t.status_soporte == 2" style="width: 15%; color:#d10512">Cerrado</td>
           <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
 
           <td style="width: 15%">{{t.comment_soporte}}</td>

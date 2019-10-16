@@ -11,10 +11,10 @@ import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} fr
 import {Router} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
 import { DatePipe } from '@angular/common';
-import { environment } from '../../environments/environment'
+import { environment } from '../../environments/environment';
 
 @Component({
-  selector: 'app-notify',
+ selector: 'app-notify',
   templateUrl: './notify.component.html',
   styleUrls: ['./notify.component.css']
 })

@@ -3,6 +3,9 @@
   <button md-button [mdMenuTriggerFor]="filtros" style="color:rgb(104, 103, 112)">
     <md-icon>menu</md-icon> Filtros
   </button>
+
+
+
   <span class="example-spacer" style="text-align: center;">Facturacion</span>
   <md-menu #filtros="mdMenu">
 
@@ -39,12 +42,16 @@
     </md-option>
   </md-select>
 </md-menu>
+
 <button md-icon-button color="primary" (click)="stopPropagation($event)" (click)="notify()" tooltip="Enviar recordatorios de pago" *ngIf="usuario.perm && usuario.perm.includes('notify')">
   <md-icon class="md-24" aria-label="notificar" >notifications</md-icon>
 </button>
   <button class="x490 x700" md-raised-button (click)="refresh(true)" >
     <md-icon [class.updateicon]="update">cached</md-icon>
     Actualizar
+  </button>
+  <button  md-raised-button (click)="updatePricesfac()" *ngIf="usuario.perm && usuario.perm.includes('facturacion_mod')">
+    <!--md-icon>cached</md-icon--> Actualizar Precios
   </button>
   <!--button class="x490 x700" md-raised-button (click)="openDialog()" >
     <md-icon>add_circle_outline</md-icon>
@@ -53,6 +60,7 @@
   <button md-raised-button (click)="sidenav.toggle()">
       boton
     </button-->
+
 </md-toolbar>
 <md-sidenav #sidenav mode="push" class="sidenav">
   <h1>Detalles</h1>

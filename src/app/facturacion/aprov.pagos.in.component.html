@@ -1,0 +1,104 @@
+<md-toolbar class="submenu">
+  <button md-raised-button class="btn" (click)="Close()">Atras</button>
+  <span class="example-spacer" style="text-align: center;">Verificar Pagos</span>
+  <!--button color="warn" md-raised-button (click)="sendSMS()" [disabled]="!notify.valid" class="btn btn-danger">Enviar Mensajes Masivos</button-->
+
+</md-toolbar>
+
+
+
+<div class="contenido" style="margin: auto; align-content: center; text-align: center ;">
+  <div>
+    <table [md2Data]="balance" #md2="md2DataTable" [rowsPerPage]="14">
+      <thead>
+      <tr>
+        <td colspan="7">
+          <md2-pagination></md2-pagination>
+        </td>
+      </tr>
+      <tr>
+
+        <td>
+          Cliente
+        </td>
+        <td>
+          Banco
+        </td>
+        <td>
+          Origen
+        </td>
+        <td>
+          Monto
+        </td>
+        <td>
+          Referencia / Titular
+        </td>
+        <td>
+          Estado
+        </td>
+        <td>
+          Fecha
+        </td>
+        <td>
+          Acciones
+        </td>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr *ngFor="let i of md2.data">
+        <td *ngIf="i.kind.toUpperCase() == 'V'">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+        <td *ngIf="i.kind.toUpperCase() == 'E'">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+        <td *ngIf="i.kind.toUpperCase() == 'G'">{{(i.social|capitalize)}}</td>
+        <td *ngIf="i.kind.toUpperCase() == 'J'">{{(i.social|capitalize)}}</td>
+
+
+        <td *ngIf="i.bal_tip_in==12">Zelle</td>
+        <td *ngIf="i.bal_tip_in==13">Wire Transfer</td>
+        <td *ngIf="i.bal_tip_in==14">Efectivo</td>
+
+        <td *ngIf="i.bal_from_in==1">Mismo Banco</td>
+        <td *ngIf="i.bal_from_in==2">Otro Banco</td>
+        <td *ngIf="i.bal_from_in==3">Deposito Bancario</td>
+        <td *ngIf="i.bal_from_in==5">Maracaibo</td>
+        <td *ngIf="i.bal_from_in==4">Coro</td>
+        <td *ngIf="i.bal_from_in==6">Taquilla Dabajuro</td>
+
+
+
+        <td style="text-align: left;">
+          {{i.bal_monto_in  | number : '1.0-3'}} US$.
+        </td>
+        <td style="text-align: left;">
+          {{i.bal_comment_in}}
+        </td>
+        <td style="text-align: left" *ngIf="i.bal_stat_in == 1">
+          Aprobada
+        </td>
+        <td style="text-align: left" *ngIf="i.bal_stat_in == 2">
+          Pendiente
+        </td>
+        <td style="text-align: left" *ngIf="i.bal_stat_in == 0">
+          Rechazada
+        </td>
+        <td style="text-align: left">
+          {{i.created_at | stringToDate | date: 'dd/M/yy'}}
+        </td>
+        <td *ngIf="i.bal_stat_in == 2; else notpermited">
+          <button md-icon-button color="primary" (click)="aprov2(i)">
+            <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
+          </button>
+          <button md-icon-button color="warn" (click)="rem2(i)">
+            <md-icon class="md-24" aria-label="Eliminar Cliente">clear</md-icon>
+          </button>
+        </td>
+        <ng-template #notpermited>
+          <td>
+            <md-icon class="md-24" aria-label="Eliminar Cliente">block</md-icon>
+          </td>
+        </ng-template>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

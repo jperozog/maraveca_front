@@ -31,12 +31,14 @@
       </md-form-field>
     </td>
   </tr>
-  <tr>
-    <td>
+  <tr >
+    <td *ngIf="!data.row.ipP || data.row.ipP==0 || data.row.ipP==null">
       <md-form-field>
       <input mdInput placeholder="IP" class="md2-input" formControlName="ip"/>
+        <md-error *ngIf="addDetails.get('ip').errors?.IpExists"> Direccion IP utilizada</md-error>
+        <md-error *ngIf="addDetails.get('ip').errors?.IpInstall"> Direccion IP asignada a instalacion</md-error>
       </md-form-field>
-    </td>
+
     <td *ngIf="aps && aps.length>0">
       <md2-select name="AP"
                 formControlName="ap"
@@ -85,6 +87,8 @@
       </md-form-field>
     </td>
   </tr>
+  <tr><td colspan="2" [style.height]="'30%'"><br></td  ></tr>
+
   <tr *ngIf="!sending">
     <td colspan="2" >
       <button md-raised-button color="primary" class="example-full-width btn btn-primary" (click)="service(data.row)" [disabled]='!addDetails.valid' tabindex="2">Si</button>

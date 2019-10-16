@@ -1,0 +1,334 @@
+<form class="example-form" id="client" name="clientForm" [formGroup]="addClient" ng-submit="ok(clientForm)" novalidate>
+  <table class="example-full-width" cellspacing="0"><tr>
+    <td colspan="2">
+      <md2-select name="cliente"
+                  formControlName="cliente_srv"
+                  placeholder="Clientes"
+                  style="width=100%; min-width: 100%; min-height: 100%;"
+                  mdInput
+                  floatPlaceholder="never"
+                  [disabled]="editable"
+      >
+        <md2-select-header>
+          <input class="search" name="c_search"
+                 type="text"
+                 [(ngModel)]="c_search"
+                 placeholder="Buscar..."
+                 style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                 formControlName="c_search"
+                 />
+        </md2-select-header>
+        <md2-option *ngFor="let i of (clientes | dataPipe : {dni: c_search, nombre: c_search, social: c_search})" [value]="i.id">
+          <span *ngIf="i.kind.toUpperCase() == 'V'">{{(i.kind | capitalize) + i.dni+' / '+(i.nombre | capitalize) +' '+(i.apellido | capitalize)}}</span>
+          <span *ngIf="i.kind.toUpperCase() == 'E'">{{(i.kind | capitalize) + i.dni+' / '+(i.nombre | capitalize) +' '+(i.apellido | capitalize)}}</span>
+          <span *ngIf="i.kind.toUpperCase() == 'J'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span>
+          <span *ngIf="i.kind.toUpperCase() == 'G'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span>
+        </md2-option>
+      </md2-select>
+
+    </td>
+  </tr>
+    
+    <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
+    <tr>
+
+      <td colspan="2">
+        <md2-select name="tipo de plan"
+                    formControlName="tipo_plan_srv"
+                    placeholder="Tipo de plan"
+                    style="width=100%; min-width: 100%; min-height: 100%;"
+                    mdInput
+                    [disabled]="editable"
+                    >
+          <md2-option [value]="1">Planes Antiguos</md2-option>
+          <md2-option [value]="4">Planes Nuevos</md2-option>
+          <md2-option [value]="3">Planes en dolares</md2-option>
+
+
+        </md2-select>
+      </td>
+
+    </tr>
+    <tr>
+      <td *ngIf="addClient.value.tipo_plan_srv==1"colspan="2">
+        <md2-select name="Plan"
+                    formControlName="plan_srv"
+                    placeholder="Planes"
+                    style="width=100%; min-width: 100%;"
+                    mdInput
+                    floatPlaceholder="never"
+                    [disabled]="editable"
+        >
+          <md2-select-header>
+            <input class="search" name="p_search"
+                   type="text"
+                   [(ngModel)]="p_search"
+                   placeholder="Buscar..."
+                   style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                   formControlName="p_search"/>
+          </md2-select-header>
+          <md2-option *ngFor="let i of (planes1 | dataPipe : {name_plan: p_search})" [value]="i.id_plan">{{i.name_plan}}</md2-option>
+        </md2-select>
+      </td>
+      <td *ngIf="addClient.value.tipo_plan_srv==4"colspan="2">
+        <md2-select name="Plan"
+                    formControlName="plan_srv"
+                    placeholder="Planes"
+                    style="width=100%; min-width: 100%;"
+                    mdInput
+                    floatPlaceholder="never"
+                    [disabled]="editable"
+        >
+          <md2-select-header>
+            <input class="search" name="p_search"
+                   type="text"
+                   [(ngModel)]="p_search"
+                   placeholder="Buscar..."
+                   style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                   formControlName="p_search" />
+          </md2-select-header>
+          <md2-option *ngFor="let i of (planes2 | dataPipe : {name_plan: p_search})" [value]="i.id_plan">{{i.name_plan}}</md2-option>
+        </md2-select>
+      </td>
+      <td *ngIf="addClient.value.tipo_plan_srv==3"colspan="2">
+        <md2-select name="Plan"
+                    formControlName="plan_srv"
+                    placeholder="Planes"
+                    style="width=100%; min-width: 100%;"
+                    mdInput
+                    floatPlaceholder="never"
+                    [disabled]="editable"
+        >
+          <md2-select-header>
+            <input class="search" name="p_search"
+                   type="text"
+                   [(ngModel)]="p_search"
+                   placeholder="Buscar..."
+                   style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                   formControlName="p_search" />
+          </md2-select-header>
+          <md2-option *ngFor="let i of (planesd | dataPipe : {name_plan: p_search})" [value]="i.id_plan">{{i.name_plan}}</md2-option>
+        </md2-select>
+      </td>
+    </tr>
+    <tr><td colspan="2" *ngIf="addClient.value.tipo_plan_srv== 4" [style.height]="'10%'"><br></td  ></tr>
+    <tr><td colspan="2" *ngIf="addClient.value.tipo_plan_srv== 4">
+      <md2-select  name="modo de pago"  formControlName="modo_pago_srv" class="example-full-width" placeholder="seleccion la modalidad de pago">
+        <md2-option [value]="1" >Moneda local Bs.S</md2-option>
+        <md2-option  [value]="2" >Moneda Internacional US$</md2-option>
+      </md2-select>
+    </td></tr>
+    <div style="min-height: 20px;">
+
+    </div>
+
+    <tr >
+      <td colspan="2" *ngIf="addClient.value.tipo_plan_srv == 1">
+
+        <md2-select class="example-full-width" name="Facturable"  mdInput placeholder="seleccione si el servicio es o no facturable" formControlName="serie_srv" [disabled]="editable">
+          <md2-option  [value]="0">No Facturable</md2-option>
+          <md2-option [value]="1">Facturable</md2-option>
+
+        </md2-select>
+
+        <!--/md-form-field-->
+      </td>
+      <td colspan="2" *ngIf="addClient.value.tipo_plan_srv == 4 && addClient.value.modo_pago_srv == 1">
+
+        <md2-select class="example-full-width" name="Facturable"  mdInput placeholder="seleccione si el servicio es o no facturable" formControlName="serie_srv" [disabled]="editable">
+          <md2-option  [value]="0">No Facturable</md2-option>
+          <md2-option [value]="1">Facturable</md2-option>
+
+        </md2-select>
+
+        <!--/md-form-field-->
+      </td>
+
+      <td colspan="2" *ngIf=" addClient.value.tipo_plan_srv == 3 ">
+
+        <md2-select  [(ngModel)]="valor_serie" disabled=" true" class="example-full-width" name="Facturable" mdInput placeholder="seleccione si el servicio es o no facturable" formControlName="serie_srv" [disabled]="editable">
+          <md2-option ng-selected="true" [value]="0">No Facturable</md2-option>
+          <!-- <md2-option [value]="1">Facturable</md2-option>-->
+
+        </md2-select>
+
+        <!--/md-form-field-->
+      </td><td colspan="2" *ngIf=" addClient.value.tipo_plan_srv == 4 &&  addClient.value.modo_pago_srv ==2">
+
+      <md2-select  [(ngModel)]="valor_serie" disabled=" true" class="example-full-width" name="Facturable" mdInput placeholder="seleccione si el servicio es o no facturable" formControlName="serie_srv" [disabled]="editable">
+        <md2-option ng-selected="true" [value]="0">No Facturable</md2-option>
+        <!-- <md2-option [value]="1">Facturable</md2-option>-->
+
+      </md2-select>
+
+      <!--/md-form-field-->
+    </td>
+    </tr>
+    <tr><td colspan="2" [style.height]="'15%'"><br></td  ></tr>
+    <tr>
+
+      <td colspan="2">
+        <md2-select name="AP"
+                    formControlName="ap_srv"
+                    placeholder="AccessPoint"
+                    style="width=100%; min-width: 100%;"
+                    mdInput
+
+
+        >
+          <md2-select-header>
+            <input name="a_search"
+                   type="text"
+                   [(ngModel)]="a_search"
+                   placeholder="Buscar..."
+                   style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                   formControlName="a_search" />
+          </md2-select-header>
+          <md2-option *ngFor="let i of (aps | dataPipe : {nombre_ap: a_search, ip_ap: a_search})" [value]="i.id">{{i.ip_ap + " " + i.nombre_ap}}</md2-option>
+        </md2-select>
+      </td>
+    </tr>
+    <tr>
+
+      <td colspan="2">
+        <md2-select name="Modo de ajuste"
+                    formControlName="pro"
+                    placeholder="Ajuste de facturacion"
+                    style="width=100%; min-width: 100%;"
+                    mdInput
+                    floatPlaceholder="never"
+                    [disabled]="editable"
+        >
+          <md2-option value=0>Sin ajuste de factura</md2-option>
+          <md2-option value=1>Prorrateo de servicio</md2-option>
+          <md2-option value=2>Servicio Completo</md2-option>
+        </md2-select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <md-form-field disabled= true>
+          <input   mdInput formControlName="costo_instalacion_srv" placeholder="Precio de instalacion" [readonly]="true"/>
+        </md-form-field>
+      </td>
+      <td>
+        <md-form-field>
+          <input mdInput formControlName="credito_srv" placeholder="Dias de credito"  [readonly]="true"/>
+        </md-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <md2-select name="equipo"
+                    formControlName="equipo_srv"
+                    placeholder="Equipo"
+                    style="width=100%; min-width: 100%;"
+                    mdInput
+                    [disabled]="editable"
+        >
+          <md2-select-header>
+            <input name="C_search"
+                   type="text"
+                   [(ngModel)]="C_search"
+                   placeholder="Buscar..."
+                   style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                   formControlName="C_search" />
+          </md2-select-header>
+          <md2-option *ngFor="let i of (equipo | dataPipe : {name: C_search})" [value]="i.id">{{i.name}}</md2-option>
+        </md2-select>
+
+      </td>
+      <td>
+        <md-form-field>
+          <input mdInput formControlName="ip_srv" placeholder="IP"/>
+          <md-error *ngIf="addClient.get('ip_srv').errors?.IpExists && row.ip_srv !== addClient.value.ip_srv "> Direccion IP utilizada</md-error>
+          <md-error *ngIf="addClient.get('ip_srv').errors?.IpInstall && row.ip_srv !== addClient.value.ip_srv"> Direccion IP asignada a instalacion</md-error>
+        </md-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <md-form-field >
+          <input [readonly]="true" mdInput formControlName="mac_srv" maxlength="17" placeholder="MAC" style="color:#9E9E9E" />
+          <md-error *ngIf="!addClient.controls.mac_srv.valid">La direccion MAC es invalida</md-error>
+        </md-form-field>
+      </td>
+      <td>
+        <md-form-field >
+          <input [readonly]="true" mdInput formControlName="serial_srv" placeholder="Serial" maxlength="12" style="color:#9E9E9E" />
+        </md-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <md2-select name="Estado"
+                    formControlName="stat_srv"
+                    placeholder="Estado"
+                    style="width=100%; min-width: 100%;"
+                    mdInput
+                    [disabled]="editable"
+        >
+          <md2-option [value]="1">Activo</md2-option>
+          <!--md2-option [value]="2">Moroso</md2-option-->
+          <md2-option [value]="3">Suspendido</md2-option>
+          <md2-option [value]="4">Retirado</md2-option>
+          <md2-option [value]="5">Exonerado</md2-option>
+        </md2-select>
+      </td>
+      <td>
+        <md-form-field>
+          <input mdInput formControlName="signal_srv" placeholder="Nivel de Señal"/>
+        </md-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td colspan='2'>
+        <md-form-field class="example-full-width"  floatPlaceholder="never" >
+          <input mdInput [readonly]="true" formControlName="comment_srv" placeholder="Comentario"style="color:#9E9E9E" />
+        </md-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <md-form-field class="example-full-width" >
+          <input type="date" name="birthdate" data-ng-model="user.birthdate"
+                 class="form-control"
+                 [readonly]="true"
+                 formControlName="instalacion_srv"
+                 placeholder="Fecha de instalacion"
+                 required mdInput
+                 style="color:#9E9E9E" >
+        </md-form-field>
+
+        <br />
+      </td>
+      <td>
+        <md-form-field class="example-full-width" >
+          <input type="date" name="birthdate" data-ng-model="user.birthdate"
+                 class="form-control"
+                 [readonly]="true"
+                 formControlName="start_srv"
+                 placeholder="Inicio de servicio"
+                 required mdInput
+                 style="color:#9E9E9E" >
+        </md-form-field>
+      </td>
+    </tr>
+    <!-- botones al final del modal -->
+
+    <tr>
+      <td>
+
+
+        <button *ngIf="row == null" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Enviar()" [disabled]="!addClient.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+        <button *ngIf="row != null"md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Editar()"[disabled]="!addClient.valid && row.ip_srv !== addClient.value.ip_srv"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+      </td><td>
+
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
+    </td>
+    </tr>
+    <p>
+
+    </p>
+  </table>
+</form>

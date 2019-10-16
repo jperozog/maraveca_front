@@ -50,6 +50,7 @@
             <th style="width: 15%; margin: 0 1em;">N</th>
             <th style="width: 15%" md2SortBy="cliente">Cliente</th>
             <th style="width: 15%" md2SortBy="fac_status">Estado</th>
+            <th style="width: 15%" md2SortBy="ciudad">Ciudad</th>
             <th style="width: 15%">Fecha</th>
             <th style="width: 10%">Acciones</th>
           </tr>
@@ -59,7 +60,7 @@
             <td style="width: 15%; margin: 0 1em;">{{t.id}}</td>
 
             <td *ngIf="((t.kind | capitalize2) == 'V' || (t.kind | capitalize2) == 'E')" style="width: 15%">{{t.nombre+" "+t.apellido | capitalize2:true}}</td>
-            <td *ngIf="((t.kind | capitalize2) == 'J' || (t.kind | capitalize2) == 'G') && (t.social != null && t.social != 'null')" style="width: 15%">{{t.nombre+" "+t.apellido | capitalize2:true}}</td>
+            <td *ngIf="((t.kind | capitalize2) == 'J' || (t.kind | capitalize2) == 'G') && (t.social != null && t.social != 'null')" style="width: 15%">{{t.social | capitalize2:true}}</td>
             <td *ngIf="((t.kind | capitalize2) == 'J' || (t.kind | capitalize2) == 'G') && (t.social == null && t.social == 'null')" style="width: 15%">{{"Sin Definir" | capitalize2:true}}</td>
 
 
@@ -67,8 +68,10 @@
             <td *ngIf="t.status == 2 && t.factible ==1" style="width: 15%"><font color="#00c402">Factible</font></td>
             <td *ngIf="t.status == 2 && t.factible ==2" style="width: 15%"><font color="#d10512">No Factible</font></td>
             <td *ngIf="t.status == 2 && t.factible ==3" style="width: 15%"><font color="#7a8018">Amerita Visita</font></td>
-
+            <td style="width: 15%">{{t.ciudad}}</td>
             <td style="width: 15%">{{t.created_at | stringToDate | date: 'd/M/yy'}}</td>
+
+
 
             <td style="width: 15%">
               <button md-icon-button color="primary"  (click)="openLINK(t.id_soporte)">

@@ -1,16 +1,70 @@
+<div align="center">
 <h1 md-dialog-title>Generar Factura</h1>
 <div md-dialog-content>
   <p>Formulario de factura para el cliente:</p>
-  <p *ngIf="cliente.kind.toUpperCase() == 'V'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
-  <p *ngIf="cliente.kind.toUpperCase() == 'E'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
-  <p *ngIf="cliente.kind.toUpperCase() == 'G'">{{(cliente.social|capitalize)}}</p>
-  <p *ngIf="cliente.kind.toUpperCase() == 'J'">{{(cliente.social|capitalize)}}</p>
+  <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'V'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
+  <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'E'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
+  <p  style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'G'">{{(cliente.social|capitalize)}}</p>
+  <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'J'">{{(cliente.social|capitalize)}}</p>
+
 
   <form [formGroup]="genFAC" ng-submit="ok(pre)">
-    <table style="width:100%">
-      <tr>
-        <td>
-          <md-select class="example-full-width" mdInput placeholder="Generar Factura" formControlName="pro">
+    <table  align="center" >
+
+
+
+
+  <!--<td *ngIf=" n_serv == 1"colspan="2">
+    <md2-select  formControlName="nservicio"  [style.width]="'100%'" placeholder="Seleccione el servicio a facturar" [(ngModel)]="nservicio">
+      <md2-option  *ngFor="let i of servicios" [value]="i.id_srv"  > {{i.name_plan}}</md2-option>
+    </md2-select>
+  </td>-->
+      <div *ngIf=" nr_serv >= 1" >
+
+      <td *ngIf=" nr_serv == 1"  [style.width]="'100%'">
+        <span style="font-weight: bold; " [style.width]="'100%'"> Plan:</span>
+      <span  style="font-weight: bold; "  [style.width]="'100%'">{{name_plan}}</span>
+      </td>
+
+<td *ngIf=" nr_serv > 1" >
+<p>Seleccione el modo de factura</p>
+    <input type="radio" value="1" formControlName="fac_serv">
+    Factura por servicio
+
+
+    <input type="radio" value="2" formControlName="fac_serv">
+   Factura para varios servicios
+
+</td>
+      <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
+      <tr *ngIf=" genFAC.value.fac_serv == 1">
+        <td colspan="2">
+          <md2-select  formControlName="nservicio"  [style.width]="'100%'" placeholder="Seleccione el servicio a facturar" [(ngModel)]="nservicio">
+
+            <md2-option  *ngFor="let i of servi" [value]="i.id_srv"  > {{i.name_plan}}</md2-option>
+          </md2-select>
+        </td>
+      </tr>
+
+      <tr *ngIf=" genFAC.value.fac_serv == 2">
+        <td colspan="2" >
+
+    <md2-select  multiple formControlName="nservicio" [style.width]="'100%'" class="example-full-width" placeholder="Seleccione los servicio a facturar" [(ngModel)]="nservicio" > <!--style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"-->
+     <button md-raised-button color="primary" class="example-half-width btn btn-primary;" style="font-size: 13px" type="button"
+             (click)="onSelectAll()">Seleccionar todo</button>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" style="font-size: 13px" type="button"
+              (click)="onClearAll()">limpiar seleccion</button>
+
+      <md2-option  style="font-size: 14px" *ngFor="let i of servicios" [value]="i.id_srv"  > {{i.name_plan}}</md2-option>
+
+    </md2-select>
+  </td>
+</tr>
+      </div>
+<tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
+      <tr  >
+        <td colspan="2" >
+          <md-select [style.width]="'100%'" mdInput placeholder="Generar Factura" formControlName="pro">
             <md-option value="2">Completa</md-option>
             <md-option value="1">Prorrateada</md-option>
           </md-select>
@@ -32,7 +86,7 @@
     </table>
   </form>
 </div>
-<div md-dialog-actions>
+<div align="center" md-dialog-actions>
   <tr>
     <td>
       <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="generate()" tabindex="2" [disabled]="!genFAC.valid">Generar Factura</button>
@@ -43,3 +97,5 @@
     </td>
   </tr>
 </div>
+</div>
+

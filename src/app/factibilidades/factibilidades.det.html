@@ -1,7 +1,9 @@
 <h1 md-dialog-title>Detalles de Factibilidad</h1>
 <div *ngIf="fact_details">
-  Cliente: {{cliente | capitalize2:true }}
-  <div style="text-align:right">Coordenadas: {{fact_details.coordenadaslat+" "+fact_details.coordenadaslon}}</div>
+<div *ngIf="fact_details.social ==null"> <span style="font-weight: bold">Cliente: </span>{{cliente | capitalize2:true }} </div>
+  <div *ngIf="fact_details.social != null"><span style="font-weight: bold">Cliente: </span>{{fact_details.social | capitalize2:true }}  </div>
+  <div ><span style="font-weight: bold">Coordenadas:</span> {{fact_details.coordenadaslat+" "+fact_details.coordenadaslon}}</div>
+  <span style="font-weight: bold">Ciudad:</span> {{fact_details.ciudad}}
 </div>
 
 
@@ -45,6 +47,7 @@
       style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
       />
     </md2-select-header>
+
     <md2-option *ngFor="let a of (equipos | dataPipe: {name: EditFact.value.e_search})" [value]="a.id" >{{a.name}}</md2-option>
   </md2-select>
 </td>

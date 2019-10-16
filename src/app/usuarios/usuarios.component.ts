@@ -280,7 +280,8 @@ export class DeleteuserDialog {
     cobrar_w:boolean = false;
     pagar:boolean = false;
     pagar_w:boolean = false;
-
+facturacion_mod:boolean= false;
+    planes_mod:boolean= false;
     //zonas
     editzona:FormGroup;
     zonas=[];
@@ -477,6 +478,8 @@ export class DeleteuserDialog {
           else if(perm == 'pagar'){ this.pagar=true }
           else if(perm == 'pagar_w'){ this.pagar_w=true }
           else if(perm == 'planes_esp'){ this.planes_esp=true }
+          else if(perm == 'facturacion_mod'){ this.facturacion_mod=true }
+          else if(perm == 'planes_mod'){ this.planes_mod=true }
         })
       });
 

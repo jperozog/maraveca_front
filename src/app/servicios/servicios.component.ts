@@ -9,12 +9,14 @@ import 'rxjs/add/operator/map';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 import 'rxjs/add/operator/takeWhile';
-import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthGuard } from '../_guards/index';
 import { DatePipe } from '@angular/common';
 import { environment } from '../../environments/environment'
 import {DeleteticketDialog} from '../soporte/soporte.component';
+import {IpValidators} from './validar_ip';
+import {SerialValidators} from './validar_serial';
 
 const MAC_REGEX = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/
 
@@ -278,7 +280,7 @@ export class MyService {
   selector: 'app-add-services',
   templateUrl: './add-Servicio.component.html',
   styleUrls: ['./servicios.component.css'],
-  providers: [DatePipe]
+  providers: [DatePipe, IpValidators , SerialValidators]
 })
 export class AddservicesComponent implements OnInit {
 
@@ -295,8 +297,15 @@ export class AddservicesComponent implements OnInit {
   p_search: string;
   C_search: string;
   a_search: string;
-
-
+  planes1:any;
+  planesd:any;
+planes2:any;
+  //address : string;
+  direccion: any;
+  valor_serie = 0;
+nombre_ap: any;
+ip_ap: any;
+ap_srv: any;
 
   constructor(private http: Http,
     public usuario: AuthGuard,
@@ -306,6 +315,8 @@ export class AddservicesComponent implements OnInit {
     public snackBar: MdSnackBar,
     private router: Router,
     private _fb: FormBuilder,
+              private validacion_ip: IpValidators,
+              private validacion_serial: SerialValidators,
     private date: DatePipe) {
 
 
@@ -315,23 +326,42 @@ export class AddservicesComponent implements OnInit {
         this.equipo = data.json().equipos;
         this.aps = data.json().aps;
         this.planes = data.json().planes;
+        this.planes1 = data.json().planes1;
+        this.planes2 = data.json().planes2;
+        this.planesd = data.json().planesd;
+        this.direccion = data.json().clientes.direccion;
+        console.log(this.direccion);
         console.log(this.clientes.slice(0, 3));
+        console.log(this.planesd);
+        console.log(this.planes1);
+        console.log(this.planes2);
+
       });
 
     this.funciones = new MyService(http, router, usuario);
+console.log(row);
+    if (row != null) {
+      this.ip_ap = row.ip_ap;
+      this.nombre_ap = row.nombre_ap;
+      this.ap_srv = row.ap_srv;
 
+    }
     if (row != null) {
       this.addClient = this.fb.group({
         responsable: this.usuario.currentUser.id_user,
-        plan_srv: row.plan_srv,
+        plan_srv: [row.plan_srv,[Validators.required]],
+        tipo_plan_srv: row.tipo_plan_srv,
         cliente_srv: row.cliente_srv,
+       // direccion_srv: row.direccion_srv,
+        modo_pago_srv: row.modo_pago_srv,
+        serie_srv: row.serie_srv,
         instalacion_srv: row.instalacion_srv,
         recibo_srv: row.recibo_srv,
         costo_instalacion_srv: row.costo_instalacion_srv,
         credito_srv: row.credito_srv,
         notify_srv: row.notify_srv,
         start_srv: row.start_srv,
-        ip_srv: row.ip_srv,
+        ip_srv:  row.ip_srv,     //[row.ip_srv,[Validators.required], [this.validacion_ip.ipValidator()]],
         signal_srv: row.signal_srv,
         //servidor_srv: row.servidor_srv,
         ap_srv: row.ap_srv,
@@ -346,7 +376,7 @@ export class AddservicesComponent implements OnInit {
         c_search: '',
         p_search: '',
         C_search: '',
-        a_search: '',
+      //  a_search: '',
 
         //email: [row.email, [Validators.required, Validators.pattern(null)]],
         //phone1: [row.phone1, [Validators.required, Validators.pattern(null)]],
@@ -357,7 +387,11 @@ export class AddservicesComponent implements OnInit {
 
       this.addClient = this.fb.group({
         responsable: this.usuario.currentUser.id_user,
-        plan_srv: '',
+        plan_srv: ['', Validators.required],
+        modo_pago_srv: '',
+        tipo_plan_srv: ['', Validators.required],
+      //  direccion_srv: ['', Validators.required],
+        serie_srv: [0, Validators.required],
         cliente_srv: ['', Validators.required],
         instalacion_srv: ['', Validators.required],
         recibo_srv: '',
@@ -365,11 +399,11 @@ export class AddservicesComponent implements OnInit {
         credito_srv: '40',
         notify_srv: '',
         start_srv: ['', Validators.required],
-        ip_srv: ['', Validators.required],
+        ip_srv: ['', [Validators.required], [this.validacion_ip.ipValidator()]],
         signal_srv: '',
         //servidor_srv: '',
         ap_srv: ['', Validators.required],
-        serial_srv: ['', Validators.required],
+        serial_srv: ['', [Validators.required]],/*[this.validacion_serial.serialValidator()]],*/
         mac_srv: ['', [Validators.required, Validators.pattern(MAC_REGEX)]],
         zona_srv: '',
         stat_srv: ['', Validators.required],
@@ -412,20 +446,40 @@ export class AddservicesComponent implements OnInit {
   }
 
   Enviar() {
+
     var client = this.addClient.value;
     //console.log(JSON.stringify(this.addClient.value));
     let dp = new DatePipe(navigator.language);
     var url = environment.apiEndpoint + "servicios";
     //console.log(body);
-
+    var url2 = environment.apiEndpoint + "tplancl/" +  client.cliente_srv;
+    var put: FormGroup
+    put = this.fb.group({
+      cliente_srv: client.cliente_srv
+    })
     this.snackBar.open("Agregando Cliente: Por favor espere", null, {
       duration: 2000,
     });
-    this.http.post(url, this.addClient.value).subscribe((data) => {
+      this.http.post(url, this.addClient.value).delay(1000).subscribe((data) => {
+        this.http.put(url2, put.value).subscribe((data) => {
+
+        });
       this.dialogRef.close();
     });
+    console.log(this.addClient.value);
+    //console.log(client.cliente_srv);
+
+    /*var put: FormGroup
+    put = this.fb.group({
+      cliente_srv: client.cliente_srv
+    })
+    var url = environment.apiEndpoint + "tplancl/" +  client.cliente_srv;
+    this.http.put(url, put.value).subscribe((data) => {
+
+    });*/
     //  this.funciones.refresh();
     //this.router.navigate(['/clientes']);
+   // console.log(client.cliente_srv);
   }
   Editar() {
     var client = this.addClient.value;
@@ -433,13 +487,33 @@ export class AddservicesComponent implements OnInit {
     let dp = new DatePipe(navigator.language);
     var url = environment.apiEndpoint + "servicios/" + client.id_srv;
     //console.log(body);
+    var url2 = environment.apiEndpoint + "tplancl/" +  client.cliente_srv;
+    var put: FormGroup
 
+    put = this.fb.group({
+      cliente_srv: client.cliente_srv
+    })
     this.snackBar.open("Agregando Cliente: Por favor espere", null, {
       duration: 2000,
     });
-    this.http.put(url, this.addClient.value).subscribe((data) => {
+
+    this.http.put(url, this.addClient.value).delay(1000).subscribe((data) => {
+      this.http.put(url2, put.value).subscribe((data) => {
+
+      });
       this.dialogRef.close();
+
     });
+  /*  console.log(this.addClient.value);
+    var put: FormGroup
+
+    put = this.fb.group({
+      cliente_srv: client.cliente_srv
+    })
+    var url = environment.apiEndpoint + "tplancl/" +  client.cliente_srv;
+    this.http.put(url, put.value).subscribe((data) => {
+
+    });*/
     //this.funciones.refresh();
     //this.router.navigate(['/clientes']);
   }
@@ -451,7 +525,7 @@ export class AddservicesComponent implements OnInit {
   selector: 'app-add-Pending',
   templateUrl: './add-Servicio.pending.component.html',
   styleUrls: ['./servicios.component.css'],
-  providers: [DatePipe]
+  providers: [DatePipe, IpValidators , SerialValidators]
 })
 export class AddPendingComponent implements OnInit {
 
@@ -461,9 +535,9 @@ export class AddPendingComponent implements OnInit {
   planes: any = [];
   clientes: any = [];
   equipos: any = [];
+  aps: any = [];
   servidores: any = null;
   equipo: any = [];
-  aps: any = [];
   cliente: any = [];
   c_search: string;
   p_search: string;
@@ -471,8 +545,17 @@ export class AddPendingComponent implements OnInit {
   a_search: string;
   planes_ = [];
   ap_edit = true;
+  plan_edit = true;
   cliente_edit = true;
   equipo_edit = true;
+  planesd: any = [];
+  planes1:any = [];
+  planes2:any = [];
+  planes_p:any = [];
+  plan_f:any;
+  valor_serie = 0;
+ // address: string;
+
   //value.replace(/\b\w/g, first => first.toLocaleUpperCase())
 
 
@@ -482,55 +565,82 @@ export class AddPendingComponent implements OnInit {
     @Inject(MD_DIALOG_DATA) public row: any,
     public snackBar: MdSnackBar,
     private router: Router,
+              private validacion_ip: IpValidators,
+              //private validacion_serial: SerialValidators,
     private _fb: FormBuilder,
     private date: DatePipe,
     public usuario: AuthGuard) {
 
+console.log(row);
+    this.http.get(environment.apiEndpoint + 'planes/'+ row.plan)
+      .subscribe((data) => {
+        this.planes_p = data.json();
 
+        this.plan_f= this.planes_p[0];
+        console.log(this.plan_f);
+        //this.id_plan= this.planes_p[0].id_plan;
+      });
     this.http.get(environment.apiEndpoint + 'add_preload/')
       .subscribe((data) => {
         this.clientes = data.json().clientes;
         this.equipo = data.json().equipos;
         this.aps = data.json().aps;
         this.planes = data.json().planes;
+        this.planes1 = data.json().planes1;
+        this.planes2 = data.json().planes2;
+        this.planesd = data.json().planesd;
+
+        console.log(this.planes);
+        console.log(this.equipo);
+        console.log(this.planesd);
+        console.log(this.planes1);
+        console.log(this.planes2);
 console.log(this.equipo);
       });
     this.funciones = new MyService(http, router, usuario);
 
-    this.addClient = this.fb.group({
-      plan_srv: '',
-      cliente_srv: ['', Validators.required],
-      instalacion_srv: [this.row.updated_at, Validators.required],
-      recibo_srv: '',
-      costo_instalacion_srv: '',
-      credito_srv: '40',
-      notify_srv: '',
-      start_srv: ['', Validators.required],
-      ip_srv: ['', Validators.required],
-      planes_: '',
-      comment_: '',
-      //celda_srv: '',
-      //servidor_srv: '',
-      ap_srv: ['', Validators.required],
-      serial_srv: ['', Validators.required],
-      mac_srv: ['', [Validators.required, Validators.pattern(MAC_REGEX)]],
-      zona_srv: '',
-      stat_srv: ['', Validators.required],
-      comment_srv: '',
-      equipo_srv: ['', Validators.required],
-      c_search: '',
-      p_search: '',
-      C_search: '',
-      a_search: '',
+  this.addClient = this.fb.group({
+    plan_srv: ['', Validators.required],
+    tipo_plan_srv: ['', Validators.required],
+    cliente_srv: ['', Validators.required],
+    // direccion_srv: ['', Validators.required],
+    instalacion_srv: [this.row.updated_at, Validators.required],
+    recibo_srv: '',
+    costo_instalacion_srv: '',
+    modo_pago_srv: 1,
+    credito_srv: '40',
+    notify_srv: '',
+    start_srv: ['', Validators.required],
+    ip_srv: ['', [Validators.required], [this.validacion_ip.ipValidator()]],
+    planes_: '',
+    serie_srv: [0, Validators.required],
+    comment_: '',
+    //celda_srv: '',
+    //servidor_srv: '',
+    ap_srv: ['', Validators.required],
+    serial_srv: ['', Validators.required],
+    mac_srv: ['', [Validators.required, Validators.pattern(MAC_REGEX)]],
+    zona_srv: '',
+    stat_srv: ['', Validators.required],
+    comment_srv: '',
+    equipo_srv: ['', Validators.required],
+    c_search: '',
+    p_search: '',
+    C_search: '',
+    a_search: '',
+    //email: ['', [Validators.required, Validators.pattern(null)]],
+    //phone1: ['', [Validators.required, Validators.pattern(null)]],
 
-      //email: ['', [Validators.required, Validators.pattern(null)]],
-      //phone1: ['', [Validators.required, Validators.pattern(null)]],
+  });
 
-    });
+
     //console.log("llego vacio"+ row)
 
 
-  }
+    }
+
+
+
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -545,8 +655,15 @@ console.log(this.equipo);
           pre = this.row.serial.replace(/(.{2})/g, '$&:')
           serial = this.row.serial
         }
+        console.log(this.row.plan);
+
         this.addClient.patchValue({
           plan_srv: +this.row.plan_srv,
+          tipo_plan_srv:  this.row.tipo_plan_srv,
+
+          serie_srv: 0,
+          modo_pago_srv: 1,
+          //direccion_srv: this.row.direccion,
           cliente_srv: +this.row.servicio_soporte,
           equipo_srv: +this.row.equipo,
           ap_srv: Number(this.row.ap),
@@ -556,10 +673,11 @@ console.log(this.equipo);
           credito_srv: '40',
           notify_srv: +this.row.notify_srv,
           start_srv: this.row.start_srv,
-          ip_srv: this.row.ip,
+          ip_srv: this.row.ipP,
           serial_srv: serial,
           zona_srv: +this.row.zona_srv,
           comment_srv: this.row.comment_srv,
+          planes_: this.plan_f,
           mac_srv: pre.replace(/(^:+|:+$)/g, "")
 
         })
@@ -575,6 +693,7 @@ console.log(this.equipo);
 
       }
     )
+
 
     this.addClient.get('serial_srv').valueChanges.subscribe(
       (EN) => {
@@ -606,10 +725,18 @@ console.log(this.equipo);
   }
   edit_equipo() {
     this.equipo_edit = true;
+
+  }
+  edit_plan() {
+    this.plan_edit = true;
   }
   addr() {
     this.planes_.push({ id_plan: this.addClient.value.planes_.id_plan, name_plan: this.addClient.value.planes_.name_plan, comment: this.addClient.value.comment_ })
-    console.log(this.planes)
+    console.log(this.planes);
+    console.log (this.planes_)
+    console.log (this.planes_.length)
+    console.log(this.addClient.value.planes_.id_plan);
+    console.log(this.addClient.value.planes_.name_plan);
     this.addClient.patchValue({
       planes_: '',
       comment_: ''
@@ -617,12 +744,17 @@ console.log(this.equipo);
   }
 
   Enviar() {
+
     if (this.planes_.length >= 1) {
       var post = this.addClient.value;
       this.planes_.forEach((item, key) => {
         this.post = this.fb.group({
           cliente_srv: post.cliente_srv,
+          modo_pago_srv: post.modo_pago_srv,
           instalacion_srv: post.instalacion_srv,
+          serie_srv: post.serie_srv,
+         // direccion_srv: post.direccion_srv,
+          tipo_plan_srv:  post.tipo_plan_srv,
           recibo_srv: post.recibo_srv,
           costo_instalacion_srv: post.costo_instalacion_srv,
           credito_srv: post.credito_srv,
@@ -637,17 +769,35 @@ console.log(this.equipo);
           plan_srv: item.id_plan,
           stat_srv: post.stat_srv,
           comment_srv: item.comment,
-          responsable: this.usuario.currentUser.id_user
+          planes_: post.plan_srv,
+          responsable: this.usuario.currentUser.id_user,
+
+        });
+
+        var url = environment.apiEndpoint + "retirar_ip_mk/" + this.row.id_soporte;
+        this.http.put(url, this.post.value).subscribe((data) => {
+
         });
         var url = environment.apiEndpoint + "servicios";
         this.http.post(url, this.post.value).subscribe((data) => {
           var put: FormGroup
           put = this.fb.group({
             status_soporte: "4"
+
           })
+          console.log(this.row.id_soporte);
+          console.log(put.value);
           var url = environment.apiEndpoint + "soporte/" + this.row.id_soporte;
           this.http.put(url, put.value).subscribe((data) => {
-
+            console.log(put.value);
+          });
+          var put1: FormGroup
+          put1 = this.fb.group({
+            cliente_srv: post.cliente_srv
+          })
+          var url = environment.apiEndpoint + "tplancl/" + this.row.servicio_soporte;
+          this.http.put(url, put1.value).subscribe((data) => {
+console.log(put1.value);
           });
         });
         this.dialogRef.close();
@@ -700,4 +850,213 @@ console.log(this.equipo);
 
 //sshfs oroxo@186.167.32.27:81:/var/www/htdocs/filemanager Plantillas && scrot 'screen.png' -e 'mv $f ~/shots/' && fusermount -u Plantillas
 
+@Component({
+  selector: 'app-add-services',
+  templateUrl: './update_service.component.html',
+  styleUrls: ['./servicios.component.css'],
+  providers: [DatePipe, IpValidators , SerialValidators]
+})
+export class UpdateserviceComponent implements OnInit {
 
+  addClient: FormGroup;
+  funciones: MyService | null;
+  planes: any = null;
+  clientes: any = null;
+  equipos: any = null;
+  servidores: any = null;
+  equipo: any = null;
+  aps: any = null;
+  cliente: any = null;
+  c_search: string;
+  p_search: string;
+  C_search: string;
+  a_search: string;
+  planes1:any;
+  planesd:any;
+  planes2:any;
+  //address : string;
+  direccion: any;
+  valor_serie = 0;
+  nombre_ap: any;
+  ip_ap: any;
+  ap_srv: any;
+  editable: boolean = true;
+
+  constructor(private http: Http,
+              public usuario: AuthGuard,
+              private fb: FormBuilder,
+              public dialogRef: MdDialogRef<AddservicesComponent>,
+              @Inject(MD_DIALOG_DATA) public row: any,
+              public snackBar: MdSnackBar,
+              private router: Router,
+              private _fb: FormBuilder,
+              private validacion_ip: IpValidators,
+              private validacion_serial: SerialValidators,
+              private date: DatePipe) {
+
+
+    this.http.get(environment.apiEndpoint + 'add_preload/')
+      .subscribe((data) => {
+        this.clientes = data.json().clientes;
+        this.equipo = data.json().equipos;
+        this.aps = data.json().aps;
+        this.planes = data.json().planes;
+        this.planes1 = data.json().planes1;
+        this.planes2 = data.json().planes2;
+        this.planesd = data.json().planesd;
+        this.direccion = data.json().clientes.direccion;
+        console.log(this.direccion);
+        console.log(this.clientes.slice(0, 3));
+        console.log(this.planesd);
+        console.log(this.planes1);
+        console.log(this.planes2);
+
+      });
+
+    this.funciones = new MyService(http, router, usuario);
+    console.log(row);
+
+    if (row != null) {
+      this.addClient = this.fb.group({
+        responsable: this.usuario.currentUser.id_user,
+        plan_srv: [row.plan_srv,[Validators.required]],
+        tipo_plan_srv: row.tipo_plan_srv,
+        cliente_srv: row.cliente_srv,
+        // direccion_srv: row.direccion_srv,
+        modo_pago_srv: row.modo_pago_srv,
+        serie_srv: row.serie_srv,
+        instalacion_srv: row.instalacion_srv,
+        recibo_srv: row.recibo_srv,
+        costo_instalacion_srv: row.costo_instalacion_srv,
+        credito_srv: row.credito_srv,
+        notify_srv: row.notify_srv,
+        start_srv: row.start_srv,
+        ip_srv: [row.ip_srv,[Validators.required],[this.validacion_ip.ipValidator()]],
+        signal_srv: row.signal_srv,
+        //servidor_srv: row.servidor_srv,
+        ap_srv: row.ap_srv,
+        serial_srv: row.serial_srv,
+        mac_srv: [row.mac_srv, [Validators.required, Validators.pattern(MAC_REGEX)]],
+        zona_srv: row.zona_srv,
+        stat_srv: row.stat_srv,
+        comment_srv: row.comment_srv,
+        equipo_srv: row.equipo_srv,
+        id_srv: row.id_srv,
+        pro: '',
+        a_search: '',
+        c_search: '',
+        p_search: '',
+        C_search: '',
+        //  a_search: '',
+
+        //email: [row.email, [Validators.required, Validators.pattern(null)]],
+        //phone1: [row.phone1, [Validators.required, Validators.pattern(null)]],
+
+      });
+      //console.log(row)
+    } else {
+
+      this.addClient = this.fb.group({
+        responsable: this.usuario.currentUser.id_user,
+        plan_srv: ['', Validators.required],
+        modo_pago_srv: '',
+        tipo_plan_srv: ['', Validators.required],
+        //  direccion_srv: ['', Validators.required],
+        serie_srv: [0, Validators.required],
+        cliente_srv: ['', Validators.required],
+        instalacion_srv: ['', Validators.required],
+        recibo_srv: '',
+        costo_instalacion_srv: '',
+        credito_srv: '40',
+        notify_srv: '',
+        start_srv: ['', Validators.required],
+        ip_srv: ['', [Validators.required], [this.validacion_ip.ipValidator()]],
+        signal_srv: '',
+        //servidor_srv: '',
+        ap_srv: ['', Validators.required],
+        serial_srv: ['', [Validators.required]/*, [this.validacion_serial.serialValidator()]*/],
+        mac_srv: ['', [Validators.required, Validators.pattern(MAC_REGEX)]],
+        zona_srv: '',
+        stat_srv: ['', Validators.required],
+        comment_srv: '',
+        equipo_srv: ['', Validators.required],
+        pro: '',
+        c_search: '',
+        p_search: '',
+        C_search: '',
+        a_search: '',
+
+        //email: ['', [Validators.required, Validators.pattern(null)]],
+        //phone1: ['', [Validators.required, Validators.pattern(null)]],
+
+      });
+      //console.log("llego vacio"+ row)
+    }
+
+  }
+
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  ngOnInit() {
+    this.addClient.get('serial_srv').valueChanges.subscribe(
+      (EN) => {
+        setTimeout(() => {
+          var pre = this.addClient.value.serial_srv.replace(/(.{2})/g, '$&:')
+          this.addClient.patchValue(
+            {
+              serial_srv: this.addClient.value.serial_srv.replace(/[^a-zA-Z0-9 ]/g, ""),
+              mac_srv: pre.replace(/(^:+|:+$)/g, "")
+              //mac_srv: pre.replace(/(.{16})/g, '$&')
+            }
+          )
+          this.addClient.updateValueAndValidity();
+        }, 200);
+      })
+  }
+
+  Enviar() {
+
+    var client = this.addClient.value;
+    //console.log(JSON.stringify(this.addClient.value));
+    let dp = new DatePipe(navigator.language);
+    var url = environment.apiEndpoint + "servicios";
+    //console.log(body);
+
+    this.snackBar.open("Actualizando Cliente: Por favor espere", null, {
+      duration: 2000,
+    });
+    this.http.post(url, this.addClient.value).subscribe((data) => {
+      this.dialogRef.close();
+    });
+    console.log(this.addClient.value);
+    //console.log(client.cliente_srv);
+
+
+    //  this.funciones.refresh();
+    //this.router.navigate(['/clientes']);
+    // console.log(client.cliente_srv);
+  }
+  Editar() {
+    var client = this.addClient.value;
+    //console.log(JSON.stringify(this.addClient.value));
+    let dp = new DatePipe(navigator.language);
+    var url = environment.apiEndpoint + "servicios/" + client.id_srv;
+    //console.log(body);
+
+    this.snackBar.open("Agregando Cliente: Por favor espere", null, {
+      duration: 2000,
+    });
+
+    this.http.put(url, this.addClient.value).subscribe((data) => {
+      this.dialogRef.close();
+    });
+
+    //this.funciones.refresh();
+    //this.router.navigate(['/clientes']);
+  }
+
+
+}

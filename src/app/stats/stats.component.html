@@ -74,18 +74,18 @@
         </thead>
         <tbody>
 
-          <tr *ngFor="let item of data; let i = index">
+          <tr *ngFor="let item of data; let i =index">
             <td class="fac pointer hover" style="text-align:center;" (click)="changeTYPE(item)">
               {{fechas[i].fecha}}
             </td>
             <td class="fac" style="text-align:right; ">
-              {{item.facturado | number: "1.2"}} Bs.S
+              {{item.facturado | number: "1.2-2"}} Bs.S
             </td>
             <td class="fac" style="text-align:right; ">
-              {{item.pagado | number: "1.2"}} Bs.S
+              {{item.pagado | number: "1.2-2"}} Bs.S
             </td>
             <td class="fac pointer hover" style="text-align:right;" (click)="goTOfac(item)">
-              {{(item.facturado-item.pagado)  | number: "1.2"}} Bs.S
+              {{(item.facturado-item.pagado)  | number: "1.2-2"}} Bs.S
             </td>
           </tr>
         </tbody>

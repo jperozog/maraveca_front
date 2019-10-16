@@ -21,9 +21,10 @@ import 'rxjs/add/operator/takeWhile';
 import { Location } from '@angular/common';
 import {IMyDpOptions, IMyDateModel} from 'mydatepicker';
 import { environment } from '../../environments/environment'
-import { FacturacionPagos, ConfirmPagoDialog, DeclinePagoDialog } from '../facturacion/facturacion.component'
+import { FacturacionPagos, ConfirmPagoDialog, DeclinePagoDialog, ConfirmPagoDialog2 } from '../facturacion/facturacion.component'
 import { PreComponent } from '../presupuestos/pre.component'
-import { AddservicesComponent } from '../servicios/servicios.component'
+import { AddservicesComponent , UpdateserviceComponent  } from '../servicios/servicios.component'
+import {forEach} from '@angular/router/src/utils/collection';
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const PHONE_REGEX = /^(0414\d|0412\d|0416\d|0426\d|0424\d|0415\d)+\d{6}/;
 const KIND_REGEX= /^(V|J|E|G)/
@@ -249,7 +250,7 @@ export class AddclientsComponent implements OnInit{
   social : string;
   phone : string;
   phone2 : string;
-  serie : string;
+//  serie : string;
   address : string;
   comment: string;
   form: string;
@@ -284,7 +285,7 @@ export class AddclientsComponent implements OnInit{
           apellido: [row.apellido, [Validators.required]],
           direccion: [row.direccion, [Validators.required]],
           day_of_birth: [row.day_of_birth, [Validators.required]],
-          serie: [row.serie, [Validators.required]],
+         // serie: [row.serie, [Validators.required]],
           phone1: [row.phone1, [Validators.required, Validators.pattern(PHONE_REGEX)]],
           phone2: [row.phone2, [Validators.required]],
           comment: row.comment,
@@ -304,7 +305,7 @@ export class AddclientsComponent implements OnInit{
           apellido: ['', [Validators.required]],
           direccion: ['', [Validators.required]],
           day_of_birth: ['', [Validators.required]],
-          serie: ['', [Validators.required]],
+        //  serie: ['', [Validators.required]],
           phone1: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
           phone2: ['', [Validators.required]],
           comment: '',
@@ -454,7 +455,7 @@ export class ClientesStatus {
     private _fb: FormBuilder
 
 ){
-  //console.log(row);
+  console.log(row);
   if(row.pagado == null){
     this.pagado = 0;
   }else{
@@ -625,17 +626,28 @@ export class ClientOverview implements OnInit{
   cliente:any
   servicios:any
   historial:any
-  balance:any;
+  balance_in:any;
   adicionales:any;
+  srv_cli: any;
 
   addClient: FormGroup;
   facturacion:any
   editclient:boolean=false
+  editservice:boolean=false
+  facturadoin: any = 0;
+  pagadoin:any = 0;
   facturado: any = 0;
+
   pagado:any = 0;
+
+balance:any;
   autoupdate:boolean=true
   balac:any = 0;
   balac_$:any = 0;
+balac_in: any= 0;
+  tipo_plan: any;
+  modo_pago: any;
+
   constructor(
 
     private route: ActivatedRoute,
@@ -657,7 +669,7 @@ export class ClientOverview implements OnInit{
       apellido: ['', [Validators.required]],
       direccion: ['', [Validators.required]],
       day_of_birth: ['', [Validators.required]],
-      serie: ['', [Validators.required]],
+     // serie: ['', [Validators.required]],
       phone1: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
       phone2: ['', [Validators.required]],
       comment: '',
@@ -678,7 +690,10 @@ export class ClientOverview implements OnInit{
        //console.log(this.usuario)
        this.pagado=0;
        this.facturado=0;
-       this.balac=0;
+       this.balac = 0;
+       this.pagadoin = 0;
+       this.facturadoin = 0;
+
        IntervalObservable.create(10000)
        .takeWhile(() => this.autoupdate)
        .subscribe(() => {
@@ -705,6 +720,18 @@ export class ClientOverview implements OnInit{
        })
        setTimeout("location.reload(true);", 4500);
      }
+  aprov2(i): void{
+    let dialogRef = this.dialog.open(ConfirmPagoDialog2, {
+      data: i,
+      width: '25%'
+
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    })
+   /* setTimeout("location.reload(true);", 4500);*/
+  }
      rem(i): void{
        let dialogRef = this.dialog.open(DeclinePagoDialog, {
          data: i,
@@ -717,46 +744,76 @@ export class ClientOverview implements OnInit{
      }
 
      refresh(){
+      var pagadoin_1=0
        var pagado_1=0
+    var facturadoin_1=0
        var facturado_1=0
        var balac_1=0
        var balac_$_1=0
-      this.http.get(environment.apiEndpoint+'clientover/' + this.id)
+       var balac_in_1=0
+
+
+       this.http.get(environment.apiEndpoint+'clientover/' + this.id)
        .subscribe((data) => {
          var response = data.json()
          this.soporte= response.soporte
          this.facturacion = response.facturacion
          this.servicios = response.servicios
          this.cliente = response.cliente
+         this.tipo_plan = response.cliente.tipo_planes
          this.historial = response.history
-         this.balance = response.balance
+         this.balance_in = response.balance_in
          this.adicionales = response.adicionales
+         this.balance = response.balance
+         this.srv_cli = response.srv_cli
+         console.log(response);
+console.log(this.tipo_plan);
+console.log(this.srv_cli);
+
          this.balance.forEach(linea => {
-           if (linea.bal_rest>0 && linea.bal_stat==1 && (linea.bal_tip!=8 && linea.bal_tip!=9 &&linea.bal_tip!=10 &&linea.bal_tip!=11 &&linea.bal_tip!=12)){
+           if (linea.bal_rest>0 && linea.bal_stat==1 && (linea.bal_tip!=8 && linea.bal_tip!=9 &&linea.bal_tip!=10 &&linea.bal_tip!=11 )){
              balac_1=balac_1+Number(linea.bal_rest);
-           }else if(linea.bal_rest>0 && linea.bal_stat==1 && (linea.bal_tip==8 || linea.bal_tip==9 || linea.bal_tip==10 ||linea.bal_tip==11 ||linea.bal_tip==12)){
+           }else if(linea.bal_rest>0 && linea.bal_stat==1 && (linea.bal_tip==8 || linea.bal_tip==9 || linea.bal_tip==10 ||linea.bal_tip==11 )){
              balac_$_1=balac_$_1+Number(linea.bal_rest);
            }
          })
+         this.balance_in.forEach(linea => {
+           if  (linea.bal_rest_in>0 && linea.bal_stat_in==1 ){
+             balac_in_1=balac_in_1+Number(linea.bal_rest_in);
+           }
+
+         })
+         this.facturacion.forEach(linea => {
+           if (linea.denominacion == '$'){
+           if(linea.fac_status ==1) {
+             pagadoin_1 = pagadoin_1 + linea.pagado;
+             facturadoin_1 = facturadoin_1 + linea.monto;
+           }
+           }
+          });
          this.facturacion.forEach(linea => {
            if(linea.denominacion == 'Bs.S'){
-             if(linea.fac_status==1){
-             pagado_1=pagado_1+linea.pagado;
-             facturado_1 = facturado_1+linea.monto;
-           }
+             if(linea.fac_status==1) {
+               pagado_1 = pagado_1 + linea.pagado;
+               facturado_1 = facturado_1 + linea.monto;
+             }
            }else if(linea.denominacion == 'BSF'){
              if(linea.fac_status == 1){
              pagado_1=+pagado_1+(+linea.pagado/100000);
              facturado_1 = +facturado_1+(+linea.monto/100000);
            }
            }
+
          });
 
          setTimeout(()=>{
            this.balac=balac_1
            this.balac_$=balac_$_1
-           this.pagado=pagado_1
-           this.facturado=facturado_1
+           this.balac_in=balac_in_1
+           this.pagado = pagado_1
+          this.pagadoin=pagadoin_1
+           this.facturadoin = facturadoin_1
+           this.facturado = facturado_1
            if(!this.editclient){
            this.addClient.patchValue({
              kind: this.cliente.kind,
@@ -767,14 +824,21 @@ export class ClientOverview implements OnInit{
              apellido: this.cliente.apellido,
              direccion: this.cliente.direccion,
              day_of_birth: this.cliente.day_of_birth,
-             serie: this.cliente.serie,
+            // serie: this.cliente.serie,
              phone1: this.cliente.phone1,
              phone2: this.cliente.phone2,
              comment: this.cliente.comment,
              id: this.cliente.id,
              social: this.cliente.social,
 
-           });}
+
+           });
+             console.log(this.facturado);
+             console.log(this.pagado);
+             console.log(this.facturadoin);
+             console.log(this.pagadoin);
+             console.log(this.balac_in);
+           }
          }, 50)
        });
      }
@@ -813,8 +877,8 @@ export class ClientOverview implements OnInit{
          width: '25%'
        });*/
        let dialogRef = this.dialog.open(GenFactura, {
-         width: '25%',
-         data: this.cliente
+         width: '23%',
+         data: {id: this.cliente, serv: this.servicios}
        });
 
 
@@ -869,7 +933,7 @@ export class ClientOverview implements OnInit{
            apellido: this.cliente.apellido,
            direccion: this.cliente.direccion,
            day_of_birth: this.cliente.day_of_birth,
-           serie: this.cliente.serie,
+         //  serie: this.cliente.serie,
            phone1: this.cliente.phone1,
            phone2: this.cliente.phone2,
            comment: this.cliente.comment,
@@ -884,6 +948,19 @@ export class ClientOverview implements OnInit{
        this.editclient=true
 
      }
+  edit_service(row){
+
+    console.log(row);
+    let dialogRef = this.dialog.open(UpdateserviceComponent, {
+      panelClass: 'my-full-screen-dialog',
+      data: row
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+      console.log('The dialog was AddClient closed');
+    });
+
+  }
      show(row){
        console.log(row);
        let dialogRef = this.dialog.open(AddservicesComponent, {
@@ -912,6 +989,22 @@ export class ClientOverview implements OnInit{
        }
        });
      }
+  abonod(){
+    let dialogRef = this.dialog.open(AddPagoBalanceDl, {
+      data: this.id
+
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+      if(result){
+        console.log(result);
+        var url = environment.apiEndpoint+"pagoclient_in/"
+        this.http.post(url, result).subscribe(data =>{
+          this.ngOnInit()
+        })
+      }
+    });
+  }
      updateClient(){
        var url = environment.apiEndpoint+"clientes/"+this.cliente.id
        this.http.put(url, this.addClient.value).subscribe((data) => {
@@ -933,7 +1026,7 @@ export class ClientOverview implements OnInit{
              apellido: this.cliente.apellido,
              direccion: this.cliente.direccion,
              day_of_birth: this.cliente.day_of_birth,
-             serie: this.cliente.serie,
+            // serie: this.cliente.serie,
              phone1: this.cliente.phone1,
              phone2: this.cliente.phone2,
              comment: this.cliente.comment,
@@ -973,7 +1066,7 @@ export class ClientOverview implements OnInit{
              apellido: this.cliente.apellido,
              direccion: this.cliente.direccion,
              day_of_birth: this.cliente.day_of_birth,
-             serie: this.cliente.serie,
+            // serie: this.cliente.serie,
              phone1: this.cliente.phone1,
              phone2: this.cliente.phone2,
              comment: this.cliente.comment,
@@ -1036,6 +1129,53 @@ export class AddPagoBalance implements OnInit{
   }
 
 }
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'pago-balance-d.html',
+})
+export class AddPagoBalanceDl implements OnInit{
+
+  addAbono: FormGroup;
+  myDatePickerOptions: IMyDpOptions = {
+    dateFormat: 'dd/mm/yyyy',
+    editableDateField: false,
+    inline: true,
+  };
+
+  constructor(
+    public usuario: AuthGuard,
+    private fb: FormBuilder,
+    public dialogRef: MdDialogRef<AddPagoBalanceDl>,
+    @Inject(MD_DIALOG_DATA) public id) {
+    console.log(id);
+    this.addAbono = this.fb.group({
+      bal_tip_in:['', Validators.required],
+      bal_monto_in:['', Validators.required],
+      created_at:['', Validators.required],
+      bal_comment_in:['', Validators.required],
+      bal_cli_in: id
+    })
+  }
+
+  ngOnInit(){
+    this.addAbono.get('created_at').valueChanges.subscribe(
+      (fn) => {
+        if(fn.epoc){
+          setTimeout(()=>{
+            this.addAbono.patchValue({
+              created_at: fn.epoc
+            })
+          }, 100)
+        }
+      })
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
 @Component({
   selector: 'dialog-overview-example-dialog',
   templateUrl: 'genFAC.component.html',
@@ -1048,24 +1188,101 @@ export class GenFactura implements OnInit{
         editableDateField: false,
         inline: true,
     };
+  data:any;
+  nservicio:any;
   cliente: any;
+  servicios: any;
+  fac_serv: [any];
+n_serv: any;
+id_cliente: any;
+id_srv_client: any;
+id_serv: any;
+nr_serv:any;
+servi:any;
+name_plan: any;
+
   constructor(
     public usuario: AuthGuard,
     private fb: FormBuilder,
     public snackBar:MdSnackBar,
     private http: Http,
     public dialogRef: MdDialogRef<GenFactura>,
-    @Inject(MD_DIALOG_DATA) public id) {
-      this.cliente = id
+
+    @Inject(MD_DIALOG_DATA) public cli) {
+    this.http.get(environment.apiEndpoint + 'servicioscli/' + cli.id.id)
+      .subscribe((data) => {
+        this.servicios = data.json().servicios;
+
+        console.log(this.servicios);
+        console.log(cli);
+
+      });
+    this.servi = cli.serv;
+    this.nr_serv = this.servi.length;
+    this.id_cliente = cli.id.id;
+    this.cliente = cli.id
+
+    console.log(this.cliente);
+    console.log(this.id_cliente);
+    console.log(this.id_serv);
+    console.log(this.servi);
+    console.log(this.nr_serv);
+    console.log(this.name_plan);
+if (this.nr_serv >= 1) {
+    if (this.nr_serv > 1) {
+      this.id_serv = cli.serv[0].id_srv;
+      this.name_plan = cli.serv[0].name_plan;
       this.genFAC = this.fb.group({
-        cliente:[id.id, Validators.required],
-        fecha:[''],
-        pro:['2', Validators.required],
+        cliente: [this.id_cliente, Validators.required],
+        fecha: [''],
+        nservicio: ['', Validators.required],
+        pro: ['2', Validators.required],
+        fac_serv: [this.fac_serv, Validators.required],
         responsable: usuario.currentUser.id_user
-      })
+
+      });
+      console.log(this.genFAC.value);
+
+    } else {
+
+      this.id_serv = cli.serv[0].id_srv;
+      this.name_plan = cli.serv[0].name_plan;
+      this.genFAC = this.fb.group({
+        cliente: [this.id_cliente, Validators.required],
+        fecha: [''],
+        nservicio: [this.id_serv, Validators.required],
+        pro: ['2', Validators.required],
+        fac_serv: '',
+        responsable: usuario.currentUser.id_user
+      });
+      console.log(this.genFAC.value);
     }
+}else{
+  this.genFAC = this.fb.group({
+    cliente:[this.id_cliente, Validators.required],
+    fecha:[''],
+    nservicio: ['', Validators.required],
+    pro:['2', Validators.required],
+    responsable: usuario.currentUser.id_user
+  })
+
+}
+  }
+  public onSelectAll() {
+    const selected = this.servi.map(item => item.id_srv);
+    this.genFAC.get('nservicio').patchValue(selected);
+  console.log(selected);
+  }
+
+  public onClearAll() {
+    this.genFAC.get('nservicio').patchValue([]);
+  }
+
+
+
 
     ngOnInit(){
+
       this.genFAC.get('fecha').valueChanges.subscribe(
         (fn) => {
         if(fn.epoc){
@@ -1085,14 +1302,18 @@ export class GenFactura implements OnInit{
           }
           })
     }
+
+
     generate(){
+    console.log(this.genFAC.value);
       const req = this.http.post(environment.apiEndpoint+'factura', this.genFAC.value).subscribe(result => {
         this.dialogRef.close();
         this.snackBar.open("Factura Generada", null, {
           duration: 2000,
         });
     })
-  }
+
+}
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -1113,6 +1334,7 @@ export class AddAdic implements OnInit{
     cliente: any;
   planes: any;
   selected: any;
+  planest: any;
   constructor(
     public usuario: AuthGuard,
     private fb: FormBuilder,
@@ -1138,7 +1360,10 @@ export class AddAdic implements OnInit{
       this.http.get(environment.apiEndpoint+'planes/')
         .subscribe((data) => {
           this.planes = data.json();
-          //console.log(this.data);
+          this.planest = this.planes.planes;
+
+          console.log(this.planes);
+          console.log(this.planest);
         });
     }
     generate(){

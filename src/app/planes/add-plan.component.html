@@ -1,5 +1,23 @@
 <form class="example-form" id="client" name="clientForm" [formGroup]="addplan" ng-submit="ok(clientForm)" novalidate>
   <table class="example-full-width" cellspacing="0">
+
+    <tr>
+
+      <td colspan="2">
+        <md2-select formControlName="tipo_plan"
+                    placeholder="Tipo de servicio"
+                    style="width=100%; min-width: 100%; min-height: 100%;"
+                    mdInput>
+          <md2-option value="1">Planes antiguos</md2-option>
+          <md2-option value="4">Planes nuevos</md2-option>
+          <md2-option value="3">Planes exclusivos en dolares</md2-option>
+          <md2-option value="2">Otros</md2-option>
+
+        </md2-select>
+      </td>
+
+    </tr>
+
     <tr>
       <td colspan="2">
         <md-form-field class="example-full-width">
@@ -17,7 +35,7 @@
     </tr>
     <tr>
 
-      <td colspan="2">
+      <td colspan="2" *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==4||addplan.value.tipo_plan==2||addplan.value.tipo_plan !=3">
 
         <md-form-field class="example-full-width">
           <input type="text" name="costo"
@@ -32,9 +50,10 @@
 
       </td>
     </tr>
+
     <tr>
 
-      <td colspan="2">
+      <td colspan="2" *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==4||addplan.value.tipo_plan==2||addplan.value.tipo_plan !=3">
 
         <md-form-field class="example-full-width">
           <input type="text" name="taza"
@@ -51,18 +70,22 @@
     </tr>
     <tr>
 
-      <td colspan="2">
-        <md2-select formControlName="tipo_plan"
-        placeholder="Tipo de servicio"
-        style="width=100%; min-width: 100%; min-height: 100%;"
-        mdInput>
-        <md2-option value="1">Planes</md2-option>
-        <md2-option value="2">Otros</md2-option>
-      </md2-select>
-    </td>
+      <td colspan="2" *ngIf="addplan.value.tipo_plan==3">
 
-  </tr>
-  <tr *ngIf="addplan.value.tipo_plan==1">
+        <md-form-field class="example-full-width">
+          <input type="text" name="costo"
+                 class="form-control"
+                 placeholder="Costo $"
+                 formControlName="taza"
+
+                 required
+                 mdInput
+          >
+        </md-form-field>
+
+      </td>
+    </tr>
+  <tr *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==3 ||addplan.value.tipo_plan==4 ">
 
     <td colspan="2">
 
@@ -77,7 +100,7 @@
 
     </td>
   </tr>
-  <tr *ngIf="addplan.value.tipo_plan==1">
+  <tr *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==3 ||addplan.value.tipo_plan==4">
 
     <td colspan="2">
 
@@ -93,7 +116,7 @@
     </td>
   </tr>
 
-  <tr *ngIf="addplan.value.tipo_plan==1">
+  <tr *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==4 ||addplan.value.tipo_plan==3">
 
     <td colspan="2">
       <md2-select formControlName="carac_plan"

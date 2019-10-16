@@ -57,20 +57,20 @@ import { APP_CONFIG } from './app.config';
 import { AppConfig } from './app.interface';
 
 import {
-  StatsComponent, PagarComponent, DetallesInstallerComponent, DetallesotherInstallerComponent, cargarPagocomponent, OtrosPagosComponent, cargarOpagocomponent } from './stats/stats.component';
+  StatsComponent, StatsdlComponent, PagarComponent, DetallesInstallerComponent, DetallesotherInstallerComponent, cargarPagocomponent, OtrosPagosComponent, cargarOpagocomponent } from './stats/stats.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
-import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddAdic, AddPagoBalance, GenFactura, AnularFactura } from './clients/clients.component';
-import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente, ShowPreComponent, ConfirmCliente } from './pclients/clients.component';
-import { ServiciosComponent, AddservicesComponent, DeleteserviceDialog, AddPendingComponent} from './servicios/servicios.component';
+import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, DeleteCliente, ClientOverview, AddAdic, AddPagoBalance, AddPagoBalanceDl, GenFactura, AnularFactura } from './clients/clients.component';
+import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente, ShowPreComponent, ConfirmCliente, ConfirmCliente2 } from './pclients/clients.component';
+import { ServiciosComponent, AddservicesComponent, DeleteserviceDialog, AddPendingComponent, UpdateserviceComponent } from './servicios/servicios.component';
 import { ServidoresComponent, AddServidoresComponent, DeleteRouterDialog } from './servidores/servidores.component';
 import { CeldasComponent, AddceldasComponent } from './celdas/celdas.component';
 import { PlanesComponent, AddplanesComponent, DeletePlanDialog, UpdatePlanPricesDialog } from './planes/planes.component';
 import { EquiposComponent, AddequipoComponent } from './equipos/equipos.component';
 import { LoginComponent } from './login/login.component';
 import { ApsComponent, AddapsComponent, DeleteApsDialog } from './aps/aps.component';
-import { SoporteComponent, DeleteticketDialog, Deleteotherinstall, DeleteInstallDialog, AddticketComponent, EditticketComponent } from './soporte/soporte.component';
+import { SoporteComponent, DeleteticketDialog, Deleteotherinstall, DeleteInstallDialog, AddticketComponent, EditticketComponent, Ipasignadascomponent } from './soporte/soporte.component';
 import { AuthGuard } from './_guards/index';
 import { AlertService, AuthenticationService, UserService, PingService, VersionCheckService } from './_services/index';
 import { User } from './_models/index';
@@ -79,7 +79,7 @@ import { PotencialesComponent } from './potenciales/potenciales.component';
 import { MyDatePickerModule } from 'mydatepicker';
 import { NotifyComponent } from './notify/notify.component';
 import { PreComponent, DialogOverviewExampleDialog } from './presupuestos/pre.component';
-import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog, AprovPagos, DeclinePagoDialog, ConfirmPagoDialog } from './facturacion/facturacion.component';
+import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog, AprovPagos, AprovPagosin, DeclinePagoDialog, DeclinePagoDialog2, ConfirmPagoDialog , ConfirmPagoDialog2, UpdatePlanPricesFacDialog} from './facturacion/facturacion.component';
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component';
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
@@ -93,6 +93,7 @@ import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEq
   declarations: [
     AppComponent,
     SidenavComponent,
+    UpdatePlanPricesFacDialog,
     LayoutComponent,
     HeaderComponent,
     AddclientsComponent,
@@ -147,6 +148,7 @@ import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEq
     UpdatePlanPricesDialog,
     DetallesUsuarios,
     StatsComponent,
+    StatsdlComponent,
     PagarComponent,
     ResetCounter,
     DetallesInstallerComponent,
@@ -154,6 +156,7 @@ import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEq
     PreComponent,
     DialogOverviewExampleDialog,
     AddPagoBalance,
+    AddPagoBalanceDl,
     ZonaComponent,
     InventariosComponent,
     AddZonaComponent,
@@ -161,6 +164,7 @@ import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEq
     ShowPreComponent,
     SelectEquipoComponent,
     ConfirmCliente,
+    ConfirmCliente2,
     EditEquipoComponent,
     TransfEquiposComponent,
     ShowEquipoComponent,
@@ -171,13 +175,18 @@ import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEq
     deletepagoDialog,
     deleteProductDialog,
     AprovPagos,
+    AprovPagosin,
     DeclinePagoDialog,
+    DeclinePagoDialog2,
     ConfirmPagoDialog,
+    ConfirmPagoDialog2,
     OtrosPagosComponent,
     DetallesotherInstallerComponent,
     cargarOpagocomponent,
     DeleteserviceDialog,
     EquiposasigndosComponent,
+    Ipasignadascomponent,
+    UpdateserviceComponent,
 
     //CeldasPipe,
     //MyFilterPipe,

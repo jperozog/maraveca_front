@@ -1,8 +1,8 @@
 <h1>Detalles de Factura</h1>
 <div id="print-section">
   <form id="producto" name="ProductForm" [formGroup]="addProduct" ng-submit="ok(clientForm)" novalidate>
-  <table style="width:100%">
-    <thead>
+    <table style="width:100%">
+      <thead>
       <tr>
         <td *ngIf=" client " class="fac" colspan="4">
           Cliente: {{cliente.toUpperCase() }}
@@ -33,7 +33,7 @@
           Correo electrónico: {{client.email}}
         </td>
         <td *ngIf=" client " rowspan="2" colspan="3" class="fac" style="text-align:center; vertical-align: text-center">
-          {{client.direccion}}
+          {{row.address}}
         </td>
       </tr>
       <tr>
@@ -52,8 +52,8 @@
         <!--th  class="fact fontz" style="font-weight: bold; text-align: center" *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1">Acciones</th-->
 
       </tr>
-    </thead>
-    <tbody >
+      </thead>
+      <tbody >
       <tr *ngFor="let i of fac_products">
         <td class="fontprod" style="text-align:left">
           {{i.codigo_articulo}}
@@ -62,23 +62,23 @@
           {{i.nombre_articulo | capitalize2:true }}
         </td>
         <td class="fontprod" style="text-align:center;  min-width: 20%; width:20%; max-width:20%;" *ngIf="i.comment_articulo != null || i.comment_articulo != 'null'; else elseblock ">
-          {{i.comment_articulo | capitalize2:true }}
+          {{i.comment_articulo | capitalize2:false }}
         </td>
-        <td class="fontprod" *ngIf="serie == 1">
+        <td class="fontprod" style="text-align:center" *ngIf="serie == 1">
           {{i.IVA}}%
         </td>
         <td class="fontprod"*ngIf="serie == 1" style="text-align:right">
-          {{(i.precio_articulo*neto)/+i.cantidad | number : '1.2'}} {{row.denominacion}}
+          {{(i.precio_articulo*neto)/+i.cantidad | number : '1.2-2'}} {{row.denominacion}}
         </td>
         <td class="fontprod"*ngIf="serie == 0" style="text-align:right">
-          {{+i.precio_articulo/+i.cantidad | number : '1.2'}} {{row.denominacion}}
+          {{+i.precio_articulo/+i.cantidad | number : '1.2-2'}} {{row.denominacion}}
         </td>
-        <td class="fontprod" style="text-align:right" >{{i.cantidad}}</td>
+        <td class="fontprod" style="text-align:center" >{{i.cantidad}}</td>
         <td class="fontprod" *ngIf="serie == 1" style="text-align:right">
-          {{(i.precio_articulo)*neto | number : '1.2'}} {{row.denominacion}}
+          {{(i.precio_articulo)*neto | number : '1.2-2'}} {{row.denominacion}}
         </td>
         <td class="fontprod" *ngIf="serie == 0" style="text-align:right">
-          {{i.precio_articulo | number : '1.2'}} {{row.denominacion}}
+          {{i.precio_articulo | number : '1.2-2'}} {{row.denominacion}}
         </td>
         <!--td *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1">
           <button  md-icon-button color="warn"(click)="deleteProductDialog(i)">
@@ -106,7 +106,7 @@
           <input formControlName='cantidad' placeholder="Cantidad" class="md2-input" [(ngModel)]="cantidad">
         </td>
         <td class="fontprod" >
-            <button md-raised-button (click)="addProducto()" [disabled]="!addProduct.valid">Agregar producto</button>
+          <button md-raised-button (click)="addProducto()" [disabled]="!addProduct.valid">Agregar producto</button>
         </td>
       </tr>
       <tr *ngFor="let i of Arr(num_products).fill(' ')">
@@ -131,32 +131,32 @@
   <td>Total Neto:</td>
   <td>{{montosi | number : '1.0-2'}} BSF</td>
 </tr-->
-</tbody>
-</table>
-</form>
-<table style="width:100%">
-  <tfoot>
+      </tbody>
+    </table>
+  </form>
+  <table style="width:100%">
+    <tfoot>
     <tr style="border-top: 1px solid black; border-bottom: 1px solid black;" class="boto">
       <td class="fontz boto bobo">
         Base Imponible
       </td>
       <td class="fontz boto bobo">
-        {{monto | number : '1.2'}} {{row.denominacion}}
+        {{monto | number : '1.2-2'}} {{row.denominacion}}
       </td>
       <td class="fontz bobo boto" *ngIf="serie == 1 && fac_products">
         Total I.V.A. {{iva}}%
       </td>
       <td class="fontz bobo boto" *ngIf="serie == 1">
-        {{impuesto|number : '1.2'}} {{row.denominacion}}
+        {{impuesto|number : '1.2-2'}} {{row.denominacion}}
       </td>
       <td class="fontz bobo boto">
         Total General
       </td>
       <td class="fontz bobo boto">
-        {{montosi | number : '1.2'}} {{row.denominacion}} <!--cambio el 14/06/2019 para que las facturas contenga dos decimales-->
+        {{montosi | number : '1.2-2'}} {{row.denominacion}} <!--cambio el 14/06/2019 para que las facturas contenga dos decimales-->
     </tr>
-  </tfoot>
-</table>
+    </tfoot>
+  </table>
 </div>
 <table>
   <tr *ngIf="deuda > 0">
@@ -189,9 +189,12 @@
     <td class="fac" *ngIf="p.pag_tip==9">Zelle</td>
     <td class="fac" *ngIf="p.pag_tip==10">Wire Transfer</td>
     <td class="fac" *ngIf="p.pag_tip==11">Efectivo</td>
+    <td class="fac" *ngIf="p.pag_tip==12">Zelle</td>
+    <td class="fac" *ngIf="p.pag_tip==13">Wire Transfer</td>
+    <td class="fac" *ngIf="p.pag_tip==14">Efectivo</td>
 
     <td class="fac">{{p.pag_comment | capitalize2:true}}</td>
-    <td class="fac">{{p.pag_monto | number : '1.2'}} {{row.denominacion}}</td>
+    <td class="fac">{{p.pag_monto | number : '1.2-2'}} {{row.denominacion}}</td>
     <td class="fac">{{p.created_at | stringToDate | date: 'd/M/yy'}}</td>
     <!--td *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1">
       <button  md-icon-button color="warn"(click)="deletepagoDialog(p)">
@@ -203,17 +206,17 @@
     <td></td>
     <td></td>
     <td>Pagado:</td>
-    <td>{{pagado | number : '1.2'}} {{row.denominacion}}</td>
+    <td>{{pagado | number : '1.2-2'}} {{row.denominacion}}</td>
     <td></td>
   </tr><tr>
-    <td *ngIf="serie == 0"></td>
-    <td *ngIf="serie == 0"></td>
-    <td *ngIf="deuda > 0"><font color="#d10512"><h3>Deuda: </h3></font></td>
-    <td *ngIf="deuda <= 0"><font color="#00c402"><h3>Saldo: </h3></font></td>
-    <td *ngIf="deuda > 0"><font color="#d10512">{{deuda|number : '1.2'}} {{row.denominacion}}</font></td>
-    <td *ngIf="deuda <= 0"><font color="#00c402">{{deuda|number : '1.2'}} {{row.denominacion}}</font></td>
-    <td></td>
-  </tr>
+  <td *ngIf="serie == 0"></td>
+  <td *ngIf="serie == 0"></td>
+  <td *ngIf="deuda > 0"><font color="#d10512"><h3>Deuda: </h3></font></td>
+  <td *ngIf="deuda <= 0"><font color="#00c402"><h3>Saldo: </h3></font></td>
+  <td *ngIf="deuda > 0"><font color="#d10512">{{deuda|number : '1.2-2'}} {{row.denominacion}}</font></td>
+  <td *ngIf="deuda <= 0"><font color="#00c402">{{deuda|number : '1.2-2'}} {{row.denominacion}}</font></td>
+  <td></td>
+</tr>
 </table>
 <form id="pago" name="PagoForm" [formGroup]="addPago" ng-submit="ok(clientForm)" novalidate *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')">
   <md2-select formControlName='pag_tip' style="width=35%; min-width: 35%;">

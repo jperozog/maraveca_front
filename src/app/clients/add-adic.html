@@ -3,7 +3,7 @@
   <table [formGroup]="AddAdic" style="width=100%; min-width: 100%;">
     <tr>
       <md-select formControlName='codigo_articulo' style="width=100%; min-width: 100%;" placeholder="Planes">
-        <md-option *ngFor="let p of planes" [value]="p.id_plan" (click)="remind(p)">{{p.name_plan | capitalize}}</md-option>
+        <md-option *ngFor="let p of planest" [value]="p.id_plan" (click)="remind(p)">{{p.name_plan | capitalize}}</md-option>
       </md-select>
     </tr>
     <tr>
