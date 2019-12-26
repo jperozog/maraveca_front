@@ -13,7 +13,10 @@
 }
 
 
-
+.b-btn {
+background-color: #106cc8;
+color:white;
+}
 
 .submenu{
   max-width:100vw;

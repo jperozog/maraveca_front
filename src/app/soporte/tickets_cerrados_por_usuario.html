@@ -1,0 +1,94 @@
+<md-toolbar class="submenu">
+ <!-- <md-form-field floatPlaceholder="never">
+    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>-->
+  <button md-button [mdMenuTriggerFor]="filtros" style="color:rgb(104, 103, 112)">
+    <md-icon>menu</md-icon> Filtros
+  </button>
+  <span class="example-spacer" style="text-align: center;">Tickets cerrados por {{nombre_u +' '+ apellido_u}} mes de {{nombre_mes}}</span>
+  <!--<button md-raised-button (click)="this.myService.refresh()" >
+    <md-icon>cached</md-icon> Actualizar Lista
+  </button>-->
+  <button md-raised-button class="btn" (click)="Close()">Atras</button>
+</md-toolbar>
+
+<md-menu #filtros="mdMenu">
+  <input mdInput class="md2-input" style="width:93%" floatPlaceholder="never" (click)="stopPropagation($event)" placeholder="Filtrar" [(ngModel)]="search" />
+  <br />
+  <md-select class="example-full-width" placeholder="Mes" [(ngModel)]="mes" (click)="stopPropagation($event)" >
+    <md-option *ngFor="let mes of meses" [value]=mes.numero>
+      {{mes.nombre}}
+    </md-option>
+  </md-select>
+  <br />
+  <md-select class="example-full-width" placeholder="Año" [(ngModel)]="year" (click)="stopPropagation($event)" >
+    <md-option *ngFor="let year of anos" [value]=year.year>
+      {{year.year}}
+    </md-option>
+  </md-select>
+</md-menu>
+<div class="contenido">
+
+  <table [md2Data]="datat | dataPipe: { id_soporte: search, nombre: search, apellido: search, social: search, nombre_servidor: search, fecha_cierre: search}" #md2="md2DataTable" [rowsPerPage]="10" class="addClient x700">
+    <thead>
+    <tr>
+      <td colspan="7">
+        <md2-pagination [rowsPerPageSet]="[10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+      </td>
+    </tr>
+    <tr>
+      <th md2SortBy="id_soporte" style="width: 10%; margin: 0 1em;">Ticket</th>
+      <th md2SortBy="nombre"  style="width: 15%">Cliente</th>
+      <th md2SortBy="nombre_celda" style="width: 15%">Zona</th>
+      <th style="width: 15%">Router</th>
+      <th md2SortBy="status_soporte" style="width: 15%">Estado</th>
+      <!--<th md2SortBy="nombre_use"rstyle="width: 15%">Usuario</th>-->
+      <th style="width: 15%" md2SortBy="fecha">Fecha de clausura</th>
+      <th style="width: 10%">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let t of md2.data">
+      <td style="width: 10%; margin: 0 1em;">{{t.id_soporte}}</td>
+
+      <td *ngIf="(t.nombre != null) && (t.apellido != null)&& (t.kind.toUpperCase() == 'V' || t.kind.toUpperCase() == 'E') && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre|capitalize2: true)+" "+(t.apellido|capitalize2: true)}}</td>
+      <td *ngIf="(t.nombre != null) && (t.apellido == null)&& (t.kind.toUpperCase() == 'V' || t.kind.toUpperCase() == 'E') && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre|capitalize2: true)}}</td>
+      <td *ngIf="(t.nombre == null) && (t.apellido != null)&& (t.kind.toUpperCase() == 'V' || t.kind.toUpperCase() == 'E') && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.apellido|capitalize2: true)}}</td>
+      <td *ngIf="(t.social != '' && t.social != null && t.social != 'null') && (t.kind.toUpperCase() == 'J' || t.kind.toUpperCase() == 'G')" style="width: 15%">{{(t.social|capitalize2: true)}}</td>
+
+
+      <td style="width: 15%">{{t.nombre_celda}}</td>
+      <td style="width: 15%">{{t.nombre_srvidor}}</td>
+
+      <td *ngIf="t.status_soporte == 1" style="width: 15%;  color:#00c402;">Abierto</td>
+      <td *ngIf="t.status_soporte == 2" style="width: 15%; color:#d10512">Cerrado</td>
+      <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
+
+     <!-- <td *ngIf="(t.nombre_user == null) && (t.apellido_user != null)" style="width: 15%">{{t.apellido_user}}</td>
+      <td *ngIf="(t.nombre_user != null) && (t.apellido_user == null)" style="width: 15%">{{t.nombre_user}}</td>
+      <td *ngIf="(t.nombre_user != null) && (t.apellido_user != null)" style="width: 15%">{{t.nombre_user+ " " +t.apellido_user}}</td>-->
+
+      <td style="width: 15%">{{t.fecha_cierre | stringToDate | date: 'd/M/yy'}}</td>
+
+      <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
+        No Autorizado
+      </td>
+      <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
+        <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
+          <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
+        </button>
+        <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
+      <button md-icon-button color="warn"(click)="deleteDialog(i)">
+      <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
+    </button-->
+
+
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+
+    </tfoot>
+  </table>
+
+</div>

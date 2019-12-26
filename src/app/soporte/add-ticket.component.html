@@ -299,7 +299,7 @@
                         mdInput
                         floatPlaceholder="never">
 <!--                        [disabled]="row"-->
-            
+
               <md2-select-header>
                 <input class="search" name="S_celda"
                        type="text"
@@ -385,7 +385,7 @@
         </tr>
 
         <!-- antennas -->
-        <tr *ngIf="antenna">
+      <!--  <tr *ngIf="antenna">
           <td>
             <md2-select name="equipo"
                       formControlName="antenna_soporte"
@@ -406,7 +406,7 @@
               <input autocomplete="off" mdInput placeholder="Serial De Antena" class="md2-input" formControlName="seriala" maxlength="12"/>
             </md-form-field>
             </td>
-          </tr>
+          </tr>-->
 <!--=============================================================================================================================================================-->
        <!-- Agregar planes e IP-->
         <tr *ngIf="addplan.value.tipo_soporte == 1">
@@ -490,7 +490,7 @@
 <tr  *ngIf="addplan.value.tipo_soporte == 1" >
   <td colspan="2" >
     <md-form-field class="example-full-width" floatPlaceholder="never">
-      <input mdInput formControlName="ip_srv" placeholder="IP"/>
+      <input mdInput formControlName="ip_srv" placeholder="IP" />
       <md-error *ngIf="addplan.get('ip_srv').errors?.IpExists"> Direccion IP utilizada</md-error>
       <md-error *ngIf="addplan.get('ip_srv').errors?.IpInstall"> Direccion IP asignada a instalacion</md-error>
     </md-form-field>
@@ -594,8 +594,8 @@
 
         <tr>
           <td>
-            <button *ngIf="!edit" md-raised-button color="primary" class="example-full-width btn btn-primary" [disabled]="!addplan.valid " (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
-            <button *ngIf="edit" md-raised-button color="primary" class="example-full-width btn btn-primary" [disabled]="row && row.status_soporte==2" (click)="closeticket()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Ticket</button>
+            <button *ngIf="!edit" md-raised-button class="example-full-width btn btn-primary b-btn" [disabled]="!addplan.valid " (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+            <button *ngIf="edit" md-raised-button  class="example-full-width btn btn-primary b-btn" [disabled]="row && row.status_soporte==2" (click)="closeticket()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Ticket</button>
           </td>
           <td>
             <button *ngIf="edit" md-raised-button color="warn" class="example-full-width btn btn-danger" type="button" (click)="Close()"><i class="fa fa-times" aria-hidden="true"></i>Salir</button>

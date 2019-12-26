@@ -148,3 +148,14 @@ table{
     float:left;
     margin:5px;
 }
+
+.box{
+  margin: 0 auto;
+  width: 200px;
+}
+
+
+.b-btn {
+background-color: #106cc8;
+color:white;
+}

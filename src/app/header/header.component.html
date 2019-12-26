@@ -1,6 +1,6 @@
 <header class="toolbar">
 
-<md-toolbar color="primary">
+<md-toolbar style="background-color:white">
   <img routerLink="/" style="max-width:20%" src="assets/images/logo-normal.jpg" alt="Maraveca">
     <span class="example-spacer"></span>
   <ng-container *ngIf="usuario.currentUser">
@@ -134,6 +134,28 @@
     <span>Servicios</span>
   </button>
 
+  <button *ngIf="usuario.perm && usuario.perm.includes('comision_r')" md-menu-item [routerLink]="['factura_comision/',usuario.currentUser.id_user]">
+    <md-icon>assignment</md-icon>
+    <span>Mis comisiones</span>
+  </button>
+  <button  *ngIf="usuario.perm && usuario.perm.includes('reportes_r')" md-menu-item   [matMenuTriggerFor]="balances">
+    <md-icon>account_balance_wallet</md-icon>
+    <span>pagos de clientes</span>
+  </button>
+</md-menu>
+<md-menu #balances="mdMenu">
+
+  <button  md-menu-item routerLink="balance_mod_nacional/">
+    <md-icon>money</md-icon>
+    <span>pagos en moneda nacional</span>
+  </button>
+
+  <button  md-menu-item routerLink="balance_mod_inter">
+    <md-icon>monetization_on</md-icon>
+    <span>pagos en moneda int</span>
+  </button>
+
+
 </md-menu>
 
 <md-menu #stat="mdMenu">
@@ -157,7 +179,7 @@
   </button>
   <button md-menu-item routerLink="/EstadodeCuenta_in"*ngIf="usuario.perm && (usuario.perm.includes('cobrar'))">
     <md-icon>attach_money</md-icon>
-    <span>Moneda Internacional</span>
+    <span>Moneda extranjera</span>
 
   </button>
 </md-menu>
@@ -171,8 +193,12 @@
   <button md-menu-item routerLink="/pagarOtrasInstalaciones"*ngIf="usuario.perm && (usuario.perm.includes('pagar'))">
     <md-icon>build</md-icon>
     <span>Otros trabajos e instalaciones</span>
-
   </button>
+    <button md-menu-item routerLink="/pagar_comisiones"*ngIf="usuario.perm && (usuario.perm.includes('pagar'))">
+    <md-icon>assignment</md-icon>
+    <span>Comisiones a pagar</span>
+
+    </button>
 </md-menu>
 
 <md-menu #conf="mdMenu">

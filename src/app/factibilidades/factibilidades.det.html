@@ -6,33 +6,37 @@
   <span style="font-weight: bold">Ciudad:</span> {{fact_details.ciudad}}
 </div>
 
+<div *ngIf="!show">
 
-
-<table style="border:1px solid black" *ngIf="fact_details && fact_details.status != 1">
+<table style="border:1px solid black" *ngIf="(fact_details && fact_details.status != 1)">
 
   <thead>
     <tr>
-      <th ><h3>Equipo</h3></th>
-      <th ><h3>Celda</h3></th>
-      <th ><h3>Factible</h3></th>
-      <th ><h3>Usuario</h3></th>
+      <th ><h5>Equipo</h5></th>
+      <th ><h5>Celda</h5></th>
+      <th ><h5>Factible</h5></th>
+      <th ><h5>Usuario</h5></th>
+      <th *ngIf="user_act"><h5>Usuario que actualiza</h5></th>
     </tr>
   </thead>
   <tbody class="fac">
     <tr>
-      <th >{{fact_details.adicionales[1].det}}</th>
-      <th >{{fact_details.adicionales[0].det}}</th>
-      <th *ngIf="fact_details && fact_details.factible == 1" >Factible</th>
-      <th *ngIf="fact_details && fact_details.factible == 2" >No Factible</th>
-      <th >{{user.det}}</th>
+      <td >{{fact_details.adicionales[1].det}}</td>
+      <td >{{fact_details.adicionales[0].det}}</td>
+      <td *ngIf="fact_details && fact_details.factible == 1" >Factible</td>
+      <td *ngIf="fact_details && fact_details.factible == 2" >No Factible</td>
+      <td *ngIf="fact_details && fact_details.factible == 3" >Amerita Visita</td>
+      <td *ngIf="fact_details && fact_details.factible == 4" >Corregir coordenadas</td>
+      <td >{{user.det}}</td>
+      <td *ngIf="user_act">{{user_act.det}}</td>
     </tr>
 </tbody>
 
 </table>
-
+</div>
 
 <form id="client" name="clientForm" [formGroup]="EditFact" ng-submit="ok(clientForm)" novalidate>
-<table style=" width: 100%; border:1px solid black" *ngIf="(usuario.perm && usuario.perm.includes('factibilidades'))&&(fact_details && fact_details.status == 1)">
+<table style=" width: 100%; border:1px solid black" *ngIf="(usuario.perm && usuario.perm.includes('factibilidades'))&&(fact_details && fact_details.status == 1)||show">
 <tr>
   <td>
     <md2-select
@@ -109,10 +113,15 @@
   <md2-option value="1" >Factible</md2-option>
   <md2-option value="2" >No Factible</md2-option>
   <md2-option value="3" >Amerita Visita</md2-option>
+  <md2-option value="4" >Corregir coordenadas</md2-option>
 </md2-select>
 </td>
-<td><button color="primary"
-  md-raised-button [disabled]="!EditFact.valid"(click)="agregar()">Consolidar</button></td>
+<td>
+  <button *ngIf="(usuario.perm && usuario.perm.includes('factibilidades'))&&(fact_details && fact_details.status == 1)" sclass ="b-btn"
+  md-raised-button [disabled]="!EditFact.valid"(click)="agregar()">Consolidar</button>
+  <button *ngIf="show" class ="b-btn"
+  md-raised-button [disabled]="!EditFact.valid"(click)="editar()">Editar estatus</button>
+</td>
 </tr>
 </table>
 </form>
@@ -120,3 +129,8 @@
 <ng-template #elseblock>
   <font color="#00c402"><h1>Factibilidad Pendiente</h1></font>
 </ng-template>
+<td style="width: 15%" *ngIf="fact_details && fact_details.factible == 3">
+  <button  *ngIf="!show" md-raised-button class ="b-btn" (click)="mostrar_edicion()">
+   Cambiar Estatus
+  </button>
+</td>

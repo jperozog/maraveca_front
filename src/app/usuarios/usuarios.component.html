@@ -40,17 +40,17 @@
         No Autorizado
       </td>
       <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('usuarios_w')">
-        <button md-icon-button color="primary" [routerLink]="['/DetalleUsuario', i.id_user]">
+        <button md-icon-button style="color:#106cc8" [routerLink]="['/DetalleUsuario', i.id_user]">
           <md-icon class="md-24" aria-label="Modulos Usuario" >contacts</md-icon>
         </button>
 
-        <!--button md-icon-button color="primary" (click)="show(i)">
+        <!--button md-icon-button style="color:#106cc8" (click)="show(i)">
           <md-icon class="md-24" aria-label="Editar Usuario" >mode_edit</md-icon>
         </button>
-        <button md-icon-button color="primary" (click)="privDialog(i)">
+        <button md-icon-button style="color:#106cc8" (click)="privDialog(i)">
           <md-icon class="md-24" aria-label="Modulos Usuario" >account_balance</md-icon>
         </button>
-        <button md-icon-button color="primary" (click)="zoneDialog(i)">
+        <button md-icon-button style="color:#106cc8" (click)="zoneDialog(i)">
           <md-icon class="md-24" aria-label="Zonas Usuario" >explore</md-icon>
         </button>
         <button md-icon-button color="warn"(click)="delete(i.id_srvidor)"-->

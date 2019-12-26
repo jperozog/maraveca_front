@@ -18,6 +18,10 @@
     <md-icon>add_circle_outline</md-icon>
     Agregar
   </button>
+  <button class="x490 x700" md-raised-button routerLink="/ticket_cerrado_user" *ngIf="usuario.perm && usuario.perm.includes('soporte_esp')">
+    <md-icon>event_available</md-icon>
+    tickets cerrados por usuarios
+  </button>
   <button md-raised-button class="btn" routerLink="/show_ip">Lista de IP asignadas</button>
 </md-toolbar>
 <md-accordion>
@@ -81,7 +85,7 @@
               No Autorizado
             </td>
             <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-              <button md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+              <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
 
                 <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
               </button>
@@ -127,7 +131,7 @@
               No Autorizado
             </td>
             <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-              <button md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+              <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
                 <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
               </button>
 
@@ -192,7 +196,7 @@
               No Autorizado
             </td>
             <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-              <button md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+              <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
                 <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
               </button>
               <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
@@ -237,7 +241,7 @@
               No Autorizado
             </td>
             <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-              <button md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+              <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
                 <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
               </button>
 
@@ -304,7 +308,7 @@
               No Autorizado
             </td>
             <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-              <button md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+              <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
                 <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
               </button>
               <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
@@ -351,7 +355,7 @@
               No Autorizado
             </td>
             <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-              <button md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+              <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
                 <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
               </button>
 
@@ -411,7 +415,7 @@
             No Autorizado
           </td>
           <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-            <button md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+            <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
               <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
             </button>
             <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
@@ -456,7 +460,7 @@
             No Autorizado
           </td>
           <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-            <button md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+            <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
               <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
             </button>
 

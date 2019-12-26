@@ -63,6 +63,7 @@
           <td *ngIf="i.bal_tip==9">Zelle</td>
           <td *ngIf="i.bal_tip==10">Wire Transfer</td>
           <td *ngIf="i.bal_tip==11">Efectivo</td>
+          <td *ngIf="i.bal_tip==12">Efectivo en Bs.S.</td>
 
           <td *ngIf="i.bal_from==1">Mismo Banco</td>
           <td *ngIf="i.bal_from==2">Otro Banco</td>
@@ -102,7 +103,7 @@
             {{i.created_at | stringToDate | date: 'dd/M/yy'}}
           </td>
           <td *ngIf="i.bal_stat == 2; else notpermited">
-            <button md-icon-button color="primary" (click)="aprov(i)">
+            <button md-icon-button style="color:#106cc8" (click)="aprov(i)">
               <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
             </button>
             <button md-icon-button color="warn" (click)="rem(i)">

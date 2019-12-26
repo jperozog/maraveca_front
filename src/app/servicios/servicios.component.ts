@@ -300,6 +300,7 @@ export class AddservicesComponent implements OnInit {
   planes1:any;
   planesd:any;
 planes2:any;
+user_comisiones: any;
   //address : string;
   direccion: any;
   valor_serie = 0;
@@ -329,12 +330,14 @@ ap_srv: any;
         this.planes1 = data.json().planes1;
         this.planes2 = data.json().planes2;
         this.planesd = data.json().planesd;
+        this.user_comisiones = data.json().user_comisiones;
         this.direccion = data.json().clientes.direccion;
         console.log(this.direccion);
         console.log(this.clientes.slice(0, 3));
         console.log(this.planesd);
         console.log(this.planes1);
         console.log(this.planes2);
+        console.log(this.user_comisiones);
 
       });
 
@@ -372,6 +375,9 @@ console.log(row);
         comment_srv: row.comment_srv,
         equipo_srv: row.equipo_srv,
         id_srv: row.id_srv,
+        gen_comision_serv: row.gen_comision_serv,
+        user_comision_serv: row.user_comision_serv,
+        porcentaje_comision_serv: row.porcentaje_comision_serv,
         pro: '',
         c_search: '',
         p_search: '',
@@ -410,6 +416,9 @@ console.log(row);
         comment_srv: '',
         equipo_srv: ['', Validators.required],
         pro: '',
+        gen_comision_serv:  '',
+        user_comision_serv:'',
+        porcentaje_comision_serv: '',
         c_search: '',
         p_search: '',
         C_search: '',
@@ -443,6 +452,24 @@ console.log(row);
           this.addClient.updateValueAndValidity();
         }, 200);
       })
+
+    this.addClient.get('gen_comision_serv').valueChanges.subscribe(
+      (gen_comision_serv) => {
+
+        if (gen_comision_serv == true) {
+          this.addClient.get('user_comision_serv').setValidators([Validators.required]);
+          this.addClient.get('porcentaje_comision_serv').setValidators([Validators.required]);
+        } if (gen_comision_serv == 0) {
+          this.addClient.get('user_comision_serv').setValue(null);
+          this.addClient.get('porcentaje_comision_serv').setValue(null);
+          this.addClient.get('user_comision_serv').setValidators([]);
+          this.addClient.get('porcentaje_comision_serv').setValidators([]);
+        }
+        this.addClient.get('user_comision_serv').updateValueAndValidity();
+        this.addClient.get('porcentaje_comision_serv').updateValueAndValidity();
+
+      }
+    );
   }
 
   Enviar() {
@@ -554,6 +581,7 @@ export class AddPendingComponent implements OnInit {
   planes_p:any = [];
   plan_f:any;
   valor_serie = 0;
+  user_comisiones: any;
  // address: string;
 
   //value.replace(/\b\w/g, first => first.toLocaleUpperCase())
@@ -589,7 +617,9 @@ console.log(row);
         this.planes1 = data.json().planes1;
         this.planes2 = data.json().planes2;
         this.planesd = data.json().planesd;
+        this.user_comisiones = data.json().user_comisiones
 
+        console.log(this.user_comisiones);
         console.log(this.planes);
         console.log(this.equipo);
         console.log(this.planesd);
@@ -611,7 +641,7 @@ console.log(this.equipo);
     credito_srv: '40',
     notify_srv: '',
     start_srv: ['', Validators.required],
-    ip_srv: ['', [Validators.required], [this.validacion_ip.ipValidator()]],
+    ip_srv: ['', [Validators.required]],
     planes_: '',
     serie_srv: [0, Validators.required],
     comment_: '',
@@ -624,6 +654,9 @@ console.log(this.equipo);
     stat_srv: ['', Validators.required],
     comment_srv: '',
     equipo_srv: ['', Validators.required],
+    gen_comision_serv:  '',
+    user_comision_serv: '',
+    porcentaje_comision_serv: '',
     c_search: '',
     p_search: '',
     C_search: '',
@@ -638,7 +671,6 @@ console.log(this.equipo);
 
 
     }
-
 
 
 
@@ -709,6 +741,22 @@ console.log(this.equipo);
           this.addClient.updateValueAndValidity();
         }, 200);
       })
+
+    this.addClient.get('gen_comision_serv').valueChanges.subscribe(
+      (gen_comision_serv) => {
+
+        if (gen_comision_serv == true) {
+          this.addClient.get('user_comision_serv').setValidators([Validators.required]);
+          this.addClient.get('porcentaje_comision_serv').setValidators([Validators.required]);
+        }
+
+        this.addClient.get('user_comision_serv').updateValueAndValidity();
+        this.addClient.get('porcentaje_comision_serv').updateValueAndValidity();
+
+      }
+    );
+
+
   }
   deleter(req) {
     for (var i = 0; i < this.planes_.length; i++) {
@@ -770,6 +818,9 @@ console.log(this.equipo);
           stat_srv: post.stat_srv,
           comment_srv: item.comment,
           planes_: post.plan_srv,
+          gen_comision_serv: post.gen_comision_serv,
+          user_comision_serv: post.user_comision_serv,
+          porcentaje_comision_serv: post.porcentaje_comision_serv,
           responsable: this.usuario.currentUser.id_user,
 
         });
@@ -841,6 +892,8 @@ console.log(put1.value);
       duration: 2000,
     });
     //this.router.navigate(['/clientes']);*/
+
+    console.log(this.addClient.value);
   }
 
 }

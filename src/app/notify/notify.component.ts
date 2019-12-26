@@ -10,7 +10,7 @@ import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/materi
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
-import { DatePipe } from '@angular/common';
+import {DatePipe, Location} from '@angular/common';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -56,6 +56,7 @@ export class NotifyComponent implements OnInit{
 
 
     });
+
    }
 
    ngOnInit(){
@@ -143,7 +144,18 @@ export class NotifyComponent implements OnInit{
          detail:''
        })
      })
-   }
+
+     this.notify.get('via').valueChanges.subscribe(
+       (via) => {
+
+         if (via === '2') {
+
+           this.notify.get('message').setValidators([]);
+  }
+         this.notify.get('message').updateValueAndValidity();
+  }
+     );
+  }
 
    sendSMS() {
      /*let params= {message: this.messaje,
@@ -151,6 +163,7 @@ export class NotifyComponent implements OnInit{
      detail: this.detail}*/
      //this.notify.value.detail.forEach(n => {
     // const url = 'http://200.209.74.4/maraveca/public/index.php/api/tnotify';
+     console.log(this.notify.value);
     const url = environment.apiEndpoint+'tnotify';
        const req = this.http.post(url, this.notify.value).subscribe((data) => {
          this.detail = []
@@ -163,5 +176,90 @@ export class NotifyComponent implements OnInit{
      //});
    }
 
+
+}
+
+
+@Component({
+  selector: 'app-notify',
+  templateUrl: './sms_morosos.component.html',
+  styleUrls: ['./notify.component.css']
+})
+export class sms_morosoComponent{
+ // messaje: any;
+  notify: FormGroup;
+sms_moroso: any;
+txt: any;
+  messaje: any;
+monto: any;
+contador:any;
+  constructor(private http: Http,
+              public usuario: AuthGuard,
+              private fb: FormBuilder,
+              public snackBar: MdSnackBar,
+              private router: Router,
+              private location: Location,
+              private _fb: FormBuilder,
+              private date: DatePipe) {
+this.monto= '{{monto}}'
+    this.http.get(environment.apiEndpoint+'mensajes_morosos/')
+      .subscribe((data) => {
+        this.sms_moroso = data.json();
+        console.log(this.sms_moroso[0]);
+        console.log(this.sms_moroso[0].mensaje);
+        console.log(this.sms_moroso[0].tipo_sms);
+
+
+ this.txt= this.sms_moroso[0];
+
+
+
+    console.log(this.txt);
+    console.log(this.txt.mensaje);
+    console.log(this.txt.tipo_sms);
+    this.messaje = this.txt.mensaje;
+    console.log(this.messaje);
+      });
+      /*this.notify = this.fb.group({
+        message: this.txt.mensaje,
+        tipo_sms: this.txt.tipo_sms,
+        responsable: this.usuario.currentUser.id_user,
+      });*/
+    //} else
+      this.notify = this.fb.group({
+        mensaje: ['', [Validators.required]],
+        tipo_sms: ['3', Validators.required],
+        responsable: this.usuario.currentUser.id_user,
+      });
+
+    //}
+
+
+  }
+  onKey(event){
+    this.contador = event.target.value.length;
+  }
+
+
+  sendSMS() {
+    /*let params= {message: this.messaje,
+    tipo: this.tipo,
+    detail: this.detail}*/
+    //this.notify.value.detail.forEach(n => {
+    // const url = 'http://200.209.74.4/maraveca/public/index.php/api/tnotify';
+
+    console.log(this.notify.value);
+    const url = environment.apiEndpoint+'env_sms_morosos';
+    const req = this.http.post(url, this.notify.value).subscribe((data) => {
+      //this.messaje=""
+
+
+    });
+    this.snackBar.open("Procediendo a enviar mensajes", null, {
+      duration: 5000,
+    });
+    //});
+  }
+  Close(){this.location.back();}
 
 }

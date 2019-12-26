@@ -1,0 +1,49 @@
+<script src="notify.component.ts"></script>
+<md-toolbar class="submenu">
+  <button md-raised-button class="btn" (click)="Close()">Atras</button>
+  <span class="example-spacer" style="text-align: center;">Mensajes a clientes con deuda</span>
+
+
+</md-toolbar>
+<br>
+<br>
+<div  class="contenido2" style="margin: auto; align-content: center; text-align: center ;">
+<p><b>Puntos a tomar en cuenta: </b></p>
+  <ul>
+<li> la plantilla <b>{{monto}}</b> es para indicar el monto de la deuda del cliente </li>
+<li> los mensajes de notificación poseen de forma predeterminada el saludo y el apellido del cliente como en el siguiente ejemplo: <b><i>MARAVECA:Sr(a) Perez,</i></b> </li>
+  </ul>
+</div>
+<div class="contenido" style="margin: auto; align-content: center; text-align: center ;">
+
+
+
+  <form class="example-form" id="client" name="clientForm" [formGroup]="notify" ng-submit="ok(clientForm)" novalidate>
+    <table>
+      <br>
+      <tr>
+        <td>
+
+          <div>
+
+            <md-form-field class="example-full-width">
+        <textarea mdInput (keyup)="onKey($event)"
+                  [(ngModel)]="messaje"
+                  class="form-control"
+                  class="example-full-width"
+                  formControlName="mensaje"
+                  rows ="4"
+                  placeholder="Escribe Aqui El Mensaje De Notificacion"></textarea>
+              <span>{{contador}}</span>
+            </md-form-field>
+
+          </div>
+        </td>
+      </tr>
+
+    </table>
+
+  </form>
+ <button color="warn" md-raised-button (click)="sendSMS()"  class="btn btn-danger">Enviar Mensajes</button>
+
+</div>

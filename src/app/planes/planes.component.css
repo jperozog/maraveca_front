@@ -11,7 +11,10 @@
     .x290{display:block;}
 
 }
-
+.b-btn {
+background-color: #106cc8;
+color:white;
+}
 
 .updateicon {
     color: red;

@@ -85,7 +85,7 @@
           {{i.created_at | stringToDate | date: 'dd/M/yy'}}
         </td>
         <td *ngIf="i.bal_stat_in == 2; else notpermited">
-          <button md-icon-button color="primary" (click)="aprov2(i)">
+          <button md-icon-button style="color:#106cc8" (click)="aprov2(i)">
             <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
           </button>
           <button md-icon-button color="warn" (click)="rem2(i)">

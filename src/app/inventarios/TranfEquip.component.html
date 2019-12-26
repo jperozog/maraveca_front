@@ -101,7 +101,7 @@
               Rechazada
             </td>
             <td *ngIf="t.status == 1 && t.responsable != client; else notpermited">
-              <button md-icon-button color="primary" (click)="confirm(t)">
+              <button md-icon-button style="color:#106cc8" (click)="confirm(t)">
                 <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
               </button>
               <button md-icon-button color="warn" (click)="cancel(t)">

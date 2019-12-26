@@ -110,6 +110,7 @@
           <tr *ngIf="usuario.perm && usuario.perm.includes('usuarios_w')">
             <td>
               <md-checkbox  [(ngModel)]="installer"  (change)="installerToggle(installer)">Es Instalador</md-checkbox>
+              <md-checkbox  [(ngModel)]="comision"  (change)="comisionToggle(comision)">Genera comisiones</md-checkbox>
             </td>
           </tr>
 
@@ -392,6 +393,9 @@
             <td>
               <md-checkbox [(ngModel)]="soporte_w"  (change)="listToglePermisos('soporte_w', soporte_w)"></md-checkbox>
             </td>
+            <td>
+              <md-checkbox [(ngModel)]="soporte_esp"  (change)="listToglePermisos('soporte_esp', soporte_esp)"></md-checkbox>
+            </td>
           </tr>
           <tr>
             <td>
@@ -404,7 +408,39 @@
               <md-checkbox [(ngModel)]="usuarios_w"  (change)="listToglePermisos('usuarios_w', usuarios_w)"></md-checkbox>
             </td>
           </tr>
+          <tr>
+            <td>
+          Comision
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="comision_r"  (change)="listToglePermisos('comision_r', comision_r)"></md-checkbox>
+            </td>
 
+          </tr>
+          <tr>
+            <td>
+          Reporte de pagos de clientes
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="reportes_r"  (change)="listToglePermisos('reportes_r', reportes_r)"></md-checkbox>
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="reportes_w"  (change)="listToglePermisos('reportes_w', reportes_w)"></md-checkbox>
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+             Sms/Correos administrativos
+            </td>
+            <td>
+
+            </td>
+            <td>
+              <md-checkbox [(ngModel)]="sms_w"  (change)="listToglePermisos('sms_w', sms_w)"></md-checkbox>
+            </td>
+
+          </tr>
         </tbody>
       </table>
 
@@ -515,6 +551,14 @@
           </td>
           <td>
             <md-checkbox  [(ngModel)]="gladiolas"  (change)="listTogleZonas('23', gladiolas)"></md-checkbox>
+          </td>
+          </tr>
+          <tr>
+            <td>
+            Churuguara
+          </td>
+          <td>
+            <md-checkbox  [(ngModel)]="churuguara"  (change)="listTogleZonas('25', churuguara)"></md-checkbox>
           </td>
           </tr>
         </tbody>

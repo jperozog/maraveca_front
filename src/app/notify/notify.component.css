@@ -22,9 +22,20 @@
 
 
   }
+  .contenido2{
+
+    overflow-x: auto;
+    max-width:150vw;
+
+
+  }
     .x700{display:none;}
     .x290{display:block;}
 
+}
+.b-btn {
+background-color: #106cc8;
+color:white;
 }
 
 .search{

@@ -1,15 +1,21 @@
-<div align="center">
+
+
+    <button style="float: right" md-raised-button color="#888888" (click)="factura_blanco()">Factura en blanco</button>
+
 <h1 md-dialog-title>Generar Factura</h1>
 <div md-dialog-content>
+  <div align="center">
   <p>Formulario de factura para el cliente:</p>
   <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'V'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
   <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'E'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
   <p  style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'G'">{{(cliente.social|capitalize)}}</p>
   <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'J'">{{(cliente.social|capitalize)}}</p>
 
+  </div>
+</div>
 
   <form [formGroup]="genFAC" ng-submit="ok(pre)">
-    <table  align="center" >
+    <table   >
 
 
 
@@ -50,9 +56,9 @@
         <td colspan="2" >
 
     <md2-select  multiple formControlName="nservicio" [style.width]="'100%'" class="example-full-width" placeholder="Seleccione los servicio a facturar" [(ngModel)]="nservicio" > <!--style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"-->
-     <button md-raised-button color="primary" class="example-half-width btn btn-primary;" style="font-size: 13px" type="button"
+     <button md-raised-button  class="b-btn" style="font-size: 13px" type="button"
              (click)="onSelectAll()">Seleccionar todo</button>
-      <button md-raised-button color="warn" class="example-half-width btn btn-danger" style="font-size: 13px" type="button"
+      <button md-raised-button color="warn"  style="font-size: 13px" type="button"
               (click)="onClearAll()">limpiar seleccion</button>
 
       <md2-option  style="font-size: 14px" *ngFor="let i of servicios" [value]="i.id_srv"  > {{i.name_plan}}</md2-option>
@@ -67,10 +73,12 @@
           <md-select [style.width]="'100%'" mdInput placeholder="Generar Factura" formControlName="pro">
             <md-option value="2">Completa</md-option>
             <md-option value="1">Prorrateada</md-option>
+            <md-option value="3">Programada</md-option>
           </md-select>
         </td>
       </tr>
-      <tr *ngIf="this.genFAC.value.pro == 1">
+      <div align="center" md-dialog-actions>
+      <tr *ngIf="this.genFAC.value.pro == 1 || this.genFAC.value.pro == 3">
         <td>
           <my-date-picker class="example-full-width"
                         name="birthdate"
@@ -83,13 +91,14 @@
                         ></my-date-picker>
         </td>
       </tr>
+      </div>
     </table>
   </form>
-</div>
+
 <div align="center" md-dialog-actions>
   <tr>
     <td>
-      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="generate()" tabindex="2" [disabled]="!genFAC.valid">Generar Factura</button>
+      <button md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="generate()" tabindex="2" [disabled]="!genFAC.valid">Generar Factura</button>
     </td>
     <td>
       <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">Cerrar</button>
@@ -97,5 +106,5 @@
     </td>
   </tr>
 </div>
-</div>
+
 

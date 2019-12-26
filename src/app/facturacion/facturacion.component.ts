@@ -87,6 +87,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
         this.year= params[1]
         this.stat=false;
         this.status='pendiente';
+        this.fac = urlParams.fac;
       }else{
         this.mes= this.datePipe.transform(Date.now(), 'M')
         this.year= this.datePipe.transform(Date.now(), 'y')
@@ -254,6 +255,8 @@ export class FacturacionPagos {
   sending_m = false
   sending_p = false
   agregarProducto:boolean=false;
+  config = [];
+  iva_c: any;
   constructor(
     private http:Http,
     private fb: FormBuilder,
@@ -289,6 +292,7 @@ export class FacturacionPagos {
       cantidad: ['',[Validators.required]],
       precio_articulo: '',
       comment_articulo: '',
+
 
     })
 
@@ -458,25 +462,39 @@ export class FacturacionPagos {
         .subscribe((data) => {
           this.fac_products = data.json();
           //console.log(this.fac_pagos.slice(0,3));
+
         });
       this.monto=this.monto-row.precio_articulo;
       this.deuda=this.monto-this.pagado;
+
     });
   }
   activar(){
     this.agregarProducto=true;
-    console.log(this.agregarProducto)
+    console.log(this.agregarProducto);
+    this.http.get(environment.apiEndpoint+'Configuraciones/')
+      .subscribe((data) => {
+        this.config = data.json();
+        this.iva_c = this.config[2].valor;
+        //console.log(this.fac_pagos.slice(0,3));
+        console.log(this.config);
+        console.log(this.iva_c);
+      });
   }
   addProducto(){
     if(this.serie == 1){
-      this.precio_articulo=(this.addProduct.value.precio_unitario*((+this.fac_products[0].IVA+100)/100))*this.addProduct.value.cantidad;
+      this.precio_articulo=(this.addProduct.value.precio_unitario*((+this.iva_c+100)/100))*this.addProduct.value.cantidad;
     }else{
       this.precio_articulo=this.addProduct.value.precio_unitario*this.addProduct.value.cantidad;
     }
+    console.log(this.config);
+    console.log(this.fac_products);
     this.addProduct.patchValue({
       precio_articulo: this.precio_articulo,
-      IVA: this.fac_products[0].IVA
+     IVA: this.iva_c
+
     })
+
     var url = environment.apiEndpoint+"facprod";
     this.http.post(url, this.addProduct.value)
       .subscribe((data)=>{
@@ -728,6 +746,7 @@ export class ConfirmPagoDialog2 implements OnInit, OnDestroy {
         this.dialogRef.close();
       }
       rem(): void{
+        console.log(this.DeclinePagos.value);
         this.http.delete(environment.apiEndpoint+'balance/', {params: this.DeclinePagos.value})
         .subscribe((data) => {
           this.dialogRef.close();
@@ -863,7 +882,7 @@ export class AprovPagosin implements OnInit, OnDestroy {
   }
 
   rem2(i): void{
-    let dialogRef = this.dialog.open(DeclinePagoDialog, {
+    let dialogRef = this.dialog.open(DeclinePagoDialog2, {
       data: i,
       width: '25%'
     });
@@ -894,7 +913,7 @@ export class AprovPagosin implements OnInit, OnDestroy {
 export class DeclinePagoDialog2 implements OnInit, OnDestroy {
   DeclinePagos: FormGroup
   constructor(
-    public dialogRef: MdDialogRef<DeclinePagoDialog>,
+    public dialogRef: MdDialogRef<DeclinePagoDialog2>,
     @Inject(MD_DIALOG_DATA) public data: any,
     private http: Http,
     private _fb: FormBuilder,
@@ -908,10 +927,11 @@ export class DeclinePagoDialog2 implements OnInit, OnDestroy {
   ngOnInit(){
     console.log(this.data);
     this.DeclinePagos = this.fb.group({
-      id_bal_in: this.data.id_bal,
+      id_bal_in: this.data.id_bal_in,
       option: ['', [Validators.required]],
       reason: [''],
       obs: [''],
+      user_bal_mod:[0],
 
     })
     this.DeclinePagos.get('option').valueChanges.subscribe(
@@ -932,6 +952,7 @@ export class DeclinePagoDialog2 implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
   rem2(): void{
+    console.log(this.DeclinePagos.value);
     this.http.delete(environment.apiEndpoint+'balance_in/', {params: this.DeclinePagos.value})
       .subscribe((data) => {
         this.dialogRef.close();
@@ -982,4 +1003,260 @@ export class UpdatePlanPricesFacDialog{
     this.dialogRef.close();
   }
 
+}
+
+@Component({
+  templateUrl: 'balance_bs.component.html',
+  styleUrls: ['./facturacion.component.css']
+})
+export class balance_bs  {
+  myService: MyService | null;
+  balance=[];
+  balance_t=[];
+  search: string = '';
+  autoupdate: boolean;
+  update = true;
+  constructor(
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private location: Location,
+    private usuario: AuthGuard) {
+    console.log(this.usuario.currentUser.id_user);
+
+    this.http.get(environment.apiEndpoint+'balance/')
+      .subscribe((data) => {
+        this.balance_t = data.json();
+        this.balance = this.balance_t;
+        //console.log(this.dash);
+        console.log(this.balance_t);
+
+      });
+  }
+    Edit_ref(i): void{
+      let dialogRef = this.dialog.open(Editar_ref_bs, {
+        data: i,
+        width: '40%'
+      });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    })
+
+  }
+
+  refresh(nf) {
+    this.update = true
+    this.autoupdate = false
+    this.http.get(environment.apiEndpoint+'balance/')
+      .subscribe((data) => {
+        this.balance_t = data.json();
+        this.balance = this.balance_t;
+        if (nf) {
+          this.snackBar.open("Lista Actualizada", null, {
+            duration: 2000,
+          });
+        }
+      });
+
+  }
+
+  Close(){this.location.back();}
+  }
+
+
+
+
+
+@Component({
+  templateUrl: 'balance_dl.component.html',
+  styleUrls: ['./facturacion.component.css']
+})
+export class balance_dl  {
+  myService: MyService | null;
+  balance=[];
+  balance_t=[];
+  search: string = '';
+  autoupdate: boolean;
+  update = true;
+  constructor(
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private location: Location,
+    private usuario: AuthGuard) {
+    console.log(this.usuario.currentUser.id_user);
+
+    this.http.get(environment.apiEndpoint+'balance_in/')
+      .subscribe((data) => {
+        this.balance_t = data.json();
+        this.balance = this.balance_t;
+        //console.log(this.dash);
+        console.log(this.balance_t);
+
+      });
+  }
+  Edit_ref_in(i): void{
+    let dialogRef = this.dialog.open(Editar_ref_dl, {
+      data: i,
+      width: '40%'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    })
+
+  }
+
+  refresh(nf) {
+    this.update = true
+    this.autoupdate = false
+    this.http.get(environment.apiEndpoint+'balance_in/')
+      .subscribe((data) => {
+        this.balance_t = data.json();
+        this.balance = this.balance_t;
+        if (nf) {
+          this.snackBar.open("Lista Actualizada", null, {
+            duration: 2000,
+          });
+        }
+      });
+
+  }
+
+  Close(){this.location.back();}
+}
+
+
+@Component({
+  templateUrl: 'editar_ref_bs.html',
+  styleUrls: ['./facturacion.component.css']
+})
+export class Editar_ref_bs implements OnInit, OnDestroy {
+ Edit_pago_bs: FormGroup;
+  update:boolean=true;
+  user: any;
+
+  constructor(
+    public dialogRef: MdDialogRef<DeclinePagoDialog>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    private _fb: FormBuilder,
+    private fb: FormBuilder,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+    console.log(this.usuario.currentUser.id_user);
+this.user = this.usuario.currentUser.id_user;
+  }
+
+
+  ngOnInit(){
+    console.log(this.user);
+    console.log(this.data);
+    this.Edit_pago_bs = this.fb.group({
+      id_bal: this.data.id_bal,
+      bal_tip: this.data.bal_tip,
+      bal_from: this.data.bal_from,
+      bal_monto: this.data.bal_monto,
+        bal_rest: this.data.bal_rest,
+      bal_comment: this.data.bal_comment,
+     bal_comment_mod: '',
+      bal_fecha_mod: '',
+      user_bal_mod: this.user
+
+    })
+
+  }
+  ngOnDestroy(){
+
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+  rem(){
+    var client = this.Edit_pago_bs.value;
+  console.log(JSON.stringify(this.Edit_pago_bs.value));
+   let dp = new DatePipe(navigator.language);
+    var url = environment.apiEndpoint + "edit_balance/" + this.data.id_bal;
+    //console.log(body);
+
+    this.snackBar.open("Editando Informacion del Pago", null, {
+    duration: 2000,
+  });
+
+  this.http.put(url, this.Edit_pago_bs.value).subscribe((data) => {
+  this.dialogRef.close();
+});
+
+}
+}
+
+
+@Component({
+  templateUrl: 'editar_ref_dl.html',
+  styleUrls: ['./facturacion.component.css']
+})
+export class Editar_ref_dl implements OnInit, OnDestroy {
+  Edit_pago_dl: FormGroup;
+  update:boolean=true;
+  user: any;
+
+  constructor(
+    public dialogRef: MdDialogRef<DeclinePagoDialog>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    private _fb: FormBuilder,
+    private fb: FormBuilder,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+    console.log(this.usuario.currentUser.id_user);
+    this.user = this.usuario.currentUser.id_user;
+  }
+
+
+  ngOnInit(){
+    console.log(this.user);
+    console.log(this.data);
+    this.Edit_pago_dl = this.fb.group({
+      id_bal_in: this.data.id_bal_in,
+      bal_tip_in: this.data.bal_tip_in,
+      bal_from_in: this.data.bal_from_in,
+      bal_monto_in: this.data.bal_monto_in,
+      bal_rest_in: this.data.bal_rest_in,
+      bal_comment_in: this.data.bal_comment_in,
+      bal_comment_mod_in: '',
+      bal_fecha_mod_in: '',
+      user_bal_mod_in: this.user
+
+    })
+
+  }
+  ngOnDestroy(){
+
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+  rem(){
+    var client = this.Edit_pago_dl.value;
+    console.log(JSON.stringify(this.Edit_pago_dl.value));
+    let dp = new DatePipe(navigator.language);
+    var url = environment.apiEndpoint + "edit_balance_in/" + this.data.id_bal_in;
+    //console.log(body);
+
+    this.snackBar.open("Editando Informacion del Pago", null, {
+      duration: 2000,
+    });
+
+    this.http.put(url, this.Edit_pago_dl.value).subscribe((data) => {
+      this.dialogRef.close();
+    });
+
+  }
 }

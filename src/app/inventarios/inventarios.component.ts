@@ -91,6 +91,7 @@ export class InventariosComponent implements OnInit, OnDestroy {
             duration: 2000,
           });}
           setTimeout(()=>{this.inventarios=this.inventarios_t, this.zonas=this.zonas_t})
+          console.log(this.inventarios);
         });
 
     }

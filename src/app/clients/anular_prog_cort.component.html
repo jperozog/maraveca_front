@@ -1,0 +1,21 @@
+<h1 md-dialog-title>Confirmacion</h1>
+<div md-dialog-content>
+  <p>¿Está seguro que desea anular la programacion de corte Nº {{data.id_prog}} del  cliente
+  <span   *ngIf="data.kind.toUpperCase() == 'V'">{{(data.nombre|capitalize) + " " + (data.apellido|capitalize)}}?</span>
+  <span  *ngIf="data.kind.toUpperCase() == 'E'">{{(data.nombre|capitalize) + " " + (data.apellido|capitalize)}}?</span>
+  <span    *ngIf="data.kind.toUpperCase() == 'G'">{{(data.social|capitalize)}}?</span>
+  <span *ngIf="data.kind.toUpperCase() == 'J'">{{(data.social|capitalize)}}?</span>
+  </p>
+</div>
+<div md-dialog-actions>
+  <tr>
+    <td>
+      <button md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="anular()" tabindex="2">Ok</button>
+
+    </td>
+    <td>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">NO</button>
+
+    </td>
+  </tr>
+</div>

@@ -150,6 +150,8 @@ export class FactibilidadesDetComponent {
   c_search: any;
   e_search: any;
   ptp= false;
+  show = false;
+  user_act: any;
   EditFact: FormGroup;
   constructor(
     private http:Http,
@@ -169,23 +171,65 @@ export class FactibilidadesDetComponent {
     this.equipos = data.json()[1].equipos;
     this.celdas = data.json()[2].celdas;
     this.user = this.fact_details.adicionales[2];
+    this.user_act = this.fact_details.adicionales[5];
     this.cliente = this.fact_details.nombre+" "+this.fact_details.apellido;
 console.log(this.fact_details );
   });
   this.EditFact=this.fb.group({
-    equipo:['', Validators.required],
-    celda:['', Validators.required],
+    equipo:'',
+    celda:'',
     factible:['', Validators.required],
     ptp: '',
     ptp_det:'',
-    altura: ['', Validators.required],
+    altura: '',
     status:'2',
     e_search:'',
     c_search:'',
     usuario: this.usuario.currentUser.id_user
   })
-}
 
+
+      this.EditFact.get('factible').valueChanges.subscribe(
+    (factible) => {
+
+      if (factible === '1') {
+
+        this.EditFact.get('equipo').setValidators([Validators.required]);
+        this.EditFact.get('celda').setValidators([Validators.required]);
+        this.EditFact.get('altura').setValidators([Validators.required]);
+
+      } else if (factible === '2') {
+
+        this.EditFact.get('equipo').setValidators([]);
+        this.EditFact.get('celda').setValidators([]);
+        this.EditFact.get('altura').setValidators([]);
+
+      } else if (factible === '3') {
+
+        this.EditFact.get('equipo').setValidators([]);
+        this.EditFact.get('celda').setValidators([]);
+        this.EditFact.get('altura').setValidators([]);
+
+    } else if (factible === '4') {
+
+      this.EditFact.get('equipo').setValidators([]);
+      this.EditFact.get('celda').setValidators([]);
+      this.EditFact.get('altura').setValidators([]);
+    }
+      this.EditFact.get('equipo').updateValueAndValidity();
+      this.EditFact.get('celda').updateValueAndValidity();
+      this.EditFact.get('altura').updateValueAndValidity();
+
+
+
+    }
+);
+  }
+      mostrar_edicion(){
+        this.show = true;
+
+
+      }
 agregar(){
   if(this.EditFact.value.ptp){
     this.EditFact.patchValue(
@@ -200,8 +244,17 @@ agregar(){
   var url = environment.apiEndpoint+'factibi/'+this.fact_details.id
   this.http.put(url, this.EditFact.value).subscribe((data) => {
     this.dialogRef.close();
+ console.log( this.EditFact.value);
   });
 
+}
+editar(){
+
+  var url = environment.apiEndpoint+'factibi_act/'+this.fact_details.id
+  this.http.put(url, this.EditFact.value).subscribe((data) => {
+    this.dialogRef.close();
+    console.log( this.EditFact.value);
+  });
 }
 
 }

@@ -1,0 +1,43 @@
+<h1 md-dialog-title>Generar Factura</h1>
+<div md-dialog-content>
+<!--<p>Formulario de factura para el cliente:</p>
+  <p *ngIf="cliente.kind.toUpperCase() == 'V'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
+  <p *ngIf="cliente.kind.toUpperCase() == 'E'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
+  <p *ngIf="cliente.kind.toUpperCase() == 'G'">{{(cliente.social|capitalize)}}</p>
+  <p *ngIf="cliente.kind.toUpperCase() == 'J'">{{(cliente.social|capitalize)}}</p>-->
+
+
+  <form [formGroup]="genFAC" ng-submit="ok(pre)">
+    <table style="width:100%">
+
+      <tr  >
+        <td colspan="2" >
+          <md-select [style.width]="'100%'" mdInput placeholder="Tipo de Moneda" formControlName="denominacion">
+            <md-option value="1">Moneda nacional</md-option>
+            <md-option value="2">Moneda extranjera</md-option>
+          </md-select>
+        </td>
+      </tr>
+      <tr  >
+        <td colspan="2" >
+          <md-select *ngIf="this.genFAC.value.denominacion == 1" [style.width]="'100%'" mdInput placeholder="Tipo de factura" formControlName="serie">
+            <md-option value="1">Fiscal</md-option>
+            <md-option value="2">No Fiscal</md-option>
+          </md-select>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+<div md-dialog-actions>
+  <tr>
+    <td>
+      <button  md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="generate()" tabindex="2" [disabled]="!genFAC.valid">Generar Factura</button>
+    </td>
+    <td>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">Cerrar</button>
+
+    </td>
+  </tr>
+</div>
+

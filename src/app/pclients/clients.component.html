@@ -46,16 +46,16 @@
         No Autorizado
       </td>
       <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('pclientes_w')">
-        <button md-icon-button color="primary" (click)="show(i)"><!---->
+        <button md-icon-button style="color:#106cc8" (click)="show(i)"><!---->
         <md-icon class="md-24" aria-label="Editar Potencial" >mode_edit</md-icon>
       </button>
-      <button md-icon-button color="primary" (click)="SendPre(i)"><!---->
+      <button md-icon-button style="color:#106cc8" (click)="SendPre(i)"><!---->
       <md-icon class="md-24" aria-label="Editar Potencial" >contact_mail</md-icon>
     </button>
         <button  md-icon-button color="warn"><!--(click)="deleteDialog(i)"-->
           <md-icon class="md-24" aria-label="Eliminar Potencial">delete</md-icon>
       </button>
-        <button md-icon-button color="primary"  (click)="dinstall(i)">
+        <button md-icon-button style="color:#106cc8"  (click)="dinstall(i)">
           <md-icon class="md-24" aria-label="Detalles De Factibilidad" >event_available</md-icon>
         </button>
       <button md-icon-button *ngIf="i.presupuesto >= 1" (click)="showPre(i)">

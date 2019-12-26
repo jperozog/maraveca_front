@@ -28,6 +28,7 @@
                 <md2-option value="3">Antena</md2-option>
                 <md2-option value="4">Router</md2-option>
                 <md2-option value="5">Switch</md2-option>
+                <md2-option value="6">Base de antena</md2-option>
     </md2-select>
     </td>
 
@@ -36,8 +37,8 @@
     <td>
 
 
-      <button *ngIf="row == null" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
-      <button *ngIf="row != null"md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Editar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+      <button *ngIf="row == null" md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+      <button *ngIf="row != null"md-raised-button class="example-half-width btn btn-primary b-btn" (click)="Editar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
     </td><td>
 
       <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>

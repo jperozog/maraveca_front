@@ -3,7 +3,7 @@ import { HashLocationStrategy, Location, LocationStrategy } from '@angular/commo
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
-import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, AnularFactura, DeleteCliente, ClientOverview, AddAdic, AddPagoBalance, AddPagoBalanceDl, GenFactura } from './clients/clients.component';
+import { ClientsComponent, AddclientsComponent, DataTablePipe, CapitalizePipe, ClientesStatus, AnularFactura, DeleteCliente, ClientOverview, AddAdic, AddPagoBalance, AddPagoBalanceDl, GenFactura, GenFactura_blanco, fac_programadas,  Anularprog_fac, Anularprog_cort, program_corte,cortes_programados } from './clients/clients.component';
 import { PClientsComponent, AddPclientsComponent, AddFactComponent, PClientesStatus, DeletePCliente, ShowPreComponent, ConfirmCliente, ConfirmCliente2 } from './pclients/clients.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiciosComponent, AddservicesComponent, DeleteserviceDialog, AddPendingComponent, UpdateserviceComponent } from './servicios/servicios.component';
@@ -13,15 +13,15 @@ import { PlanesComponent, AddplanesComponent, DeletePlanDialog, UpdatePlanPrices
 import { EquiposComponent, AddequipoComponent } from './equipos/equipos.component';
 import { LoginComponent } from './login/login.component';
 import { ApsComponent, AddapsComponent, DeleteApsDialog } from './aps/aps.component';
-import { SoporteComponent, DeleteticketDialog, Deleteotherinstall,DeleteInstallDialog, AddticketComponent, EditticketComponent, Ipasignadascomponent } from './soporte/soporte.component';
-import {UsuariosComponent, DetallesUsuarios, AdduserComponent, DeleteuserDialog, ResetCounter} from './usuarios/usuarios.component'
-import { NotifyComponent } from './notify/notify.component'
+import { SoporteComponent, DeleteticketDialog, Deleteotherinstall,DeleteInstallDialog, AddticketComponent, EditticketComponent, Ipasignadascomponent, tickets_cerrados_user, tickets_cerrados_por_usuarios } from './soporte/soporte.component';
+import {UsuariosComponent, DetallesUsuarios, AdduserComponent, DeleteuserDialog, ResetCounter} from './usuarios/usuarios.component';
+import { NotifyComponent, sms_morosoComponent } from './notify/notify.component';
 import { AuthGuard } from './_guards/index';
 import { PreComponent, DialogOverviewExampleDialog } from './presupuestos/pre.component';
-import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog, AprovPagos, AprovPagosin, DeclinePagoDialog, DeclinePagoDialog2, ConfirmPagoDialog, ConfirmPagoDialog2, UpdatePlanPricesFacDialog } from './facturacion/facturacion.component';
+import { FacturacionComponent, FacturacionPagos, deletepagoDialog, deleteProductDialog, AprovPagos, AprovPagosin, DeclinePagoDialog, DeclinePagoDialog2, ConfirmPagoDialog, ConfirmPagoDialog2, UpdatePlanPricesFacDialog, balance_bs, balance_dl, Editar_ref_dl, Editar_ref_bs } from './facturacion/facturacion.component';
 import { FactibilidadesComponent, FactibilidadesDetComponent } from './factibilidades/factibilidades.component';
 import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } from './instalaciones/instalaciones.component';
-import { StatsComponent, StatsdlComponent, PagarComponent, DetallesInstallerComponent,DetallesotherInstallerComponent , cargarPagocomponent , OtrosPagosComponent, cargarOpagocomponent } from './stats/stats.component';
+import { StatsComponent, StatsdlComponent, PagarComponent, DetallesInstallerComponent,DetallesotherInstallerComponent , cargarPagocomponent , OtrosPagosComponent, cargarOpagocomponent, Pagar_comisones_Component, factura_comision, pagar_comisionescomponent } from './stats/stats.component';
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
 import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent, ShowEquipoComponent, SelectTipoComponent, EquiposasigndosComponent } from './inventarios/inventarios.component';
 
@@ -113,6 +113,22 @@ const appRoutes: Routes = [
   {path: 'GenFAC', component: GenFactura},
   {path: 'delservice', component: DeleteserviceDialog},
   {path: 'EquiposAsignados', component: EquiposasigndosComponent},
+  {path: 'ticket_cerrado_user', component: tickets_cerrados_user},
+  {path: 'ticket_user/:ticket', component: tickets_cerrados_por_usuarios, canActivate: [AuthGuard]},
+  {path: 'pagar_comisiones', component: Pagar_comisones_Component, canActivate: [AuthGuard]},
+  {path: 'factura_comision/:id_user', component: factura_comision, canActivate: [AuthGuard]},
+  {path: 'pagar_comision', component: pagar_comisionescomponent},
+  {path: 'balance_mod_nacional', component: balance_bs},
+  {path: 'balance_mod_inter', component: balance_dl},
+  {path: 'Edit_bal_bs', component: Editar_ref_dl},
+  {path: 'Edit_bal_dl', component: Editar_ref_bs},
+  {path: 'Gen_Fac_blanco', component: GenFactura_blanco},
+  {path: 'sms_morosos', component: sms_morosoComponent},
+  {path: 'fac_prog', component: fac_programadas},
+  {path: 'Anular_fac_prog', component: Anularprog_fac},
+  {path: 'Anular_cort_prog', component: Anularprog_cort},
+  {path: 'program_corte', component: program_corte},
+  {path: 'cortes_programados', component: cortes_programados}
 
 
 

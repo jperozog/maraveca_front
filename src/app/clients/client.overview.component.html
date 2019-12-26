@@ -1,7 +1,7 @@
 <md-toolbar class="submenu">
   <button md-raised-button class="btn" (click)="Close()">Atras</button>
   <span class="example-spacer" style="text-align: center;">Ficha De Cliente</span>
-  <button md-icon-button color="primary" (click)="notify()" tooltip="Enviar recordatorio de pago" *ngIf="usuario.perm && usuario.perm.includes('notify')">
+  <button md-icon-button style="color:#106cc8" (click)="notify()" tooltip="Enviar recordatorio de pago" *ngIf="usuario.perm && usuario.perm.includes('notify')">
     <md-icon class="md-24" aria-label="notificar" >notifications</md-icon>
   </button>
 
@@ -19,7 +19,7 @@
     <md-card class="example-card card-body text-center">
 
       <md-card-header >
-        <md-card-title><h4>Datos de Cliente</h4></md-card-title>
+        <md-card-title><h4>Datos del Cliente</h4></md-card-title>
         <span class="example-spacer" style="text-align: center;"></span>
         <div *ngIf="usuario.perm && usuario.perm.includes('clientes_w')">
           <button *ngIf="editclient" (click)="updateClient()" md-raised-button color="#888888">Actualizar</button>
@@ -93,7 +93,7 @@
           </td>
           </tr>
         </table>
-        <button md-button color="primary" (click)="SendPre()" *ngIf="usuario.perm && usuario.perm.includes('clientes_w')">
+        <button md-button class="b-btn" (click)="SendPre()" *ngIf="usuario.perm && usuario.perm.includes('clientes_w')">
           Enviar Presupuesto
         </button>
 
@@ -359,6 +359,7 @@
     <md-card class="example-card card-body text-center">
       <md-card-header>
         <md-card-title><h4>Servicios</h4></md-card-title>
+
       </md-card-header>
       <md-card-content>
         <div class="example-form">
@@ -369,12 +370,24 @@
               <td colspan="3">
                 <md2-pagination></md2-pagination>
               </td>
+              <td >
+                <div *ngIf="((facturado - pagado)>0 || (facturadoin - pagadoin)>0) && estatus_cort < 1 && activo == true ">
+                <button  style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w') " (click)="program_corte()">Compromiso de pago</button>
+              </div>
+                <div  *ngIf="estatus_cort >=1">
+                  <button  class="btn1 info1" style="color:#106cc8; float:right;" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="cort_prog()">
+                    <md-icon class=" icono1" aria-label="status" >schedule</md-icon>
+                  </button>
+                  <button md-icon-button  style="color:#106cc8; float:right;" aria-label="status" *ngIf ="usuario.perm && !usuario.perm.includes('facturacion_w')">
+                    <md-icon class="md-24" aria-label="status" >schedule</md-icon></button>
+                </div>
+              </td>
             </tr>
             <tr>
-              <th  md2SortBy="name_plan">Plan</th>
-              <th md2SortBy='comment_srv'> Zona</th>
+              <th style="text-align: center"  md2SortBy="name_plan">Plan</th>
+              <th style="text-align: center"  md2SortBy='comment_srv'> Zona</th>
               <th style="text-align: center"  md2SortBy="stat_srv">Estado</th>
-              <th style="text-align: center" >Acciones</th>
+              <th style="text-align: center">Acciones</th>
             </tr>
             </thead>
             <tbody class='fac'>
@@ -405,19 +418,20 @@
                   <span>Exonerado</span>
                 </button>
               </td>
-              <td class="fac montos" style="text-align: center; width: 20%"  *ngIf="usuario.perm && !usuario.perm.includes('servicios_w')">
-                No Autorizado
-              </td>
-              <td class="fac montos" style="text-align: center; width: 20%"  *ngIf="usuario.perm && usuario.perm.includes('servicios_w')">
+              <!-- <td class="fac montos" style="text-align: center; width: 20%"  *ngIf="usuario.perm && !usuario.perm.includes('servicios_w')">
+                 No Autorizado
+               </td>-->
+              <td class="fac montos" style="text-align: center;"  *ngIf="usuario.perm && usuario.perm.includes('servicios')">
                 <!--botones de acciones-->
                 <div *ngIf="usuario.perm && usuario.perm.includes('clientes_w')">
-                  <button md-icon-button color="primary" (click)="show(i)">
+                  <button md-icon-button style="color:#106cc8" (click)="show(i)">
                     <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
                   </button>
                 </div>
-                <button md-icon-button color="primary"(click)="openLINK(i.ip_srv)" >
+                <button md-icon-button style="color:#106cc8; float:left;"(click)="openLINK(i.ip_srv)" >
                   <md-icon class="md-24" aria-label="Ubiquiti Admin">language</md-icon>
                 </button>
+
                 <button md-icon-button *ngIf="i.stat_srv == 1" >
                   <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
                 </button>
@@ -457,11 +471,11 @@
       <md-card-content>
         <div class="example-form">
 
-          <table class=example-full-width [md2Data]="historial" #md2="md2DataTable" class="addClient" [rowsPerPage]="3">
+          <table class=example-full-width [md2Data]="historial" #md2="md2DataTable" class="addClient"  [rowsPerPage]="3">
             <thead>
             <tr>
               <td colspan="3">
-                <md2-pagination></md2-pagination>
+                <md2-pagination ></md2-pagination>
               </td>
             </tr>
             <tr>
@@ -515,20 +529,36 @@
             <table [md2Data]="facturacion" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="facturacion.length>0; else elseblock">
               <thead>
               <tr>
+
+
+                <td >
+                  <div  class="left" *ngIf="estatus_prog >=1">
+                    <button  class="btn1 info1" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="fac_progr()">
+                      <md-icon class=" icono1"  aria-label="opciones de factura programada" >alarm_on</md-icon></button>
+
+                    <button md-icon-button *ngIf ="usuario.perm && usuario.perm.includes('facturacion') && !usuario.perm.includes('facturacion_w')">
+                      <md-icon class=" md-24" style="color:#106cc8" aria-label="status">alarm_on</md-icon>
+                    </button>
+                  </div>
+
+                  <button class="right" style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura</button>
+                </td>
+              </tr>
+              <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
+              <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
+              <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
+              <tr >
                 <td colspan="4">
                   <md2-pagination>
                   </md2-pagination>
-                </td><td>
-                <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura</button>
-
-              </td>
+                </td>
               </tr>
               <tr >
                 <th style="text-align: center; width: 10%" >N</th>
                 <th style="text-align: center" >Fecha</th>
                 <th style="text-align: center" >Monto</th>
                 <th style="text-align: center">Pagado</th>
-                <th style="text-align: center">Acciones</th>
+                <th style="text-align: center; width: 20% ">Acciones</th>
 
               </tr>
               </thead>
@@ -546,17 +576,17 @@
                 <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado != null)">
                   {{i.pagado | number : '1.2'}}  {{i.denominacion}}
                 </td>
-                <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado == null)">
+                <td class="fac montos" *ngIf=" (i.fac_status == 1 || i.fac_status == 3) && (i.pagado == null)">
 
                 </td>
                 <td class="fac montos" *ngIf="i.fac_status == 2">
                   Anulado
                 </td>
                 <td  class="fac montos" >
-                  <button md-icon-button color="primary" (click)="status(i)">
+                  <button md-icon-button style="color:#106cc8" (click)="status(i)">
                     <md-icon class="md-24" aria-label="Detalles De Factura" >find_in_page</md-icon>
                   </button>
-                  <button md-icon-button color="primary" *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && facturacion && i.fac_status == 1" (click)="anularfactura(i)">
+                  <button md-icon-button style="color:#106cc8" *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && facturacion && i.fac_status == 1" (click)="anularfactura(i)">
                     <md-icon class="md-24" aria-label="Detalles De Factura" >block</md-icon>
                   </button>
                 </td>
@@ -577,6 +607,14 @@
                   <td colspan="4">
 
                   </td><td>
+                  <div  class="left" *ngIf="estatus_prog >=1">
+                    <button color="#888888" class="btn1 info1" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="fac_progr()">
+                      <md-icon class=" icono1"  aria-label="opciones de factura programada" >alarm_on</md-icon></button>
+                    <button md-icon-button *ngIf ="usuario.perm && usuario.perm.includes('facturacion') && !usuario.perm.includes('facturacion_w')">
+                      <md-icon class=" md-24" style="color:#106cc8" aria-label="status">alarm_on</md-icon>
+                    </button>
+                  </div>
+
                   <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura</button>
 
                 </td>
@@ -610,13 +648,11 @@
                 </td>
               </tr>
               <tr>
-              <td >
-                <button style="float: left"  md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura en blanco</button>
-                </td>
-              <td>
-                <button style="float: right" md-raised-button color="#888888" [disabled]="!(usuario.perm && usuario.perm.includes('facturacion_esp'))" (click)="AddAdic()">Agregar adicional</button>
 
-              </td>
+                <td>
+                  <button style="float: right" md-raised-button color="#888888" [disabled]="!(usuario.perm && usuario.perm.includes('facturacion_esp'))" (click)="AddAdic()">Agregar adicional</button>
+
+                </td>
               </tr>
               <tr >
                 <th style="text-align: center" >Nombre</th>
@@ -720,8 +756,11 @@
                 <td class="fac montos" style="border-right: 1px solid #000000; text-align: right">
                   {{i.id_bal}}
                 </td>
-                <td class="fac montos" style="text-align: center">
+                <td class="fac montos"  style="text-align: center">
+                <span *ngIf ="i.bal_fecha_mod == null || i.bal_fecha_mod ==''" class="fac montos" style="text-align: center">
                   {{i.created_at | stringToDate | date: 'dd/M/yy'}}
+                </span>
+                  <span style=" width: 7%; text-align: center; color: #FF6C00" *ngIf="i.bal_fecha_mod"> {{i.bal_fecha_mod | stringToDate | date: 'dd/M/yy'}} </span>
                 </td>
                 <td class="fac montos" *ngIf="i.bal_tip!=8 && i.bal_tip!=9 && i.bal_tip!=10 && i.bal_tip!=11">
                   {{i.bal_monto | number : '1.2-2'}} Bs.S
@@ -730,7 +769,8 @@
                   {{i.bal_monto | number : '1.2'}} US$
                 </td>
                 <td class="fac montos">
-                  {{i.bal_comment}}
+                  <span *ngIf ="i.bal_comment_mod == null || i.bal_comment_mod =='' ">{{i.bal_comment}}</span>
+                  <span style=" width: 14%; text-align: center; color: #FF6C00; font-weight: bold;" *ngIf="i.bal_comment_mod"> {{i.bal_comment_mod}}</span>
                 </td>
 
                 <td class="fac" *ngIf="i.bal_tip==2">Transferencia Banesco</td>
@@ -744,10 +784,10 @@
                 <td class="fac" *ngIf="i.bal_tip==9">Zelle</td>
                 <td class="fac" *ngIf="i.bal_tip==10">Wire Transfer</td>
                 <td class="fac" *ngIf="i.bal_tip==11">Efectivo en $</td>
-                <td class="fac" *ngIf="i.bal_tip==12">Efectivo en Bs.S.</td>
+                <td class="fac" *ngIf="i.bal_tip==15">Efectivo en Bs.S.</td>
 
                 <td *ngIf="i.bal_stat == 2; else notpermited">
-                  <button md-icon-button color="primary" (click)="aprov(i)">
+                  <button md-icon-button style="color:#106cc8" (click)="aprov(i)">
                     <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
                   </button>
                   <button md-icon-button color="warn" (click)="rem(i)">
@@ -771,7 +811,7 @@
               <font><h1>no tiene abonos en su balance</h1></font>
             </ng-template>
           </md-tab>
-          <md-tab  label="Balance de pagos: moneda internacional " selected>
+          <md-tab  label="Balance de pagos: moneda extranjera " selected>
             <button *ngIf="tipo_plan == 2||tipo_plan == 5||tipo_plan==3" style="float: right" md-raised-button color="#888888" [disabled]="!usuario.perm && !usuario.perm.includes('facturacion_w')" (click)="abonod()">Cargar Pago</button>
             <table [md2Data]="balance_in" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="balance_in && balance_in.length>0; else elsebal">
               <thead>
@@ -801,14 +841,18 @@
                   {{i.id_bal_in}}
                 </td>
                 <td class="fac montos"  style="text-align: center">
+                   <span *ngIf ="i.bal_fecha_mod_in == null || i.bal_fecha_mod_in ==''" class="fac montos" style="text-align: center">
                   {{i.created_at | stringToDate | date: 'dd/M/yy'}}
+                </span>
+                  <span style=" width: 7%; text-align: center; color: #FF6C00" *ngIf="i.bal_fecha_mod_in"> {{i.bal_fecha_mod_in | stringToDate | date: 'dd/M/yy'}} </span>
                 </td>
 
                 <td class="fac montos" >
                   {{i.bal_monto_in | number : '1.2'}} US$
                 </td>
                 <td class="fac montos" >
-                  {{i.bal_comment_in}}
+                  <span *ngIf ="i.bal_comment_mod_in == null || i.bal_comment_mod_in =='' ">{{i.bal_comment_in}}</span>
+                  <span style=" width: 14%; text-align: center; color: #FF6C00; font-weight: bold;" *ngIf="i.bal_comment_mod_in"> {{i.bal_comment_mod_in}}</span>
                 </td>
 
 
@@ -817,7 +861,7 @@
                 <td class="fac" *ngIf="i.bal_tip_in==14">Efectivo (Plan D)</td>
 
                 <td *ngIf="i.bal_stat_in == 2; else notpermited">
-                  <button md-icon-button color="primary" (click)="aprov2(i)">
+                  <button md-icon-button style="color:#106cc8" (click)="aprov2(i)">
                     <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
                   </button>
                   <button md-icon-button color="warn" (click)="rem(i)">
@@ -870,7 +914,7 @@
 
       <md-card-actions   style="text-align: center">
       <span >
-     <p> Estatus de balance planes moneda internacional: </p>
+     <p> Estatus de balance planes moneda extranjera: </p>
 
     </span>
         <span *ngIf="balac_in>0" style="color: rgb(75, 170, 78)">
@@ -930,7 +974,7 @@
               No Autorizado
             </td>
             <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-              <button md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+              <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
                 <md-icon class="md-24" aria-label="Editar AP" >rate_review</md-icon>
               </button>
               <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
@@ -1007,7 +1051,7 @@
                   <span style="font-weight: bold;"> Intensidad de señal: </span>{{t.signal_srv}}
                 </td>
               <tr><td colspan="2" [style.height]="'10%'"><br></td></tr>
-              <button (click)="edit_service(t)" md-raised-button color="#888888">Editar</button>
+              <button (click)="edit_service(t)" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">Editar</button>
             </div>
             <tfoot>
 

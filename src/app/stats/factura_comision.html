@@ -1,0 +1,242 @@
+<md-toolbar class="submenu">
+
+  <button md-button [mdMenuTriggerFor]="filtros" style="color:rgb(104, 103, 112)">
+    <md-icon>menu</md-icon> Filtros
+  </button>
+
+
+
+  <span class="example-spacer" style="text-align: center;">Facturacion y comisiones del mes de {{nombre_mes}}</span>
+  <md-menu #filtros="mdMenu">
+    <input mdInput class="md2-input" style="width:93%" floatPlaceholder="never" (click)="stopPropagation($event)" placeholder="Filtrar" [(ngModel)]="search" />
+    <br />
+    <md-select class="example-full-width" placeholder="Mes" [(ngModel)]="mes" (click)="stopPropagation($event)" >
+      <md-option *ngFor="let mes of meses" [value]=mes.numero>
+        {{mes.nombre}}
+      </md-option>
+    </md-select>
+    <br />
+    <md-select class="example-full-width" placeholder="Año" [(ngModel)]="year" (click)="stopPropagation($event)" >
+      <md-option *ngFor="let year of anos" [value]=year.year>
+        {{year.year}}
+      </md-option>
+    </md-select>
+  </md-menu>
+
+  <button md-icon-button style="color:#106cc8" (click)="stopPropagation($event)" (click)="notify()" tooltip="Enviar recordatorios de pago" *ngIf="usuario.perm && usuario.perm.includes('notify')">
+    <md-icon class="md-24" aria-label="notificar" >notifications</md-icon>
+  </button>
+  <button class="x490 x700" md-raised-button (click)="refresh(true)" >
+    <md-icon [class.updateicon]="update">cached</md-icon>
+    Actualizar
+  </button>
+  <button md-raised-button (click)="pagar()" *ngIf="usuario.perm && (usuario.perm.includes('pagar'))">
+    <md-icon>credit_card</md-icon> Reportar Pago
+  </button>
+  <!--button class="x490 x700" md-raised-button (click)="openDialog()" >
+    <md-icon>add_circle_outline</md-icon>
+    Agregar
+  </button>
+  <button md-raised-button (click)="sidenav.toggle()">
+      boton
+    </button-->
+
+</md-toolbar>
+<md-sidenav #sidenav mode="push" class="sidenav">
+  <h1>Detalles</h1>
+  <h2>Cliente:</h2>
+  <h2>Fecha</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>control</th>
+      <th>tipo</th>
+      <th>monto</th>
+    </thead>
+  </table>
+
+</md-sidenav>
+
+
+<md-sidenav-container>
+  <p style=" text-align: center;">
+    <b> Detalles de facturas</b> </p>
+  <table style="width: 97%" [md2Data]="facturacion | dataPipe: {cliente: search, id: search} | dataPipe: {estado:status}" #md2="md2DataTable" class="addClient x700" [rowsPerPage]="14">
+
+    <thead>
+    <tr>
+
+    </tr>
+
+    <tr>
+      <th>Facturacion total Bs.S</th>
+      <th>Facturacion total $</th>
+      <th>Monto recaudado Bs.S</th>
+      <th>Monto recaudado $</th>
+      <th>Monto adeudado Bs.S</th>
+      <th>monto adeudado $</th>
+    </tr>
+
+    </thead>
+    <tbody class="cuerpo">
+    <tr>
+      <td>{{total_bs | number : '1.0-2'}}Bs.S</td>
+      <td>{{total_dl | number : '1.0-2'}}$</td>
+      <td><b><font color="#00c402">{{pagado_bs | number : '1.0-2'}}Bs.S</font></b></td>
+      <td><b><font color="#00c402">{{pagado_dl | number : '1.0-2'}}$</font></b></td>
+      <td><b><font color="#d10512">{{deuda_bs | number : '1.0-2'}}Bs.S</font></b></td>
+      <td><b><font color="#d10512">{{deuda_dl | number : '1.0-2'}}$</font></b></td>
+
+    </tr>
+    </tbody>
+  </table>
+</md-sidenav-container>
+
+
+
+
+<md-sidenav-container>
+  <p style="text-align: center;"><b>Comisiones</b></p>
+  <table style="width: 97%" [md2Data]="facturacion | dataPipe: {cliente: search, id: search} | dataPipe: {estado:status}" #md2="md2DataTable" class="addClient x700" [rowsPerPage]="14">
+
+    <thead>
+    <tr>
+
+    </tr>
+  <tr>
+
+    <th>total comisiones Bs.S</th>
+
+    <th>total comisiones $</th>
+    <th>Comisiones recaudadas Bs.S</th>
+    <th>Comisiones recaudadas $</th>
+    <th> comisiones pagadas Bs.S</th>
+    <th>comisiones pagadas $</th>
+  </tr>
+    </thead>
+    <tbody class="cuerpo">
+    <tr>
+      <td>{{total_cm_bs | number : '1.0-2'}}Bs.S</td>
+      <td>{{total_cm_dl | number : '1.0-2'}}$</td>
+      <td><b><font color="20A8D9">{{recaudo_cm_bs | number : '1.0-2'}}Bs.S</font></b></td>
+      <td><b><font color="20A8D9">{{recaudo_cm_dl | number : '1.0-2'}}$</font></b></td>
+      <td><b><font color="#00c402">{{comisiones_pg_bs | number : '1.0-2'}}Bs.S</font></b></td>
+      <td><b><font color="#00c402">{{comisiones_pg_dl | number : '1.0-2'}}$</font></b></td>
+    </tr>
+    <tr>
+      <th>comisiones pendiente por pagar Bs.S</th>
+
+      <th>comisiones pendiente por pagar $</th>
+    </tr>
+    <tr>
+      <td><b><font color="#d10512">{{(recaudo_cm_bs - comisiones_pg_bs) | number : '1.0-2'}}Bs.S</font></b></td>
+      <td><b><font color="#d10512">{{(recaudo_cm_dl - comisiones_pg_dl)  | number : '1.0-2'}}$</font></b></td>
+    </tr>
+    </tbody>
+  </table>
+  </md-sidenav-container>
+
+
+<md-sidenav-container>
+
+  <div class="contenido">
+    <div class="x700">
+      <p style=" text-align: center;">
+        <b> Facturacion </b></p>
+      <table style="width: 97%" [md2Data]="facturacion | dataPipe: {cliente: search, id: search} | dataPipe: {estado:status}" #md2="md2DataTable" class="addClient x700" [rowsPerPage]="4">
+        <thead>
+        <tr>
+          <td colspan="5">
+            <md2-pagination paginationLabel="Filas por pagina"></md2-pagination>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 15%; margin: 0 1em;">N</th>
+          <th style="width: 15%" md2SortBy="cliente">Cliente</th>
+          <th style="width: 15%" md2SortBy="estado">Estado</th>
+          <th style="width: 15%" md2SortBy="monto">Monto Facturado</th>
+          <th style="width: 15%" md2SortBy="deuda">Monto Adeudado</th>
+          <th style="width: 15%">Fecha</th>
+          <th style="width: 15%">Comision</th>
+
+          <th style="width: 10%">Acciones</th>
+        </tr>
+        </thead>
+        <tbody class="cuerpo">
+        <tr class="hover" *ngFor="let t of md2.data" (click)='show(t)'>
+          <td style="width: 15%; margin: 0 1em;">{{t.id}}</td>
+
+          <td style="width: 15%">{{t.cliente | capitalize2:true}}</td>
+
+
+          <td *ngIf="t.fac_status == 1 && (t.pagado < t.monto || t.pagado == null)" style="width: 15%"><b><font color="#d10512">{{t.estado | capitalize2:true}}</font></b></td>
+          <td *ngIf="t.fac_status == 1 && (t.pagado >= t.monto)" style="width: 15%"><b><font color="#00c402">{{t.estado | capitalize2:true}}</font></b></td>
+          <td *ngIf="t.fac_status == 2" style="width: 15%"><b><font color="#FF6C00">Anulado</font></b></td>
+
+          <td style="width: 15%">{{t.monto | number : '1.0-2'}}{{t.denominacion}}</td>
+          <td style="width: 15%">{{t.deuda | number : '1.0-2'}}{{t.denominacion}}</td>
+
+          <td style="width: 15%">{{t.created_at | stringToDate | date: 'd/M/yy'}}</td>
+
+          <td *ngIf="t.fac_status == 1 && (t.pagado < t.monto || t.pagado == null)" style="width: 15%"><b><font color="#d10512">{{((t.porcentaje_comision_serv*t.monto)/100)| number : '1.0-2'}} {{t.denominacion}} {{+ "(" +t.porcentaje_comision_serv+ "%)" }}</font></b></td>
+          <td *ngIf="t.fac_status == 1 && (t.pagado >= t.monto)" style="width: 15%"><b><font color="#00c402">{{((t.porcentaje_comision_serv*t.monto)/100)| number : '1.0-2'}} {{t.denominacion}} {{+ "(" +t.porcentaje_comision_serv+ "%)"  }}</font></b></td>
+          <td *ngIf="t.fac_status == 2" style="width: 15%"><b><font color="#FF6C00">Anulado</font></b></td>
+          <td style="width: 15%">
+            <button md-icon-button style="color:#106cc8" (click)="openLINK(t.id_soporte)">
+              <md-icon class="md-24" aria-label="Editar AP" >rate_review</md-icon>
+            </button>
+            <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
+            <button md-icon-button color="warn"(click)="deleteDialog(i)">
+            <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
+          </button-->
+
+
+          </td>
+        </tr>
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</md-sidenav-container>
+
+
+<!--<md-sidenav-container>
+
+  <div class="contenido">
+    <div class="x700">
+      <table style="width: 97%" [md2Data]="historicos" #md2="md2DataTable" class="addClient x700" [rowsPerPage]="4">
+        <thead>
+        <tr>
+          <td colspan="5">
+            <md2-pagination paginationLabel="Filas por pagina"></md2-pagination>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 15%; margin: 0 1em;">N</th>
+          <th style="width: 15%" md2SortBy="cliente">Detalle</th>
+          <th style="width: 15%" md2SortBy="estado">Fecha</th>
+
+
+        </tr>
+        </thead>
+        <tbody class="cuerpo">
+        <tr class="hover" *ngFor="let t of md2.data">
+          <td style="width: 15%; margin: 0 1em;">{{t.comentario}}</td>
+
+          <td style="width: 15%">{{t.created_at  | stringToDate | date: 'd/M/yy'}}</td>
+
+
+
+
+        </tr>
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</md-sidenav-container>-->

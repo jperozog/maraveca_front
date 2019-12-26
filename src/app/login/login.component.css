@@ -149,6 +149,7 @@ input[type="submit"]{
 	-o-border-bottom-right-radius: 15px;
 	cursor: pointer;
 }
+
 input[type="submit"]:hover {
 	background: #1f96c4;
   border-bottom-left-radius: 15px;
@@ -361,4 +362,8 @@ label.lbl-3 {
   align:center;
   overflow-x: auto;
   max-width:100vw
+}
+.b-btn {
+background-color: #106cc8;
+color:white;
 }

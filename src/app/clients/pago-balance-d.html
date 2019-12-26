@@ -35,10 +35,11 @@
         <input
 
           formControlName='bal_monto_in'
-          type="number"
+          type="text"
           placeholder="Monto"
           style="width=100%; min-width: 100%;"
           mdInput
+          mask="separator.2" thousandSeparator=","
           autocomplete="off">
       </md-form-field>
     </tr>
@@ -47,7 +48,7 @@
 <div md-dialog-actions>
   <tr>
     <td>
-      <button [disabled]=" !addAbono.valid " md-button [mat-dialog-close]="addAbono.value" cdkFocusInitial>Si</button>
+      <button md-raised-button [disabled]=" !addAbono.valid " md-button class="b-btn" [mat-dialog-close]="addAbono.value" cdkFocusInitial>Si</button>
     </td>
     <td>
       <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">NO</button>

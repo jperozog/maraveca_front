@@ -1,0 +1,79 @@
+<h1 md-dialog-title>Factura programada</h1>
+<div md-dialog-content>
+
+      <table [md2Data]="fac_prog" #md2="md2DataTable" [rowsPerPage]="3" class="addClient" >
+        <thead>
+        <tr>
+          <td colspan="4">
+            <md2-pagination>
+            </md2-pagination>
+          </td>
+
+          <!--<td >
+            <div  class="left" *ngIf="estatus_prog >=1">
+              <button color="#888888" class="btn1 info1" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">
+                <md-icon class=" icono1"  aria-label="opciones de factura programada" >alarm_on</md-icon></button>
+            </div>
+
+            <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura</button>
+          </td>-->
+        </tr>
+        <tr >
+          <th style="text-align: center; " >N</th>
+          <th style="text-align: center; " >Cliente</th>
+          <th style="text-align: center" >Fecha de porgramacion</th>
+          <th style="text-align: center" >Nro servicio</th>
+          <th style="text-align: center">responsable</th>
+          <th style="text-align: center">Acciones</th>
+
+        </tr>
+        </thead>
+        <tbody class="fac">
+        <tr class="fac montos" *ngFor="let i of md2.data">
+          <td class="fac montos"  style="text-align: center">
+            {{i.id_fac_prog}}
+          </td>
+
+          <td class="fac montos"  style="text-align: center">
+            <span style="font-weight: bold" *ngIf="i.kind.toUpperCase() == 'V'">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</span>
+            <span style="font-weight: bold" *ngIf="i.kind.toUpperCase() == 'E'">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</span>
+            <span  style="font-weight: bold" *ngIf="i.kind.toUpperCase() == 'G'">{{(i.social|capitalize)}}</span>
+            <span style="font-weight: bold" *ngIf="i.kind.toUpperCase() == 'J'">{{(i.social|capitalize)}}</span>
+          </td>
+          <td class="fac montos" style="text-align: center">
+            {{i.fecha | stringToDate | date: 'd/M/yyyy'}}
+          </td>
+          <td class="fac montos" style="text-align: center;">
+            {{i.id_servicio }}
+          </td>
+          <td class="fac montos" style="text-align: center;">
+            {{i.nombre_user }}
+          </td>
+
+          <td  class="fac montos" >
+            <button md-icon-button style="color:#106cc8"*ngIf="usuario.perm && usuario.perm.includes('facturacion_w') " (click)="anularprog(i)">
+              <md-icon class="md-24" aria-label="Detalles De Factura" >block</md-icon>
+            </button>
+          </td>
+          <!--td class="fac" #obf>
+          0BSF
+        </td-->
+
+        </tr>
+
+
+
+
+        </tbody>
+
+      </table>
+
+
+  <br>
+  <br>
+
+    <button md-raised-button color="warn" class=" centrado btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Salir</button>
+
+
+</div>
+

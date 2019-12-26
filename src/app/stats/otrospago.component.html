@@ -31,7 +31,7 @@
       <td align= "center "style="width: 20%; padding: 0px 20% 0px 0px">{{i.installs}}</td>
       <td style="width: 20%" *ngIf="usuario.perm && !usuario.perm.includes('pagar_w')">No Autorizado</td>
       <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('pagar_w')">
-        <button md-icon-button color="primary" [routerLink]="['/detailworks/', i.id_user]">
+        <button md-icon-button style="color:#106cc8" [routerLink]="['/detailworks/', i.id_user]">
           <md-icon class="md-24" aria-label="Editar AP" >receipt</md-icon>
         </button>
 

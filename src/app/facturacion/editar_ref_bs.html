@@ -1,0 +1,58 @@
+<h1 md-dialog-title>Modificar Pago</h1>
+<div md-dialog-content>
+  <p>
+    Esta seguro que desea modificar el pago {{data.id_bal }} del cliente: <br>
+
+        <span *ngIf="data.kind.toUpperCase() == 'V'">{{(data.kind | capitalize) + data.dni+' / '+(data.nombre | capitalize) +' '+(data.apellido | capitalize)}}</span>
+        <span *ngIf="data.kind.toUpperCase() == 'E'">{{(data.kind | capitalize) + data.dni+' / '+(data.nombre | capitalize) +' '+(data.apellido | capitalize)}}</span>
+        <span *ngIf="data.kind.toUpperCase() == 'J'">{{(data.kind | capitalize) + data.dni+' / '+(data.social | capitalize)}}</span>
+        <span *ngIf="data.kind.toUpperCase() == 'G'">{{(data.kind | capitalize) + data.dni+' / '+(data.social | capitalize)}}</span>
+
+
+    ?
+  </p>
+  <form class="example-form" id="client" name="clientForm" [formGroup]="Edit_pago_bs" ng-submit="ok(clientForm)" novalidate>
+    <table>
+
+      <tr>
+        <md-form-field class="example-full-width">
+           <textarea
+            formControlName='bal_comment_mod'
+            placeholder="Referencia modificada"
+            style="width=100%; min-width: 100%;"
+            mdInput
+            rows ="2"
+            autocomplete="off"></textarea>
+        </md-form-field>
+      </tr>
+      <tr>
+        <td>
+          <md-form-field class="example-full-width">
+            <input type="date" name="Fecha"
+                   class="form-control"
+                   formControlName="bal_fecha_mod"
+                   placeholder="Fecha"
+                   required mdInput
+
+                   >
+
+          </md-form-field>
+        </td>
+      </tr>
+    </table>
+
+  </form>
+</div>
+<div md-dialog-actions>
+  <tr>
+    <td>
+      <button md-raised-button  class="example-half-width btn btn-primary b-btn"  (click)="rem()"><i class="fa fa-paper-plane" aria-hidden="true"></i>OK</button>
+      <!-- <button md-raised-button class="example-half-width btn btn-primary b-btn" (click)="delete(data)" [disabled]="!Edit_pago_bs.valid" tabindex="2">Ok</button> -->
+
+    </td>
+    <td>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">NO</button>
+
+    </td>
+  </tr>
+</div>

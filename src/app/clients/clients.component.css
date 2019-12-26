@@ -155,3 +155,50 @@ table{
 .icono {
   font-size: 15px;
 }
+.left {
+  position: absolute;
+  left: 0;
+  width: 120px;
+
+}
+.right {
+  position: absolute;
+  right: 0;
+  width: 120px;
+
+}
+.btn1 {
+  border: 1px solid black;
+  background-color: white;
+  color: black;
+
+  cursor: pointer;
+}
+.info1 {
+  border-color: #106cc8;
+  color:#106cc8
+}
+
+.info1:hover {
+  background: #106cc8;
+  color: white;
+}
+
+.icono1{
+  color:#106cc8;
+padding: 6px 45px;
+}.icono1:hover{
+  color: #f3f3f3
+}
+
+.centrado{
+  display:block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.b-btn {
+background-color: #106cc8;
+color:white;
+}
+

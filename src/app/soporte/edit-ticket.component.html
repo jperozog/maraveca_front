@@ -291,11 +291,11 @@
 
         <tr>
           <td>
-            <button *ngIf="!edit" md-raised-button color="primary" class="example-full-width btn btn-primary" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
-            <button *ngIf="row && row.tipo_soporte == 4" md-raised-button color="primary" class="example-full-width btn btn-primary" [disabled]="row && (row.status_soporte==2||row.status_soporte==4)" (click)="closeotherinstall()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Otros trabajos e instalaciones</button>
-            <button *ngIf="row && row.tipo_soporte == 3" md-raised-button color="primary" class="example-full-width btn btn-primary" [disabled]="row && (row.status_soporte==2||row.status_soporte==4)" (click)="closeticket()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Averia</button>
-            <button *ngIf="row && row.tipo_soporte == 2" md-raised-button color="primary" class="example-full-width btn btn-primary" [disabled]="row && (row.status_soporte==2||row.status_soporte==4)" (click)="closeticket()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Ticket</button>
-            <button *ngIf="row && row.tipo_soporte == 1" md-raised-button color="primary" class="example-full-width btn btn-primary" [disabled]="row && (row.status_soporte==2||row.status_soporte==4)" (click)="closeinstall()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Instalacion</button>
+            <button *ngIf="!edit" md-raised-button class="example-full-width btn btn-primary b-btn" (click)="Enviar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+            <button *ngIf="row && row.tipo_soporte == 4" md-raised-button class="example-full-width btn btn-primary b-btn" [disabled]="row && (row.status_soporte==2||row.status_soporte==4)" (click)="closeotherinstall()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Otros trabajos e instalaciones</button>
+            <button *ngIf="row && row.tipo_soporte == 3" md-raised-button class="example-full-width btn btn-primary b-btn" [disabled]="row && (row.status_soporte==2||row.status_soporte==4)" (click)="closeticket()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Averia</button>
+            <button *ngIf="row && row.tipo_soporte == 2" md-raised-button class="example-full-width btn btn-primary b-btn" [disabled]="row && (row.status_soporte==2||row.status_soporte==4)" (click)="closeticket()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Ticket</button>
+            <button *ngIf="row && row.tipo_soporte == 1" md-raised-button  class="example-full-width btn btn-primary b-btn" [disabled]="row && (row.status_soporte==2||row.status_soporte==4)" (click)="closeinstall()"><i class="fa fa-paper-plane" aria-hidden="true"></i>Cerrar Instalacion</button>
           </td>
           <td>
             <button *ngIf="edit" md-raised-button color="warn" class="example-full-width btn btn-danger" type="button" (click)='Close()'><i class="fa fa-times" aria-hidden="true"></i>Salir</button>

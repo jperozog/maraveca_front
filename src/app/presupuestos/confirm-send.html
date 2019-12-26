@@ -8,7 +8,7 @@
 <div md-dialog-actions>
   <tr>
     <td>
-      <button *ngIf="data.factibi>0&&data.factibi == data.nofac" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="onNoClick()" tabindex="2">Ok</button>
+      <button *ngIf="data.factibi>0&&data.factibi == data.nofac" md-raised-button class="example-half-width btn btn-primary b-btn" (click)="onNoClick()" tabindex="2">Ok</button>
       <button *ngIf=" (data.factibi==0)||(data.factibi>0&&data.fac==0&&data.nofac==0)||(data.factibi>0&&data.factibi> data.nofac&& data.fac>0) " md-button [mat-dialog-close]="data.answer" cdkFocusInitial>Si</button>
     </td>
     <td>

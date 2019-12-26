@@ -1,0 +1,164 @@
+<md-toolbar class="submenu">
+
+  <md-form-field floatPlaceholder="never">
+    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+  </md-form-field>
+  <span class="example-spacer" style="text-align: center;">Pagos en moneda nacional</span>
+  <button md-raised-button class="btn" (click)="Close()">Atras</button>
+
+  <!--button color="warn" md-raised-button (click)="sendSMS()" [disabled]="!notify.valid" class="btn btn-danger">Enviar Mensajes Masivos</button-->
+  <button md-raised-button (click)="refresh(true)" >
+    <md-icon [class.updateicon]="update">cached</md-icon> Actualizar Lista
+  </button>
+</md-toolbar>
+
+
+
+<div class="contenido" style="margin: auto; align-content: center; text-align: center ;">
+  <div>
+    <table [md2Data]="balance| dataPipe: { id_bal: search, nombre: search, apellido: search, social:search, bal_comment:search, bal_comment_mod:search, bal_monto:search }" #md2="md2DataTable" [rowsPerPage]="14">
+      <thead>
+      <tr>
+        <td colspan="7">
+          <md2-pagination></md2-pagination>
+        </td>
+      </tr>
+      <tr>
+<td style ="width: 7%">
+  Nº
+</td>
+        <td style ="width: 7%">
+          Cliente
+        </td>
+        <td style ="width: 7%">
+          Banco
+        </td>
+        <td style ="width: 7%">
+          Origen
+        </td>
+        <td style ="width: 7%">
+          Monto
+        </td>
+        <td style ="width: 7%">
+          Referencia / Titular
+        </td>
+        <td style ="width: 7%">
+          Referencia mod.
+        </td>
+        <td style ="width: 7%">
+          Estado
+        </td>
+        <td style ="width: 7%">
+          Fecha
+        </td>
+        <td style ="width: 7%">
+          Fecha mod.
+        </td>
+        <td style ="width: 7%">
+          Usuario mod
+        </td>
+        <td style ="width: 7%">
+          Acciones
+        </td>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr *ngFor="let i of md2.data">
+        <td style="text-align: left; width: 7%">
+          {{i.id_bal}}
+        </td>
+        <td style ="width: 14%" *ngIf="i.kind.toUpperCase() == 'V'">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+        <td style ="width: 14%" *ngIf="i.kind.toUpperCase() == 'E'">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+        <td style ="width: 14%" *ngIf="i.kind.toUpperCase() == 'G'">{{(i.social|capitalize)}}</td>
+        <td style ="width: 14%" *ngIf="i.kind.toUpperCase() == 'J'">{{(i.social|capitalize)}}</td>
+
+        <td style ="width: 10%" *ngIf="i.bal_tip==2">Transferencia Banesco</td>
+        <td style ="width: 10%" *ngIf="i.bal_tip==6">Transferencia Bicentenario</td>
+        <td style ="width: 10%" *ngIf="i.bal_tip==1">Transferencia BOD</td>
+        <td style ="width: 10%" *ngIf="i.bal_tip==3">Transferencia Venezuela</td>
+        <td style ="width: 10%" *ngIf="i.bal_tip==4">Retencion ISLR</td>
+        <td style ="width: 10%" *ngIf="i.bal_tip==5">Retencion IVA</td>
+        <td style ="width: 10%" *ngIf="i.bal_tip==7">Exonerado</td>
+        <td  style ="width: 10%" *ngIf="i.bal_tip==8">Moneda Extranjera</td>
+        <td  style ="width: 10%" *ngIf="i.bal_tip==9">Zelle</td>
+        <td  style ="width: 10%" *ngIf="i.bal_tip==10">Wire Transfer</td>
+        <td style ="width: 10%"  *ngIf="i.bal_tip==11">Efectivo $</td>
+        <td style ="width: 10%"  *ngIf="i.bal_tip==15">Efectivo en Bs.S.</td>
+
+        <td style ="width: 10%"  *ngIf="i.bal_from==1">Mismo Banco</td>
+        <td style ="width: 10%"  *ngIf="i.bal_from==2">Otro Banco</td>
+        <td style ="width: 10%"   *ngIf="i.bal_from==5">Maracaibo</td>
+        <td style ="width: 10%"  *ngIf="i.bal_from==4">Coro</td>
+        <td  style ="width: 10%" *ngIf="i.bal_from==6">Taquilla Dabajuro</td>
+        <td style ="width: 10%"  *ngIf="i.bal_from==12">otros bancos (Venezuela)</td>
+        <td  style ="width: 10%" *ngIf="i.bal_from==13">otros bancos (Bicentenario)</td>
+        <td style ="width: 10%"  *ngIf="i.bal_from==14">otros bancos (BNC)</td>
+        <td style ="width: 10%"  *ngIf="i.bal_from==15">otros bancos (Provincial)</td>
+        <td style ="width: 10%"  *ngIf="i.bal_from==16">otros bancos (Mercantil)</td>
+        <td style ="width: 10%"  *ngIf="i.bal_from==17">otros bancos (Banco del tesoro)</td>
+        <td style ="width: 10%"  *ngIf="i.bal_from==18">otros bancos (Banco Venezolano de credito)</td>
+        <td style ="width: 10%"  *ngIf="i.bal_from==19">otros bancos (Banplus)</td>
+        <td style ="width: 10%"  *ngIf="i.bal_from==20">otros bancos (BFC)</td>
+<td>
+        <span style=" width: 7%; text-align: left;" *ngIf="i.bal_tip!=8 && i.bal_tip!=9 && i.bal_tip!=10 && i.bal_tip!=11">
+          {{i.bal_monto  | number : '1.0-3'}} Bs.S.
+        </span>
+        <span style=" width: 7%; text-align: left;" *ngIf="i.bal_tip==8 || i.bal_tip==9 || i.bal_tip==10 || i.bal_tip==11">
+          {{i.bal_monto  | number : '1.0-3'}} US$.
+        </span>
+</td>
+        <td style=" width: 14%; ">
+          {{i.bal_comment}}
+        </td>
+        <td>
+        <span style=" width: 14%; text-align: center; color: #FF6C00" *ngIf="i.bal_comment_mod">
+          {{i.bal_comment_mod}}
+        </span>
+        <span style=" width: 14%; text-align: center; color: #FF6C00; font-weight: bold;"*ngIf ="i.bal_comment_mod == null || i.bal_comment_mod =='' ">
+          <md-icon class="md-24" aria-label="N/A">minimize</md-icon>
+        </span>
+        </td>
+        <td>
+        <span style=" width: 7%; text-align: center; color: #00c402" *ngIf="i.bal_stat == 1">
+          Aprobada
+        </span>
+        <span style=" width: 7%; text-align: center; color: #7a8018" *ngIf="i.bal_stat == 2">
+          Pendiente
+        </span>
+        <span style=" width: 7%; text-align: center; color: #c4092b" *ngIf="i.bal_stat == 0">
+          Rechazada
+        </span>
+        </td>
+        <td style=" width: 7%; text-align: left">
+          {{i.created_at | stringToDate | date: 'dd/M/yy'}}
+        </td>
+        <td >
+         <span style=" width: 7%; text-align: center; color: #FF6C00" *ngIf="i.bal_fecha_mod"> {{i.bal_fecha_mod | stringToDate | date: 'dd/M/yy'}} </span>
+
+        <span style=" width: 7%; text-align: center;  color: #FF6C00; font-weight: bold;"*ngIf ="i.bal_fecha_mod == null || i.bal_fecha_mod ==''">
+          <md-icon class="md-24" aria-label="N/A">minimize</md-icon>
+        </span>
+        </td>
+        <td>
+         <span style=" width: 7%; text-align: center; color: #FF6C00" *ngIf="i.user_bal_mod">
+ {{i.nombre_user|capitalize}}
+        </span>
+          <span style=" width: 7%; text-align: center; color: #FF6C00; font-weight: bold;"*ngIf ="i.user_bal_mod == null || i.user_bal_mod ==''|| i.user_bal_mod ==0">
+          <md-icon class="md-24" aria-label="N/A">minimize</md-icon>
+        </span>
+        </td>
+        <td style="width: 7%;" >
+          <button *ngIf="usuario.perm && usuario.perm.includes('reportes_w')"  md-icon-button style="color:#106cc8" (click)="Edit_ref(i)">
+            <md-icon class="md-24" aria-label="Editar Balance" >mode_edit</md-icon>
+          </button>
+          <span *ngIf="usuario.perm && !usuario.perm.includes('reportes_w')">
+        <md-icon style= "color: #ff0010;" class="md-24" aria-label="no autorizado">block</md-icon>
+        </span>
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

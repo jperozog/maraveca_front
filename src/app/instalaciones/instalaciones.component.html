@@ -69,10 +69,10 @@
         <td *ngIf="(t.nombre_user != null) && (t.apellido_user != null)" style="width: 15%">{{t.nombre_user+ " " +t.apellido_user}}</td>
 
         <td style="width: 15%">
-          <button *ngIf="t.status_soporte != -1" md-icon-button color="primary" [routerLink]="['/editticket', t.id_soporte]">
+          <button *ngIf="t.status_soporte != -1" md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
             <md-icon class="md-24" aria-label="Editar AP" >rate_review</md-icon>
           </button>
-          <button *ngIf="t.status_soporte == -1" md-icon-button color="primary" (click)="openEdit(t)">
+          <button *ngIf="t.status_soporte == -1" md-icon-button style="color:#106cc8" (click)="openEdit(t)">
             <md-icon class="md-24" aria-label="Editar AP" >rate_review</md-icon>
           </button>
           <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">

@@ -44,3 +44,7 @@ body {
     background-position-y: bottom;
     background-size: contain;
 }
+.b-btn {
+background-color: #106cc8;
+color:white;
+}

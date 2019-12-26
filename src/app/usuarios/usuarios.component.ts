@@ -282,6 +282,7 @@ export class DeleteuserDialog {
     pagar_w:boolean = false;
 facturacion_mod:boolean= false;
     planes_mod:boolean= false;
+    soporte_esp:boolean = false;
     //zonas
     editzona:FormGroup;
     zonas=[];
@@ -296,6 +297,13 @@ facturacion_mod:boolean= false;
     inter:boolean = false;
     gladiolas:boolean = false;
 
+    churuguara:boolean = false;
+
+    comision:boolean = false;
+    comision_r:boolean = false;
+    reportes_r: boolean = false;
+    reportes_w: boolean = false;
+   sms_w: boolean = false;
 
 
     constructor(
@@ -321,6 +329,7 @@ facturacion_mod:boolean= false;
         responsable: this.usuario.currentUser.id_user,
         nombre_user: '',
         installer: '',
+        comision: '',
         apellido_user: '',
         username: ['', [Validators.required]],
         email_user: '',
@@ -379,6 +388,17 @@ facturacion_mod:boolean= false;
         })
       }
       console.log(valor)
+    } comisionToggle(valor){
+      if(valor){
+        this.edituser.patchValue({
+          comision: '1'
+        })
+      }else{
+        this.edituser.patchValue({
+          comision: '0'
+        })
+      }
+      console.log(valor)
     }
     ResetCounter(row): void {
       let dialogRef = this.dialog.open(ResetCounter, {
@@ -413,6 +433,7 @@ facturacion_mod:boolean= false;
           else if(zonas == '13'){ this.socopo=true }
           else if(zonas == '15'){ this.inter=true }
           else if(zonas == '23'){ this.gladiolas=true }
+          else if(zonas == '25'){ this.churuguara=true }
 
         })
       });
@@ -430,11 +451,16 @@ facturacion_mod:boolean= false;
           password: '',
           confirm: '',
           installer: this.data.installer,
+          comision: this.data.comision,
         })
         if(this.data.installer=='1'){
           this.installer=true
         }else{
           this.installer=false
+        }if(this.data.comision=='1'){
+          this.comision=true
+        }else{
+          this.comision=false
         }
       });
       this.http.get(environment.apiEndpoint+'users/'+this.id+'/permission')
@@ -471,6 +497,7 @@ facturacion_mod:boolean= false;
           else if(perm == 'servicios_w'){ this.servicios_w=true }
           else if(perm == 'soporte'){ this.soporte=true }
           else if(perm == 'soporte_w'){ this.soporte_w=true }
+          else if(perm == 'soporte_esp'){ this.soporte_esp=true }  //26-10-2019
           else if(perm == 'usuarios'){ this.usuarios=true }
           else if(perm == 'usuarios_w'){ this.usuarios_w=true }
           else if(perm == 'cobrar'){ this.cobrar=true }
@@ -480,6 +507,10 @@ facturacion_mod:boolean= false;
           else if(perm == 'planes_esp'){ this.planes_esp=true }
           else if(perm == 'facturacion_mod'){ this.facturacion_mod=true }
           else if(perm == 'planes_mod'){ this.planes_mod=true }
+          else if(perm == 'comision_r'){ this.comision_r=true }
+          else if(perm == 'reportes_r'){ this.reportes_r=true }
+          else if(perm == 'reportes_w'){ this.reportes_w=true }
+          else if(perm == 'sms_w'){ this.sms_w=true }
         })
       });
 

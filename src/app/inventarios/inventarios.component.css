@@ -20,7 +20,10 @@
   margin: 4px;
   padding: 0 2px 0;
 }
-
+.b-btn {
+background-color: #106cc8;
+color:white;
+}
 .dialog-wrap {
   overflow-y: auto;
   height: 90%;
@@ -162,3 +165,4 @@ table{
   border-collapse: collapse;
 
 }
+

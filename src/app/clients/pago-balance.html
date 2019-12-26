@@ -3,8 +3,7 @@
   <table [formGroup]="addAbono" style="width=100%; min-width: 100%;">
     <tr>
       <md-select formControlName='bal_tip' style="width=100%; min-width: 100%;" placeholder="Banco">
-        <md-option value="11" >Efectivo $</md-option>
-        <md-option value="12" >Efectivo Bs.S.</md-option>
+
         <md-option value="2" >Transferencia Banesco</md-option>
         <md-option value="6" >Transferencia Bicentenario</md-option>
         <md-option value="1" >Transferencia BOD</md-option>
@@ -12,6 +11,8 @@
         <md-option value="8" >Moneda Extranjera</md-option>
         <md-option value="4" >Retencion ISLR</md-option>
         <md-option value="5" >Retencion IVA</md-option>
+        <md-option value="15" >Efectivo Bs.S.</md-option>
+        <md-option value="11" >Efectivo $</md-option>
         <md-option value="10" >Wire Transfer</md-option>
         <md-option value="9" >Zelle</md-option>
       </md-select>
@@ -43,10 +44,11 @@
         <input
 
       formControlName='bal_monto'
-      type="number"
+      type="text"
       placeholder="Monto"
       style="width=100%; min-width: 100%;"
       mdInput
+      mask="separator.2" thousandSeparator=","
       autocomplete="off">
     </md-form-field>
     </tr>
@@ -55,7 +57,7 @@
 <div md-dialog-actions>
   <tr>
     <td>
-      <button [disabled]=" !addAbono.valid " md-button [mat-dialog-close]="addAbono.value" cdkFocusInitial>Si</button>
+      <button md-raised-button [disabled]=" !addAbono.valid " class="b-btn" md-button [mat-dialog-close]="addAbono.value" cdkFocusInitial>Si</button>
     </td>
     <td>
       <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">NO</button>

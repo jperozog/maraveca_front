@@ -5,6 +5,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/map';
 import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/material';
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import 'rxjs/add/operator/startWith';
@@ -18,6 +19,7 @@ import {environment} from '../../environments/environment';
 import {SelectEquipoComponent, SelectTipoComponent} from '../inventarios/inventarios.component';
 import {IpValidators} from '../servicios/validar_ip';
 import {SerialValidators} from '../servicios/validar_serial';
+import {cargarPagocomponent} from '../stats/stats.component';
 
 
 const MAC_REGEX = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
@@ -333,7 +335,7 @@ export class AddticketComponent implements OnInit {
       equipo_soporte: ['', Validators.required],
       antenna_soporte: '',
       seriale: '', /*['', [Validators.required],[this.validacion_serial.serialValidator()]],*/
-      seriala: '',
+     // seriala: '',
       status_soporte: '1',
       user_soporte: this.currentUser.id_user,
       S_servicios: '',
@@ -455,7 +457,7 @@ export class AddticketComponent implements OnInit {
         this.tes = true;
       }
     );
-    this.addplan.get('seriale').valueChanges.subscribe(
+   /* this.addplan.get('seriale').valueChanges.subscribe(
       (seriale) => {
         if (this.tes && this.addplan.value.equipo_soporte != '' && seriale != '') {
           this.antenna = true;
@@ -463,7 +465,7 @@ export class AddticketComponent implements OnInit {
           this.antenna = false;
         }
       }
-    );
+    );*/
 
     this.addplan.get('EN').valueChanges.subscribe(
       (EN) => {
@@ -628,10 +630,10 @@ export class AddticketComponent implements OnInit {
       this.requ.push({nombre: 'SerialEquipo', valor: this.addplan.value.seriale});
       this.requ.push({nombre: 'ModeloEquipo', valor: this.addplan.value.equipo_soporte});
     }
-    if (this.antenna) {
+   /* if (this.antenna) {
       this.requ.push({nombre: 'SerialAntenna', valor: this.addplan.value.seriala});
       this.requ.push({nombre: 'ModeloAntena', valor: this.addplan.value.antenna_soporte});
-    }
+    }*/
 
     this.addplan.patchValue({
       adicionales: this.requ
@@ -641,6 +643,7 @@ export class AddticketComponent implements OnInit {
     this.http.post(url, plan).subscribe((data) => {
       this.row = data.json();
     console.log(plan);
+    console.log(this.row);
     });
     setTimeout(() => {
       /*          var body1=
@@ -703,7 +706,7 @@ export class EditticketComponent implements OnInit, OnDestroy {
       );
     this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     //console.log(this.currentUser)
-    this.http.get(environment.apiEndpoint + 'soporte/' + this.id)
+    this.http.get(environment.apiEndpoint + 'soporte/'+ this.id)
       .subscribe((data) => {
         this.row = data.json()[0];
         console.log(this.row);
@@ -1250,3 +1253,362 @@ export class Ipasignadascomponent  {
   }
   Close(){this.location.back();}
 }
+
+
+@Component({
+  selector: 'app-ticket',
+  templateUrl: './Tickets_cerrados_usuarios.html',
+  styleUrls: ['./soporte.component.css']
+})
+
+export class tickets_cerrados_user {
+  //myService: MyService | null;
+  myService: MyService;
+  data: any = [];
+  search: string = '';
+  mes='';
+  year='';
+  fac='tod';
+  meses=[];
+  nombre_mes= '';
+  anos=[];
+  update:boolean=true;
+  autoupdate:boolean=true;
+  constructor(
+   public usuario: AuthGuard,
+    private http: Http,
+    private datePipe: DatePipe,
+    public dialog: MdDialog,
+    private location: Location,
+    private route: ActivatedRoute,
+    public snackBar:MdSnackBar,
+    private router: Router
+) {
+
+    this.snackBar.open("Cargando Usuarios", null, {
+      duration: 2000,
+    });
+    this.myService = new MyService(http, router, usuario);
+    this.http.get(environment.apiEndpoint+'show_tickets')
+      .subscribe((data) => {
+        this.data = data.json();
+        console.log(this.data);
+        this.update=false;
+
+      });
+
+    this.snackBar.open("Usuarios Cargadas", null, {
+      duration: 2000,
+    });
+  }
+  show(row){
+
+  }
+
+stopPropagation(event){
+  event.stopPropagation();
+  // console.log("Clicked!");
+}
+ngOnInit(){
+  this.route.params.forEach((urlParams) => {
+    console.log(urlParams)
+    if(urlParams.fecha){
+      var params=urlParams.fecha.split('-')
+      console.log(params)
+      this.mes= params[0]
+      this.year= params[1]
+
+    }else{
+      this.mes= this.datePipe.transform(Date.now(), 'M')
+      this.year= this.datePipe.transform(Date.now(), 'y')
+
+    }
+    console.log('parametros')
+
+
+  });
+  this.refresh(true)
+
+  this.meses=[
+    {numero:"1", nombre:'Enero'},
+    {numero:"2", nombre:'Febrero'},
+    {numero:"3", nombre:'Marzo'},
+    {numero:"4", nombre:'Abril'},
+    {numero:"5", nombre:'Mayo'},
+    {numero:"6", nombre:'Junio'},
+    {numero:"7", nombre:'Julio'},
+    {numero:"8", nombre:'Agosto'},
+    {numero:"9", nombre:'Septiembre'},
+    {numero:"10", nombre:'Octubre'},
+    {numero:"11", nombre:'Noviembre'},
+    {numero:"12", nombre:'Diciembre'},
+  ]
+  this.anos=[
+    {year:"2018"},
+    {year:"2019"}
+  ]
+  IntervalObservable.create(10000)
+    .takeWhile(() => this.autoupdate)
+    .subscribe(() => {
+      this.refresh(false);
+    });
+}
+ngOnDestroy(){
+  this.autoupdate=false
+}
+
+refresh(nf){
+  this.update=true;
+  this.http.get(environment.apiEndpoint+'show_tickets/', {params:{month: this.mes, year: this.year}})
+    .subscribe((data) => {
+      this.data = data.json();
+      // this.facturacion_t = data.json();
+      this.update=false
+     // this.facturacion=this.facturacion_t;
+      switch (this.mes) {
+
+        case '1':
+          this.nombre_mes = 'Enero';
+          break;
+        case '2':
+          this.nombre_mes = 'Febrero';
+          break;
+        case '3':
+          this.nombre_mes = 'Marzo';
+          break;
+        case '4':
+          this.nombre_mes = 'Abril';
+          break;
+        case '5':
+          this.nombre_mes = 'Mayo';
+          break;
+        case '6':
+          this.nombre_mes = 'Junio';
+          break;
+        case '7':
+          this.nombre_mes = 'Julio';
+          break;
+        case '8':
+          this.nombre_mes = 'Agosto';
+          break;
+        case '9':
+          this.nombre_mes = 'Septiembre';
+          break;
+        case '10':
+          this.nombre_mes = 'Octubre';
+          break;
+        case '11':
+          this.nombre_mes = 'Noviembre';
+          break;
+        case '12':
+          this.nombre_mes = 'Diciembre';
+          break;
+
+
+      }
+      if (nf){
+        this.snackBar.open("Lista Actualizada", null, {
+          duration: 2000,
+        })
+      }
+    });
+}
+
+
+  Close(){this.location.back();}
+
+
+}
+
+@Component({
+  selector: 'app-ticket',
+  templateUrl: './tickets_cerrados_por_usuario.html',
+  styleUrls: ['./soporte.component.css']
+})
+
+export class tickets_cerrados_por_usuarios {
+  myService: MyService;
+
+  datat: any = [];
+  search: string = '';
+  datat_t: any = [];
+  id_u: any;
+  id:any;
+
+  data: any = [];
+
+  mes='';
+  year='';
+  fac='tod';
+  meses=[];
+  nombre_mes= '';
+  anos=[];
+  update:boolean=true;
+  autoupdate:boolean=true;
+  nombre_u: any;
+  apellido_u: any;
+  constructor(
+    private http: Http,
+    private datePipe: DatePipe,
+    private route: ActivatedRoute,
+    public dialog: MdDialog,
+    public snackBar: MdSnackBar,
+    private router: Router,
+    private location: Location,
+    public usuario: AuthGuard) {
+
+    this.id_u = this.route.params
+      .subscribe(
+        params => {
+          this.id = params.ticket;
+          console.log(this.id);
+        }
+      );
+
+
+    this.snackBar.open('Cargando Tickets', null, {
+      duration: 2000,
+    });
+
+    this.myService = new MyService(http, router, usuario);
+    console.log(usuario.currentUser);
+    this.http.get(environment.apiEndpoint + 'show_tickets_user/'+this.id)
+      .subscribe((data) => {
+        this.datat_t = data.json();
+        this.datat = this.datat_t;
+        this.update=false;
+        this.nombre_u = this.datat[0].nombre_user;
+        this.apellido_u = this.datat[0].apellido_user;
+console.log(this.datat);
+console.log(this.nombre_u);
+console.log(this.apellido_u);
+
+      });
+
+    this.snackBar.open('Tickets Cargados', null, {
+      duration: 2000,
+    });
+  }
+  show(row){
+
+  }
+  stopPropagation(event){
+    event.stopPropagation();
+    // console.log("Clicked!");
+  }
+  ngOnInit(){
+    this.route.params.forEach((urlParams) => {
+      console.log(urlParams)
+      if(urlParams.fecha){
+        var params=urlParams.fecha.split('-')
+        console.log(params)
+        this.mes= params[0]
+        this.year= params[1]
+
+      }else{
+        this.mes= this.datePipe.transform(Date.now(), 'M')
+        this.year= this.datePipe.transform(Date.now(), 'y')
+
+      }
+      console.log('parametros')
+
+
+    });
+    this.refresh(true)
+
+    this.meses=[
+      {numero:"1", nombre:'Enero'},
+      {numero:"2", nombre:'Febrero'},
+      {numero:"3", nombre:'Marzo'},
+      {numero:"4", nombre:'Abril'},
+      {numero:"5", nombre:'Mayo'},
+      {numero:"6", nombre:'Junio'},
+      {numero:"7", nombre:'Julio'},
+      {numero:"8", nombre:'Agosto'},
+      {numero:"9", nombre:'Septiembre'},
+      {numero:"10", nombre:'Octubre'},
+      {numero:"11", nombre:'Noviembre'},
+      {numero:"12", nombre:'Diciembre'},
+    ]
+    this.anos=[
+      {year:"2018"},
+      {year:"2019"}
+    ]
+    IntervalObservable.create(10000)
+      .takeWhile(() => this.autoupdate)
+      .subscribe(() => {
+        this.refresh(false);
+      });
+  }
+  ngOnDestroy(){
+    this.autoupdate=false
+  }
+
+  refresh(nf){
+    this.update=true;
+    this.http.get(environment.apiEndpoint+'show_tickets_user/'+this.id, {params:{month: this.mes, year: this.year}})
+      .subscribe((data) => {
+        this.datat_t = data.json();
+        this.datat = this.datat_t;
+        // this.facturacion_t = data.json();
+        this.update=false
+        // this.facturacion=this.facturacion_t;
+
+        switch (this.mes) {
+
+          case '1':
+            this.nombre_mes = 'Enero';
+            break;
+          case '2':
+            this.nombre_mes = 'Febrero';
+            break;
+          case '3':
+            this.nombre_mes = 'Marzo';
+            break;
+          case '4':
+            this.nombre_mes = 'Abril';
+            break;
+          case '5':
+            this.nombre_mes = 'Mayo';
+            break;
+          case '6':
+            this.nombre_mes = 'Junio';
+            break;
+          case '7':
+            this.nombre_mes = 'Julio';
+            break;
+          case '8':
+            this.nombre_mes = 'Agosto';
+            break;
+          case '9':
+            this.nombre_mes = 'Septiembre';
+            break;
+          case '10':
+            this.nombre_mes = 'Octubre';
+            break;
+          case '11':
+            this.nombre_mes = 'Noviembre';
+            break;
+          case '12':
+            this.nombre_mes = 'Diciembre';
+            break;
+
+
+        }
+        if (nf){
+          this.snackBar.open("Lista Actualizada", null, {
+            duration: 2000,
+          })
+        }
+      });
+  }
+
+
+  Close(){this.location.back();}
+
+
+}
+
+
+
+

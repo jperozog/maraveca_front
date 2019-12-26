@@ -583,6 +583,9 @@ styleUrls: ['./clients.component.css']
 })
 export class AnularFactura {
   myService: MyService | null;
+responsable: any;
+datat: any;
+
 
   constructor(
     public dialogRef: MdDialogRef<AnularFactura>,
@@ -594,6 +597,19 @@ export class AnularFactura {
     private usuario: AuthGuard) {
       this.myService = new MyService(http, router, usuario);
       console.log(this.data);
+    this.responsable = this.usuario.currentUser.id_user;
+    console.log(this.responsable);
+
+let data1= this.data;
+let resp= this.responsable;
+let data_t= [];
+data_t.push(data1);
+data_t.push(resp);
+    //this.datat= this.data1[this.data];
+    console.log(data_t);
+    this.datat = data_t;
+    console.log(this.datat);
+
      }
 
 
@@ -603,7 +619,7 @@ export class AnularFactura {
       this.snackBar.open("Anulando Factura: Por favor espere", null, {
         duration: 1000,
       });
-      this.http.put(environment.apiEndpoint+"facturas/anular/"+this.data.id, this.data).subscribe((data)=>{
+      this.http.put(environment.apiEndpoint+"facturas/anular/"+this.data.id, this.datat).subscribe((data)=>{
       this.dialogRef.close();
     })
       //this.myService.refresh();
@@ -647,7 +663,13 @@ balance:any;
 balac_in: any= 0;
   tipo_plan: any;
   modo_pago: any;
-
+  fac_prog: any;
+  estatus_prog:any;
+  corte_prog: any;
+  estatus_cort: any;
+  estatus_serv:any;
+  cort: any;
+activo: boolean=false;
   constructor(
 
     private route: ActivatedRoute,
@@ -766,9 +788,34 @@ balac_in: any= 0;
          this.adicionales = response.adicionales
          this.balance = response.balance
          this.srv_cli = response.srv_cli
+         this.fac_prog = response.fac_prog
+         this.corte_prog= response.corte_prog
+
          console.log(response);
 console.log(this.tipo_plan);
 console.log(this.srv_cli);
+console.log(this.fac_prog);
+console.log(this.corte_prog);
+this.estatus_prog = this.fac_prog.length;
+console.log(this.estatus_prog);
+
+this.estatus_cort = this.corte_prog.length;
+console.log(this.estatus_cort);
+
+
+         for(let i=0; i<this.servicios.length; i++){
+           this.estatus_serv = this.servicios[i];
+           console.log(this.estatus_serv);
+           this.cort= this.estatus_serv.stat_srv
+           console.log(this.cort);
+        if(this.cort == 1){
+          this.activo= true;
+        }
+        console.log(this.activo);
+         }
+         console.log(this.activo);
+         console.log(this.cort);
+         console.log(this.estatus_serv);
 
          this.balance.forEach(linea => {
            if (linea.bal_rest>0 && linea.bal_stat==1 && (linea.bal_tip!=8 && linea.bal_tip!=9 &&linea.bal_tip!=10 &&linea.bal_tip!=11 )){
@@ -888,6 +935,38 @@ console.log(this.srv_cli);
          this.ngOnInit();
        });
      }
+  program_corte(): void {
+       /*let dialogRef = this.dialog.open(AddclientsComponent, {
+         width: '25%'
+       });*/
+       let dialogRef = this.dialog.open(program_corte, {
+         width: '23%',
+         data: {client: this.cliente, serv: this.servicios}
+       });
+
+
+
+       dialogRef.afterClosed().subscribe(result => {
+         console.log('The dialog GenFAC was closed');
+         this.ngOnInit();
+       });
+     }
+
+  fac_progr(){
+
+    //console.log(row);
+    let dialogRef = this.dialog.open(fac_programadas, {
+        width: '50%',
+      data:  this.fac_prog
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+      console.log('The dialog was AddClient closed');
+    });
+
+  }
+
+
      AddAdic(): void {
        /*let dialogRef = this.dialog.open(AddclientsComponent, {
          width: '25%'
@@ -961,10 +1040,12 @@ console.log(this.srv_cli);
     });
 
   }
+
      show(row){
        console.log(row);
        let dialogRef = this.dialog.open(AddservicesComponent, {
          panelClass: 'my-full-screen-dialog',
+        // height: '98%',
          data: row
        });
        dialogRef.afterClosed().subscribe(result => {
@@ -973,6 +1054,21 @@ console.log(this.srv_cli);
        });
        //this.myService.refresh();
      }
+
+  cort_prog(){
+
+    //console.log(row);
+    let dialogRef = this.dialog.open(cortes_programados, {
+      width: '50%',
+      data:  this.corte_prog
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+      console.log('The dialog was AddClient closed');
+    });
+
+  }
+
      abono(){
        let dialogRef = this.dialog.open(AddPagoBalance, {
          data: this.id
@@ -1086,6 +1182,7 @@ console.log(this.srv_cli);
 @Component({
   selector: 'dialog-overview-example-dialog',
   templateUrl: 'pago-balance.html',
+  styleUrls: ['./clients.component.css']
 })
 export class AddPagoBalance implements OnInit{
 
@@ -1133,6 +1230,7 @@ export class AddPagoBalance implements OnInit{
 @Component({
   selector: 'dialog-overview-example-dialog',
   templateUrl: 'pago-balance-d.html',
+  styleUrls: ['./clients.component.css']
 })
 export class AddPagoBalanceDl implements OnInit{
 
@@ -1179,6 +1277,7 @@ export class AddPagoBalanceDl implements OnInit{
 @Component({
   selector: 'dialog-overview-example-dialog',
   templateUrl: 'genFAC.component.html',
+  styleUrls: ['./clients.component.css']
 })
 export class GenFactura implements OnInit{
 
@@ -1200,12 +1299,14 @@ id_serv: any;
 nr_serv:any;
 servi:any;
 name_plan: any;
+factura_b: any;
 
   constructor(
     public usuario: AuthGuard,
     private fb: FormBuilder,
     public snackBar:MdSnackBar,
     private http: Http,
+    public dialog: MdDialog,
     public dialogRef: MdDialogRef<GenFactura>,
 
     @Inject(MD_DIALOG_DATA) public cli) {
@@ -1295,7 +1396,7 @@ if (this.nr_serv >= 1) {
         })
         this.genFAC.get('pro').valueChanges.subscribe(
           (fn) => {
-          if(fn==1){
+          if(fn==1 ||fn==3){
               this.genFAC.get('fecha').setValidators([Validators.required]);
           }else{
             this.genFAC.get('fecha').setValidators([]);
@@ -1314,6 +1415,18 @@ if (this.nr_serv >= 1) {
     })
 
 }
+
+  factura_blanco(){
+    let dialogRef = this.dialog.open(GenFactura_blanco, {
+      width: '23%',
+      data: this.genFAC.value
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog GenFactura_blanco was closed');
+      this.ngOnInit();
+    });
+    this.dialogRef.close();
+  }
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -1381,3 +1494,429 @@ export class AddAdic implements OnInit{
 }
 
     //regex to validate phones (^0414\d+|^0412\d+|^0416\d+|^0426\d+|^0424\d+)(\d{6})
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'genfactura_blanco.html',
+  styleUrls: ['./clients.component.css']
+})
+export class GenFactura_blanco implements OnInit{
+
+  genFAC: FormGroup;
+  myDatePickerOptions: IMyDpOptions = {
+    dateFormat: 'dd/mm/yyyy',
+    editableDateField: false,
+    inline: true,
+  };
+  data:any;
+  nservicio:any;
+  cliente: any;
+  servicios: any;
+
+  constructor(
+    public usuario: AuthGuard,
+    private fb: FormBuilder,
+    public snackBar:MdSnackBar,
+    private http: Http,
+    public dialogRef: MdDialogRef<GenFactura_blanco>,
+    @Inject(MD_DIALOG_DATA) public id)
+  { console.log(this.id);
+  console.log(this.id.cliente);
+  console.log(this.id.nservicio);
+
+
+    this.cliente = this.id.cliente;
+    this.genFAC = this.fb.group({
+      cliente:[this.cliente, Validators.required],
+      fecha:[''],
+      denominacion: ['', Validators.required],
+      serie: [''],
+      pro:['2', Validators.required],
+      responsable: usuario.currentUser.id_user
+    })
+
+    this.genFAC.get('denominacion').valueChanges.subscribe(
+      (denominacion) => {
+
+        if (denominacion == 1) {
+          this.genFAC.get('serie').setValidators([Validators.required]);
+
+        }
+        this.genFAC.get('serie').updateValueAndValidity();
+
+
+      }
+    );
+
+  }
+
+  ngOnInit(){
+
+    this.genFAC.get('fecha').valueChanges.subscribe(
+      (fn) => {
+        if(fn.epoc){
+          setTimeout(()=>{
+            this.genFAC.patchValue({
+              fecha: fn.formatted
+            })
+          }, 100)
+        }
+      })
+    this.genFAC.get('pro').valueChanges.subscribe(
+      (fn) => {
+        if(fn==1){
+          this.genFAC.get('fecha').setValidators([Validators.required]);
+        }else{
+          this.genFAC.get('fecha').setValidators([]);
+        }
+      })
+  }
+
+  generate(){
+    console.log(this.genFAC.value);
+    const req = this.http.post(environment.apiEndpoint+'factura_blanco', this.genFAC.value).subscribe(result => {
+      this.dialogRef.close();
+      this.snackBar.open("Factura Generada", null, {
+        duration: 2000,
+      });
+    })
+
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: './fac_prog.html',
+  styleUrls: ['./clients.component.css']
+})
+
+export class fac_programadas{
+  myService: MyService | null;
+  //data:any = null;
+  fac_prog: any;
+  constructor(
+    public usuario: AuthGuard,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    public dialogRef: MdDialogRef<fac_programadas>,
+    public router: Router,
+  @Inject(MD_DIALOG_DATA) public data)  {
+ console.log(data);
+this.fac_prog = this.data;
+    console.log(this.fac_prog);
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+  anularprog(i):void {
+    let dialogRef = this.dialog.open(Anularprog_fac, {
+      width: '25%',
+      data: i
+    });
+
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    })
+    this.dialogRef.close();
+  }
+}
+
+@Component({
+  selector: 'delete-dialog',
+  templateUrl: 'anular_prog_fac.component.html',
+  styleUrls: ['./clients.component.css']
+})
+export class Anularprog_fac {
+  myService: MyService | null;
+  responsable: any;
+  datat: any;
+
+
+  constructor(
+    public dialogRef: MdDialogRef<Anularprog_fac>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+    this.myService = new MyService(http, router, usuario);
+    console.log(this.data);
+    this.responsable = this.usuario.currentUser.id_user;
+    console.log(this.responsable);
+
+    let data1= this.data;
+    let resp= this.responsable;
+    let data_t= [];
+    data_t.push(data1);
+    data_t.push(resp);
+    //this.datat= this.data1[this.data];
+    console.log(data_t);
+    this.datat = data_t;
+    console.log(this.datat);
+
+  }
+
+
+
+
+  anular(): void {
+    this.snackBar.open("Anulando Factura: Por favor espere", null, {
+      duration: 1000,
+    });
+    this.http.put(environment.apiEndpoint+"facturas_prog/anular/"+this.data.id_fac_prog, this.datat).subscribe((data)=>{
+      this.dialogRef.close();
+    })
+    //this.myService.refresh();
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'Prog_corte.component.html',
+  styleUrls: ['./clients.component.css']
+})
+export class program_corte implements OnInit {
+
+
+  progCorte: FormGroup;
+  myDatePickerOptions: IMyDpOptions = {
+    dateFormat: 'dd/mm/yyyy',
+    editableDateField: false,
+    inline: true,
+  };
+  data:any;
+  nservicio:any;
+  cliente: any;
+  servicios: any;
+  fac_serv: [any];
+  n_serv: any;
+  id_cliente: any;
+  id_srv_client: any;
+  id_serv: any;
+  nr_serv:any;
+  servi:any;
+  name_plan: any;
+  factura_b: any;
+
+  constructor(
+    public usuario: AuthGuard,
+    private fb: FormBuilder,
+    public snackBar:MdSnackBar,
+    private http: Http,
+    public dialog: MdDialog,
+    public dialogRef: MdDialogRef<program_corte>,
+
+    @Inject(MD_DIALOG_DATA) public row) {
+    console.log(row);
+    this.cliente = row.client;
+    this.servi = row.serv;
+    this.http.get(environment.apiEndpoint + 'servicioscli/' + this.cliente.id)
+      .subscribe((data) => {
+        this.servicios = data.json().servicios;
+
+        console.log(this.servicios);
+        console.log(row);
+
+      });
+
+    this.nr_serv = this.servi.length;
+    this.id_cliente = this.cliente.id;
+
+
+    console.log(this.cliente);
+    console.log(this.id_cliente);
+    console.log(this.id_serv);
+    console.log(this.servi);
+    console.log(this.nr_serv);
+    console.log(this.name_plan);
+    if (this.nr_serv >= 1) {
+      if (this.nr_serv > 1) {
+        this.id_serv = row.serv[0].id_srv;
+        this.name_plan = row.serv[0].name_plan;
+        this.progCorte = this.fb.group({
+          cliente: [this.id_cliente, Validators.required],
+          fecha: ['', Validators.required],
+          nservicio: ['', Validators.required],
+          fac_serv: [this.fac_serv, Validators.required],
+          responsable: usuario.currentUser.id_user
+
+        });
+        console.log(this.progCorte.value);
+
+      } else {
+
+        this.id_serv = row.serv[0].id_srv;
+        this.name_plan = row.serv[0].name_plan;
+        this.progCorte = this.fb.group({
+          cliente: [this.id_cliente, Validators.required],
+          fecha: ['', Validators.required],
+          nservicio: [this.id_serv, Validators.required],
+          fac_serv: '',
+          responsable: usuario.currentUser.id_user
+        });
+        console.log(this.progCorte.value);
+      }
+    }else{
+      this.progCorte = this.fb.group({
+        cliente:[this.id_cliente, Validators.required],
+        fecha:['', Validators.required],
+        nservicio: ['', Validators.required],
+        responsable: usuario.currentUser.id_user
+      })
+
+    }
+  }
+  public onSelectAll() {
+    const selected = this.servi.map(item => item.id_srv);
+    this.progCorte.get('nservicio').patchValue(selected);
+    console.log(selected);
+  }
+
+  public onClearAll() {
+    this.progCorte.get('nservicio').patchValue([]);
+  }
+
+
+
+
+  ngOnInit(){
+
+    this.progCorte.get('fecha').valueChanges.subscribe(
+      (fn) => {
+        if(fn.epoc){
+          setTimeout(()=>{
+            this.progCorte.patchValue({
+              fecha: fn.formatted
+            })
+          }, 100)
+        }
+      })
+
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+
+  generate(){
+    console.log(this.progCorte.value);
+    const req = this.http.post(environment.apiEndpoint+'Prog_corte', this.progCorte.value).subscribe(result => {
+      this.dialogRef.close();
+      this.snackBar.open("Factura Generada", null, {
+        duration: 2000,
+      });
+    })
+
+
+  }
+  }
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: './corte_prog.html',
+  styleUrls: ['./clients.component.css']
+})
+
+export class cortes_programados{
+  myService: MyService | null;
+  //data:any = null;
+ corte_prog: any;
+  constructor(
+    public usuario: AuthGuard,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    public dialogRef: MdDialogRef<cortes_programados>,
+    public router: Router,
+    @Inject(MD_DIALOG_DATA) public data)  {
+    console.log(data);
+    this.corte_prog = this.data;
+    console.log(this.corte_prog);
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+  anularprog(i):void {
+    let dialogRef = this.dialog.open(Anularprog_cort, {
+      width: '25%',
+      data: i
+    });
+
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+    })
+    this.dialogRef.close();
+  }
+}
+
+@Component({
+  selector: 'delete-dialog',
+  templateUrl: 'anular_prog_cort.component.html',
+  styleUrls: ['./clients.component.css']
+})
+export class Anularprog_cort {
+  myService: MyService | null;
+  responsable: any;
+  datat: any;
+
+
+  constructor(
+    public dialogRef: MdDialogRef<Anularprog_cort>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private http: Http,
+    public dialog: MdDialog,
+    public snackBar:MdSnackBar,
+    private router: Router,
+    private usuario: AuthGuard) {
+    this.myService = new MyService(http, router, usuario);
+    console.log(this.data);
+    this.responsable = this.usuario.currentUser.id_user;
+    console.log(this.responsable);
+
+    let data1= this.data;
+    let resp= this.responsable;
+    let data_t= [];
+    data_t.push(data1);
+    data_t.push(resp);
+    //this.datat= this.data1[this.data];
+    console.log(data_t);
+    this.datat = data_t;
+    console.log(this.datat);
+
+  }
+
+
+
+
+  anular(): void {
+    this.snackBar.open("Anulando Corte programado: Por favor espere", null, {
+      duration: 1000,
+    });
+    this.http.put(environment.apiEndpoint+"cortes_prog/anular/"+this.data.id_prog, this.datat).subscribe((data)=>{
+      this.dialogRef.close();
+    })
+    //this.myService.refresh();
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}

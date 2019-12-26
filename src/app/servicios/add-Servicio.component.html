@@ -1,3 +1,4 @@
+<script src="../../../node_modules/ngx-mask/ngx-mask.d.ts"></script>
 <form class="example-form" id="client" name="clientForm" [formGroup]="addClient" ng-submit="ok(clientForm)" novalidate>
   <table class="example-full-width" cellspacing="0"><tr>
     <td colspan="2">
@@ -109,7 +110,7 @@
     <tr><td colspan="2" *ngIf="addClient.value.tipo_plan_srv== 4">
       <md2-select  name="modo de pago"  formControlName="modo_pago_srv" class="example-full-width" placeholder="seleccion la modalidad de pago">
         <md2-option [value]="1" >Moneda local Bs.S</md2-option>
-        <md2-option  [value]="2" >Moneda Internacional US$</md2-option>
+        <md2-option  [value]="2" >Moneda extranjera US$</md2-option>
       </md2-select>
     </td></tr>
     <div style="min-height: 20px;">
@@ -205,6 +206,29 @@
       </td>
     </tr>
     <tr>
+
+      <td>
+        <input type="checkbox"  value="1"  formControlName="gen_comision_serv" />
+        Genera comision
+      </td>
+    </tr>
+
+    <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
+
+    <tr *ngIf="addClient.value.gen_comision_serv == 1">
+      <td colspan="2">
+        <md2-select  formControlName="user_comision_serv"  [style.width]="'100%'" placeholder="seleccione usuario que genera comision">
+
+          <md2-option  *ngFor="let i of user_comisiones" [value]="i.id_user"  > {{i.nombre_user +" "+ i.apellido_user}}</md2-option>
+        </md2-select>
+        <md-form-field >
+          <input mdInput input type="text" mask="percent" suffix="%" formControlName="porcentaje_comision_serv" placeholder="Porcentaje de comision"/>
+        </md-form-field>
+      </td>
+    </tr>
+
+    <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
+    <tr>
       <td>
         <md-form-field>
           <input mdInput formControlName="costo_instalacion_srv" placeholder="Precio de instalacion"/>
@@ -238,7 +262,7 @@
       </td>
       <td *ngIf="row == null ">
         <md-form-field>
-          <input mdInput formControlName="ip_srv" placeholder="IP"/>
+          <input mdInput formControlName="ip_srv" placeholder="IP" />
 
           <md-error *ngIf="addClient.get('ip_srv').errors?.IpExists"> Direccion IP utilizada</md-error>
           <md-error *ngIf="addClient.get('ip_srv').errors?.IpInstall"> Direccion IP asignada a instalacion</md-error>
@@ -344,8 +368,8 @@
       <td>
 
 
-        <button *ngIf="row == null" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Enviar()" [disabled]="!addClient.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
-        <button *ngIf="row != null "md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Editar()" ><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+        <button *ngIf="row == null" md-raised-button class="example-half-width btn btn-primary b-btn" (click)="Enviar()" [disabled]="!addClient.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+        <button *ngIf="row != null "md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="Editar()" [disabled]="!addClient.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
       </td><td>
 
       <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>

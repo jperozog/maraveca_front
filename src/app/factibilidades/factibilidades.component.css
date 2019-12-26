@@ -4,7 +4,10 @@
   .x290{display:none;}
 
 }
-
+.b-btn {
+background-color: #106cc8;
+color:white;
+}
 @media all and (max-width: 479px) {
 
   .x700{display:none;}

@@ -40,8 +40,8 @@
     <td>
 
 
-      <button *ngIf="row == null" md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Enviar()" [disabled]="!addZona.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
-      <button *ngIf="row != null"md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Editar()" [disabled]="!addZona.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+      <button *ngIf="row == null" md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="Enviar()" [disabled]="!addZona.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Guardar</button>
+      <button *ngIf="row != null"md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="Editar()" [disabled]="!addZona.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
     </td><td>
 
       <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>

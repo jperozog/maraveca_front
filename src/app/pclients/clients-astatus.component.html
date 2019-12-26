@@ -81,6 +81,10 @@ Cliente: {{(row.nombre+" "+row.apellido) | capitalize2:true }}
       <font color="#7a8018">
         Amerita Visita
         </font>
+    </td> <td class="fac montos" *ngIf="i.status == 2 && i.factible == 4">
+      <font color="#FF6C00">
+        Corregir coordenadas
+        </font>
     </td>
     <td class="fac montos" *ngIf="i.status == 1">
       <font color="#d10512">
@@ -93,7 +97,7 @@ Cliente: {{(row.nombre+" "+row.apellido) | capitalize2:true }}
       </font>
     </td>
     <td>
-      <button md-icon-button color="primary" (click)="status(i)" *ngIf="i.status == 2 && i.factible ==1">
+      <button md-icon-button style="color:#106cc8" (click)="status(i)" *ngIf="i.status == 2 && i.factible ==1">
       <md-icon class="md-24" aria-label="Detalles De Factibilidad" >event_available</md-icon>
     </button>
     </td>

@@ -49,16 +49,16 @@
       <td style="width: 20%">
         <!--botones de acciones-->
 
-        <button md-icon-button color="primary" (click)="show(i)">
+        <button md-icon-button style="color:#106cc8" (click)="show(i)">
           <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
         </button>
         <button md-icon-button color="warn"(click)="delete(i.id_srv)">
             <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
         </button>
-        <button md-icon-button color="primary"(click)="openLINK(i.ip_srv)" >
+        <button md-icon-button style="color:#106cc8"(click)="openLINK(i.ip_srv)" >
           <md-icon class="md-24" aria-label="Ubiquiti Admin">language</md-icon>
         </button>
-        <button md-icon-button color="primary">
+        <button md-icon-button style="color:#106cc8">
           <md-icon class="md-24" aria-label="Mostrar Detalles">turned_in</md-icon>
         </button>
         <button md-icon-button *ngIf="i.stat_srv == 1" >

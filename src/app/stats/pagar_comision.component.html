@@ -1,0 +1,118 @@
+<h1 md-dialog-title>Confirmacion</h1>
+<div md-dialog-content>
+ <p *ngIf="nombre_instalador">Reportar pago para: {{nombre_instalador+" "+apellido_instalador}}?</p>
+</div>
+<div md-dialog-actions>
+
+  <form [formGroup]="addPago" ng-submit="ok(pre)">
+
+  <table>
+
+    <tr>
+      <td >
+        <p>seleccione el tipo de pago</p>
+        <input type="radio" [value]="1" formControlName="tipo_pago_comision">
+        Pagar comision Bs.S
+
+
+        <input type="radio" [value]="2" formControlName="tipo_pago_comision">
+        Pagar comision $
+
+      </td>
+    </tr>
+    <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
+
+
+
+
+        <tr >
+
+      <td colspan="2"  *ngIf=" addPago.value.tipo_pago_comision == 1" style=" text-align: center;">
+        <md-form-field class="example-full-width" style=" text-align: center;">
+          <input
+            mdInput
+            placeholder="Monto pendiente a pagar(Bs.S)"  [readonly]="true"  />
+          <span style=" color:#000000;">{{(recaudo_cm_bs - comisiones_pg_bs) | number : '1.0-2'}} Bs.S</span>
+        </md-form-field>
+      </td>
+      <td colspan="2"  *ngIf=" addPago.value.tipo_pago_comision == 2" >
+        <md-form-field class="example-full-width" style=" text-align: center;">
+          <input
+            mdInput
+            placeholder="Monto pendiente a pagar ($)"  [readonly]="true"  />
+          <span style="color:#000000;">{{(recaudo_cm_dl - comisiones_pg_dl)  | number : '1.0-2'}} $</span>
+        </md-form-field>
+      </td>
+
+    </tr>
+
+
+    <tr>
+      <td *ngIf=" addPago.value.tipo_pago_comision == 1">
+        <md-form-field>
+          <input mdInput type="text" mask="separator.2" thousandSeparator=","  suffix=" Bs.S." placeholder="Monto" class="md2-input" formControlName="monto_comision" [lte]="(recaudo_cm_bs - comisiones_pg_bs)"/>
+          <md-error *ngIf="addPago.get('monto_comision').errors?.lte">El monto ingresado es mayor al recaudado</md-error>
+        </md-form-field>
+
+      </td>
+      <td *ngIf=" addPago.value.tipo_pago_comision == 2">
+        <md-form-field>
+          <input mdInput type="text" mask="separator.2" thousandSeparator="," suffix=" $" placeholder="Monto" class="md2-input" formControlName="monto_comision" [lte]="(recaudo_cm_dl - comisiones_pg_dl)"/>
+          <md-error *ngIf="addPago.get('monto_comision').errors?.lte">El monto ingresado es mayor al recaudado</md-error>
+        </md-form-field>
+
+      </td>
+      <td *ngIf=" addPago.value.tipo_pago_comision == 1">
+        <md-form-field>
+          <input mdInput type="text" mask="separator.0" placeholder="Referencia" class="md2-input" formControlName="referencia_comision" />
+        </md-form-field>
+      </td>
+      <td *ngIf=" addPago.value.tipo_pago_comision == 2">
+        <md-form-field>
+          <input mdInput type="text"  placeholder="Referencia" class="md2-input" formControlName="referencia_comision" />
+        </md-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td *ngIf=" addPago.value.tipo_pago_comision == 1">
+        <md2-select formControlName="banco_comision" style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" placeholder="Modo de pago">
+          <md2-option value="2" >Transferencia Banesco</md2-option>
+          <md2-option value="6" >Transferencia Bicentenario</md2-option>
+          <md2-option value="1" >Transferencia BOD</md2-option>
+          <md2-option value="3" >Transferencia Venezuela</md2-option>
+        </md2-select>
+      </td>
+      <td *ngIf=" addPago.value.tipo_pago_comision == 2">
+        <md2-select formControlName="banco_comision" style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" placeholder="Modo de pago">
+          <md2-option value="11" >Efectivo $</md2-option>
+          <md2-option value="10" >Wire Transfer</md2-option>
+          <md2-option value="9" >Zelle</md2-option>
+        </md2-select>
+      </td>
+      <td *ngIf=" addPago.value.tipo_pago_comision == 1 || addPago.value.tipo_pago_comision == 2" >
+        <md-form-field>
+          <input mdInput placeholder="fecha"  type="date" class="md2-input" formControlName="fecha_comision" />
+        </md-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td *ngIf=" addPago.value.tipo_pago_comision == 1 || addPago.value.tipo_pago_comision == 2" colspan="3">
+        <md-form-field class="example-full-width">
+          <input mdInput placeholder="Comentario" class="example-full-width" formControlName="comment_comision" />
+        </md-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button md-raised-button  class="example-full-width btn btn-primary  b-btn" [disabled]="!addPago.valid" (click)="pagar()">Reportar Pago</button>
+
+      </td>
+      <td colspan="2">
+        <button md-raised-button color="warn" class="example-full-width btn btn-danger" type="button" (click)="onNoClick()">No</button>
+
+      </td>
+    </tr>
+  </table>
+
+  </form>
+</div>

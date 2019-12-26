@@ -360,3 +360,15 @@ table{
   border-collapse: collapse;
 
 }
+
+.center {
+  margin: auto;
+  width: 100%;
+  border: 3px solid #73AD21;
+  padding: 10px;
+  text-align: center;
+}
+.b-btn {
+background-color: #106cc8;
+color:white;
+}

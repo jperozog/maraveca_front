@@ -54,10 +54,10 @@
           <td style="width: 7%">{{i.servicios}}</td>
         <td style="width: 20%" *ngIf="usuario.perm && !usuario.perm.includes('clientes')"> No Autorizado</td>
           <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('clientes')">
-            <button md-icon-button color="primary" [routerLink]="['/ClientOverview', i.id]"><!---->
+            <button md-icon-button style="color:#106cc8" [routerLink]="['/ClientOverview', i.id]"><!---->
               <md-icon class="md-24" aria-label="Mas Detalles" >search</md-icon>
             </button>
-            <!--button md-icon-button color="primary" (click)="show(i)">
+            <!--button md-icon-button style="color:#106cc8" (click)="show(i)">
               <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
             </button-->
             <button  md-icon-button color="warn"(click)="deleteDialog(i)">
@@ -113,10 +113,10 @@
           <td (click)="status(i)" style="width: 30%">{{i.direccion}}</td>
           <td (click)="status(i)" style="width: 7%">{{i.servicios}}</td>
           <td style="width: 20%">
-            <button md-icon-button color="primary" [routerLink]="['/ClientOverview', i.id]"><!---->
+            <button md-icon-button style="color:#106cc8" [routerLink]="['/ClientOverview', i.id]"><!---->
               <md-icon class="md-24" aria-label="Mas Detalles" >search</md-icon>
             </button>
-            <!--button md-icon-button color="primary" (click)="show(i)">
+            <!--button md-icon-button style="color:#106cc8" (click)="show(i)">
               <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
             </button-->
             <button  md-icon-button color="warn"(click)="deleteDialog(i)">
