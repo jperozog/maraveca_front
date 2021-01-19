@@ -1,0 +1,162 @@
+
+<div >
+
+  <p style=" text-align: center;">
+    <b> Detalles de productos o servicios para la  Factura/Recibo Nº {{data.id}} del cliente {{data.cliente}}</b> </p>
+  <table [md2Data]="data_prod" #md2="md2DataTable" [rowsPerPage]="3" class="addClient table-center" >
+    <thead>
+    <tr>
+      <td colspan="4">
+        <md2-pagination>
+        </md2-pagination>
+      </td>
+
+      <!--<td >
+        <div  class="left" *ngIf="estatus_prog >=1">
+          <button color="#888888" class="btn1 info1" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">
+            <md-icon class=" icono1"  aria-label="opciones de factura programada" >alarm_on</md-icon></button>
+        </div>
+
+        <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura</button>
+      </td>-->
+    </tr>
+    <tr >
+      <th style="text-align: center; " >Nº</th>
+
+      <th style="text-align: center" >producto</th>
+      <th style="text-align: center" >precio</th>
+      <th style="text-align: center">iva</th>
+      <th style="text-align: center">Acciones</th>
+
+    </tr>
+    </thead>
+    <tbody class="fac">
+    <tr class="fac montos" *ngFor="let i of md2.data">
+      <td class="fac montos"  style="text-align: center">
+        {{i.id}}
+      </td>
+
+      <td class="fac montos" style="text-align: center">
+        {{i.nombre_articulo}}
+      </td>
+      <td class="fac montos" style="text-align: center;">
+        {{i.precio_articulo+ " " + i.denominacion}}
+      </td>
+      <td class="fac montos" style="text-align: center;">
+        {{i.IVA}}%
+      </td>
+
+      <td  class="fac montos" style="text-align: center;" >
+        <button md-icon-button style="color:#106cc8" (click)="edit_prod(i)">
+          <md-icon class="md-24" aria-label="Editar factura" >mode_edit</md-icon>
+        </button>
+
+        <button  md-icon-button color="warn"(click)="delete_fac_prog(i)">
+          <md-icon class="md-24" aria-label="Eliminar producto">delete</md-icon>
+        </button>
+      </td>
+      <!--td class="fac" #obf>
+      0BSF
+    </td-->
+
+    </tr>
+
+
+
+
+    </tbody>
+
+  </table>
+  <br>
+  <hr>
+
+  <p style=" text-align: center;">
+    <b> Detalles de pagos de la Factura/Recibo Nº {{data.id}} del cliente {{data.cliente}}</b> </p>
+  <div *ngIf="data_pag =='' ">
+    <p style=" text-align: center;">
+       la Factura/Recibo Nº {{data.id}} no presenta pagos</p>
+  </div>
+  <div *ngIf="data_pag !='' ">
+
+  <table [md2Data]="data_pag" #md2="md2DataTable" [rowsPerPage]="3" class="addClient table-center"  >
+    <thead>
+    <tr>
+      <td colspan="4">
+        <md2-pagination>
+        </md2-pagination>
+      </td>
+
+
+    </tr>
+    <tr >
+      <th style="text-align: center; " >Nº</th>
+      <th style="text-align: center" >tipo de pago</th>
+      <th style="text-align: center" >monto de pago</th>
+      <th style="text-align: center">comentario</th>
+      <th style="text-align: center">Acciones</th>
+
+    </tr>
+    </thead>
+    <tbody class="fac">
+    <tr class="fac montos" *ngFor="let i of md2.data">
+      <td class="fac montos"  style="text-align: center">
+        {{i.id}}
+      </td>
+     <td style="text-align: center" class="fac montos">
+      <span  *ngIf="i.pag_tip==2">Transferencia Banesco</span>
+      <span  *ngIf="i.pag_tip==6">Transferencia Bicentenario</span>
+      <span  *ngIf="i.pag_tip==1">Transferencia BOD</span>
+      <span  *ngIf="i.pag_tip==3">Transferencia Venezuela</span>
+      <span  *ngIf="i.pag_tip==4">Retencion ISLR</span>
+      <span  *ngIf="i.pag_tip==5">Retencion IVA</span>
+      <span  *ngIf="i.pag_tip==17">Otras Retenciones</span>
+      <span  *ngIf="i.pag_tip==7">Exonerado</span>
+      <span  *ngIf="i.pag_tip==8">Moneda Extranjera</span>
+      <span  *ngIf="i.pag_tip==9">Zelle</span>
+      <span  *ngIf="i.pag_tip==10">Wire Transfer</span>
+      <span  *ngIf="i.pag_tip==11">Efectivo $</span>
+      <span  *ngIf="i.pag_tip==12">Zelle</span>
+      <span  *ngIf="i.pag_tip==13">Wire Transfer</span>
+      <span  *ngIf="i.pag_tip==14">Efectivo $</span>
+      <span  *ngIf="i.pag_tip==15">Efectivo Bs.S</span>
+
+      </td>
+      <td class="fac montos" style="text-align: center;">
+        {{i.pag_monto+ " " + i.denominacion}}
+      </td>
+      <td class="fac montos" style="text-align: center;">
+        {{i.pag_comment}}
+      </td>
+
+      <td  class="fac montos" style="text-align: center;">
+        <button md-icon-button style="color:#106cc8" (click)="edit_pag(i)">
+          <md-icon class="md-24" aria-label="Editar factura" >mode_edit</md-icon>
+        </button>
+
+        <button  md-icon-button color="warn"(click)="delete_fac_prog(i)">
+          <md-icon class="md-24" aria-label="Eliminar pago">delete</md-icon>
+        </button>
+
+      </td>
+      <!--td class="fac" #obf>
+      0BSF
+    </td-->
+
+    </tr>
+
+
+
+
+    </tbody>
+
+  </table>
+    <br>
+    <br>
+
+  </div>
+  <button md-raised-button color="warn" class=" centrado btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Salir</button>
+
+</div>
+
+
+

@@ -4,11 +4,22 @@
     <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
   </md-form-field>
   <span class="example-spacer" style="text-align: center;">Clientes</span>
-  <button md-raised-button (click)="refresh(true)" >
+  <button md-raised-button (click)="refresh(true)">
     <md-icon [class.updateicon]="update">cached</md-icon> Actualizar Lista
   </button>
+  <!--
   <button md-raised-button (click)="openDialog()" *ngIf="usuario.perm && usuario.perm.includes('clientes_w')">
     <md-icon>group_add</md-icon> Agregar Cliente
+  </button>
+  -->
+  <button style="background-color:#1F9BCF;" (click)="aggCliente(template)" title="Agregar Factibilidad" type="button"
+    class="btn btn-info btn-sm ">
+    <md-icon>group_add</md-icon> Agregar Cliente
+  </button>
+  
+  <button style="background-color:#1F9BCF;" (click)="irZonas()" title="Agregar Factibilidad" type="button"
+    class="btn btn-info btn-sm ">
+    <md-icon>accessibility</md-icon> Zonas
   </button>
 
 </md-toolbar>
@@ -22,49 +33,55 @@
         Con Servicios Registrados
       </md-panel-description>
     </md-expansion-panel-header>
-    <div class="x700" *ngIf="modouno == 1" >
+    <div class="x700" *ngIf="modouno == 1">
 
-      <table class="addClient x700" [md2Data]="clientes | dataPipe: { nombre: search, apellido: search, email:search, dni: search, phone1:search, social:search }" #md2="md2DataTable" [rowsPerPage]="10">
+      <table class="addClient x700"
+        [md2Data]="clientes | dataPipe: { nombre: search, apellido: search, email:search, dni: search, phone1:search, social:search }"
+        #md2="md2DataTable" [rowsPerPage]="10">
         <thead>
-        <tr>
-          <td colspan="7">
-            <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
-          </td>
-        </tr>
-        <tr>
-          <th style="width: 10%" md2SortBy="dni">Cedula</th>
-          <th style="width: 15%" md2SortBy="nombre">Nombre y Apellido</th>
-          <th style="width: 10%" md2SortBy="phone1">Telefono</th>
-          <th style="width: 20%" md2SortBy="email">Correo Electronico</th>
-          <th style="width: 30%" md2SortBy="direccion">Direccion</th>
-          <th style="width: 7%" md2SortBy="servicios">Serv. Cont.</th>
-          <th style="width: 20%">Acciones</th>
-        </tr>
+          <tr>
+            <td colspan="7">
+              <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 10%" md2SortBy="dni">Cedula</th>
+            <th style="width: 15%" md2SortBy="nombre">Nombre y Apellido</th>
+            <th style="width: 10%" md2SortBy="phone1">Telefono</th>
+            <th style="width: 20%" md2SortBy="email">Correo Electronico</th>
+            <th style="width: 30%" md2SortBy="direccion">Direccion</th>
+            <th style="width: 7%" md2SortBy="servicios">Serv. Cont.</th>
+            <th style="width: 20%">Acciones</th>
+          </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let i of md2.data">
-          <td style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
-          <td *ngIf="i.kind.toUpperCase() == 'V'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-          <td *ngIf="i.kind.toUpperCase() == 'E'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-          <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 15%">{{(i.social|capitalize)}}</td>
-          <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 15%">{{(i.social|capitalize)}}</td>
-          <td style="width: 10%">{{i.phone1}}</td>
-          <td style="width: 20%">{{i.email}}</td>
-          <td style="width: 30%">{{i.direccion}}</td>
-          <td style="width: 7%">{{i.servicios}}</td>
-        <td style="width: 20%" *ngIf="usuario.perm && !usuario.perm.includes('clientes')"> No Autorizado</td>
-          <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('clientes')">
-            <button md-icon-button style="color:#106cc8" [routerLink]="['/ClientOverview', i.id]"><!---->
-              <md-icon class="md-24" aria-label="Mas Detalles" >search</md-icon>
-            </button>
-            <!--button md-icon-button style="color:#106cc8" (click)="show(i)">
+          <tr *ngFor="let i of md2.data">
+            <td style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
+            <td *ngIf="i.kind.toUpperCase() == 'V'" style="width: 15%">
+              {{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+            <td *ngIf="i.kind.toUpperCase() == 'E'" style="width: 15%">
+              {{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+            <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 15%">{{(i.social|capitalize)}}</td>
+            <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 15%">{{(i.social|capitalize)}}</td>
+            <td *ngIf="i.kind.toUpperCase() == 'V-'" style="width: 15%">{{(i.social|capitalize)}}</td>
+            <td style="width: 10%">{{i.phone1}}</td>
+            <td style="width: 20%">{{i.email}}</td>
+            <td style="width: 30%">{{i.direccion}}</td>
+            <td style="width: 7%">{{i.servicios}}</td>
+            <td style="width: 20%" *ngIf="usuario.perm && !usuario.perm.includes('clientes')"> No Autorizado</td>
+            <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('clientes')">
+              <button md-icon-button style="color:#106cc8" [routerLink]="['/ClientOverview', i.id]">
+                <!---->
+                <md-icon class="md-24" aria-label="Mas Detalles">search</md-icon>
+              </button>
+              <!--button md-icon-button style="color:#106cc8" (click)="show(i)">
               <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
             </button-->
-            <button  md-icon-button color="warn"(click)="deleteDialog(i)">
-              <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
-            </button>
-          </td>
-        </tr>
+              <button md-icon-button color="warn" (click)="deleteDialog(i)">
+                <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
+              </button>
+            </td>
+          </tr>
         </tbody>
         <tfoot>
 
@@ -73,7 +90,7 @@
     </div>
   </md-expansion-panel>
   <!-- pendientes -->
-  <md-expansion-panel hideToggle="true"  (opened)=" this.mododos==2">
+  <md-expansion-panel hideToggle="true" (opened)=" this.mododos==2">
     <md-expansion-panel-header style="background-color: lightpink;">
       <md-panel-title>
         {{ pendientes.length }} Pendientes
@@ -84,46 +101,53 @@
     </md-expansion-panel-header>
     <div class="x700" *ngIf="mododos == 2">
 
-      <table class="addClient x700" [md2Data]="pendientes | dataPipe: { nombre: search, apellido: search, dni: search, phone1:search, social:search }" #md2="md2DataTable" [rowsPerPage]="10">
+      <table class="addClient x700"
+        [md2Data]="pendientes | dataPipe: { nombre: search, apellido: search, dni: search, phone1:search, social:search }"
+        #md2="md2DataTable" [rowsPerPage]="10">
         <thead>
-        <tr>
-          <td colspan="7">
-            <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
-          </td>
-        </tr>
-        <tr>
-          <th style="width: 10%" md2SortBy="dni">Cedula</th>
-          <th style="width: 15%" md2SortBy="nombre">Nombre y Apellido</th>
-          <th style="width: 10%" md2SortBy="phone1">Telefono</th>
-          <th style="width: 20%" md2SortBy="email">Correo Electronico</th>
-          <th style="width: 30%" md2SortBy="direccion">Direccion</th>
-          <th style="width: 7%" md2SortBy="servicios">Servicios Contratados</th>
-          <th style="width: 20%">Acciones</th>
-        </tr>
+          <tr>
+            <td colspan="7">
+              <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 10%" md2SortBy="dni">Cedula</th>
+            <th style="width: 15%" md2SortBy="nombre">Nombre y Apellido</th>
+            <th style="width: 10%" md2SortBy="phone1">Telefono</th>
+            <th style="width: 20%" md2SortBy="email">Correo Electronico</th>
+            <th style="width: 30%" md2SortBy="direccion">Direccion</th>
+            <th style="width: 7%" md2SortBy="servicios">Servicios Contratados</th>
+            <th style="width: 20%">Acciones</th>
+          </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let i of md2.data">
-          <td (click)="status(i)" style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
-          <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'V'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-          <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'E'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-          <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'G'" style="width: 15%">{{(i.social|capitalize)}}</td>
-          <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'J'" style="width: 15%">{{(i.social|capitalize)}}</td>
-          <td (click)="status(i)" style="width: 10%">{{i.phone1}}</td>
-          <td (click)="status(i)" style="width: 20%">{{i.email}}</td>
-          <td (click)="status(i)" style="width: 30%">{{i.direccion}}</td>
-          <td (click)="status(i)" style="width: 7%">{{i.servicios}}</td>
-          <td style="width: 20%">
-            <button md-icon-button style="color:#106cc8" [routerLink]="['/ClientOverview', i.id]"><!---->
-              <md-icon class="md-24" aria-label="Mas Detalles" >search</md-icon>
-            </button>
-            <!--button md-icon-button style="color:#106cc8" (click)="show(i)">
+          <tr *ngFor="let i of md2.data">
+            <td (click)="status(i)" style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
+            <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'V'" style="width: 15%">
+              {{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+            <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'E'" style="width: 15%">
+              {{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+            <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'G'" style="width: 15%">{{(i.social|capitalize)}}
+            </td>
+            <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'J'" style="width: 15%">{{(i.social|capitalize)}}
+            </td>
+            <td (click)="status(i)" style="width: 10%">{{i.phone1}}</td>
+            <td (click)="status(i)" style="width: 20%">{{i.email}}</td>
+            <td (click)="status(i)" style="width: 30%">{{i.direccion}}</td>
+            <td (click)="status(i)" style="width: 7%">{{i.servicios}}</td>
+            <td style="width: 20%">
+              <button md-icon-button style="color:#106cc8" [routerLink]="['/ClientOverview', i.id]">
+                <!---->
+                <md-icon class="md-24" aria-label="Mas Detalles">search</md-icon>
+              </button>
+              <!--button md-icon-button style="color:#106cc8" (click)="show(i)">
               <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
             </button-->
-            <button  md-icon-button color="warn"(click)="deleteDialog(i)">
-              <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
-            </button>
-          </td>
-        </tr>
+              <button md-icon-button color="warn" (click)="deleteDialog(i)">
+                <md-icon class="md-24" aria-label="Eliminar Cliente">delete</md-icon>
+              </button>
+            </td>
+          </tr>
         </tbody>
         <tfoot>
 
@@ -132,3 +156,133 @@
     </div>
   </md-expansion-panel>
 </md-accordion>
+
+
+<ng-template #template>
+
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Agregar Cliente</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="ocultarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="card-body">
+
+
+    <div class="row">
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Nombres</label>
+        <input [(ngModel)]="nombres" type="text" class="form-control" id="inputDefault"
+          required>
+      </div>
+
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Apellidos</label>
+        <input [(ngModel)]="apellidos" type="text" class="form-control" id="inputDefault"
+          required>
+      </div>
+    </div>
+    <br>
+
+    <div *ngIf="nombres.length > 4 && apellidos.length > 4" class="row">
+      <div class="col-sm-4">
+        <label class="control-label" for="disabledInput">Tipo</label>
+        <select [(ngModel)]="kni" class="form-control" id="exampleSelect1" required>
+          <option  value="V">V</option>
+          <option  value="E">E</option>
+          <option  value="J">J</option>
+          <option  value="V-">V- Firma Personal</option>
+          <option  value="G">G</option>
+        </select>
+      </div>
+
+      <div class="col-sm-8 cedula">
+        <input [(ngModel)]="dni" type="text" placeholder="Cedula/RIF" class="form-control" id="inputDefault"
+          required>
+      </div>
+    </div>
+    <br>
+
+
+    <div *ngIf="kni != '' && dni.length > 6" class="row">
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Fecha de Nacimiento</label>
+      <my-date-picker [(ngModel)]="fecha" class="example-full-width" name="birthdate" mdInput required locale=es
+        [options]="myDatePickerOptions"></my-date-picker>
+      </div>
+
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Telefono</label>
+        <input [(ngModel)]="numero" type="number" class="form-control" id="inputDefault"
+          required>
+      </div>
+    </div>
+    <br>
+    <div *ngIf="numero > 1000000" class="row">
+      <div class="col-sm-12">
+        <label class="col-form-label" for="inputDefault">Correo</label>
+        <input [(ngModel)]="email" type="email" class="form-control" id="inputDefault"
+          required>
+      </div>
+    </div>
+    <br>
+
+    <div *ngIf="email.length > 8" class="row">
+      <div class="col-sm-6">
+        <label class="control-label" for="disabledInput">Estado</label>
+        <select [(ngModel)]="estado" (change)="Municipios()" class="form-control" id="exampleSelect1" required>
+          <option  value=""></option>
+          <option *ngFor="let e of estados"  [value]="e.id_estado">{{e.estado}}</option>
+        </select>
+      </div>
+
+      <div *ngIf="estado != 0" class="col-sm-6">
+        <label class="control-label" for="disabledInput">Municipio</label>
+        <select [(ngModel)]="municipio" (change)="Parroquias()" class="form-control" id="exampleSelect1" required>
+          <option  value=""></option>
+          <option *ngFor="let m of municipios"  [value]="m.id_municipio">{{m.municipio}}</option>
+        </select>
+      </div>
+
+    </div>
+    <br>
+
+    <div *ngIf="municipio != 0" class="row">
+      <div class="col-sm-6">
+        <label class="control-label" for="disabledInput">Parroquias</label>
+        <select [(ngModel)]="parroquia" class="form-control" id="exampleSelect1" required>
+          <option  value=""></option>
+          <option *ngFor="let p of parroquias"  [value]="p.id_parroquia">{{p.parroquia}}</option>
+        </select>
+      </div>
+      <div *ngIf="parroquia != 0 && (kni == 'J' || kni == 'G' || kni == 'V-')" class="col-sm-6 social">
+        <label class="col-form-label" for="inputDefault">Social</label>
+        <input [(ngModel)]="social" type="text" class="form-control" id="inputDefault"
+          required>
+      </div>
+    </div>
+    <br>
+    <div *ngIf="parroquia != 0 && (kni == 'J' || kni == 'G' || kni == 'V-')" class="custom-control custom-checkbox">
+      <input type="checkbox" [(ngModel)]="isChecked" class="custom-control-input" id="customCheck1">
+      <label class="custom-control-label" for="customCheck1">Cliente Facturable</label>
+    </div>
+    <br>
+    <div *ngIf="parroquia != 0" class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label for="exampleTextarea">Direccion</label>
+          <textarea [(ngModel)]="direccion" class="form-control" id="exampleTextarea" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+
+
+   
+    <div *ngIf="nombres != '' && apellidos != '' && kni != '' && dni != '' && direccion.length > 5 && estado != 0 && municipio != 0 && parroquia != 0 ">
+      <button (click)="verdatos()" type="button" class="btn btn-info">Guardar</button>
+    </div>
+  </div>
+
+</ng-template>

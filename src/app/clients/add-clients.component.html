@@ -34,11 +34,12 @@
 
     <td>
       <md-input-container class="example-full-width">
-        <input mdInput placeholder="Tipo:" maxlength="1" required formControlName="kind" [mdAutocomplete]="tipo" />
+        <input mdInput placeholder="Tipo:" maxlength="2" required formControlName="kind" [mdAutocomplete]="tipo" />
         <md-autocomplete #tipo="mdAutocomplete">
           <md-option value="E">E</md-option>
           <md-option value="V">V</md-option>
           <md-option value="J">J</md-option>
+          <md-option value="V-">V- Firma Personal</md-option>
           <md-option value="G">G</md-option>
         </md-autocomplete>
       </md-input-container>
@@ -81,7 +82,7 @@
 
 
 
-  <tr *ngIf="addClient.value.kind == 'J'">
+  <tr *ngIf="addClient.value.kind == 'J' ||  addClient.value.kind == 'V-' ">
     <td >
       <md-form-field class="example-full-width">
         <input name="nombre"

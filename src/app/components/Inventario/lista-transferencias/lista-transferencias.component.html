@@ -1,0 +1,624 @@
+<div id="convetir">
+  <div class="row primero">
+    <div class="col-sm-1">
+      <button (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+    </div>
+    <div class="col-sm-4">
+      <h2 class="titulo">Lista De Transferencia</h2>
+    </div>
+    <div class="col-sm-2 filtrado">
+      <select (change)="FiltroTransferencia()" [(ngModel)]="FiltroActivo" class="form-control" id="exampleSelect2"
+        required>
+        <option value="1">Equipos</option>
+        <option value="2">Consumibles</option>
+      </select>
+    </div>
+    <div class="col-sm-2"></div>
+    <div class="col-sm-3 filtrado2">
+      <input (input)="BuscarLista($event.target.value)" (keyup.backspace)="BuscarListaBackSpace($event.target.value)"
+        type="text" class="form-control" name="filtrado" placeholder="Filtrar" id="inputDefault">
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-sm-1"></div>
+    <div *ngIf="mensajeN == true" class="col-sm-4">
+      <div class="alert alert-dismissible alert-danger">
+        La transferencia de Equipos ha sido Rechazada!!
+      </div>
+    </div>
+    <div *ngIf="mensajeA == true" class="col-sm-4">
+      <div class="alert alert-dismissible alert-success">
+        La transferencia de Equipos ha sido Aceptada!!
+      </div>
+    </div>
+    <div *ngIf="mensajeAu == true" class="col-sm-4">
+      <div class="alert alert-dismissible alert-success">
+        La transferencia de Equipos ha sido Autorizada!!
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-11 separador2">
+      <table class="table table-hover">
+        <thead>
+          <tr class="table-info">
+            <th scope="col">Estatus</th>
+            <th scope="col">Codigo Transferencia</th>
+            <th scope="col">Responsable</th>
+            <th scope="col">Destino</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Accion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of transferencias | paginate: { itemsPerPage: 7, currentPage: p }">
+            <th *ngIf="t.estatus_trans == 1 || t.estatus_trans == 6">Abierta</th>
+            <th class="table-success" *ngIf="t.estatus_trans == 2">Exitosa</th>
+            <th class="table-warning" *ngIf="t.estatus_trans == 3">En Proceso</th>
+            <th class="table-danger" *ngIf="t.estatus_trans == 0">Cancelada</th>
+            <th>{{t.id_transferencia}}</th>
+            <th>{{t.nombre_user}} {{t.apellido_user}}</th>
+            <th>{{t.nombre_zona}}</th>
+            <th>{{t.created_at | stringToDate | date: 'dd/M/yy'}}</th>
+            <th>
+              <button *ngIf="t.estatus_trans == 6 || t.estatus_trans" type="button"
+                (click)="verDetalles(t.id_transferencia,lgModal)" class="btn btn-info btn-sm">
+                <i id="icono" class="fa fa-info"></i>
+              </button>
+              <button
+                *ngIf="(usuario.perm && usuario.perm.includes('inventarios_esp')) && (t.estatus_trans == 6 || t.estatus_trans == 1)"
+                type="button" (click)="modificarTransferencia(t.id_transferencia,lgModal2)" class="btn btn-info btn-sm">
+                <i id="icono" class="fa fa-clipboard"></i>
+              </button>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+
+
+
+
+  </div>
+
+</div>
+
+
+<div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="card-header">Detalles de Transferencia</div>
+      <div class="card-body">
+        <label class="control-label" for="disabledInput">Codigo Transferencia</label>
+        <p>{{id_transferencia}}</p>
+        <br>
+        <label class="control-label" for="disabledInput">Numero de equipos: {{numero_equipos}}</label>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <p>Equipos Enviados</p>
+            <table *ngIf="FiltroActivo == 1" class="table table-hover">
+              <tbody>
+                <tr
+                  *ngFor="let r of respuesta | paginate: {id:'respuesta', itemsPerPage: 3, currentPage: e } ; let o = index">
+                  <th>{{r.id}}</th>
+                  <td>{{r.modelo_articulo}}</td>
+                  <td>{{r.serial_articulo}}</td>
+                  <td>
+                    <button (click)="agregarEquipoLista(r.id_articulo,o)" type="button" class="btn btn-info btn-sm"><i
+                        id="icono" class="fa fa-arrow-right"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table *ngIf="FiltroActivo == 2" class="table table-hover">
+              <tbody>
+                <tr
+                  *ngFor="let r of respuesta | paginate: {id:'respuesta', itemsPerPage: 3, currentPage: e } ; let o = index">
+                  <th>{{r.id_consumible}}</th>
+                  <td>{{r.nombre_equipo}}</td>
+                  <td>{{r.cantidad}}</td>
+                  <td>{{r.unidad}}</td>
+                  <td>
+                    <button (click)="agregarEquipoLista(r.id_articulo,o)" type="button" class="btn btn-info btn-sm"><i
+                        id="icono" class="fa fa-arrow-right"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls id="respuesta" (pageChange)="e = $event"></pagination-controls>
+            <br>
+          </div>
+          <div class="col-sm-6">
+            <p>Equipos Recibidos</p>
+            <table class="table table-hover">
+              <tbody>
+                <tr
+                  *ngFor="let r of equiposLista | paginate: {id:'equiposLista', itemsPerPage: 3, currentPage: r } ; let i = index">
+                  <th>{{r.id}}</th>
+                  <td>{{r.modelo_articulo}}</td>
+                  <td>{{r.serial_articulo}}</td>
+                  <td>
+                    <button type="button" (click)="eliminarEquipoLista(r.id_articulo,i)" class="btn btn-info btn-sm"><i
+                        id="icono" class="fa fa-arrow-left"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls id="equiposLista" (pageChange)="r = $event"></pagination-controls>
+            <br>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label class="control-label" for="disabledInput">Desde (Emisor)</label>
+            <p>{{nombre_emisor}}</p>
+            <br>
+          </div>
+          <div class="col-sm-6">
+            <label class="control-label" for="disabledInput">Responsable de Transferencia</label>
+            <p>{{nombre_responsable}} {{apellido_responsable}}</p>
+            <br>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label class="control-label" for="disabledInput">Hacia (Receptor) </label>
+            <p>{{nombre_receptor}}</p>
+            <br>
+          </div>
+          <div class="col-sm-6">
+            <label class="control-label" for="disabledInput">Receptor Responsable </label>
+            <p>{{nombre_confirmante}} {{apellido_confirmante}}</p>
+            <br>
+          </div>
+        </div>
+        <div class="row">
+        </div>
+        <button *ngIf="(usuario.perm && usuario.perm.includes('inventarios_esp')) && estatus == 6" type="button"
+          (click)="openModal8(template8,id_transferencia)" class="btn btn-info">
+          <i id="icono" class="fa fa-user-circle"></i>
+        </button>
+        <button *ngIf="(responsable != usuario.currentUser.id_user) && estatus == 1 && visualizar2 == false"
+          (click)="openModal(template)" type="button" class="btn btn-info">Confirmar Traslado Exitoso!
+        </button>
+        <button *ngIf="(responsable != usuario.currentUser.id_user) && estatus == 1 && visualizar2 == false"
+          (click)="openModal2(template2)" type="button" class="btn btn-warning">
+          Confirmar Traslado con Problemas!
+        </button>
+        <button *ngIf="estatus == 2 || estatus == 1 " (click)="irAorden()" type="button" class="btn btn-info">
+          <i id="icono" class="fa fa-file"></i>
+        </button>
+        <button *ngIf="estatus != 6" (click)="Comentario(template6)" type="button" class="btn btn-info">
+          <i id="icono" class="fa fa-comments"></i>
+        </button>
+        <button
+          *ngIf="(usuario.perm && usuario.perm.includes('inventarios_esp')) && estatus == 1 && visualizar2 == false"
+          (click)="openModal4(template4)" type="button" class="btn btn-danger">
+          <i id="icono" class="fa fa-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #lgModal2="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="card-header">Modificar Transferencia</div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-6">
+            <label class="control-label" for="disabledInput">Codigo Transferencia</label>
+            <p>{{id_transferencia}}</p>
+          </div>
+          <div class="col-6">
+            <label for="exampleSelect1">Tipo de modificacion</label>
+            <select (change)="cambiarModificacion()" [(ngModel)]="tipoModificacion" class="form-control"
+              id="exampleSelect1" required>
+              <option value="0"></option>
+              <option value="1">Modificar Sedes</option>
+              <option value="2">Añadir Equipos</option>
+              <option value="3">Eliminar Equipos</option>
+              <option value="4">Cambiar datos en orden de traslado</option>
+            </select>
+          </div>
+        </div>
+        <br>
+        <div *ngIf="tipoModificacion == 1" class="row">
+          <div class="col-6">
+            <label for="exampleSelect1">Sede (Emisor)</label>
+            <select [(ngModel)]="zonaModificacionSelected" class="form-control" id="exampleSelect1" #ubicacion required>
+              <option *ngFor="let zona of zonas" [value]="zona.id_zona">{{zona.nombre_zona}}</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label for="exampleSelect2">Sede (Receptor)</label>
+            <select [(ngModel)]="zonaModificacionSelected2" class="form-control" id="exampleSelect2" #ubicacion
+              required>
+              <option *ngFor="let zona of zonas" [value]="zona.id_zona">{{zona.nombre_zona}}</option>
+            </select>
+          </div>
+          <br>
+          <div *ngIf="zonaModificacionSelected != 0 && zonaModificacionSelected2 != 0" class="col-2">
+            <button (click)="modificarSedesTranferencia(lgModal2)" type="button" class="btn btn-default botonNuevo">
+              Guardar
+            </button>
+          </div>
+
+        </div>
+        <div *ngIf="tipoModificacion == 2" class="row">
+          <div class="col-6">
+            <label for="exampleSelect1">Equipos</label>
+            <select [(ngModel)]="categoriaSelected" (change)="buscarEquiposModificacion()" class="form-control"
+              id="exampleSelect1" required>
+              <option *ngFor="let c of categorias" [value]="c.nombre_equipo">[{{c.nombre_tipo_art}}] {{c.nombre_equipo}}
+              </option>
+            </select>
+          </div>
+          <div *ngIf="categoriaSelected != 0" class="col-6">
+            <label *ngIf="FiltroActivo == 1" for="exampleSelect1">Seriales</label>
+            <select *ngIf="FiltroActivo == 1" [(ngModel)]="equipoAggSelected" (change)="agregarListaAgg()" class="form-control"
+              id="exampleSelect1" required>
+              <option value="0"></option>
+              <option *ngFor="let e of equiposModificacion" [value]="e.id_articulo">{{e.serial_articulo}} </option>
+            </select>
+            <label *ngIf="FiltroActivo == 2" for="exampleSelect1">Cantidad</label>
+            <input  (keyup.enter)="agregarListaAggCon($event.target.value)" type="number" class="form-control" >
+          </div>
+          <br>
+          <div *ngIf="listaEquiposAgg.length > 0" class="col-12">
+            <table style="margin-top: 2%;" class="table table-borderless">
+              <thead>
+                <tr style="background-color: #2C2C30; color: white;" class="table-default">
+                  <th scope="col">#</th>
+                  <th scope="col">Equipo</th>
+                  <th scope="col">Serial</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let equipo of listaEquiposAgg | paginate: { id:'listaEquiposAgg', itemsPerPage: 4, currentPage: n } ">
+                  <th scope="row">{{equipo.id_articulo}}</th>
+                  <td>{{equipo.modelo_articulo}}</td>
+                  <td>{{equipo.serial_articulo}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls id="listaEquiposAgg" (pageChange)="n = $event"></pagination-controls>
+          </div>
+          <br>
+          <div *ngIf="listaEquiposAgg.length > 0" class="col-2">
+            <button (click)="aggEquiposTranferencia(lgModal2)" type="button" class="btn btn-default botonNuevo">
+              Guardar
+            </button>
+          </div>
+
+        </div>
+        <div *ngIf="tipoModificacion == 3" class="row">
+          <div class="col-12">
+            <label for="exampleSelect1">Lista Equipos</label>
+            <select *ngIf="FiltroActivo == 1" [(ngModel)]="equipoDelSelected" (change)="agregarListaDel()" class="form-control"
+              id="exampleSelect1" required>
+              <option value="0"> </option>
+              <option *ngFor="let r of respuesta" [value]="r.id_articulo">[{{r.modelo_articulo}}] {{r.serial_articulo}}</option>
+            </select>
+            <select *ngIf="FiltroActivo == 2" [(ngModel)]="equipoDelSelected" (change)="agregarListaDel()" class="form-control"
+              id="exampleSelect1" required>
+              <option value="0"> </option>
+              <option *ngFor="let r of respuesta" [value]="r.id_consumible">[{{r.cantidad}}] {{r.nombre_equipo}}</option>
+            </select>
+          </div>
+          <br>
+          <div *ngIf="listaEquiposDel.length > 0" class="col-12">
+            <table *ngIf="FiltroActivo == 1" style="margin-top: 2%;" class="table table-borderless">
+              <thead>
+                <tr style="background-color: #2C2C30; color: white;" class="table-default">
+                  <th scope="col">#</th>
+                  <th scope="col">Equipo</th>
+                  <th scope="col">Serial</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let equipo of listaEquiposDel | paginate: { id:'listaEquiposDel', itemsPerPage: 4, currentPage: v } ">
+                  <th scope="row">{{equipo.id_articulo}}</th>
+                  <td>{{equipo.modelo_articulo}}</td>
+                  <td>{{equipo.serial_articulo}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <table *ngIf="FiltroActivo == 2" style="margin-top: 2%;" class="table table-borderless">
+              <thead>
+                <tr style="background-color: #2C2C30; color: white;" class="table-default">
+                  <th scope="col">#</th>
+                  <th scope="col">Consumible</th>
+                  <th scope="col">Cantidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let equipo of listaEquiposDel | paginate: { id:'listaEquiposDel', itemsPerPage: 4, currentPage: v } ">
+                  <th scope="row">{{equipo.id_consumible}</th>
+                  <td>{{equipo.nombre_equipo}}</td>
+                  <td>{{equipo.cantidad}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls id="listaEquiposDel" (pageChange)="v = $event"></pagination-controls>
+          </div>
+          <br>
+          <div *ngIf="listaEquiposDel.length > 0" class="col-2">
+            <button (click)="delEquiposTranferencia(lgModal2)" type="button" class="btn btn-default botonNuevo">
+              Eliminar
+            </button>
+          </div>
+
+        </div>
+
+        <div *ngIf="tipoModificacion == 4" class="row">
+          <div class="col-6">
+            <label for="exampleSelect1">Conductor</label>
+            <select [(ngModel)]="choferSelected" class="form-control" id="exampleSelect1" #ubicacion required>
+              <option *ngFor="let c of chofer" [value]="c.id_conductor">{{c.nombre_conductor}}
+                {{c.apellido_conductor}}</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label for="exampleSelect2">Vehiculo</label>
+            <select [(ngModel)]="vehiculoSelected" class="form-control" id="exampleSelect2" #ubicacion
+              required>
+              <option *ngFor="let vehi of vehiculos" [value]="vehi.id_vehiculo">{{vehi.marca}} {{vehi.modelo}}</option>
+            </select>
+          </div>
+          <br>
+          <div *ngIf="choferSelected != 0 && vehiculoSelected != 0" class="col-2">
+            <button (click)="modificarOrdenTranferencia(lgModal2)" type="button" class="btn btn-default botonNuevo">
+              Guardar
+            </button>
+          </div>
+
+        </div>
+        <!--   
+        <label class="control-label" for="disabledInput">Numero de equipos: {{numero_equipos}}</label>
+        <div class="row">
+          <div class="col-sm-6">
+            <p>Equipos Enviados</p>
+            <table *ngIf="FiltroActivo == 1" class="table table-hover">
+              <tbody>
+                <tr
+                  *ngFor="let r of respuesta | paginate: {id:'respuesta', itemsPerPage: 3, currentPage: e } ; let o = index">
+                  <th>{{r.id}}</th>
+                  <td>{{r.modelo_articulo}}</td>
+                  <td>{{r.serial_articulo}}</td>
+                  <td>
+                    <button (click)="agregarEquipoLista(r.id_articulo,o)" type="button" class="btn btn-info btn-sm"><i
+                        id="icono" class="fa fa-arrow-right"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table *ngIf="FiltroActivo == 2" class="table table-hover">
+              <tbody>
+                <tr
+                  *ngFor="let r of respuesta | paginate: {id:'respuesta', itemsPerPage: 3, currentPage: e } ; let o = index">
+                  <th>{{r.id_consumible}}</th>
+                  <td>{{r.nombre_equipo}}</td>
+                  <td>{{r.cantidad}}</td>
+                  <td>{{r.unidad}}</td>
+                  <td>
+                    <button (click)="agregarEquipoLista(r.id_articulo,o)" type="button" class="btn btn-info btn-sm"><i
+                        id="icono" class="fa fa-arrow-right"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls id="respuesta" (pageChange)="e = $event"></pagination-controls>
+            <br>
+          </div>
+          <div class="col-sm-6">
+            <p>Equipos Recibidos</p>
+            <table class="table table-hover">
+              <tbody>
+                <tr
+                  *ngFor="let r of equiposLista | paginate: {id:'equiposLista', itemsPerPage: 3, currentPage: r } ; let i = index">
+                  <th>{{r.id}}</th>
+                  <td>{{r.modelo_articulo}}</td>
+                  <td>{{r.serial_articulo}}</td>
+                  <td>
+                    <button type="button" (click)="eliminarEquipoLista(r.id_articulo,i)" class="btn btn-info btn-sm"><i
+                        id="icono" class="fa fa-arrow-left"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls id="equiposLista" (pageChange)="r = $event"></pagination-controls>
+            <br>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label class="control-label" for="disabledInput">Desde (Emisor)</label>
+            <p>{{nombre_emisor}}</p>
+            <br>
+          </div>
+          <div class="col-sm-6">
+            <label class="control-label" for="disabledInput">Responsable de Transferencia</label>
+            <p>{{nombre_responsable}} {{apellido_responsable}}</p>
+            <br>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label class="control-label" for="disabledInput">Hacia (Receptor) </label>
+            <p>{{nombre_receptor}}</p>
+            <br>
+          </div>
+          <div class="col-sm-6">
+            <label class="control-label" for="disabledInput">Receptor Responsable </label>
+            <p>{{nombre_confirmante}} {{apellido_confirmante}}</p>
+            <br>
+          </div>
+        </div>
+        <div class="row">
+        </div>
+        <button *ngIf="(usuario.perm && usuario.perm.includes('inventarios_esp')) && estatus == 6" type="button"
+          (click)="openModal8(template8,id_transferencia)" class="btn btn-info">
+          <i id="icono" class="fa fa-user-circle"></i>
+        </button>
+        <button *ngIf="(responsable != usuario.currentUser.id_user) && estatus == 1 && visualizar2 == false"
+          (click)="openModal(template)" type="button" class="btn btn-info">Confirmar Traslado Exitoso!
+        </button>
+        <button *ngIf="(responsable != usuario.currentUser.id_user) && estatus == 1 && visualizar2 == false"
+          (click)="openModal2(template2)" type="button" class="btn btn-warning">
+          Confirmar Traslado con Problemas!
+        </button>
+        <button *ngIf="estatus == 2 || estatus == 1 " (click)="irAorden()" type="button" class="btn btn-info">
+          <i id="icono" class="fa fa-file"></i>
+        </button>
+        <button *ngIf="estatus != 6" (click)="Comentario(template6)" type="button" class="btn btn-info">
+          <i id="icono" class="fa fa-comments"></i>
+        </button>
+        <button
+          *ngIf="(usuario.perm && usuario.perm.includes('inventarios_esp')) && estatus == 1 && visualizar2 == false"
+          (click)="openModal4(template4)" type="button" class="btn btn-danger">
+          <i id="icono" class="fa fa-times"></i>
+        </button>
+      -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Seguro Desea Confirmar Exitosamente Transferencia?</p>
+    <button type="button" class="btn btn-info" (click)="aceptar()">Si</button>
+    <button type="button" class="btn btn-danger" (click)="negacion()">No</button>
+  </div>
+</ng-template>
+
+<ng-template #template2>
+  <div class="modal-body text-center">
+    <p>Seguro Desea Confirmar Con Problemas la Transferencia?</p>
+    <button type="button" class="btn btn-info" (click)="openModal3(template3)">Si</button>
+    <button type="button" class="btn btn-danger" (click)="negacion2()">No</button>
+  </div>
+</ng-template>
+
+
+<ng-template #template3>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Detalles de Transferencia</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef3.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label for="exampleTextarea">Seleccione Problema</label>
+    <select [(ngModel)]="ProblemaSelected" class="form-control" id="exampleSelect1" required>
+      <option [value]="1">Problemas Menores</option>
+      <option [value]="2">Equipos Incompletos</option>
+    </select>
+    <br>
+    <div *ngIf="ProblemaSelected == 1" class="form-group">
+      <label for="exampleTextarea"><b>Agregar Problemas de la Transferencia</b></label>
+      <textarea [(ngModel)]="TextoSelected" class="form-control" id="exampleTextarea" rows="3"></textarea>
+      <br>
+      <button type="button" class="btn btn-danger" (click)="aceptarDetalles2()">Confirmar</button>
+
+    </div>
+
+    <div *ngIf="ProblemaSelected == 2" class="form-group">
+
+      <h6>Equipos Enviados</h6> <label for="">* Seleccione Aquellos que Presentan Dificultades</label>
+      <div *ngFor=" let r of respuesta; let o = index" class="row">
+        <div class="col-sm-10">
+          {{r.modelo_articulo}} || {{r.serial_articulo}}
+        </div>
+        <div class="col-sm-2">
+          <button (click)="agregarEquipoLista(r.id_articulo,o)" type="button" class="btn btn-outline-info btn-sm"><i
+              id="icono" class="fa fa-check"></i>
+          </button>
+        </div>
+      </div>
+
+
+
+      <h6 for="exampleTextarea"><b>Equipos Ausentes en la Sede Destino</b></h6>
+      <div *ngFor="let r of equiposLista ; let i = index" class="row">
+        <div class="col-sm-10">
+          {{r.modelo_articulo}} || {{r.serial_articulo}}
+        </div>
+        <div class="col-sm-2">
+          <button type="button" (click)="eliminarEquipoLista(r.id_articulo,i)" class="btn btn-outline-danger btn-sm"><i
+              id="icono" class="fa fa-trash"></i>
+          </button>
+        </div>
+      </div>
+
+      <br>
+      <label for="">Agregar Problemas de la Transferencia</label>
+      <textarea [(ngModel)]="TextoSelected" class="form-control" id="exampleTextarea" rows="3"></textarea>
+    </div>
+
+    <button *ngIf="equiposLista.length > 0" type="button" class="btn btn-danger"
+      (click)="aceptarDetalles(template5)">Confirmar</button>
+  </div>
+</ng-template>
+
+
+
+<ng-template #template6>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Comentario de la Transferencia</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef6.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <p>{{comentario}}</p>
+      <br>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #template4>
+  <div class="modal-body text-center">
+    <p>Seguro Desea Cancelar la Transferencia?</p>
+    <button type="button" class="btn btn-info" (click)="negar()">SI</button>
+    <button type="button" class="btn btn-danger" (click)="negacion4()">No</button>
+  </div>
+</ng-template>
+
+
+
+<ng-template #template5>
+  <div class="modal-body text-center">
+    <p>Transferencia Finalizada! los detalles estan en la descripcion de la Transferencia!</p>
+  </div>
+</ng-template>
+
+<ng-template #template8>
+  <div class="modal-body text-center">
+    <p>Desea Autorizar la Transferencia</p>
+    <button *ngIf="anuncio == 1" type="button" (click)="autorizar()" class="btn btn-info">SI</button>
+    <button *ngIf="anuncio == 1" type="button" (click)="negar()" class="btn btn-danger">NO</button>
+  </div>
+</ng-template>

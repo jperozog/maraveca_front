@@ -52,7 +52,7 @@
     }
 }
 tr.hover:hover{
-  background-color: rgb(80, 108, 181)
+  background-color: rgb(203, 194, 202)
 }
 
 table.fac, th.fac, td.fac {
@@ -371,4 +371,24 @@ table{
 .b-btn {
 background-color: #106cc8;
 color:white;
+}
+
+.right{
+  float: right;
+
+}
+
+.mensajeBS{
+  border: 1px solid black;
+  width: 50%;
+  font-size: 14px;
+  padding: 5px;
+
+}
+
+.Der{
+  float: Right;
+  margin-top: -4%;
+
+
 }

@@ -29,16 +29,13 @@
             style="width:100%; min-width: 100%; min-height: 100%;"
             mdInput
             >
-            <md2-option value="2">
+            <md2-option value="2" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
               Ticket
             </md2-option>
-            <md2-option value="1">
-              Instalacion
-            </md2-option>
-            <md2-option value="3">
+            <md2-option value="3" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
               Averia
             </md2-option>
-              <md2-option value="4">
+              <md2-option value="4" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
                 Otros trabajos e instalaciones
               </md2-option>
           </md2-select>
@@ -67,16 +64,13 @@
         style="width=100%; min-width: 100%; min-height: 100%;"
         mdInput
         >
-        <md2-option value="2" >
+        <md2-option value="2" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
           Ticket
         </md2-option>
-        <md2-option value="1" >
-          Instalacion
-        </md2-option>
-        <md2-option value="3" >
+        <md2-option value="3" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
           Averia
         </md2-option>
-          <md2-option value="4">
+          <md2-option value="4" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
             Otros trabajos e instalaciones
           </md2-option>
       </md2-select>
@@ -106,7 +100,8 @@
               <span *ngIf="i.kind.toUpperCase() == 'V'">{{(i.kind | capitalize) + i.dni+' / '+(i.nombre | capitalize) +' '+(i.apellido | capitalize)}}</span>
               <span *ngIf="i.kind.toUpperCase() == 'E'">{{(i.kind | capitalize) + i.dni+' / '+(i.nombre | capitalize) +' '+(i.apellido | capitalize)}}</span>
               <span *ngIf="i.kind.toUpperCase() == 'J'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span>
-              <span *ngIf="i.kind.toUpperCase() == 'G'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span><br />
+              <span *ngIf="i.kind.toUpperCase() == 'G'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span><br/>
+              <span *ngIf="i.kind.toUpperCase() == 'V-'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span><br />
             </md2-option>
           </md2-select>
           </td>
@@ -132,6 +127,7 @@
               <span *ngIf="i.kind.toUpperCase() == 'E'">{{(i.kind | capitalize) + i.dni+' / '+(i.nombre | capitalize) +' '+(i.apellido | capitalize)}}</span>
               <span *ngIf="i.kind.toUpperCase() == 'J'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span>
               <span *ngIf="i.kind.toUpperCase() == 'G'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span><br />
+              <span *ngIf="i.kind.toUpperCase() == 'V-'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span><br />
             </md2-option>
           </md2-select>
           </td>
@@ -420,6 +416,7 @@
               <md2-option [value]="1">Planes Antiguos</md2-option>
               <md2-option [value]="4">Planes Nuevos</md2-option>
               <md2-option [value]="3">Planes en dolares</md2-option>
+              <md2-option [value]="5">Planes solo Dedicados</md2-option>
 
 
             </md2-select>
@@ -484,6 +481,25 @@
                        formControlName="p_search" />
               </md2-select-header>
               <md2-option *ngFor="let i of (planesd | dataPipe : {name_plan: p_search})" [value]="i.id_plan">{{i.name_plan}}</md2-option>
+            </md2-select>
+          </td>
+          <td colspan="2"  *ngIf="addplan.value.tipo_plan_srv==5">
+            <md2-select name="Plan"
+                        formControlName="plan_srv"
+                        placeholder="Planes"
+                        style="width=100%; min-width: 100%;"
+                        mdInput
+                        floatPlaceholder="never"
+            >
+              <md2-select-header>
+                <input class="search" name="p_search"
+                       type="text"
+                       [(ngModel)]="p_search"
+                       placeholder="Buscar..."
+                       style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                       formControlName="p_search" />
+              </md2-select-header>
+              <md2-option *ngFor="let i of (planes3 | dataPipe : {name_plan: p_search})" [value]="i.id_plan">{{i.name_plan}}</md2-option>
             </md2-select>
           </td>
         </tr>

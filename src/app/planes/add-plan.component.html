@@ -11,6 +11,9 @@
           <md2-option value="1">Planes antiguos</md2-option>
           <md2-option value="4">Planes nuevos</md2-option>
           <md2-option value="3">Planes exclusivos en dolares</md2-option>
+          <md2-option value="5">Planes Solo Dedicados</md2-option>
+          <md2-option value="6">Planes Zulia</md2-option>
+          <md2-option value="7">Planes Fibra</md2-option>
           <md2-option value="2">Otros</md2-option>
 
         </md2-select>
@@ -35,7 +38,7 @@
     </tr>
     <tr>
 
-      <td colspan="2" *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==4||addplan.value.tipo_plan==2||addplan.value.tipo_plan !=3">
+      <td colspan="2" *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==4||addplan.value.tipo_plan==5||addplan.value.tipo_plan==6||addplan.value.tipo_plan==7||addplan.value.tipo_plan==2||addplan.value.tipo_plan !=3">
 
         <md-form-field class="example-full-width">
           <input type="text" name="costo"
@@ -53,7 +56,7 @@
 
     <tr>
 
-      <td colspan="2" *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==4||addplan.value.tipo_plan==2||addplan.value.tipo_plan !=3">
+      <td colspan="2" *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==4||addplan.value.tipo_plan==6||addplan.value.tipo_plan==7||addplan.value.tipo_plan==2||addplan.value.tipo_plan !=3">
 
         <md-form-field class="example-full-width">
           <input type="text" name="taza"
@@ -85,7 +88,7 @@
 
       </td>
     </tr>
-  <tr *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==3 ||addplan.value.tipo_plan==4 ">
+  <tr *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==3 ||addplan.value.tipo_plan==4 ||addplan.value.tipo_plan==5||addplan.value.tipo_plan==6 ||addplan.value.tipo_plan==7 ">
 
     <td colspan="2">
 
@@ -100,7 +103,7 @@
 
     </td>
   </tr>
-  <tr *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==3 ||addplan.value.tipo_plan==4">
+  <tr *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==3 ||addplan.value.tipo_plan==4 ||addplan.value.tipo_plan==5 ||addplan.value.tipo_plan==6||addplan.value.tipo_plan==7">
 
     <td colspan="2">
 
@@ -116,7 +119,7 @@
     </td>
   </tr>
 
-  <tr *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==4 ||addplan.value.tipo_plan==3">
+  <tr *ngIf="addplan.value.tipo_plan==1||addplan.value.tipo_plan==4 ||addplan.value.tipo_plan==3 ||addplan.value.tipo_plan==6 ||addplan.value.tipo_plan==7">
 
     <td colspan="2">
       <md2-select formControlName="carac_plan"
@@ -124,6 +127,17 @@
       style="width=100%; min-width: 100%; min-height: 100%;"
       mdInput>
       <md2-option value="1">Asimetrico</md2-option>
+      <md2-option value="2">Simetrico</md2-option>
+    </md2-select>
+  </td>
+
+  <tr *ngIf="addplan.value.tipo_plan==5">
+
+    <td colspan="2">
+      <md2-select formControlName="carac_plan"
+      placeholder="Caracteristica de servicio"
+      style="width=100%; min-width: 100%; min-height: 100%;"
+      mdInput>
       <md2-option value="2">Simetrico</md2-option>
     </md2-select>
   </td>

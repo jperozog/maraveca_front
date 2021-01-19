@@ -60,6 +60,8 @@
             <td style="width: 15%; margin: 0 1em;">{{t.id}}</td>
 
             <td *ngIf="((t.kind | capitalize2) == 'V' || (t.kind | capitalize2) == 'E')" style="width: 15%">{{t.nombre+" "+t.apellido | capitalize2:true}}</td>
+            <td *ngIf="((t.kind | capitalize2) == 'V-' || (t.kind | capitalize2) == 'G') && (t.social != null && t.social != 'null')" style="width: 15%">{{t.social | capitalize2:true}}</td>
+            <td *ngIf="((t.kind | capitalize2) == 'V-' || (t.kind | capitalize2) == 'G') && (t.social == null && t.social == 'null')" style="width: 15%">{{"Sin Definir" | capitalize2:true}}</td>
             <td *ngIf="((t.kind | capitalize2) == 'J' || (t.kind | capitalize2) == 'G') && (t.social != null && t.social != 'null')" style="width: 15%">{{t.social | capitalize2:true}}</td>
             <td *ngIf="((t.kind | capitalize2) == 'J' || (t.kind | capitalize2) == 'G') && (t.social == null && t.social == 'null')" style="width: 15%">{{"Sin Definir" | capitalize2:true}}</td>
 

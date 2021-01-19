@@ -1,0 +1,69 @@
+#contenedor{
+    width: 60%;
+    margin-left: 15%;
+}
+.pdf{
+    margin-top: 1%;
+    background-color: white;
+    width: 95%;
+    background-size: cover; 
+}
+.imagen1{
+    width: 100%;
+    height: 250px;
+}
+
+.titulo{
+    margin-left: 15%;
+    margin-top: -1%;
+}
+
+.comentario{
+    padding-top: 1%;
+    padding-left: 5%;
+    justify-content: center;
+}
+
+.texto{
+    font-size: large;
+}
+
+.tabla{
+    margin-top: 2%;
+}
+
+.datos{
+    font-size: large;
+    margin-left: 10%;
+    width: 100%;
+}
+
+.datos2{
+    font-size: large;   
+}
+
+.recibido{
+    width: 50%;
+}
+.recibido2{
+    width: 40%;
+    margin-left: 50%;
+    margin-top: -15%;
+}
+.negrita{
+    font-weight: 900;
+}
+
+.primero{
+    margin-top: 5%;
+    margin-left: 2%;
+}
+
+.loque{
+    margin-left: 60px;
+    flex-direction: row;
+}
+
+.articulos{
+   margin-bottom: -4px;
+}

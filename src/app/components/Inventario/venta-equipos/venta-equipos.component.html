@@ -1,0 +1,232 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <button (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+  </div>
+  <div class="col-sm-4">
+    <h2 class="titulo">Lista Venta de Equipos</h2>
+  </div>
+  <div class="col-sm-3 filtrado">
+    <input (input)="BuscarVenta($event.target.value)" (keyup.backspace)="BuscarVentaBackSpace($event.target.value)"
+      type="text" class="form-control" name="filtrado" placeholder="Filtrar" id="inputDefault">
+  </div>
+
+</div>
+<div class="row">
+  <div class="col-sm-8">
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">Comprador</th>
+          <th scope="col">Modelo del Equipo</th>
+          <th scope="col">Serial del Equipo</th>
+          <th scope="col">Comentario</th>
+          <th scope="col">Tipo de Venta</th>
+          <th scope="col">Monto ($)</th>
+          <th scope="col">Accion</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor=" let venta of ventas | paginate: { id:'ventaequipos', itemsPerPage: 6, currentPage: e }">
+          <td>{{venta.cliente}}</td>
+          <td>{{venta.modelo_articulo}}</td>
+          <td>{{venta.serial_articulo}}</td>
+          <td>{{venta.comentario}}</td>
+          <td>{{venta.tipo}}</td>
+          <td *ngIf="venta.monto == 0 && venta.tipo == 'Promocion'">Promocion</td>
+          <td *ngIf="venta.monto > 0 && venta.tipo == 'Venta'">{{venta.monto}} $</td>
+          <td>
+            <button type="button" (click)="detallesVenta(template,venta.id_venta)" class="btn btn-info btn-sm boton2">
+              <i id="icono" class="fa fa-info">
+              </i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="ventaequipos" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-1"></div>
+  <div class="col-sm-3">
+    <div class="formulario">
+      <div class="card border-light mb-3">
+        <div class="card-header">Vender Equipo</div>
+
+        <div class="card-body">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" [(ngModel)]="isChecked" class="custom-control-input" id="customCheck1">
+            <label class="custom-control-label" for="customCheck1">Cliente No Registrado</label>
+          </div>
+          <br>
+          <div *ngIf="isChecked == true">
+            <input *ngIf="isChecked == true" type="text" class="form-control" placeholder="Cliente" id="inputDefault"
+              [(ngModel)]="cliente" required>
+          </div>
+          <div *ngIf="isChecked == false">
+            <div *ngIf="clienteSeleccionado == false">
+              <label for="">Cliente</label>
+              <input type="text" class="form-control form-control-sm" (input)="onSearchCliente($event.target.value)">
+              <br>
+              <div *ngFor=" let cliente of listacliente">
+                <button type="button"
+                  (click)="SeleccionCliente(cliente.id,cliente.dni, cliente.nombre, cliente.apellido,cliente.social)"
+                  class="btn btn-info btn-sm boton2"><i id="icono" class="fa fa-check"></i></button>
+                <p *ngIf='cliente.social == null || cliente.social == "null"'> {{cliente.kind}}{{cliente.dni}} ||
+                  {{cliente.nombre}} {{cliente.apellido}}</p>
+                <p *ngIf="cliente.social != null"> {{cliente.kind}}{{cliente.dni}} || {{cliente.social}}</p>
+              </div>
+            </div>
+            <div *ngIf="clienteSeleccionado == true">
+              <button type="button" (click)="deseleccionarCliente()" class="btn btn-info btn-sm boton2"><i id="icono"
+                  class="fa fa-times"></i></button>
+              <p>{{cedulaSeleccionado}} || {{cliente}}</p>
+            </div>
+          </div>
+          <div *ngIf="visualizar1 == true || isChecked == true" class="row">
+            <div class="col-sm-5">
+              <label for="exampleSelect1">Zona</label>
+              <select [(ngModel)]="sedeSeleccionada" (change)="cambiarEstatus()" class="form-control form-control-sm"
+                id="exampleSelect1" #ubicacion required>
+                <option [value]="0" selected></option>
+                <option *ngFor="let s of sedes" [value]="s.id_zona">{{s.nombre_zona}}</option>
+              </select>
+            </div>
+            <div class="col-sm-5">
+              <label for="exampleSelect1">Tipo de Equipo</label>
+              <select (change)="cambiarEstatus()" [(ngModel)]="equipoSeleccionado" class="form-control form-control-sm"
+                id="exampleSelect1" required>
+                <option [value]=" " selected></option>
+                <option *ngFor="let equipo of equipos" [value]="equipo.nombre_equipo">[{{equipo.nombre_tipo_art}}]
+                  {{equipo.nombre_equipo}} </option>
+              </select>
+            </div>
+            <div class="col-sm-1">
+              <label for="exampleSelect1">Accion</label>
+              <button type="button" (click)="buscarArticulos()" class="btn btn-info btn-sm boton2"><i id="icono"
+                  class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+          <br>
+
+
+          <div *ngIf="visualizar == true">
+            <label>Disponibles</label>
+            <select [(ngModel)]="serialSeleccionado" *ngIf="visualizar == true" class="form-control form-control-sm"
+              id="exampleSelect1" required>
+              <option [value]=" " selected></option>
+              <option *ngFor="let d of disponibles" [value]="d.id_articulo">{{d.modelo_articulo}} -
+                {{d.serial_articulo}}
+              </option>
+            </select>
+            <br>
+
+            <label class="col-form-label" for="inputDefault">Fecha Pago</label>
+            <my-date-picker [(ngModel)]="fecha" class="example-full-width" name="birthdate" mdInput required locale=es
+              [options]="myDatePickerOptions"></my-date-picker>
+            <br>
+
+            <label>Tipo Venta</label>
+            <select [(ngModel)]="tipoSeleccionado" *ngIf="visualizar == true && serialSeleccionado !=' ' && fecha != 0"
+              class="form-control form-control-sm" id="exampleSelect1" required>
+              <option value=" " selected></option>
+              <option value="Venta">Venta</option>
+              <option value="Promocion">Promocion</option>
+            </select>
+            <br>
+
+            <div *ngIf="serialSeleccionado != 0 && tipoSeleccionado == 'Venta'" class="form-group">
+              <label class="control-label">Monto</label>
+              <div class="form-group">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                  </div>
+                  <input [(ngModel)]="montoSeleccionado" type="text" class="form-control"
+                    aria-label="Amount (to the nearest dollar)">
+                  <div class="input-group-append">
+                    <span class="input-group-text">.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [(ngModel)]="isChecked2" class="custom-control-input" id="customCheck2">
+              <label class="custom-control-label" for="customCheck2">Agregar Comentario</label>
+            </div>
+            <br>
+            <div *ngIf="isChecked2">
+              <label for="exampleTextarea">Comentario</label>
+              <textarea [(ngModel)]="ComentarioVenta" class="form-control"
+                id="exampleTextarea" rows="5"></textarea>
+            </div>
+            <br>
+
+          </div>
+
+          <div *ngIf="montoSeleccionado > 0 || tipoSeleccionado == 'Promocion'">
+            <button type="button" (click)="GuardarData()" class="btn btn-info btn">Vender</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Detalles de Venta</h4>
+    <button type="button" (click)="detallesVenta(template,venta.id_venta)" class="btn btn-info btn-sm">
+      <i id="icono" class="fa fa-pencil">
+      </i>
+    </button>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="this.modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="card border-light mb-3" style="max-width: 40rem;">
+    <div *ngFor="let d of detalles" class="card-body">
+      <h6 class="control-label" for="disabledInput">Comprador: </h6>
+      <p>{{d.cliente}}</p>
+      <br>
+      <h6>Detalles de Articulo</h6>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Modelo Equipo:</label>
+          <p>{{d.modelo_articulo}}</p>
+        </div>
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Serial Equipo</label>
+          <p>{{d.serial_articulo}}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Zona Equipo</label>
+          <p>{{d.nombre_zona}}</p>
+        </div>
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Tipo de Venta</label>
+          <p>{{d.tipo}}</p>
+        </div>
+
+      </div>
+      <br>
+      <h6>Responsable de Venta</h6>
+      <p>{{d.nombre_user}} {{d.apellido_user}}</p>
+      <br>
+      <h6>Datos de Venta</h6>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Monto:</label>
+          <p>{{d.monto}} $</p>
+        </div>
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Fecha</label>
+          <p>{{d.fecha_venta |date:"shortDate" }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

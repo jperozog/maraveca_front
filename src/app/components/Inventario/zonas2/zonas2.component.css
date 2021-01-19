@@ -1,0 +1,82 @@
+.zonas{
+    margin-top: 5%;
+}
+.titulo{
+    margin-left: 2%;
+}
+
+
+.carta-zona{
+    margin-left: 2%;
+    margin-top: 1%;
+    float: left;
+    padding: 1%;
+    cursor: pointer;
+}   
+
+md-grid-list{
+    margin-bottom: 10% ;
+}
+
+.md-button{
+    justify-content: center;
+}
+
+img{
+    margin-left: 2%;
+}
+
+.formulario{
+    margin-top: 5%; 
+    float: left;
+}
+.primary{
+    background-color: #249CC8;
+    color: white;
+}
+
+
+.prueba{
+    flex-direction: row;
+}
+
+.prueba1{
+    width: 42%;
+    float: left;
+}
+.prueba2{
+    margin-left: 2%;
+    width: 42%;
+    float: left;
+}
+
+.boton2{
+    margin-top: 7%;
+    margin-left: 3%;
+}
+
+.historial{
+    margin-left: 1%;
+}
+
+.botones{
+    margin-top: 1%;
+}
+
+.boton{
+    background-color:#f9f9f9;
+    border-radius: 10px;
+    color:#2C2C30;
+    transition: all .5s ease;
+}
+
+.boton:hover{
+    background-color:#2C2C30;
+    border-radius: 10px;
+    color:#f9f9f9
+}
+
+.botones2{
+    background-color: #2C2C30;
+    color: white;
+}

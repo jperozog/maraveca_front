@@ -1,0 +1,37 @@
+<h1 md-dialog-title>Confirmacion</h1>
+<div md-dialog-content>
+  <p  *ngIf="id_facpago">¿Está seguro que desea eliminar el pago seleccionado de la factura {{datos.row.id}} del  cliente {{dni +" "+ cliente}}?</p>
+
+  <p *ngIf="id_facProd && nro_prod > 1">¿Está seguro que desea eliminar el producto/servicio seleccionado de la factura {{datos.row.id}} del  cliente {{dni +" "+ cliente}}?</p>
+
+  <p *ngIf="id_facProd && nro_prod == 1 ">El servicio o producto que desea eliminar es el unico existente en la factura seleccionada, por lo que se recomienda anular la factura relacionada
+
+  <p *ngIf="tasa ">¿Está seguro que desea realizar cambios en la configuración? </p>
+
+  <p *ngIf="edicion == 'pg' ">¿Está seguro que desea editar el pago de la factura {{datos.row.codigo_factura}}? </p>
+
+  <p *ngIf="edicion == 'pr' ">¿Está seguro que desea editar el producto/servicio de la factura {{datos.row.fac_id}} ? </p>
+
+
+
+
+
+</div>
+<div md-dialog-actions>
+  <tr>
+    <td>
+      <button  *ngIf="id_facpago" md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="eliminar_pago()" tabindex="2">Eliminar pago</button>
+      <button *ngIf="id_facProd && nro_prod > 1" md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="eliminar_producto()" tabindex="2">Eliminar producto</button>
+      <button *ngIf="tasa" md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="confir_edit_config()" tabindex="2">Sí</button>
+      <button *ngIf="edicion == 'pg' " md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="confir_edit_pg()" tabindex="2">Sí</button>
+      <button *ngIf="edicion == 'pr' " md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="confir_edit_pr()" tabindex="2">Sí</button>
+
+    </td>
+    <td>
+      <button *ngIf="(id_facProd && nro_prod > 1)|| id_facpago" md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">Cancelar</button>
+      <button *ngIf="id_facProd && nro_prod == 1 " md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">Salir</button>
+      <button *ngIf="tasa ||edicion == 'pg' || edicion == 'pr' " md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">No</button>
+
+    </td>
+  </tr>
+</div>

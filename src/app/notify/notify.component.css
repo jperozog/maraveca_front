@@ -130,3 +130,44 @@ table{
 
 }
 
+.tabla{
+  margin-top: 1%;
+  margin-left: 5%;
+}
+
+.boton{
+  margin-top: 20%;
+}
+
+.primero{
+  margin-top: 5%;
+  margin-left: 2%;
+}
+
+.boton2{
+  float: left;
+}
+
+.titulo{
+  margin-top: 10%;
+}
+.filtrado{
+  margin-top: 1%;
+  margin-left: -8%;
+}
+
+
+.tr{
+  line-height: 1px;
+  min-height: 1px;
+  height: 1px;
+}
+
+.td{
+  line-height: 1px;
+  min-height: 1px;
+  height: 1px;
+  padding: 15px;
+}
+
+

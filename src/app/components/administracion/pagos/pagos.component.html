@@ -1,0 +1,123 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <button (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+  </div>
+  <div class="col-sm-11">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-5 separador">
+    <h2 class="titulo">Lista De Cierre de Caja</h2>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-4 separador2">
+    <table class="table table-hover">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">Codigo Cierre</th>
+          <th scope="col">Fecha De Cierre</th>
+          <th scope="col">Usuario</th>
+          <th scope="col">Accion</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of pendientes | paginate: {id:'cierres', itemsPerPage: 5, currentPage: p }">
+          <th>{{p.id_cierre}}</th>
+          <th>{{p.cierre_fecha | date:"shortDate"}}</th>
+          <th>{{p.nombre_user}} {{p.apellido_user}}</th>
+          <th>
+            <button type="button" (click)="verDetalles(p.id_cierre,p.nombre_user, p.apellido_user)"
+              class="btn btn-info btn-sm">
+              <i id="icono" class="fa fa-info"></i>
+            </button>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="cierres" (pageChange)="p = $event"></pagination-controls>
+
+  </div>
+  <div *ngIf="visualizar==true" class="col-sm-7">
+    <div class="card border-light mb-3">
+      <div class="card-header">Detalles de Cierre de Caja</div>
+      <div class="card-body">
+        <label class="control-label" for="disabledInput">Codigo Cierre de Caja: {{id_cierre}}</label>
+        <br>
+        <br>
+        <p>
+          <md-icon>attach_money</md-icon> Dinero en Efectivo: {{cantidadEfectivo | number : '1.2'}}$
+        </p>
+
+        <p>
+          <md-icon>swap_horizontal_circle</md-icon> Dinero en Transferencia (Banco Nacionales):
+          {{cantidadNacionales | number : '1.2-2'}}Bs.S
+        </p>
+
+        <p>
+          <md-icon>swap_horizontal_circle</md-icon> Dinero en Transferencias (Zelle):
+          {{cantidadZelle | number : '1.2'}}$
+        </p>
+        <br>
+
+        <input (input)="onSearchMovimiento($event.target.value)" (keyup.backspace)="onSearchMoviemientoBackSpace($event.target.value)" type="text" class="form-control" name="filtrado"
+          placeholder="Filtrar" id="inputDefault" [(ngModel)]="filtrado">
+
+        <br>
+        <table class="table table-borderless">
+          <thead>
+            <tr class="table-info">
+              <th scope="col">N</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Monto</th>
+              <th scope="col">Metodo</th>
+              <th scope="col">Referencia</th>
+              <th scope="col">Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of detalles | paginate: {id:'movimientosCierre', itemsPerPage: 3, currentPage: e }">
+              <th scope="row">{{d.id_registro}}</th>
+              <th scope="row">{{d.nombre}} {{d.apellido}}</th>
+              <th scope="row">{{d.monto | number : '1.2-2'}} {{d.moneda}}</th>
+              <th scope="row">{{d.nombre_metodo}}</th>
+              <th scope="row">{{d.comentario}}</th>
+              <th scope="row">{{d.fecha_pago| stringToDate | date: 'dd/M/yy'}}</th>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="movimientosCierre" (pageChange)="e = $event"></pagination-controls>
+        <!--
+        <button *ngIf="estatusCierre == 1" (click)="openModal(template)" type="button" class="btn btn-info">
+          <i id="icono" class="fa fa-check"></i>
+        </button>
+        <button *ngIf="estatusCierre == 1" (click)="openModal2(template2)" type="button" class="btn btn-danger">
+          <i id="icono" class="fa fa-times"></i>
+        </button>
+        -->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Seguro Desea Aprobar el Cierre de Caja?</p>
+    <br>
+    <button type="button" class="btn btn-info" (click)="confirmar()">Si</button>
+    <button type="button" class="btn btn-danger" (click)="this.modalRef.hide()">No</button>
+  </div>
+</ng-template>
+
+<ng-template #template2>
+  <div class="modal-body text-center">
+    <p>Seguro Desea Cancelar el Cierre de Caja?</p>
+    <br>
+    <button type="button" class="btn btn-info" (click)="cancelar()">Si</button>
+    <button type="button" class="btn btn-danger" (click)="this.modalRef2.hide()">No</button>
+  </div>
+</ng-template>

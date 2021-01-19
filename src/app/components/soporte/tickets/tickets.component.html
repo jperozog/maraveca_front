@@ -1,0 +1,391 @@
+<div class="con">
+
+  <div class="row principal">
+  </div>
+
+  <div class="row">
+
+    <div class="col-sm-2 acciones">
+      <h1 class="titulo">Soporte</h1>
+      <br>
+      <div (click)="cambiarActivo(1)" class="boton2">
+        <md-icon style="font-size: 25px; margin-top: 40px;">headset_mic</md-icon>
+        <p>Tickets</p>
+      </div>
+      <br>
+      <div
+        *ngIf="(usuario.perm && usuario.perm.includes('soporte_esp')) ||(usuario.perm && usuario.perm.includes('instalaciones_w'))"
+        (click)="cambiarActivo(2)" class="boton2">
+        <md-icon style="font-size: 25px; margin-top: 20px;">build</md-icon>
+        <p>Averias</p>
+      </div>
+      <br>
+      <div
+        *ngIf="(usuario.perm && usuario.perm.includes('soporte_esp')) ||(usuario.perm && usuario.perm.includes('instalaciones_w'))"
+        (click)="cambiarActivo(3)" class="boton2">
+        <md-icon style="font-size: 25px; margin-top: 20px;">add_to_queue</md-icon>
+        <p>Reposicion de Equipos</p>
+      </div>
+      <div
+        *ngIf="(usuario.perm && usuario.perm.includes('soporte_w')) ||(usuario.perm && usuario.perm.includes('instalaciones_w'))"
+        routerLink="/show_ip" class="boton2">
+        <md-icon style="font-size: 25px; margin-top: 20px;">http</md-icon>
+        <p>Lista de Ips</p>
+      </div>
+    </div>
+    <div class="col-sm-10">
+      <div class="row">
+        <!--
+        <div class="col-sm-3">
+          <select [(ngModel)]="tipoActivo" (change)="ngOnInit()" class="form-control" id="exampleSelect2" required>
+            <option value="1">Tickets</option>
+            <option value="2">Averias</option>
+            <option value="3">Reposicion de Equipos</option>
+          </select>
+        </div>
+        -->
+        <div class="col-sm-3">
+          <input class="form-control filtrado" (keyup.backspace)="buscarDatosBackSpace($event.target.value)"
+            (input)="buscarDatos($event.target.value)" type="text" name="filtrado" placeholder="Filtrar"
+            id="inputDefault">
+        </div>
+        <div class="col-sm-3">
+          <div *ngIf="tipoActivo == 1" class="alert alert-dismissible alert-danger">
+            {{ticketsActivos}} Tickets Abiertos
+          </div>
+          <div *ngIf="tipoActivo == 2" class="alert alert-dismissible alert-danger">
+            {{averiasActivas}} Averias Abiertos
+          </div>
+          <div *ngIf="tipoActivo == 3" class="alert alert-dismissible alert-danger">
+            {{repoActivas}} Reposiciones Abiertos
+          </div>
+
+        </div>
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-2">
+          <button style="background-color: #2C2C30; color: white;"
+            *ngIf="usuario.perm && usuario.perm.includes('soporte_w')" (click)="openModal(template)"
+            title="Agregar Nueva Ticket" type="button" class="btn btn-default btn-sm">
+            <md-icon class="icon">add_circle_outline</md-icon>
+          </button>
+          <button style="background-color: #2C2C30; color: white;" (click)="ngOnInit()" title="Actualizar Tickets"
+            type="button" class="btn btn-default btn-sm">
+            <md-icon class="icon">loop</md-icon>
+          </button>
+        </div>
+        <div *ngIf="tipoActivo == 1" class="col-sm-12">
+          <table class="table table-borderless tabla">
+            <thead>
+              <tr class="table-default" style="background-color: #2C2C30; color: white;">
+                <th scope="col">TICKET</th>
+                <th scope="col">CLIENTE</th>
+                <th scope="col">Celda/Olt</th>
+                <th scope="col">ROUTER</th>
+                <th scope="col">ESTADO</th>
+                <th scope="col">USUARIO</th>
+                <th scope="col">FECHA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="cursor: pointer;" [routerLink]="['/detallesTicket', t.id_soporte,tipoActivo]"
+                *ngFor="let t of tickets | paginate: {id:'tickets', itemsPerPage: 12, currentPage: p }">
+                <td> {{t.id_soporte}}
+                <td *ngIf="t.serie == 0 || t.serie == null">{{t.nombre}} {{t.apellido}}</td>
+                <td *ngIf="t.serie == 1">{{t.social}}</td>
+                <td>{{t.nombre_celda}}</td>
+                <td>{{t.nombre_srvidor}}</td>
+                <td *ngIf="t.status_soporte == 1">
+                  <p class="text-success">Abierto.</p>
+                </td>
+                <td *ngIf="t.status_soporte == 2">
+                  <p class="text-danger">Cerrado.</p>
+                </td>
+                <td>{{t.nombre_user}} {{t.apellido_user}}</td>
+                <td>{{t.created_at | date: 'dd/M/yy'}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <pagination-controls id="tickets" (pageChange)="p = $event"></pagination-controls>
+        </div>
+        <div *ngIf="tipoActivo == 2" class="col-sm-12">
+          <table class="table table-borderless tabla">
+            <thead>
+              <tr class="table-default" style="background-color: #2C2C30; color: white;">
+                <th scope="col">AVERIA</th>
+                <th scope="col">CELDA/MANGA</th>
+                <th scope="col">ROUTER</th>
+                <th scope="col">ESTADO</th>
+                <th scope="col">USUARIO</th>
+                <th scope="col">FECHA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="cursor: pointer;" [routerLink]="['/detallesTicket', a.id_averia,tipoActivo]"
+                *ngFor="let a of averias | paginate: {id:'averias', itemsPerPage: 12, currentPage: p }">
+                <td> {{a.id_averia}}
+                <td>{{a.nombre_celda}}</td>
+                <td>{{a.nombre_srvidor}}</td>
+                <td *ngIf="a.status_averia == 1">
+                  <p class="text-success">Abierto.</p>
+                </td>
+                <td *ngIf="a.status_averia == 2">
+                  <p class="text-danger">Cerrado.</p>
+                </td>
+                <td>{{a.nombre_user}} {{a.apellido_user}}</td>
+                <td>{{a.created_at | date: 'dd/M/yy'}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <pagination-controls id="averias" (pageChange)="p = $event"></pagination-controls>
+        </div>
+        <div *ngIf="tipoActivo == 3" class="col-sm-12">
+          <table class="table table-borderless tabla">
+            <thead>
+              <tr class="table-default" style="background-color: #2C2C30; color: white;">
+                <th scope="col">#</th>
+                <th scope="col">CLIENTE</th>
+                <th scope="col">Celda/Olt</th>
+                <th scope="col">ROUTER</th>
+                <th scope="col">ESTADO</th>
+                <th scope="col">USUARIO</th>
+                <th scope="col">FECHA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="cursor: pointer;" [routerLink]="['/detallesTicket', r.id_reposicion, tipoActivo]"
+                *ngFor="let r of reposiciones | paginate: {id:'reposiciones', itemsPerPage: 12, currentPage: p }">
+                <td> {{r.id_reposicion}}
+                <td *ngIf="r.serie == 0 || r.serie == null">{{r.nombre}} {{r.apellido}}</td>
+                <td *ngIf="r.serie == 1">{{r.social}}</td>
+                <td>{{r.nombre_celda}}</td>
+                <td>{{r.nombre_srvidor}}</td>
+                <td *ngIf="r.status_reposicion == 1">
+                  <p class="text-primary">Abierto.</p>
+                </td>
+                <td *ngIf="r.status_reposicion == 2">
+                  <p class="text-success">Aprobada.</p>
+                </td>
+                <td *ngIf="r.status_reposicion == 3">
+                  <p class="text-danger">Rechazada.</p>
+                </td>
+                <td>{{r.nombre_user}} {{r.apellido_user}}</td>
+                <td>{{r.created_at | date: 'dd/M/yy'}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <pagination-controls id="reposiciones" (pageChange)="p = $event"></pagination-controls>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Agregar</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="tipoActivo == 1">
+      <label for="">Cliente</label>
+      <div>
+        <input *ngIf="clienteSeleccionado == false" type="text" class="form-control form-control-sm"
+          (input)="onSearchCliente($event.target.value)">
+        <br>
+        <div *ngFor=" let cliente of listacliente">
+          <button *ngIf="clienteSeleccionado == false" type="button"
+            (click)="SeleccionCliente(cliente.id,cliente.dni, cliente.nombre, cliente.apellido)"
+            class="btn btn-info btn-sm boton"><i id="icono" class="fa fa-check"></i></button>
+          <p *ngIf="clienteSeleccionado == false">{{cliente.kind}}{{cliente.dni}} || {{cliente.nombre}}
+            {{cliente.apellido}}</p>
+        </div>
+      </div>
+
+      <div *ngIf="clienteSeleccionado == true">
+        <button type="button" (click)="deseleccionarCliente()" class="btn btn-info btn-sm boton"><i id="icono"
+            class="fa fa-times"></i></button>
+        <p>{{cedulaSeleccionado}} || {{nombreSeleccionado}} {{apellidoSeleccionado}}</p>
+      </div>
+
+
+      <!--tickets-->
+      <div *ngIf="visualizarDivEquipos == true " class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isChecked1" class="custom-control-input" id="customCheck1">
+        <label class="custom-control-label" for="customCheck1">Lentitud</label>
+        <br>
+      </div>
+
+      <div *ngIf="visualizarDivEquipos == true " class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isChecked2" class="custom-control-input" id="customCheck2">
+        <label class="custom-control-label" for="customCheck2">Lan Desconectado</label>
+        <br>
+      </div>
+
+      <div *ngIf="visualizarDivEquipos == true " class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isChecked3" class="custom-control-input" id="customCheck3">
+        <label class="custom-control-label" for="customCheck3">Señal Degradada</label>
+        <br>
+      </div>
+
+      <div *ngIf="visualizarDivEquipos == true " class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isChecked4" class="custom-control-input" id="customCheck4">
+        <label class="custom-control-label" for="customCheck4">Equipo Inaccesible</label>
+        <br>
+        <br>
+      </div>
+
+
+      <div
+        *ngIf="(isChecked1 == true || isChecked2 == true || isChecked3 == true || isChecked4 == true) && PrioridadSelected > 0">
+        <button type="button" (click)="GuardarData()" class="btn btn-default boton">Guardar Ticket</button>
+      </div>
+
+
+    </div>
+
+    <div *ngIf="tipoActivo == 2">
+
+      <div>
+        <label for="">Tipo de Tecnologia</label>
+        <select [(ngModel)]="tecnologiaSeleccionada" (change)="cambiarTecnologia()" class="form-control"
+          id="exampleSelect2" required>
+          <option value="1">Inalambrica</option>
+          <option value="2">Alambrica</option>
+        </select>
+      </div>
+      <br>
+      <div *ngIf="tecnologiaSeleccionada == 1">
+        <label for="">Celdas</label>
+        <select [(ngModel)]="celdaSeleccionada" class="form-control" id="exampleSelect2" required>
+          <option *ngFor="let c of celdas" [value]="c.id_celda">{{c.nombre_celda}}</option>
+        </select>
+      </div>
+      <div *ngIf="tecnologiaSeleccionada == 2">
+        <label for="">Manga Empalme</label>
+        <select [(ngModel)]="mangaSeleccionada" class="form-control" id="exampleSelect2" required>
+          <option *ngFor="let m of mangas" [value]="m.id_manga">{{m.nombre_manga}}</option>
+        </select>
+      </div>
+      <br>
+      <div *ngIf="celdaSeleccionada != 0 || mangaSeleccionada != 0" class="form-group">
+        <label for="exampleTextarea">Comentario</label>
+        <textarea [(ngModel)]="comentario" class="form-control" id="exampleTextarea" rows="8"></textarea>
+      </div>
+      <br>
+      <div *ngIf="(celdaSeleccionada != 0 || mangaSeleccionada != 0) && comentario.length > 10">
+        <button type="button" (click)="GuardarData()" class="btn btn-info">Guardar Averia</button>
+      </div>
+    </div>
+
+
+    <div *ngIf="tipoActivo == 3">
+
+      <label for="">Cliente</label>
+      <div>
+        <input *ngIf="clienteSeleccionado == false" type="text" class="form-control form-control-sm"
+          (input)="onSearchCliente($event.target.value)">
+        <br>
+        <div *ngFor=" let cliente of listacliente">
+          <button *ngIf="clienteSeleccionado == false" type="button"
+            (click)="SeleccionCliente(cliente.id,cliente.dni, cliente.nombre, cliente.apellido)"
+            class="btn btn-info btn-sm boton"><i id="icono" class="fa fa-check"></i></button>
+          <p *ngIf="clienteSeleccionado == false">{{cliente.kind}}{{cliente.dni}} || {{cliente.nombre}}
+            {{cliente.apellido}}</p>
+        </div>
+      </div>
+
+      <div *ngIf="clienteSeleccionado == true">
+        <button type="button" (click)="deseleccionarCliente()" class="btn btn-info btn-sm boton"><i id="icono"
+            class="fa fa-times"></i></button>
+        <p>{{cedulaSeleccionado}} || {{nombreSeleccionado}} {{apellidoSeleccionado}}</p>
+        <br>
+      </div>
+
+      <div *ngIf="clienteSeleccionado == true">
+        <label for="">Servicios</label>
+        <select [(ngModel)]="servicioSeleccionado" (change)="buscarTecnoglogia()" class="form-control"
+          id="exampleSelect2" required>
+          <option value="0"></option>
+          <option *ngFor="let s of serviciosClientes" [value]="s.id_srv">[{{s.id_srv}}] {{s.name_plan}}</option>
+        </select>
+        <br>
+      </div>
+      <div *ngIf="tecnoSeleccionada == 2">
+        <label for="">Caja Distribucion</label>
+        <select [(ngModel)]="cajaSeleccionada" (change)="buscarEquipos()" class="form-control" id="exampleSelect2"
+          required>
+          <option value="0"></option>
+          <option *ngFor="let c of cajas" [value]="c.id_caja">{{c.nombre_caja}}</option>
+        </select>
+      </div>
+      <div *ngIf="tecnoSeleccionada == 1">
+        <label for="">Celdas</label>
+        <select [(ngModel)]="celdaSeleccionada" (change)="buscarEquipos()" class="form-control" id="exampleSelect2"
+          required>
+          <option value="0"></option>
+          <option *ngFor="let c of celdas" [value]="c.id_celda">{{c.nombre_celda}}</option>
+        </select>
+        <br>
+      </div>
+      <div *ngIf="celdaSeleccionada != 0 || cajaSeleccionada != 0" class="form-group">
+
+        <label for="">Eligir tipo de reposicion</label>
+        <select [(ngModel)]="mudanza" (change)="buscarEquiposModelos()" class="form-control" id="exampleSelect2"
+          required>
+          <option value="0"></option>
+          <option value="1">Nuevo Equipo</option>
+          <option value="2">Mismo Equipo</option>
+        </select>
+        <br>
+      </div>
+
+
+
+      <div *ngIf="mudanza == 1" class="form-group">
+        <label for="">Equipos</label>
+        <select [(ngModel)]="equipoSeleccionado" (change)="buscarEquiposModelos()" class="form-control"
+          id="exampleSelect2" required>
+          <option value="0"></option>
+          <option *ngFor="let e of equipos" [value]="e.nombre_equipo">{{e.nombre_equipo}}</option>
+        </select>
+        <br>
+      </div>
+
+
+
+
+      <div *ngIf="equipoSeleccionado != ''" class="form-group">
+        <label for="">Equipo Disponible</label>
+        <select [(ngModel)]="disponibleSeleccionado" class="form-control" id="exampleSelect2" required>
+          <option value="0"></option>
+          <option *ngFor="let d of disponibles" [value]="d.id_articulo">{{d.serial_articulo}}</option>
+        </select>
+      </div>
+      <div *ngIf="disponibleSeleccionado != 0" class="form-group">
+        <label for="exampleTextarea">Comentario</label>
+        <textarea [(ngModel)]="comentarioEquipo" class="form-control" id="exampleTextarea" rows="8"></textarea>
+      </div>
+
+      <div *ngIf="mudanza == 2" class="form-group">
+        <label for="exampleTextarea">Direccion</label>
+        <textarea [(ngModel)]="comentarioEquipo" class="form-control" id="exampleTextarea" rows="8"></textarea>
+      </div>
+      <div *ngIf="comentarioEquipo.length > 10">
+        <button type="button" (click)="GuardarData()" class="btn btn-default boton">Guardar Reposicion</button>
+      </div>
+    </div>
+
+
+  </div>
+</ng-template>

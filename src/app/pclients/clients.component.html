@@ -1,72 +1,735 @@
-<md-toolbar class="submenu">
+<!--<md-toolbar class="submenu">
   <md-form-field floatPlaceholder="never">
-  <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
+    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
   </md-form-field>
   <span class="example-spacer" style="text-align: center;">Clientes Potenciales</span>
-  <button md-raised-button (click)="NFactibilidad()" *ngIf="usuario.perm && usuario.perm.includes('pclientes_w')" >
+
+  <button style="background-color:#1F9BCF;" (click)="nuevaFact(template)" title="Agregar Factibilidad" type="button"
+    class="btn btn-info btn-sm ">
     <md-icon>leak_add</md-icon> Nueva Factibilidad
   </button>
-  <button md-raised-button (click)="this.myService.refresh()" >
-    <md-icon>cached</md-icon> Actualizar Lista
-  </button>
-  <button md-raised-button (click)="openDialog()" *ngIf="usuario.perm && usuario.perm.includes('pclientes_w')" >
+  <button style="background-color:#1F9BCF;" (click)="aggCliente(template1)" title="Agregar Factibilidad" type="button"
+    class="btn btn-info btn-sm ">
     <md-icon>group_add</md-icon> Agregar Potencial
   </button>
-
+  <button md-raised-button (click)="this.myService.refresh()">
+    <md-icon>cached</md-icon> Actualizar Lista
+  </button>
 </md-toolbar>
 <div class="contenido">
 
-<table style="width: 97%" class=addClient [md2Data]="data | dataPipe: { nombre: search, apellido: search, dni: search, phone1:search, social:search }" #md2="md2DataTable" [rowsPerPage]="15">
-  <thead>
-    <tr>
-      <td colspan="6">
-        <md2-pagination [rowsPerPageSet]="[5,10,15]" paginationLabel="Filas por pagina"></md2-pagination>
-      </td>
-    </tr>
-    <tr>
-      <th style="width: 10%" md2SortBy="dni">Cedula</th>
-      <th style="width: 20%" md2SortBy="nombre">Nombre y Apellido</th>
-      <th style="width: 10%" md2SortBy="phone1">Telefono</th>
-      <th style="width: 20%" md2SortBy="email">Correo Electronico</th>
-      <th style="width: 20%" md2SortBy="direccion">Direccion</th>
-      <th style="width: 20%">Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let i of md2.data">
-      <td (click)="status(i)" style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
-      <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'V'" style="width: 20%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-      <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'E'" style="width: 20%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-      <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'G'" style="width: 20%">{{(i.social|capitalize)}}</td>
-      <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'J'" style="width: 20%">{{(i.social|capitalize)}}</td>
-      <td (click)="status(i)" style="width: 10%">{{i.phone1}}</td>
-      <td (click)="status(i)" style="width: 20%">{{i.email}}</td>
-      <td (click)="status(i)" style="width: 20%">{{i.direccion}}</td>
-      <td style="width:20%" *ngIf="usuario.perm && !usuario.perm.includes('pclientes_w')">
-        No Autorizado
-      </td>
-      <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('pclientes_w')">
-        <button md-icon-button style="color:#106cc8" (click)="show(i)"><!---->
-        <md-icon class="md-24" aria-label="Editar Potencial" >mode_edit</md-icon>
-      </button>
-      <button md-icon-button style="color:#106cc8" (click)="SendPre(i)"><!---->
-      <md-icon class="md-24" aria-label="Editar Potencial" >contact_mail</md-icon>
-    </button>
-        <button  md-icon-button color="warn"><!--(click)="deleteDialog(i)"-->
-          <md-icon class="md-24" aria-label="Eliminar Potencial">delete</md-icon>
-      </button>
-        <button md-icon-button style="color:#106cc8"  (click)="dinstall(i)">
-          <md-icon class="md-24" aria-label="Detalles De Factibilidad" >event_available</md-icon>
-        </button>
-      <button md-icon-button *ngIf="i.presupuesto >= 1" (click)="showPre(i)">
-        <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
-      </button>
+  <table style="width: 97%" class=addClient
+    [md2Data]="data | dataPipe: { nombre: search, apellido: search, dni: search, phone1:search, social:search }"
+    #md2="md2DataTable" [rowsPerPage]="15">
+    <thead>
+      <tr>
+        <td colspan="6">
+          <md2-pagination [rowsPerPageSet]="[5,10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+        </td>
+      </tr>
+      <tr>
+        <th style="width: 10%" md2SortBy="dni">Cedula</th>
+        <th style="width: 20%" md2SortBy="nombre">Nombre y Apellido</th>
+        <th style="width: 10%" md2SortBy="phone1">Telefono</th>
+        <th style="width: 20%" md2SortBy="email">Correo Electronico</th>
+        <th style="width: 20%" md2SortBy="direccion">Direccion</th>
+        <th style="width: 20%">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of md2.data">
+        <td (click)="status(i)" style="width: 10%">{{(i.kind|capitalize)+i.dni}}</td>
+        <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'V'" style="width: 20%">
+          {{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+        <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'E'" style="width: 20%">
+          {{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
+        <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'G'" style="width: 20%">{{(i.social|capitalize)}}</td>
+        <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'J'" style="width: 20%">{{(i.social|capitalize)}}</td>
+        <td (click)="status(i)" *ngIf="i.kind.toUpperCase() == 'V-'" style="width: 20%">{{(i.social|capitalize)}}</td>
+        <td (click)="status(i)" style="width: 10%">{{i.phone1}}</td>
+        <td (click)="status(i)" style="width: 20%">{{i.email}}</td>
+        <td (click)="status(i)" style="width: 20%">{{i.direccion}}</td>
+        <td style="width:20%" *ngIf="usuario.perm && !usuario.perm.includes('pclientes_w')">
+          No Autorizado
+        </td>
+        <td style="width: 20%" *ngIf="usuario.perm && usuario.perm.includes('pclientes_w')">
+          <button md-icon-button style="color:#106cc8" (click)="show(i)">
 
-    </td>
-    </tr>
-  </tbody>
-  <tfoot>
+            <md-icon class="md-24" aria-label="Editar Potencial">mode_edit</md-icon>
+          </button>
+          <button md-icon-button style="color:#106cc8" (click)="SendPre(i)">
 
-  </tfoot>
-</table>
+            <md-icon class="md-24" aria-label="Editar Potencial">contact_mail</md-icon>
+          </button>
+          <button md-icon-button color="warn">
+            (click)="deleteDialog(i)"
+            <md-icon class="md-24" aria-label="Eliminar Potencial">delete</md-icon>
+          </button>
+
+          <button md-icon-button style="color:#106cc8" (click)="dinstall(i)">
+            <md-icon class="md-24" aria-label="Detalles De Factibilidad">event_available</md-icon>
+          </button>
+
+          <button md-icon-button *ngIf="i.presupuesto >= 1" (click)="showPre(i)">
+            <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens
+            </md-icon>
+          </button>
+
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+
+    </tfoot>
+  </table>
 </div>
+-->
+<div class="zonas">
+
+  <div class="row">
+    <div class="col-sm-3">
+      <h2 class="titulo">Clientes Potenciales</h2>
+    </div>
+    <div class="col-sm-2 filtrado">
+      <input (input)="buscarCliente($event.target.value)" (keyup.backspace)="BuscarClienteSpace($event.target.value)"
+        type="text" class="form-control" name="filtrado" placeholder="Filtrar" id="inputDefault">
+    </div>
+    <div class="col-sm-5"></div>
+    <div class="col-sm-2 filtrado">
+      <button style="background-color:#1F9BCF;" (click)="nuevaFact(template)" title="Agregar Factibilidad" type="button"
+        class="btn btn-info btn-sm ">
+        <md-icon>leak_add</md-icon>
+      </button>
+      <button style="background-color:#1F9BCF;" (click)="aggCliente(template1)" title="Agregar Factibilidad"
+        type="button" class="btn btn-info btn-sm ">
+        <md-icon>group_add</md-icon>
+      </button>
+      <button style="background-color:#1F9BCF;" (click)="actualizarP()" title="Actualizar Instalaciones" type="button"
+        class="btn btn-info btn-sm ">
+        <md-icon>loop</md-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table table-borderless tabla">
+        <thead>
+          <tr class="table-info">
+            <th scope="col">CEDULA</th>
+            <th scope="col">CLIENTE</th>
+            <th scope="col">TELEFONO</th>
+            <th scope="col">CORREO</th>
+            <th scope="col">DIRECCION</th>
+            <th scope="col">ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of pClientes | paginate: {id:'clientes', itemsPerPage: 12, currentPage: e }">
+            <td (click)="openModal(p.id,template2)">{{p.kind}}{{p.dni}}</td>
+            <td (click)="openModal(p.id,template2)" *ngIf="p.kind == 'V' || p.kind == 'E'"> {{p.nombre+" "+p.apellido}}
+            </td>
+            <td (click)="openModal(p.id,template2)" *ngIf="p.kind == 'J' || p.kind == 'G' || p.kind == 'V-'">
+              {{p.social}}</td>
+            <td (click)="openModal(p.id,template2)">{{p.phone1}}</td>
+            <td (click)="openModal(p.id,template2)">{{p.email}}</td>
+            <td (click)="openModal(p.id,template2)">{{p.direccion | slice:0:30}} ...</td>
+            <td>
+              <md-icon *ngIf="usuario.perm && usuario.perm.includes('pclientes_w')" id="icono"
+                (click)="openModal4(p.id,template4)" class="md-24" aria-label="Editar Potencial">create</md-icon>
+              <md-icon id="icono" (click)="SendPre(p)" class="md-24" aria-label="Editar Potencial">email</md-icon>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination-controls id="clientes" (pageChange)="e = $event"></pagination-controls>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Nueva Factibilidad </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="ocultarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="card-body">
+
+    <div *ngIf="clienteSeleccionado == false">
+      <label for="">Cliente Potencial</label>
+      <input type="text" class="form-control form-control-sm" (input)="onSearchCliente($event.target.value)">
+      <br>
+      <div *ngFor=" let cliente of listacliente">
+        <button type="button" (click)="SeleccionCliente(cliente.id,cliente.dni, cliente.nombre, cliente.apellido)"
+          class="btn btn-info btn-sm boton2"><i id="icono" class="fa fa-check"></i></button>
+        <p> {{cliente.kind}}{{cliente.dni}} || {{cliente.nombre}} {{cliente.apellido}}</p>
+      </div>
+    </div>
+    <div *ngIf="clienteSeleccionado == true">
+      <button type="button" (click)="deseleccionarCliente()" class="btn btn-info btn-sm boton2"><i id="icono"
+          class="fa fa-times"></i></button>
+      <p>{{cedulaSeleccionado}} || {{nombreSeleccionado}} {{apellidoSeleccionado}}</p>
+    </div>
+    <br>
+    <div *ngIf="clienteSeleccionado" class="row">
+      <div class="col-sm-6">
+        <label for="">Latitud</label>
+        <input [(ngModel)]="latitud" type="text" class="form-control form-control-sm">
+      </div>
+      <div class="col-sm-6">
+        <label for="">Longitud</label>
+        <input [(ngModel)]="longitud" type="text" class="form-control form-control-sm">
+      </div>
+    </div>
+    <br>
+    <div *ngIf="clienteSeleccionado" class="row">
+
+      <div class="col-sm-12">
+        <label for="">Ciudad</label>
+        <input [(ngModel)]="ciudad" type="text" class="form-control form-control-sm">
+      </div>
+    </div>
+    <br>
+    <div *ngIf="clienteSeleccionado" class="row">
+      <div class="col-sm-12">
+        <label for="">Direccion</label>
+        <input [(ngModel)]="direccion" type="text" class="form-control form-control-sm">
+      </div>
+    </div>
+    <br>
+    <div *ngIf="longitud != '' && latitud != '' && ciudad != '' && direccion.length > 5">
+      <button type="button" (click)="guardarData()" class="btn btn-info">Guardar</button>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #template1>
+
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Agregar Cliente</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="card-body">
+
+
+    <div class="row">
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Nombres</label>
+        <input [(ngModel)]="nombres" type="text" class="form-control" id="inputDefault" required>
+      </div>
+
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Apellidos</label>
+        <input [(ngModel)]="apellidos" type="text" class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+
+    <div *ngIf="nombres.length > 4 && apellidos.length > 4" class="row">
+      <div class="col-sm-4">
+        <label class="control-label" for="disabledInput">Tipo</label>
+        <select [(ngModel)]="kni" class="form-control" id="exampleSelect1" required>
+          <option value="V">V</option>
+          <option value="E">E</option>
+          <option value="J">J</option>
+          <option value="V-">V- Firma Personal</option>
+          <option value="G">G</option>
+        </select>
+      </div>
+
+      <div class="col-sm-8 cedula">
+        <input [(ngModel)]="dni" type="text" placeholder="Cedula/RIF" class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+
+
+    <div *ngIf="kni != '' && dni.length > 6" class="row">
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Fecha de Nacimiento</label>
+        <my-date-picker [(ngModel)]="fecha" class="example-full-width" name="birthdate" mdInput required locale=es
+          [options]="myDatePickerOptions"></my-date-picker>
+      </div>
+
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Telefono</label>
+        <input [(ngModel)]="numero" type="number" class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+    <div *ngIf="numero > 1000000" class="row">
+      <div class="col-sm-12">
+        <label class="col-form-label" for="inputDefault">Correo</label>
+        <input [(ngModel)]="email" type="email" class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+
+    <div *ngIf="email.length > 8" class="row">
+      <div class="col-sm-6">
+        <label class="control-label" for="disabledInput">Estado</label>
+        <select [(ngModel)]="estado" (change)="Municipios()" class="form-control" id="exampleSelect1" required>
+          <option value=""></option>
+          <option *ngFor="let e of estados" [value]="e.id_estado">{{e.estado}}</option>
+        </select>
+      </div>
+
+      <div *ngIf="estado != 0" class="col-sm-6">
+        <label class="control-label" for="disabledInput">Municipio</label>
+        <select [(ngModel)]="municipio" (change)="Parroquias()" class="form-control" id="exampleSelect1" required>
+          <option value=""></option>
+          <option *ngFor="let m of municipios" [value]="m.id_municipio">{{m.municipio}}</option>
+        </select>
+      </div>
+
+    </div>
+    <br>
+
+    <div *ngIf="municipio != 0" class="row">
+      <div class="col-sm-6">
+        <label class="control-label" for="disabledInput">Parroquias</label>
+        <select [(ngModel)]="parroquia" class="form-control" id="exampleSelect1" required>
+          <option value=""></option>
+          <option *ngFor="let p of parroquias" [value]="p.id_parroquia">{{p.parroquia}}</option>
+        </select>
+      </div>
+      <div *ngIf="parroquia != 0 && (kni == 'J' || kni == 'G' || kni == 'V-')" class="col-sm-6 social">
+        <label class="col-form-label" for="inputDefault">Social</label>
+        <input [(ngModel)]="social" type="text" class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+    <div *ngIf="parroquia != 0 && (kni == 'J' || kni == 'G' || kni == 'V-')" class="custom-control custom-checkbox">
+      <input type="checkbox" [(ngModel)]="isCheckedCliente" class="custom-control-input" id="customCheck1">
+      <label class="custom-control-label" for="customCheck1">Cliente Facturable</label>
+    </div>
+
+    <div *ngIf="parroquia != 0" class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label for="exampleTextarea">Direccion</label>
+          <textarea [(ngModel)]="Direccion" class="form-control" id="exampleTextarea" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="nombres != '' && apellidos != '' && kni != '' && dni != '' && Direccion.length > 5 && estado != 0 && municipio != 0 && parroquia != 0 ">
+      <button (click)="verdatos()" type="button" class="btn btn-info">Guardar</button>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template #template2>
+
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Factibilidad </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="ocultarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="card-body">
+
+    <div>
+      <label>Cliente Potencial:</label>
+      <label
+        *ngIf="pClienteSeleccionado.kind == 'V' || pClienteSeleccionado.kind == 'E'">{{pClienteSeleccionado.nombre+" "+pClienteSeleccionado.apellido}}</label>
+      <label
+        *ngIf="pClienteSeleccionado.kind != 'V' || pClienteSeleccionado.kind != 'E'">{{pClienteSeleccionado.social}}</label>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <table class="table table-borderless tabla">
+          <thead>
+            <tr class="table-info">
+              <th scope="col">DATOS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let f of detallesFactibilidad | paginate: {id:'factibilidades', itemsPerPage: 1, currentPage: p }">
+              <td>
+                <h6>ID:</h6><br>
+                <label>{{f.id}}</label><br>
+                <h6>STATUS:</h6>
+                <p *ngIf="f.status == 1" class="text-info">Pendiente</p><br>
+                <p *ngIf="f.status == 2 && f.factible == 2" class="text-danger">No Factible</p><br>
+                <p *ngIf="f.status == 2 && f.factible == 1" class="text-success">Factible</p><br>
+                <p *ngIf="f.status == 2 && f.factible == 3" class="text-warning">Corregir Coordenadas</p><br>
+                <p *ngIf="f.status == 2 && f.factible == 4" class="text-secondary">Amerita Visita</p><br>
+                <h6>COORDENADAS:</h6>
+                <p>{{f.coordenadaslat}} - {{f.coordenadaslon}}</p>
+                <div *ngIf="f.status == 2 && (f.factible == 1 || f.factible == 4)">
+                  <h6>EQUIPO:</h6>
+                  <p>{{f.nombreEquipo}}</p>
+                  <h6>CELDA:</h6>
+                  <p>{{f.nombreCelda}}</p>
+                  <h6>ALTURA:</h6>
+                  <p>{{f.altura}} Mts</p>
+                  <h6>USUARIO:</h6>
+                  <p>{{f.usuario_responsable}}</p>
+                  <h6>PTP:</h6>
+                  <p>{{f.nombrePtp}}</p>
+                </div>
+                <button (click)="agendarCliente(f.id,template3)" *ngIf="f.status == 2 && f.factible == 1"
+                  style="background-color:#1F9BCF;" title="Actualizar Instalaciones" type="button"
+                  class="btn btn-info btn-sm ">
+                  <md-icon>event</md-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="factibilidades" (pageChange)="p = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #template3>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Nueva Instalacion</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal3()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label *ngIf="pClienteSeleccionado.kind == 'V' || pClienteSeleccionado.kind == 'E'">Cliente:
+      {{pClienteSeleccionado.nombre+" "+pClienteSeleccionado.apellido}}</label>
+    <label *ngIf="pClienteSeleccionado.kind != 'V' || pClienteSeleccionado.kind != 'E'">Cliente:
+      {{pClienteSeleccionado.social}}</label>
+    <div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" [(ngModel)]="isChecked" class="custom-control-input" id="customCheck1">
+            <label class="custom-control-label" for="customCheck1">Equipo Usado</label>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" [(ngModel)]="isCheckedE" (change)="cambiarEdificio()" class="custom-control-input"
+              id="customCheck10">
+            <label class="custom-control-label" for="customCheck10">Instalacion Grupal</label>
+          </div>
+        </div>
+      </div>
+      <div class="row primero">
+        <div class="col-sm-5">
+          <label for="exampleSelect1">Celdas</label>
+          <select [(ngModel)]="factbilidadSeleccionada.idCelda" (change)="cambioCelda()"
+            class="form-control form-control-sm" id="exampleSelect1" required>
+            <option value="factbilidadSeleccionada.idCelda" selected>{{factbilidadSeleccionada.nombreCelda}}</option>
+            <option *ngFor="let celda of celdas" [value]="celda.id_celda">{{celda.nombre_celda}}</option>
+          </select>
+        </div>
+        <div class="col-sm-5">
+          <label for="exampleSelect1">Tipo de Equipo</label>
+          <select [(ngModel)]="factbilidadSeleccionada.nombreEquipo" class="form-control form-control-sm"
+            id="exampleSelect1" required>
+            <option value="factbilidadSeleccionada.nombreEquipo" selected> Sugerido:
+              {{factbilidadSeleccionada.nombreEquipo}}</option>
+            <option value="0"></option>
+            <option *ngFor="let equipo of equipos" [value]="equipo.nombre_equipo">[{{equipo.nombre_tipo_art}}]
+              {{equipo.nombre_equipo}}</option>
+          </select>
+        </div>
+        <div class="col-sm-1">
+          <label for="exampleSelect1">Accion</label>
+          <button *ngIf="isChecked == false" type="button" (click)="hola()" class="btn btn-info btn-sm boton2"><i
+              id="icono" class="fa fa-search"></i></button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="row primero">
+        <div class="col-sm-9">
+          <div *ngIf="isChecked == false">
+            <label for="exampleSelect1">Disponibles</label>
+            <select [(ngModel)]="serialSeleccionado" *ngIf="visualizarDisponible == true"
+              class="form-control form-control-sm" id="exampleSelect1" #ubicacion required>
+              <option [value]=" " selected></option>
+              <option *ngFor="let d of disponibles" [value]="d.serial_articulo">{{d.modelo_articulo}} -
+                {{d.serial_articulo}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+
+
+    <div
+      *ngIf="serialSeleccionado != ' ' || isChecked == true && factbilidadSeleccionada.idCelda != 0 && factbilidadSeleccionada.nombreEquipo != ''">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isCheckedP" class="custom-control-input" id="customCheckP">
+        <label class="custom-control-label" for="customCheckP">Instalacion con Promocion</label>
+      </div>
+      <br>
+      <div *ngIf="isCheckedP">
+        <label for="">Seleccionar Promocion</label>
+        <select [(ngModel)]="promoSeleccionada" (change)="revisarAdicional()" class="form-control form-control-sm"
+          id="exampleSelect1" #ubicacion required>
+          <option [value]="0"></option>
+          <option *ngFor="let promo of promociones" [value]="promo.id_promocion">{{promo.nombre_promocion}}</option>
+        </select>
+      </div>
+      <div *ngIf="isCheckedP && isCheckedP2" class="row">
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Equipo Promocion</label>
+          <select [(ngModel)]="equipoSeleccionado" (change)="hola2()" class="form-control form-control-sm"
+            id="exampleSelect1" #ubicacion required>
+            <option [value]="0" selected></option>
+            <option *ngFor="let equipo of equipos" [value]="equipo.nombre_equipo">[{{equipo.nombre_tipo_art}}]
+              {{equipo.nombre_equipo}}</option>
+          </select>
+        </div>
+        <div class="col-sm-6">
+          <label *ngIf="isCheckedP" for="exampleSelect1">Disponibles</label>
+          <select [(ngModel)]="serial2Seleccionado" class="form-control form-control-sm" id="exampleSelect1" #ubicacion
+            required>
+            <option [value]=" " selected></option>
+            <option *ngFor="let d of disponibles2" [value]="d.serial_articulo">{{d.serial_articulo}}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <label for="exampleSelect1">Tipo de Instalacion</label>
+      <select [(ngModel)]="instalacionSelected" (change)="cambioInstalacion()" class="form-control form-control-sm"
+        id="exampleSelect1" #ubicacion required>
+        <option [value]="0" selected></option>
+        <option [value]="1">Inalambrica</option>
+        <option [value]="2">Fibra Optica</option>
+      </select>
+      <br>
+
+      <div *ngIf="instalacionSelected == 1">
+        <label for="exampleSelect1">Tipo de Pago</label>
+        <select [(ngModel)]="tipoPagoSelected" (change)="cambioTipoPago()" class="form-control form-control-sm"
+          id="exampleSelect1" #ubicacion required>
+          <option [value]="0" selected></option>
+          <option [value]="1">$</option>
+          <option [value]="2">Bs</option>
+        </select>
+        <br>
+
+        <label *ngIf="tipoPagoSelected == 2" for="">Ingrese Tasa Ofrecida Al Cliente</label>
+        <input *ngIf="tipoPagoSelected == 2" [(ngModel)]="tasaCliente" type="text" class="form-control form-control-sm"
+          thousandSeparator="." mask="separator,2">
+        <br>
+
+        <label *ngIf="(tipoPagoSelected != 2 || tasaCliente > 9999) && tipoPagoSelected != 0" for="exampleSelect1">Tipo
+          de Plan</label>
+        <select *ngIf="(tipoPagoSelected != 2 || tasaCliente > 9999) && tipoPagoSelected != 0"
+          [(ngModel)]="tipoPlanSeleccionado" (change)="onChange()" class="form-control form-control-sm"
+          id="exampleSelect1" #ubicacion required>
+          <option [value]="0" selected></option>
+          <option [value]="1">Planes Antiguos</option>
+          <option [value]="4">Planes Nuevos</option>
+          <option [value]="3">Planes en dolares</option>
+          <option [value]="5">Planes solo Dedicados</option>
+          <option [value]="6">Planes Zulia</option>
+          <option [value]="7">Planes Fibra</option>
+        </select>
+
+
+        <label *ngIf="visualizarPlan == true && tipoPlanSeleccionado != 0" for="exampleSelect1">Planes
+          Disponibles</label>
+        <select *ngIf="visualizarPlan == true && tipoPlanSeleccionado != 0" [(ngModel)]="planSeleccionado"
+          class="form-control form-control-sm" id="exampleSelect1" #ubicacion required>
+          <option [value]="0"></option>
+          <option *ngFor="let plan of planes" [value]="plan.id_plan">{{plan.name_plan}}</option>
+        </select>
+        <div *ngIf="planSeleccionado != 0">
+          <label class="col-form-label" for="inputDefault">IP</label>
+          <span *ngIf="visualizarIp == true" class="badge badge-pill badge-danger"> Disculpe, pero la Ip ya esta
+            en
+            Uso!!</span>
+          <input [(ngModel)]="ipSeleccionada" (input)="onSearchIp($event.target.value)" type="text"
+            class="form-control form-control-sm" placeholder="IP" id="inputDefault" required>
+          <br>
+        </div>
+
+      </div>
+
+
+      <div *ngIf="instalacionSelected == 2">
+
+        <label for="exampleSelect1">Tipo de Pago</label>
+        <select [(ngModel)]="tipoPagoSelected" (change)="cambioTipoPago()" class="form-control form-control-sm"
+          id="exampleSelect1" #ubicacion required>
+          <option [value]="0" selected></option>
+          <option [value]="1">$</option>
+          <option [value]="2">Bs</option>
+        </select>
+        <br>
+
+        <label *ngIf="tipoPagoSelected == 2" for="">Ingrese Tasa Ofrecida Al Cliente</label>
+        <input *ngIf="tipoPagoSelected == 2" [(ngModel)]="tasaCliente" type="text" class="form-control form-control-sm"
+          thousandSeparator="." mask="separator,2">
+        <br>
+
+        <label *ngIf="(tipoPagoSelected != 2 || tasaCliente > 9999) && tipoPagoSelected != 0" for="exampleSelect1">Perfiles Disponibles</label>
+        <select *ngIf="(tipoPagoSelected != 2 || tasaCliente > 9999) && tipoPagoSelected != 0" [(ngModel)]="planSeleccionado" class="form-control form-control-sm" id="exampleSelect1" #ubicacion
+          required>
+          <option [value]="0"></option>
+          <option *ngFor="let plan of planes" [value]="plan.id_plan">{{plan.name_plan}}</option>
+        </select>
+      </div>
+    </div>
+    <div *ngIf="planSeleccionado != 0">
+      <h6>ADICIONALES</h6>
+      <label>Altura del Tubo: {{factbilidadSeleccionada.altura}} Mts</label>
+      <br>
+      <label>PTP: {{factbilidadSeleccionada.nombrePtp}}</label>
+      <br>
+    </div>
+    <div
+      *ngIf=" instalacionSelected == 2 && planSeleccionado != 0 ||visualizarIp == false  && visualizarDivGuardar == true ">
+      <button type="button" (click)="GuardarData()" class="btn btn-info btn-sm">Guardar Instalacion</button>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #template4>
+
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar Cliente</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal4()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="card-body">
+
+
+    <div class="row">
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Nombres</label>
+        <input type="text" [(ngModel)]="pClienteModificable.nombre" [value]="pClienteModificable.nombre"
+          class="form-control" id="inputDefault" required>
+      </div>
+
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Apellidos</label>
+        <input type="text" [(ngModel)]="pClienteModificable.apellido" [value]="pClienteModificable.apellido"
+          class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <label class="control-label" for="disabledInput">Tipo</label>
+        <select [(ngModel)]="pClienteModificable.kind" [(ngModel)]="pClienteModificable.kind" class="form-control"
+          id="exampleSelect1" required>
+          <option value="V">V</option>
+          <option value="E">E</option>
+          <option value="J">J</option>
+          <option value="V-">V- Firma Personal</option>
+          <option value="G">G</option>
+        </select>
+      </div>
+
+      <div class="col-sm-8 cedula">
+        <input type="text" placeholder="Cedula/RIF" [(ngModel)]="pClienteModificable.dni"
+          [value]="pClienteModificable.dni" class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+
+
+    <div class="row">
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Fecha de Nacimiento</label>
+        <input type="date" [(ngModel)]="pClienteModificable.day_of_birth" [value]="pClienteModificable.day_of_birth"
+          class="form-control" required>
+      </div>
+
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Telefono</label>
+        <input [(ngModel)]="pClienteModificable.phone1" [value]="pClienteModificable.phone1" type="number"
+          class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-12">
+        <label class="col-form-label" for="inputDefault">Correo</label>
+        <input [(ngModel)]="pClienteModificable.email" [value]="pClienteModificable.email" type="email"
+          class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <label class="control-label" for="disabledInput">Estado</label>
+        <select [(ngModel)]="pClienteModificable.estado" (change)="Municipios()" class="form-control"
+          id="exampleSelect1" required>
+          <option value=""></option>
+          <option *ngFor="let e of estados" [value]="e.id_estado">{{e.estado}}</option>
+        </select>
+      </div>
+
+      <div class="col-sm-6">
+        <label class="control-label" for="disabledInput">Municipio</label>
+        <select [(ngModel)]="pClienteModificable.municipio" (change)="Parroquias()" class="form-control"
+          id="exampleSelect1" required>
+          <option value=""></option>
+          <option *ngFor="let m of municipios" [value]="m.id_municipio">{{m.municipio}}</option>
+        </select>
+      </div>
+
+    </div>
+    <br>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <label class="control-label" for="disabledInput">Parroquias</label>
+        <select [(ngModel)]="pClienteModificable.parroquia" class="form-control" id="exampleSelect1" required>
+          <option value=""></option>
+          <option *ngFor="let p of parroquias" [value]="p.id_parroquia">{{p.parroquia}}</option>
+        </select>
+      </div>
+      <div
+        *ngIf="pClienteModificable.kind == 'J' || pClienteModificable.kind == 'G' || pClienteModificable.kind == 'V-'"
+        class="col-sm-6 social">
+        <label class="col-form-label" for="inputDefault">Social</label>
+        <input [(ngModel)]="pClienteModificable.social" [value]="pClienteModificable.social" type="text"
+          class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label for="exampleTextarea">Direccion</label>
+          <textarea [(ngModel)]="pClienteModificable.direccion" [value]="pClienteModificable.direccion"
+            class="form-control" id="exampleTextarea" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button (click)="editarCliente()" type="button" class="btn btn-info">Editar</button>
+    </div>
+  </div>
+
+</ng-template>

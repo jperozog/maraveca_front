@@ -1,0 +1,197 @@
+
+<!--
+<md-sidenav-container>
+  <table style="width: 97%" [md2Data]="data" #md2="md2DataTable" class="addClient x700" [rowsPerPage]="14">
+
+    <div class="lt" align="center" md-dialog-actions>
+      <tr>
+        <td><b>Tasa de cambio:</b></td>
+        <td>{{tasa}} BS.S</td>
+      </tr>
+      <tr>
+        <td><b>Moneda local:</b></td>
+        <td>{{moneda_local}}</td>
+      </tr>
+      <tr>
+        <td><b>moneda extranjera:</b></td>
+        <td>{{moneda_ex}}</td>
+      </tr>
+      <tr>
+        <td><b>porcentaje del iva:</b></td>
+        <td>{{iva}} %</td>
+      </tr>
+
+
+    </div>
+
+  </table>
+  <br>
+  <br>
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('config_adm_w')" md-raised-button class=" centrado b-btn"
+    type="button" (click)=" editar_conf ()"><i class="fa fa-times" aria-hidden="true"></i> Editar</button>
+
+</md-sidenav-container>
+<br>
+<br>
+<md-sidenav-container *ngIf="usuario.perm && usuario.perm.includes('config_adm_w')">
+
+  <h4 style="text-align: center">Historial de configuraciones</h4>
+  <table class=example-full-width [md2Data]="historial" #md2="md2DataTable" class="addClient table-center"
+    [rowsPerPage]="6">
+
+    <thead>
+      <tr>
+        <td colspan="4">
+          <md2-pagination></md2-pagination>
+        </td>
+      </tr>
+      <tr>
+        <th md2SortBy="name_plan">Detalle</th>
+        <th md2SortBy='comment_srv'> Modulo</th>
+        <th style="text-align: center" md2SortBy="stat_srv">Responsable</th>
+        <th style="text-align: center">Fecha</th>
+      </tr>
+    </thead>
+    <tbody class='fac'>
+      <tr class="fac montos" *ngFor="let i of md2.data">
+        <td class="fac" style="text-align: justify;">
+          {{i.history}}
+        </td>
+        <td class="fac">
+          {{i.modulo}}
+        </td>
+        <td class="fac">
+          <span *ngIf="i.responsable != -1 && i.responsable !=0">
+            {{i.nombre_user+" "+i.apellido_user}}
+          </span>
+          <span *ngIf="i.responsable ==0 ">
+            {{i.nombre_user}}
+          </span>
+          <span *ngIf="i.responsable == -1">
+            Cliente
+          </span>
+        </td>
+        <td class="fac">
+          {{i.created_at | stringToDate | date: 'd/M/yy'}}
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+
+    </tfoot>
+
+  </table>
+
+</md-sidenav-container>
+-->
+<div class="row datosConfig1">
+  <div class="col-9">
+    <h4>Configuraciones administrativas</h4>
+  </div>
+  <div class="col-3">
+    <button *ngIf="usuario.perm && usuario.perm.includes('config_adm_esp') " type="button" routerLink="/config_fac"
+      class="btn btn-primary">Configurar facturas</button>
+    <button *ngIf="usuario.perm && usuario.perm.includes('config_adm_esp')" routerLink="/config_balances" type="button"
+      class="btn btn-primary">Editar pagos</button>
+  </div>
+</div>
+
+<div class="row datosConfig">
+  <div class="col-3">
+    <div class="datos">
+      <h6>Tasa de cambio</h6>
+      <p>{{tasa | number: "1.2"}} Bs</p>
+
+      <h6>Tasa de cambio (BCV)</h6>
+      <p>{{tasaBCV | number: "1.2"}} Bs</p>
+
+      <h6>Moneda local:</h6>
+      <p>{{moneda_local}}</p>
+
+
+      <h6>moneda extranjera:</h6>
+      <p>{{moneda_ex}}</p>
+
+      <h6>porcentaje del iva:</h6>
+      <p>{{iva}} %</p>
+
+      <button type="button" (click)="openModal(template)" class="btn btn-primary">Editar</button>
+    </div>
+  </div>
+  <div class="col-9">
+
+    <table class="table table-borderless">
+      <thead>
+        <tr style="background-color: #2C2C30; color: white;">
+          <th scope="col">Detalle</th>
+          <th scope="col">Modulo</th>
+          <th scope="col">Responsable</th>
+          <th scope="col">Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let h of historial | paginate: {id:'historial', itemsPerPage: 5, currentPage: p }">
+          <th> {{h.history}}</th>
+          <td> {{h.modulo}}</td>
+          <td>
+            <span *ngIf="h.responsable != -1 && h.responsable !=0">
+              {{h.nombre_user+" "+h.apellido_user}}
+            </span>
+            <span *ngIf="h.responsable ==0 ">
+              {{h.nombre_user}}
+            </span>
+            <span *ngIf="h.responsable == -1">
+              Cliente
+            </span>
+          </td>
+          <td> {{h.created_at | stringToDate | date: 'd/M/yy'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="historial" (pageChange)="p = $event"></pagination-controls>
+  </div>
+
+</div>
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <div>
+        <label for="">Tasa de cambio</label>
+        <input [(ngModel)]="tasa" type="text" class="form-control form-control-sm">
+      </div>
+      <div>
+        <label for="">Tasa de cambio (BCV)</label>
+        <input [(ngModel)]="tasaBCV" type="text" class="form-control form-control-sm">
+      </div>
+      <div>
+        <label for="">Moneda local</label>
+        <input [(ngModel)]="moneda_local" type="text" class="form-control form-control-sm">
+      </div>
+      <div>
+        <label for="">Moneda extranejra</label>
+        <input [(ngModel)]="moneda_ex" type="text" class="form-control form-control-sm">
+      </div>
+      <div>
+        <label for="">IVA</label>
+        <input [(ngModel)]="iva" type="text" class="form-control form-control-sm">
+      </div>
+      <br>
+      <div>
+        <button type="button" (click)="guardarData()" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+
+
+
+
+  </div>
+</ng-template>

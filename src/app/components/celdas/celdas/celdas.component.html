@@ -1,0 +1,60 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <h1>CELDAS</h1>
+  </div>
+  <div class="col-sm-2">
+    <button type="button" class="btn btn-info btn-sm" (click)="openModal(template)">
+      <md-icon>add_circle_outline</md-icon>
+    </button>
+    <button style="background-color:#1F9BCF;" (click)="traerCeldas()" title="Actualizar Instalaciones" type="button"
+      class="btn btn-info btn-sm ">
+      <md-icon>loop</md-icon>
+    </button>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-sm-11 tabla">
+    <table class="table table-borderless">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">#</th>
+          <th scope="col">Celda</th>
+          <th scope="col">MK</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of celdas | paginate: { id:'celdas', itemsPerPage: 8, currentPage: p } ">
+          <th scope="row">{{c.id_celda}}</th>
+          <td>{{c.nombre_celda}}</td>
+          <td>{{c.nombre_srvidor}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="celdas" (pageChange)="p = $event"></pagination-controls>
+  </div>
+
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Agregar Celda</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label class="col-form-label" for="inputDefault">Nombre Celda</label>
+    <input [(ngModel)]="celda" type="text" class="form-control">
+    <br>
+    <label  class="col-form-label" for="inputDefault">Mk de la Celda</label>
+    <select  [(ngModel)]="mk" class="form-control" id="exampleSelect1" required>
+      <option value="0"></option>
+      <option *ngFor="let s of servidores" [value]="s.id_srvidor">{{s.nombre_srvidor}}</option>
+    </select>
+    <br>
+    <button *ngIf="celda.length > 4 && mk != 0" type="button" class="btn btn-info" (click)="agregarCelda()">
+    Agregar
+    </button>
+  </div>
+</ng-template>

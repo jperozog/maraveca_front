@@ -1,0 +1,62 @@
+<button (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+<div class="formulario">
+  <div class="card border-light mb-3" style="max-width: 40rem;">
+    <div class="card-header">Editar Equipo</div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <label class="col-form-label" for="inputDefault">Modelo</label>
+          <select [(ngModel)]="modeloSelected" class="form-control" id="exampleSelect2" required>
+            <option *ngFor="let equipo of equipos" [value]="equipo.nombre_equipo">{{equipo.nombre_equipo}}</option>
+          </select>
+          <br>
+        </div>
+        <div class="col-sm-6">
+          <label class="col-form-label" for="inputDefault">Serial</label>
+          <input type="text" class="form-control" placeholder="Serial" [value]="equipo?.serial_articulo"
+            id="inputDefault" #serial required>
+          <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <label for="exampleSelect1">Tipo</label>
+          <select [(ngModel)]="tipoSelected" class="form-control" id="exampleSelect1" #tipo required>
+            <option [value]="1">Antena</option>
+            <option [value]="2">Router</option>
+            <option [value]="4">Switch</option>
+            <option [value]="5">Poe</option>
+            <option [value]="6">Radio</option>
+            <option [value]="7">Base de Antena</option>
+            <option [value]="8">Consumibles</option>
+          </select>
+        </div>
+      </div>
+      <br>
+      <button type="button" (click)="Actualizar(serial)" class="btn btn-info">Actualizar Equipo</button>
+      <button type="button" (click)="Eliminar()" class="btn btn-danger">Eliminar Equipo</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #Modal>
+  <div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Modal body text goes here.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

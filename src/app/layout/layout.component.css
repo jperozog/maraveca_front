@@ -64,3 +64,312 @@ body {
 background-color: #106cc8;
 color:white;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.Gerencia{
+  margin-top: 3%;
+}
+
+
+
+.tickets{
+  background-color: white;
+  padding: 10px; 
+  text-align: center;
+  display: block;
+}
+.cuentas{
+    margin-top: 20px;
+    padding: 10px; 
+    text-align: center;
+    display: block;
+ 
+  
+}
+.graficos{
+  border-radius: 20px;
+  width: 98%;
+}
+.tarjetas{
+  margin-top: 2%;
+  border-radius: 20px;
+  margin-left: 5%;
+  width: 98%;
+}
+.tarjetas3{
+  margin-top: 2%;
+  border-radius: 20px;
+  margin-left: 5%;
+  width: 98%;
+}
+.tablas{
+  background-color: white;
+  margin: 1%;
+  padding: 1%;
+  border-radius: 20px;
+}
+.tabla{
+  font-size: 11px;
+}
+
+
+.clientesZ{
+  height: 300px;
+}
+
+.tarjetas2{
+  height: 80px;
+  margin-left: 5%;
+  background-color:#2C2C30;
+  color: white;
+  cursor: pointer;
+}
+
+.clientesActivos{
+background-color: white;
+height: 150px;
+width: 100%;
+text-align: center;
+transition: all ease .5s ;
+margin-top: 7%;
+}
+
+
+.clientesActivos:hover{
+  background-color: #71BBEC;
+  height: 150px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  transition: all ease .5s ;
+  cursor: pointer;
+  }
+ 
+
+.clientesSuspendidos{
+  margin-top: 10%;
+  background-color: white;
+height: 150px;
+width: 100%;
+text-align: center;
+transition: all ease .5s ;
+}
+
+.clientesSuspendidos:hover{
+  background-color: #E16F62;
+  height: 150px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  transition: all ease .5s ;
+  cursor: pointer;
+  }
+
+.clientesExonerados{
+  background-color: white;
+height: 150px;
+width: 100%;
+transition: all ease .5s ;
+text-align: center;
+margin-top: 8%;
+}
+
+.clientesExonerados:hover{
+  background-color: #CEE162;
+  height: 150px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  transition: all ease .5s ;
+  cursor: pointer;
+  }
+
+.clientesRetirados{
+  margin-top: 10%;
+  background-color: white;
+height: 150px;
+width: 100%;
+text-align: center;
+transition: all ease .5s ;
+}
+
+.clientesRetirados:hover{
+  background-color: #BABABA;
+  height: 150px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  transition: all ease .5s ;
+  cursor: pointer;
+  }
+
+.numeroClientes{
+  margin-top: 30px;
+  font-size: 35px;
+  color: #2C2C30;
+  font-weight: 900;
+  
+}
+
+.cliente{
+  font-size: 12px;
+  color: #2C2C30;
+ align-self: center;
+}
+
+
+.clientes{
+  font-weight: 700;
+  color: white;
+  font-size: 12px;
+  margin-top: 18%;
+  margin-left: 20%;
+}
+
+.botones{
+  margin-top: 8%;
+  background-color: white;
+height: 150px;
+width: 100%;
+text-align: center;
+transition: all ease .5s ;
+cursor: pointer;
+color: #2C2C30;
+}
+
+.botones:hover{
+  margin-top: 5%;
+  background-color: #71BBEC;
+height: 150px;
+width: 100%;
+text-align: center;
+transition: all ease .5s ;
+cursor: pointer;
+}
+
+.botones .icono{
+  margin-top: 30px;
+  margin-left: -10px;
+   font-size: 60px;
+   align-self: center;
+   color: #2C2C30;
+ }
+
+
+
+.botones .cliente{
+  font-size: 12px;
+  color: #2C2C30;
+  margin-left: 5px;
+ align-self: center;
+ }
+
+
+ .graficaNumeroClientes{
+  height: 360px;
+  width: 100%;
+  background-color: white;
+  margin-top: 2%;
+ }
+
+ .graficaServiciosCreados{
+  height: 360px;
+  width: 100%;
+  background-color: white;
+  margin-top: 2%;
+  text-align: center;
+  padding: 20px;
+ }
+
+ .graficaNumeroClientesyPotenciales{
+   height: 300px;
+  background-color: white;
+  margin-top: 8%;
+ }
+
+ .numerosCuentas{
+  height: 300px;
+ background-color: white;
+ margin-top: 8%;
+ text-align: center;
+ margin-left: 5%;
+}
+.numerosSoporte{
+  height: 300px;
+ background-color: white;
+ margin-top: 8%;
+ margin-left: 5%;
+ text-align: center;
+}
+
+
+.tarjetas3 .tarjetasDatos{
+  height: 20px;
+  background-color:white;
+  color: #2C2C30;
+  cursor: pointer;
+}
+
+.tarjetas3 .tarjetasDatos .clientesActivos{
+  border: 1px solid #62E162;
+  background-color: white;
+  height: 80px;
+  }
+  
+  .tarjetas3 .tarjetasDatos .clientesSuspendidos{
+    border: 1px solid #E16F62;
+    background-color: white;
+    height: 80px;
+   
+  }
+  
+  .tarjetas3 .tarjetasDatos .clientesExonerados{
+    border: 1px solid #CEE162;
+    background-color: white;
+    height: 80px;
+  }
+  
+  .tarjetas3 .tarjetasDatos .clientesRetirados{
+    border: 1px solid #BABABA;
+    background-color: white;
+    height: 80px;
+   
+  }
+
+  .tarjetas3 .tarjetasDatos .datos{
+    font-weight: 700;
+    color: black;
+    font-size: 12px;
+  }
+
+  .tarjetas3 .tarjetasDatos .datos2{
+    font-weight: 700;
+    color: black;
+    font-size: 12px;
+  }
+
+  .montoCuentas{
+    font-size: 25px;
+    font-weight: 900;
+    color: #71BBEC;
+    margin-top: 5%;
+  }
+
+  .cantidadSoporte{
+    font-size: 25px;
+    font-weight: 900;
+    color: #E16F62;
+    margin-top: 5%;
+  }

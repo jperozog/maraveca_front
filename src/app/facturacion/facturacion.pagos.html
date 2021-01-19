@@ -1,7 +1,21 @@
+<div class="right" *ngIf="(deuda > 0 && row.fac_status == 1) && row.denominacion =='$' ">
+ <!-- <button md-icon-button  class="right" style="color:#106cc8" (click)="mod_monto()" tooltip="Actualizar monto en Bs segun la tasa actual" >
+    <md-icon class="md-24" aria-label="notificar" >cached</md-icon>
+  </button>-->
+  <button md-icon-button  class="right" style="color:#106cc8" (click)="toggle()"  tooltip=" {{buttonName}} " *ngIf="serie == 0" >
+
+    <md-icon class="md-24" aria-label="notificar" >refresh</md-icon>
+  </button>
+</div>
+
 <h1 *ngIf="serie == 1" >Detalles de Factura</h1>
 <h1 *ngIf="serie == 0" >Detalles del Recibo de pago</h1>
+
+
+
 <div id="print-section">
   <form id="producto" name="ProductForm" [formGroup]="addProduct" ng-submit="ok(clientForm)" novalidate>
+    <span>Mes: {{fecha_f | date:"MMMM yyyy"| capitalize}}</span>
     <table style="width:100%">
       <thead>
       <tr>
@@ -9,7 +23,7 @@
           Cliente: {{cliente.toUpperCase() }}
         </td>
         <td *ngIf=" row.fac_num == null " class="fac" colspan="2" style="text-align: center">
-          Factura: {{row.id}}
+          Recibo: {{row.id}}
         </td>
         <td *ngIf=" row.fac_num != null " class="fac" colspan="2" style="text-align: center">
           Factura: {{row.fac_num}}
@@ -22,7 +36,7 @@
         <td  colspan="4" *ngIf="client && ((client.kind | capitalize2)=='V' || (client.kind | capitalize2)=='E')" class="fac">
           Cedula:  {{client.kind+client.dni}}
         </td>
-        <td colspan="4" *ngIf="(client.kind | capitalize2)=='J' || (client.kind | capitalize2)=='G'"class="fac">
+        <td colspan="4" *ngIf="(client.kind | capitalize2)=='J' || (client.kind | capitalize2)=='V-' || (client.kind | capitalize2)=='G'"class="fac">
           R.I.F.:  {{client.kind+client.dni}}
         </td>
         <td class="fac" style="text-align: center" colspan="3">
@@ -69,18 +83,32 @@
           {{i.IVA}}%
         </td>
         <td class="fontprod"*ngIf="serie == 1 && row.fac_status !=3" style="text-align:right">
+
           {{(i.precio_articulo*neto)/+i.cantidad | number : '1.2-2'}} {{row.denominacion}}
+
         </td>
         <td class="fontprod"*ngIf="serie == 0" style="text-align:right">
+
+          <span  *ngIf="show">
           {{+i.precio_articulo/+i.cantidad | number : '1.2-2'}} {{row.denominacion}}
+         </span>
+          <span  *ngIf="!show">
+          {{(+i.precio_articulo/+i.cantidad) * +tasa_sis | number : '1.2-2'}} Bs
+         </span>
         </td>
         <td class="fontprod" style="text-align:center" *ngIf="row.fac_status !=3">{{i.cantidad}}</td>
         <td class="fontprod" *ngIf="serie == 1 && row.fac_status !=3" style="text-align:right">
           {{(i.precio_articulo)*neto | number : '1.2-2'}} {{row.denominacion}}
         </td>
         <td class="fontprod" *ngIf="serie == 0" style="text-align:right">
+          <span *ngIf="show">
           {{i.precio_articulo | number : '1.2-2'}} {{row.denominacion}}
+       </span>
+          <span *ngIf="!show">
+          {{i.precio_articulo * +tasa_sis | number : '1.2-2'}} Bs
+       </span>
         </td>
+        
         <!--td *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && row && row.fac_status == 1">
           <button  md-icon-button color="warn"(click)="deleteProductDialog(i)">
             <md-icon class="md-24" aria-label="Eliminar Producto">delete</md-icon>
@@ -89,7 +117,6 @@
       </tr>
       <tr *ngIf="agregarProducto">
         <td class="fontprod" >
-
         </td>
         <td class="fontprod"  colspan="2">
           <input formControlName='nombre_articulo' placeholder="Nombre del articulo" class="md2-input" [(ngModel)]="nombre_articulo">
@@ -104,10 +131,10 @@
           {{iva_c}} %
         </td>
         <td class="fontprod" >
-          <input formControlName='precio_unitario' placeholder="Precio unitario" class="md2-input" mask="separator.2" thousandSeparator=","[(ngModel)]="precio_unitario">
+          <input formControlName='precio_unitario' placeholder="Precio unitario" class="md2-input" mask="separator,2" thousandSeparator="."[(ngModel)]="precio_unitario">
         </td>
         <td class="fontprod" >
-          <input formControlName='cantidad' placeholder="Cantidad" class="md2-input" mask="separator.2" thousandSeparator="," [(ngModel)]="cantidad">
+          <input formControlName='cantidad' placeholder="Cantidad" class="md2-input" mask="separator,2" thousandSeparator="." [(ngModel)]="cantidad">
         </td>
         <td class="fontprod" >
           <button md-raised-button (click)="addProducto()" [disabled]="!addProduct.valid">Agregar producto</button>
@@ -138,6 +165,25 @@
       </tbody>
     </table>
   </form>
+  <div *ngIf="(serie == 0 && row.denominacion == '$' && deuda <= 0)" class="mensajeBS">
+    <p>A solo efectos de lo previsto en el Art.25 de la Ley de Impuesto al Agregado se expresan los montos de la factura
+      en Bolivares(Bs) considerando la Tasa de Cambio Promedio de Bs/Dólares de {{row.tasa_pago}} Bs
+    </p>
+    <br><br>
+
+    <div class="Der">
+      <span>  Bs {{(precio_producto* row.tasa_pago)| number : '1.2-2'}} </span>
+    <br>
+    <span>  Bs {{(precio_producto* row.tasa_pago)| number : '1.2-2'}} </span>
+    </div>
+
+  <div class="Der">
+    <span><b>Sub-total &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </b></span>
+    <br>
+    <span><b>Total </b> </span>
+  </div>
+
+  </div>
   <table style="width:100%">
     <tfoot>
     <tr style="border-top: 1px solid black; border-bottom: 1px solid black;" class="boto">
@@ -145,7 +191,12 @@
         Base Imponible
       </td>
       <td class="fontz boto bobo">
+        <span *ngIf="show">
         {{monto | number : '1.2-2'}} {{row.denominacion}}
+          </span>
+        <span *ngIf="!show">
+          {{monto *tasa_sis | number : '1.2-2'}} Bs
+        </span>
       </td>
       <td class="fontz bobo boto" *ngIf="serie == 1 && fac_products">
         Total I.V.A. {{iva}}%
@@ -157,7 +208,17 @@
         Total General
       </td>
       <td class="fontz bobo boto">
+        <span *ngIf="show">
         {{montosi | number : '1.2-2'}} {{row.denominacion}} <!--cambio el 14/06/2019 para que las facturas contenga dos decimales-->
+          </span>
+        <span *ngIf="!show">
+        {{montosi * +tasa_sis| number : '1.2-2'}} Bs <!--cambio el 14/06/2019 para que las facturas contenga dos decimales-->
+          </span>
+    </tr>
+    <tr *ngIf="serie == 1" class="boto">
+      <td class="fontz boto bobo">
+        Tasa BCV: {{tasa_generacion | number : '1.2-2'}} Bs
+      </td>
     </tr>
     </tfoot>
   </table>
@@ -188,7 +249,8 @@
     <td class="fac" *ngIf="p.pag_tip==3">Transferencia Venezuela</td>
     <td class="fac" *ngIf="p.pag_tip==4">Retencion ISLR</td>
     <td class="fac" *ngIf="p.pag_tip==5">Retencion IVA</td>
-    <td class="fac" *ngIf="p.pag_tip==7">Exonerado</td>
+    <td class="fac" *ngIf="p.pag_tip==17">Otras Retenciones</td>
+    <td class="fac" *ngIf="p.pag_tip==7 ">Exonerado</td>
     <td class="fac" *ngIf="p.pag_tip==8">Moneda Extranjera</td>
     <td class="fac" *ngIf="p.pag_tip==9">Zelle</td>
     <td class="fac" *ngIf="p.pag_tip==10">Wire Transfer</td>
@@ -196,7 +258,9 @@
     <td class="fac" *ngIf="p.pag_tip==12">Zelle</td>
     <td class="fac" *ngIf="p.pag_tip==13">Wire Transfer</td>
     <td class="fac" *ngIf="p.pag_tip==14">Efectivo $</td>
-    <td class="fac" *ngIf="p.pag_tip==15">Efectivo Bs.S</td>
+    <td class="fac" *ngIf="p.pag_tip==15">Efectivo Bs</td>
+    <td class="fac" *ngIf="p.pag_tip==18">Banesco Panama</td>
+    <td class="fac" *ngIf="p.pag_tip==20">Descuento</td>
 
     <td class="fac">{{p.pag_comment | capitalize2:true}}</td>
     <td class="fac">{{p.pag_monto | number : '1.2-2'}} {{row.denominacion}}</td>
@@ -218,7 +282,10 @@
   <td *ngIf="serie == 0"></td>
   <td *ngIf="deuda > 0"><font color="#d10512"><h3>Deuda: </h3></font></td>
   <td *ngIf="deuda <= 0"><font color="#00c402"><h3>Saldo: </h3></font></td>
-  <td *ngIf="deuda > 0"><font color="#d10512">{{deuda|number : '1.2-2'}} {{row.denominacion}}</font></td>
+  <td *ngIf="deuda > 0">
+    <span *ngIf="show" ><font color="#d10512">{{deuda|number : '1.2-2'}} {{row.denominacion}}</font></span>
+    <span *ngIf="!show"><font color="#d10512">{{deuda * +tasa_sis|number : '1.2-2'}} Bs</font></span>
+  </td>
   <td *ngIf="deuda <= 0"><font color="#00c402">{{deuda|number : '1.2-2'}} {{row.denominacion}}</font></td>
   <td></td>
 </tr>
@@ -230,16 +297,17 @@
     <md2-option value="1" >Transferencia BOD</md2-option>
     <md2-option value="3" >Transferencia Venezuela</md2-option>
     <md2-option value="8" >Moneda Extranjera</md2-option>
-    <md2-option value="4" >Retencion ISLR</md2-option>
-    <md2-option value="5" >Retencion IVA</md2-option>
-    <md2-option value="7" >Exonerado</md2-option>
-    <md2-option value="15" >Efectivo Bs.S</md2-option>
+    <md2-option value="4" *ngIf="serie == 1">Retencion ISLR</md2-option>
+    <md2-option value="5" *ngIf="serie == 1">Retencion IVA</md2-option>
+    <md2-option value="17" *ngIf="serie == 1">Otras Retenciones</md2-option>
+    <md2-option value="7" *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp')" >Exonerado</md2-option>
+    <md2-option value="15" >Efectivo Bs</md2-option>
   </md2-select>
   <input formControlName='pag_comment' placeholder="Referencia" class="md2-input" [(ngModel)]="opcion">
   <input formControlName='created_at' type="date" placeholder="Fecha de Realizacion" class="md2-input" [(ngModel)]="fecha">
-  <input formControlName='pag_monto' type="text"  mask="separator.2" thousandSeparator="," placeholder="Monto" class="md2-input" [(ngModel)]="nada">
+  <input formControlName='pag_monto' type="text"  mask="separator,2" thousandSeparator="." placeholder="Monto" class="md2-input" [(ngModel)]="nada">
   <button md-raised-button (click)="agregar()" *ngIf="!sending_p" [disabled]="!addPago.valid">Agregar Pago</button>
-  <button md-raised-button (click)="print()">Imprimir</button>
+  <button md-raised-button  (click)="print()">Imprimir</button>
   <button md-raised-button (click)="sendmail()">Enviar Al Cliente</button>
 </form>
 <ng-template #elseblock>

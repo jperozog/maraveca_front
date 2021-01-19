@@ -1,1067 +1,2116 @@
-<md-toolbar class="submenu">
-  <button md-raised-button class="btn" (click)="Close()">Atras</button>
-  <span class="example-spacer" style="text-align: center;">Ficha De Cliente</span>
-  <button md-icon-button style="color:#106cc8" (click)="notify()" tooltip="Enviar recordatorio de pago" *ngIf="usuario.perm && usuario.perm.includes('notify')">
-    <md-icon class="md-24" aria-label="notificar" >notifications</md-icon>
-  </button>
+<div class="row body">
+  <div class="col-sm-3 cliente">
+    <img class="imagenPerfil" src="../../assets/images/user.png" width="200px" height="200px" alt="" />
+    <br />
+    <h4 *ngIf="editarCliente == false" class="nombre">
+      {{
+      (clienteSeleccionado.nombre | capitalize) +
+      " " +
+      (clienteSeleccionado.apellido | capitalize)
+      }}
+    </h4>
+    <h6 *ngIf="editarCliente">Nombre:</h6>
+    <input *ngIf="editarCliente" [(ngModel)]="clienteSeleccionado.nombre" [value]="clienteSeleccionado.nombre"
+      class="form-control" type="text" placeholder=".form-control-sm" id="inputSmall" />
+    <h6 *ngIf="editarCliente">Apellido:</h6>
+    <input *ngIf="editarCliente" [(ngModel)]="clienteSeleccionado.apellido" [value]="clienteSeleccionado.apellido"
+      class="form-control" type="text" placeholder=".form-control-sm" id="inputSmall" />
+    <br />
+    <div class="datos">
+      <h6>Identificacion:</h6>
+      <p *ngIf="editarCliente == false">
+        {{ (clienteSeleccionado.kind | capitalize) + clienteSeleccionado.dni }}
+      </p>
+      <input *ngIf="editarCliente" [(ngModel)]="clienteSeleccionado.dni" [value]="clienteSeleccionado.dni"
+        class="form-control form-control-sm" type="text" placeholder=".form-control-sm" id="inputSmall" />
+      <h6>Correo:</h6>
+      <p *ngIf="editarCliente == false">{{ clienteSeleccionado.email }}</p>
+      <input *ngIf="editarCliente" [(ngModel)]="clienteSeleccionado.email" [value]="clienteSeleccionado.email"
+        class="form-control form-control-sm" type="text" placeholder=".form-control-sm" id="inputSmall" />
+      <h6>Social:</h6>
+      <p *ngIf="editarCliente == false">
+        {{ clienteSeleccionado.social | capitalize }}
+      </p>
+      <input *ngIf="editarCliente" [(ngModel)]="clienteSeleccionado.social" [value]="clienteSeleccionado.social"
+        class="form-control form-control-sm" type="text" placeholder=".form-control-sm" id="inputSmall" />
+      <h6>Telefono:</h6>
+      <p *ngIf="editarCliente == false">{{ clienteSeleccionado.phone1 }}</p>
+      <input *ngIf="editarCliente" [(ngModel)]="clienteSeleccionado.phone1" [value]="clienteSeleccionado.phone1"
+        class="form-control form-control-sm" type="text" placeholder=".form-control-sm" id="inputSmall" />
+      <h6>Fecha:</h6>
+      <p *ngIf="editarCliente == false">
+        {{ clienteSeleccionado.day_of_birth }}
+      </p>
+      <input *ngIf="editarCliente" [(ngModel)]="clienteSeleccionado.day_of_birth"
+        [value]="clienteSeleccionado.day_of_birth" class="form-control form-control-sm" type="date"
+        placeholder=".form-control-sm" id="inputSmall" />
+      <h6>Direccion:</h6>
+      <p *ngIf="editarCliente == false">{{ clienteSeleccionado.direccion }}</p>
+      <input *ngIf="editarCliente" [(ngModel)]="clienteSeleccionado.direccion" [value]="clienteSeleccionado.direccion"
+        class="form-control form-control-sm" type="text" placeholder=".form-control-sm" id="inputSmall" />
+      <h6>Estado:</h6>
+      <p>{{ clienteSeleccionado.estado }}</p>
+      <h6>Municipio:</h6>
+      <p>{{ clienteSeleccionado.municipio }}</p>
+      <h6>Parroquia:</h6>
+      <p>{{ clienteSeleccionado.parroquia }}</p>
+    </div>
+    <button type="button" (click)="editarEstatusDatosClientes()" *ngIf="
+        editarCliente == false &&
+        usuario.perm &&
+        usuario.perm.includes('clientes_w')
+      " class="btn btn-default btn-block editarDatos">
+      Editar Datos
+    </button>
+    <button type="button" (click)="editarDatosClientes()" *ngIf="
+        editarCliente && usuario.perm && usuario.perm.includes('clientes_w')
+      " class="btn btn-default btn-block editarDatos">
+      Realizar Cambios
+    </button>
+    <button type="button" (click)="SendPre()" *ngIf="usuario.perm && usuario.perm.includes('clientes_w')"
+      class="btn btn-default btn-block enviarPresupuesto">
+      Enviar Presupuesto
+    </button>
+  </div>
 
-</md-toolbar>
-
-<ng-masonry-grid [masonryOptions]="{ transitionDuration: '0.8s', gutter: 5 }"
-                 [useAnimation]="true"
-                 [useImagesLoaded]="true"
-                 [scrollAnimationOptions]="{ animationEffect: 'effect-4', minDuration : 0.4, maxDuration : 0.7 }"
-                 *ngIf="cliente">
-
-  <ng-masonry-grid-item class="card" *ngIf="cliente">
-
-    <!-- card de datos de usuario -->
-    <md-card class="example-card card-body text-center">
-
-      <md-card-header >
-        <md-card-title><h4>Datos del Cliente</h4></md-card-title>
-        <span class="example-spacer" style="text-align: center;"></span>
-        <div *ngIf="usuario.perm && usuario.perm.includes('clientes_w')">
-          <button *ngIf="editclient" (click)="updateClient()" md-raised-button color="#888888">Actualizar</button>
-          <button *ngIf="!editclient" (click)="edit()" md-raised-button color="#888888">Editar</button>
-        </div>
-      </md-card-header>
-
-      <md-card-content *ngIf="cliente && !editclient">
-        <table class="example-full-width" cellspacing="0"><tr>
-          <td colspan="2">
-            {{(addClient.value.nombre|capitalize)+' '+(addClient.value.apellido|capitalize)}}
-          </td>
-        </tr>
-          <tr>
-            <td colspan="2">
-              {{(addClient.value.kind|capitalize)+addClient.value.dni}}
-            </td>
-
-          </tr>
-          <tr>
-            <td colspan="2">
-              {{addClient.value.email}}
-            </td>
-          </tr>
-          <tr *ngIf="addClient.value.kind == 'J'">
-            <td >
-              {{addClient.value.social|capitalize}}
-            </td>
-            <td>
-              {{addClient.value.phone1}}
-            </td>
-          </tr>
-          <tr *ngIf="addClient.value.kind == 'G'">
-            <td >
-              {{addClient.value.social|capitalize}}
-            </td>
-            <td>
-              {{addClient.value.phone1}}
-            </td>
-          </tr>
-          <tr *ngIf="addClient.value.kind == 'V'">
-            <td colspan="2">
-              {{addClient.value.phone1}}
-            </td>
-          </tr>
-          <tr *ngIf="addClient.value.kind == 'E'">
-            <td colspan="2">
-              {{addClient.value.phone1}}
-            </td>
-          </tr>
-          <!--    <tr>
-                <td colspan="2">
-                  <span *ngIf="addClient.value.serie==0">No Facturable</span>
-                  <span *ngIf="addClient.value.serie==1">Facturable</span>
-                </td>
-              </tr>-->
-          <tr *ngIf="addClient.value.day_of_birth">
-            <td colspan="2">
-              {{addClient.value.day_of_birth | stringToDate | date: 'd/M/yy'}}
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2">
-              {{addClient.value.phone2}}
-            </td>
-          </tr><tr>
-            <td>
-              {{addClient.value.direccion|capitalize}}
-            </td><td>
-            {{addClient.value.comment|capitalize}}
-          </td>
-          </tr>
-        </table>
-        <button md-button class="b-btn" (click)="SendPre()" *ngIf="usuario.perm && usuario.perm.includes('clientes_w')">
-          Enviar Presupuesto
+  <div class="col-sm-9">
+    <div class="row">
+      <md-toolbar class="submenu">
+        <button type="button" (click)="Close()" class="btn btn-default editarDatos">
+          Atras
         </button>
+        <span class="example-spacer" style="text-align: center">Ficha De Cliente</span>
 
-      </md-card-content>
+        <button md-icon-button style="color: #2C2C30" (click)="notify()" tooltip="Enviar recordatorio de pago"
+          *ngIf="usuario.perm && usuario.perm.includes('notify')">
+          <md-icon class="md-24" aria-label="notificar">notifications</md-icon>
+        </button>
+      </md-toolbar>
+    </div>
 
-      <!-- si es editable a partir de aqui-->
+    <div *ngIf="cargado" class="row">
 
-      <md-card-content *ngIf="editclient">
-        <form class="example-form" id="client" name="clientForm" [formGroup]="addClient" ng-submit="ok(clientForm)" novalidate>
-          <table class="example-full-width" cellspacing="0"><tr>
-            <td>
-              <md-form-field class="example-full-width">
-                <input type="text" name="nombre"
-                       class="form-control"
-                       formControlName="nombre"
-                       placeholder="Nombres"
-                       autocomplete="off"
-                       required
-                       mdInput
-                >
-              </md-form-field>
+      <div style="margin-top:1% ; margin-bottom: 5px;" *ngIf="clienteSeleccionado.serie == 1 " class="col-sm-3">
+        <div class="statusBalanceN">
+          <p style="font-size:15px ;">Estatus de balance</p>
+          <p *ngIf=" (facturado + MontoNotadeDebito ) > (pagado + MontoNotadeCredito)" style="text-align: right;"> {{
+            (facturado + MontoNotadeDebito ) - (pagado + MontoNotadeCredito) | number: "1.2-2"
+            }}
+            Bs</p>
+          <p *ngIf=" (facturado + MontoNotadeDebito ) < (pagado + MontoNotadeCredito)" style="text-align: right;"> {{
+            0 | number: "1.2-2"
+            }}
+            Bs</p>
+          <p *ngIf=" (facturado + MontoNotadeDebito ) == (pagado + MontoNotadeCredito)" style="text-align: right;"> {{
+            0 | number: "1.2-2"
+            }}
+            Bs</p>
+        </div>
+      </div>
 
-            </td>
-            <td>
-
-              <md-form-field class="example-full-width">
-                <input type="text" name="last"
-                       class="form-control"
-                       placeholder="Apellidos"
-                       formControlName="apellido"
-                       autocomplete="off"
-                       required
-                       mdInput
-                >
-              </md-form-field>
-
-            </td>
-
-          </tr>
-
-
-            <td>
-              <md-input-container class="example-full-width">
-                <input mdInput placeholder="Tipo:" maxlength="1" required formControlName="kind" [mdAutocomplete]="tipo" />
-                <md-autocomplete #tipo="mdAutocomplete">
-                  <md-option value="E">E</md-option>
-                  <md-option value="V">V</md-option>
-                  <md-option value="J">J</md-option>
-                  <md-option value="G">G</md-option>
-                </md-autocomplete>
-              </md-input-container>
-            </td>
-            <td>
-              <md-form-field class="example-full-width">
-                <input type="text" name="dni"
-                       class="form-control"
-                       formControlName="dni"
-                       placeholder="Cedula o Rif"
-                       autocomplete="off"
-                       required
-                       mdInput>
-              </md-form-field>
-            </td>
-            <tr >
-              <td colspan="2">
-                <md-error *ngIf="!addClient.controls.kind.valid">Por favor ingrese un tipo valido de identificacion</md-error>
-              </td>
-            </tr>
-            <tr>
-              <th colspan="2">
-
-                <md-form-field class="example-full-width">
-                  <input id="validation-email"
-                         name="email"
-                         formControlName="email"
-                         placeholder="Email"
-                         mdInput
-                         autocomplete="off">
-                  <md-error *ngIf="!addClient.controls.email.valid">Por favor ingrese un correo valido</md-error>
-
-                </md-form-field>
-
-
-              </th>
-            </tr>
+      <div style="margin-top:1% ; margin-bottom: 5px;" *ngIf="clienteSeleccionado.serie == 1" class="col-sm-3">
+        <div class="statusBalanceP">
+          <span>
+            <p style="font-size:15px ;">Estatus de balance</p>
+            <p *ngIf="(pagado + MontoNotadeCredito) > (facturado + MontoNotadeDebito )" style="text-align: right;">{{
+              (pagado + MontoNotadeCredito) - (facturado + MontoNotadeDebito ) | number: "1.2-2" }} Bs</p>
+            <p *ngIf="(pagado + MontoNotadeCredito) < (facturado + MontoNotadeDebito )" style="text-align: right;">{{ 0
+              | number: "1.2-2" }} Bs</p>
+              <p *ngIf="(pagado + MontoNotadeCredito) == (facturado + MontoNotadeDebito )" style="text-align: right;">{{ 0
+                | number: "1.2-2" }} Bs</p>
+          </span>
+        </div>
+      </div>
 
 
 
 
-            <tr *ngIf="addClient.value.kind == 'J'">
-              <td >
-                <md-form-field class="example-full-width">
-                  <input name="nombre"
-                         class="form-control"
-                         placeholder="Razon Social"
-                         mdInput
-                         formControlName="social"
-                         autocomplete="off"
-                         required
-                  >
-                </md-form-field>
-              </td>
-              <td>
-                <md-form-field class="example-full-width">
-                  <input name="phone"
-                         placeholder="Telefono"
-                         mdInput
-                         formControlName="phone1"
-                         autocomplete="off"
-                         required
-                  >
-                  <md-error *ngIf="!addClient.controls.phone1.valid">El numero ingresado no es valido</md-error>
+      <div style="margin-top:1% ; margin-bottom: 5px;" *ngIf="clienteSeleccionado.serie != 1" class="col-sm-3">
+        <div class="statusBalanceN">
+          <p style="font-size:15px ;">Estatus de balance</p>
+          <p style="text-align: right;">{{ facturadoin - pagadoin | number: "1.2" }}$</p>
+        </div>
+      </div>
 
-                </md-form-field>
-              </td>
-            </tr>
-            <tr *ngIf="addClient.value.kind == 'G'">
-              <td >
-                <md-form-field class="example-full-width">
-                  <input name="nombre"
-                         class="form-control"
-                         placeholder="Razon Social"
-                         mdInput
-                         formControlName="social"
-                         autocomplete="off"
-                         required
-                  >
-                </md-form-field>
-              </td>
-              <td>
-                <md-form-field class="example-full-width">
-                  <input name="phone"
-                         placeholder="Telefono"
-                         mdInput
-                         formControlName="phone1"
-                         autocomplete="off"
-                         required
-                  >
-                  <md-error *ngIf="!addClient.controls.phone1.valid">El numero ingresado no es valido</md-error>
-
-                </md-form-field>
-              </td>
-            </tr>
-            <tr *ngIf="addClient.value.kind == 'V'">
-              <td colspan="2">
-                <md-form-field class="example-full-width">
-                  <input name="phone"
-                         placeholder="Telefono"
-                         mdInput
-                         formControlName="phone1"
-                         autocomplete="off"
-                         required
-                  >
-                  <md-error *ngIf="!addClient.controls.phone1.valid">El numero ingresado no es valido</md-error>
-
-                </md-form-field>
-              </td>
-            </tr>
-            <tr *ngIf="addClient.value.kind == 'E'">
-              <td colspan="2">
-                <md-form-field class="example-full-width">
-                  <input name="phone"
-                         placeholder="Telefono"
-                         mdInput
-                         formControlName="phone1"
-                         autocomplete="off"
-                         required
-                  >
-                  <md-error *ngIf="!addClient.controls.phone1.valid">El numero ingresado no es valido</md-error>
-
-                </md-form-field>
-              </td>
-            </tr>
+      <div style="margin-top:1% ; margin-bottom: 5px;" *ngIf="clienteSeleccionado.serie != 1" class="col-sm-3">
+        <div class="statusBalanceP">
+          <span>
+            <p style="font-size:15px ;">Estatus de balance</p>
+            <p style="text-align: right;">{{ balac_in | number: "1.2-2" }}$.
+          </span>
+        </div>
+      </div>
 
 
 
-            <!--
-                  <tr>
-                    <td colspan="2">
-                      <md-select class="example-full-width" mdInput placeholder="Facturable" formControlName="serie">
-                        <md-option value="0">No Facturable</md-option>
-                        <md-option value="1">Facturable</md-option>
 
-                      </md-select>
+      <div style="margin-top:1% ; margin-bottom: 5px;" class="col-sm-3">
+        <div class="tipoCliente">
+          <p style="font-size:15px ;">Tipo de Cliente</p>
+          <p *ngIf="clienteSeleccionado.serie != 1" style="text-align: right;">No
+            Facturable</p>
+          <p *ngIf="clienteSeleccionado.serie == 1" style="text-align: right;">Facturable</p>
+        </div>
+      </div>
 
-                    </td>
-                  </tr>-->
-            <tr>
-              <!--td colspan="2">
-              <md-form-field class="example-full-width">
-              <input type="date" name="birthdate" data-ng-model="user.birthdate"
-              class="form-control"
+      <div style="margin-top:1% ; margin-bottom: 5px;" class="col-sm-3">
+        <div class="ServiciosContratados">
+          <p style="font-size:15px ;">Servicios Contratados</p>
+          <p style="text-align: right;">{{servicios.length}}</p>
+        </div>
+      </div>
 
-              formControlName="day_of_birth"
-              placeholder="Fecha de nacimiento"
-              required mdInput>
-            </md-form-field>
-          </td-->
-              <md2-datepicker class="example-full-width"
-                              name="birthdate"
-                              mdInput
-                              data-ng-model="user.birthdate"
-                              placeholder="Fecha de nacimiento"
-                              formControlName="day_of_birth"
-                              required
-                              openOnFocus
-                              type="date"
-                              mode="auto"
-                              startView="year"
-                              format="dd/MM/y"
 
-              ></md2-datepicker>
+    </div>
 
-            </tr>
-            <tr>
-              <th colspan="2">
-                <md-form-field class="example-full-width">
-                  <input type="text" name="phone2" formControlName="phone2" data-ng-model="user.phone2"
-                         mdInput
-                         class="form-control"
-                         autocomplete="off"
-                         placeholder="Otros Telefonos De Contacto"
-                         required>
-                </md-form-field>
-              </th>
-            </tr><tr>
-              <td>
+    <div *ngIf="cargado == false" class="row">
+      <div style=" margin-left: 50%; margin-top: 20%;">
+        <div class="spinner-border" style="width: 4rem; height: 4rem ;" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
 
-                <md-form-field class="example-full-width">
-        <textarea name="address"
-                  data-ng-model="user.contact_people.description"
-                  mdInput
-                  formControlName="direccion"
-                  #address
-                  class="form-control"
-                  placeholder="Direccion"
-                  maxlength="256"
-                  required></textarea>
-                  <md-hint align="end">{{address.value.length}} / 256</md-hint>
-                </md-form-field>
-              </td><td>
-              <md-form-field class="example-full-width">
-        <textarea mdInput name="address" data-ng-model="user.comments"
-                  class="form-control"
-                  maxlength="256"
-                  formControlName="comment"
-                  placeholder="Comentarios"></textarea>
-                <md-hint align="end">{{address.value.length}} / 256</md-hint>
-              </md-form-field>
-            </td>
-            </tr>
-          </table>
-        </form>
-      </md-card-content>
-
-    </md-card>
-  </ng-masonry-grid-item>
-
-  <!-- card de Servicios -->
-
-  <ng-masonry-grid-item class="card" *ngIf="usuario.perm && usuario.perm.includes('servicios')">
-
-    <md-card class="example-card card-body text-center">
-      <md-card-header>
-        <md-card-title><h4>Servicios</h4></md-card-title>
-
-      </md-card-header>
-      <md-card-content>
-        <div class="example-form">
-
-          <table class=example-full-width [md2Data]="servicios" #md2="md2DataTable" class="addClient" [rowsPerPage]="3">
-            <thead>
-            <tr>
-              <td colspan="3">
-                <md2-pagination></md2-pagination>
-              </td>
-              <td >
-                <div *ngIf="((facturado - pagado)>0 || (facturadoin - pagadoin)>0) && estatus_cort < 1 && activo == true ">
-                <button  style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w') " (click)="program_corte()">Compromiso de pago</button>
+    <div *ngIf="cargado" class="row">
+      <!-- card de Servicios -->
+      <div class="col-sm-12">
+        <div class="accordion">
+          <div class="contentBx">
+            <div (click)="mostrarCuerpoServicio()" class="label">Servicios</div>
+            <div *ngIf="bodyServices" id="cuerpoServicio">
+              <div *ngIf="(facturado - pagado > 0 || facturadoin - pagadoin > 0) && estatus_cort < 1 &&activo == true ">
+                <button *ngIf="
+                usuario.perm && usuario.perm.includes('facturacion_w')
+              " (click)="openModal8(template8)" style="background-color: #F0FDFF; float: right;" type="button"
+                  class="btn btn-secondary">Compromiso de Pago</button>
               </div>
-                <div  *ngIf="estatus_cort >=1">
-                  <button  class="btn1 info1" style="color:#106cc8; float:right;" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="cort_prog()">
-                    <md-icon class=" icono1" aria-label="status" >schedule</md-icon>
-                  </button>
-                  <button md-icon-button  style="color:#106cc8; float:right;" aria-label="status" *ngIf ="usuario.perm && !usuario.perm.includes('facturacion_w')">
-                    <md-icon class="md-24" aria-label="status" >schedule</md-icon></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th style="text-align: center"  md2SortBy="name_plan">Plan</th>
-              <th style="text-align: center"  md2SortBy='comment_srv'> Zona</th>
-              <th style="text-align: center"  md2SortBy="stat_srv">Estado</th>
-              <th style="text-align: center">Acciones</th>
-            </tr>
-            </thead>
-            <tbody class='fac'>
-            <tr class="fac montos" *ngFor="let i of md2.data">
-              <td *ngIf="i.serie_srv == 0 && i.tipo_plan_srv != 3 && i.modo_pago_srv !=2" class="fac montos" style="text-align: center; width: 40%; max-height:34px" >{{i.name_plan}}  </td>
-
-              <td *ngIf="i.serie_srv == 1" class="fac montos" style="text-align: center; width: 40%; max-height:34px" >{{i.name_plan}}   <md-icon class="icono" style="color:#3A93C5;" aria-label="facturable" >edit_attributes</md-icon> </td>
-
-              <td *ngIf="i.tipo_plan_srv== 3 ||i.modo_pago_srv==2 " class="fac montos" style="text-align: center; width: 40%; max-height:34px" >{{i.name_plan}}   <md-icon class="icono" style="color:#3A93C5;" aria-label="Moneda $" >monetization_on</md-icon> </td>
-
-              <td class="fac montos" style="text-align: center" >{{i.comment_srv}}</td>
-
-
-              <td class="fac montos" style="text-align: center; width: 15%" >
-                <button md-icon-button *ngIf="i.stat_srv == 1" >
-                  <span>Activo</span>
-                </button>
-                <button md-icon-button *ngIf="i.stat_srv == 2" >
-                  <span>Moroso</span>
-                </button>
-                <button md-icon-button *ngIf="i.stat_srv == 3" >
-                  <span>Suspendido</span>
-                </button>
-                <button md-icon-button *ngIf="i.stat_srv == 4" >
-                  <span>Retirado</span>
-                </button>
-                <button md-icon-button *ngIf="i.stat_srv == 5" >
-                  <span>Exonerado</span>
-                </button>
-              </td>
-              <!-- <td class="fac montos" style="text-align: center; width: 20%"  *ngIf="usuario.perm && !usuario.perm.includes('servicios_w')">
-                 No Autorizado
-               </td>-->
-              <td class="fac montos" style="text-align: center;"  *ngIf="usuario.perm && usuario.perm.includes('servicios')">
-                <!--botones de acciones-->
-                <div *ngIf="usuario.perm && usuario.perm.includes('clientes_w')">
-                  <button md-icon-button style="color:#106cc8" (click)="show(i)">
-                    <md-icon class="md-24" aria-label="Editar Cliente" >mode_edit</md-icon>
-                  </button>
-                </div>
-                <button md-icon-button style="color:#106cc8; float:left;"(click)="openLINK(i.ip_srv)" >
-                  <md-icon class="md-24" aria-label="Ubiquiti Admin">language</md-icon>
-                </button>
-
-                <button md-icon-button *ngIf="i.stat_srv == 1" >
-                  <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
-                </button>
-                <button md-icon-button *ngIf="i.stat_srv == 2" >
-                  <md-icon class="md-24" style="color:rgb(186, 198, 58);text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
-                </button>
-                <button md-icon-button *ngIf="i.stat_srv == 3" >
-                  <md-icon class="md-24" style="color:rgb(236, 46, 46);text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
-                </button>
-                <button md-icon-button *ngIf="i.stat_srv == 4" >
-                  <md-icon class="md-24" style="color:grey;text-shadow: 0px 0px 20px #000000;" aria-label="status">lens</md-icon>
-                </button>
-                <!--terminan los botones-->
-              </td>
-            </tr>
-            </tbody>
-            <tfoot>
-
-            </tfoot>
-          </table>
-        </div>
-      </md-card-content>
-
-    </md-card>
-  </ng-masonry-grid-item>
-
-
-  <!--==============================================================================================-->
-
-
-  <ng-masonry-grid-item class="card" *ngIf="historial && historial.length > 0">
-
-    <md-card class="example-card card-body text-center">
-      <md-card-header>
-        <md-card-title><h4>Historial</h4></md-card-title>
-      </md-card-header>
-      <md-card-content>
-        <div class="example-form">
-
-          <table class=example-full-width [md2Data]="historial" #md2="md2DataTable" class="addClient"  [rowsPerPage]="3">
-            <thead>
-            <tr>
-              <td colspan="3">
-                <md2-pagination ></md2-pagination>
-              </td>
-            </tr>
-            <tr>
-              <th  md2SortBy="name_plan">Detalle</th>
-              <th md2SortBy='comment_srv'> Modulo</th>
-              <th style="text-align: center"  md2SortBy="stat_srv">Responsable</th>
-              <th style="text-align: center" >Fecha</th>
-            </tr>
-            </thead>
-            <tbody class='fac'>
-            <tr class="fac montos" *ngFor="let i of md2.data">
-              <td class="fac">
-                {{i.history}}
-              </td>
-              <td class="fac">
-                {{i.modulo}}
-              </td>
-              <td class="fac" *ngIf="i.responsable != -1">
-                {{i.nombre_user}}
-              </td>
-              <td class="fac" *ngIf="i.responsable == -1">
-                Cliente
-              </td>
-              <td class="fac">
-                {{i.created_at  | stringToDate | date: 'd/M/yy'}}
-              </td>
-            </tr>
-            </tbody>
-            <tfoot>
-
-            </tfoot>
-          </table>
-        </div>
-      </md-card-content>
-
-    </md-card>
-  </ng-masonry-grid-item>
-
-
-  <!--===============================================================================================-->
-
-
-  <!-- card de historial -->
-
-  <ng-masonry-grid-item class="card" *ngIf="usuario.perm && usuario.perm.includes('facturacion') && (facturacion || adicionales)">
-
-    <md-card class="example-card card-body text-center">
-      <md-card-content>
-        <md-tab-group>
-          <md-tab label="Resumen de Facturacion" selected>
-            <table [md2Data]="facturacion" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="facturacion.length>0; else elseblock">
-              <thead>
-              <tr>
-
-
-                <td >
-                  <div  class="left" *ngIf="estatus_prog >=1">
-                    <button  class="btn1 info1" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="fac_progr()">
-                      <md-icon class=" icono1"  aria-label="opciones de factura programada" >alarm_on</md-icon></button>
-
-                    <button md-icon-button *ngIf ="usuario.perm && usuario.perm.includes('facturacion') && !usuario.perm.includes('facturacion_w')">
-                      <md-icon class=" md-24" style="color:#106cc8" aria-label="status">alarm_on</md-icon>
-                    </button>
-                  </div>
-
-                  <button class="right" style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura</button>
-                </td>
-              </tr>
-              <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
-              <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
-              <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
-              <tr >
-                <td colspan="4">
-                  <md2-pagination>
-                  </md2-pagination>
-                </td>
-              </tr>
-              <tr >
-                <th style="text-align: center; width: 10%" >N</th>
-                <th style="text-align: center" >Fecha</th>
-                <th style="text-align: center" >Monto</th>
-                <th style="text-align: center">Pagado</th>
-                <th style="text-align: center; width: 20% ">Acciones</th>
-
-              </tr>
-              </thead>
-              <tbody class="fac">
-              <tr class="fac montos" *ngFor="let i of md2.data">
-                <td class="fac montos" style="border-right: 1px solid #000000; text-align: right">
-                  {{i.id}}
-                </td>
-                <td class="fac montos" style="text-align: center">
-                  {{i.created_at | stringToDate | date: 'M/yy'}}
-                </td>
-                <td class="fac montos">
-                  {{i.monto | number : '1.2'}} {{i.denominacion}}
-                </td>
-                <td class="fac montos" *ngIf=" i.fac_status == 1 && (i.pagado != null)">
-                  {{i.pagado | number : '1.2'}}  {{i.denominacion}}
-                </td>
-                <td class="fac montos" *ngIf=" (i.fac_status == 1 || i.fac_status == 3) && (i.pagado == null)">
-
-                </td>
-                <td class="fac montos" *ngIf="i.fac_status == 2">
-                  Anulado
-                </td>
-                <td  class="fac montos" >
-                  <button md-icon-button style="color:#106cc8" (click)="status(i)">
-                    <md-icon class="md-24" aria-label="Detalles De Factura" >find_in_page</md-icon>
-                  </button>
-                  <button md-icon-button style="color:#106cc8" *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp') && facturacion && i.fac_status == 1" (click)="anularfactura(i)">
-                    <md-icon class="md-24" aria-label="Detalles De Factura" >block</md-icon>
-                  </button>
-                </td>
-                <!--td class="fac" #obf>
-                0BSF
-              </td-->
-
-              </tr>
-
-
-              </tbody>
-
-            </table>
-            <ng-template #elseblock>
-              <table>
-                <thead>
-                <tr>
-                  <td colspan="4">
-
-                  </td><td>
-                  <div  class="left" *ngIf="estatus_prog >=1">
-                    <button color="#888888" class="btn1 info1" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="fac_progr()">
-                      <md-icon class=" icono1"  aria-label="opciones de factura programada" >alarm_on</md-icon></button>
-                    <button md-icon-button *ngIf ="usuario.perm && usuario.perm.includes('facturacion') && !usuario.perm.includes('facturacion_w')">
-                      <md-icon class=" md-24" style="color:#106cc8" aria-label="status">alarm_on</md-icon>
-                    </button>
-                  </div>
-
-                  <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')" (click)="GenFac()">Generar Factura</button>
-
-                </td>
-                </tr>
-                <tr >
-                  <th style="text-align: center; width: 10%" >N</th>
-                  <th style="text-align: center" >Fecha</th>
-                  <th style="text-align: center" >Monto</th>
-                  <th style="text-align: center">Pagado</th>
-                  <th style="text-align: center">Acciones</th>
-
-                </tr>
-                </thead>
-                <tr>
-                  <td colspan="5">
-                    <font color="#00c402" style="text-align:center;"><h1>No posee facturas</h1></font>
-                  </td>
-                </tr>
-              </table>
-            </ng-template>
-
-          </md-tab>
-          <md-tab label="Cargos Adicionales">
-            <table [md2Data]="adicionales" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="adicionales.length>0; else elseblock1">
-              <thead>
-
-              <tr>
-                <td colspan="4">
-                  <md2-pagination>
-                  </md2-pagination>
-                </td>
-              </tr>
-              <tr>
-
-                <td>
-                  <button style="float: right" md-raised-button color="#888888" [disabled]="!(usuario.perm && usuario.perm.includes('facturacion_esp'))" (click)="AddAdic()">Agregar adicional</button>
-
-                </td>
-              </tr>
-              <tr >
-                <th style="text-align: center" >Nombre</th>
-                <th style="text-align: center" >Cantidad</th>
-                <th style="text-align: center">Precio</th>
-                <th style="text-align: center">Comentario</th>
-                <th style="text-align: center">Cargado en factura</th>
-
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let a of md2.data">
-                <td class="fac montos">
-                  {{a.nombre_articulo}}
-                </td>
-                <td class="fac montos">
-                  {{a.cantidad}}
-                </td>
-                <td class="fac montos">
-                  {{a.precio_articulo}}
-                </td>
-                <td class="fac montos">
-                  {{a.comment_articulo}}
-                </td>
-                <td class="fac montos">
-                  {{a.id_fac}}
-                </td>
-              </tr>
-              </tbody>
-            </table>
-            <ng-template #elseblock1>
-              <table>
-                <thead>
-                <tr>
-                  <td colspan="4">
-                  </td><td>
-                  <button style="float: right" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('facturacion_esp')" (click)="AddAdic()">Agregar adicional</button>
-
-                </td>
-                </tr>
-                <tr >
-                  <th style="text-align: center" >Nombre</th>
-                  <th style="text-align: center" >Cantidad</th>
-                  <th style="text-align: center">Precio</th>
-                  <th style="text-align: center">Comentario</th>
-                  <th style="text-align: center">Cargado en factura</th>
-
-                </tr>
-                </thead>
+              <div *ngIf="estatus_cort >= 1">
+                <md-icon (click)="cort_prog()" *ngIf="usuario.perm && usuario.perm.includes('facturacion_w')"
+                  (click)="cort_prog()" style=" cursor: pointer;color: #2C2C30; float: right" class="icono1"
+                  aria-label="status">schedule</md-icon>
+              </div>
+              <table style="width: 100%;" class="table table-borderless">
                 <tbody>
-                <tr>
-                  <td colspan="5">
-                    <font color="#00c402" style="text-align:center;"><h1>No posee cargos adicionales</h1></font>
-                  </td>
-                </tr>
+                  <tr *ngFor="let s of servicios | paginate: {id:'servicios', itemsPerPage: 3, currentPage: s }">
+                    <th>{{s.id_srv}}</th>
+                    <td>
+                      {{s.name_plan}}
+                      <button md-icon-button *ngIf="s.stat_srv == 1">
+                        <md-icon class="md-24" style="color: #1f96c4" aria-label="status">
+                          lens</md-icon>
+                      </button>
+                      <button md-icon-button *ngIf="s.stat_srv == 2">
+                        <md-icon class="md-24" style="color: rgb(186, 198, 58)" aria-label="status">lens</md-icon>
+                      </button>
+                      <button md-icon-button *ngIf="s.stat_srv == 3">
+                        <md-icon class="md-24" style="color: rgb(236, 46, 46)" aria-label="status">lens</md-icon>
+                      </button>
+                      <button md-icon-button *ngIf="s.stat_srv == 4">
+                        <md-icon class="md-24" style="color: grey" aria-label="status">
+                          lens</md-icon>
+                      </button>
+                    </td>
+                    <td>{{s.comment_srv}}</td>
+                    <td *ngIf="usuario.perm && usuario.perm.includes('servicios')">
+                      <div *ngIf="
+                      usuario.perm && usuario.perm.includes('clientes_w')
+                    ">
+                        <button md-icon-button style="color: #2C2C30" title="Editar Servicio"
+                          (click)="openModal5(template5, s.id_srv, s.tipo_srv)">
+                          <md-icon class="md-24" aria-label="Editar Cliente">mode_edit</md-icon>
+                        </button>
+
+                        <button *ngIf="
+                        usuario.perm && usuario.perm.includes('facturacion_w')
+                      " md-icon-button style="color: #2C2C30" title="Promocion de Servicio"
+                          (click)="openModal2(template2, s.id_srv)">
+                          <md-icon class="md-24" aria-label="Editar Cliente">star</md-icon>
+                        </button>
+
+                        <button *ngIf="
+                        usuario.perm && usuario.perm.includes('facturacion_w')
+                      " md-icon-button style="color: #2C2C30" title="Prorateo Servicio/Factura"
+                          (click)="openModal9(template9, s.id_srv)">
+                          <md-icon class="md-24" aria-label="Editar Cliente">rotate_left
+                          </md-icon>
+                        </button>
+
+                        <button *ngIf="
+                        s.compromisoActivo == 1 &&
+                        usuario.perm &&
+                        usuario.perm.includes('facturacion_w')
+                      " title="Compromiso de Servicio" md-icon-button style="color: #2daa36"
+                          (click)="openModal6(template6, s.id_srv)">
+                          <md-icon class="md-24" aria-label="Ubiquiti Admin">book_online</md-icon>
+                        </button>
+
+                        <button *ngIf="
+                        s.compromisoActivo == 0 &&
+                        usuario.perm &&
+                        usuario.perm.includes('facturacion_w')
+                      " title="Compromiso de Servicio" md-icon-button style="color: #2C2C30"
+                          (click)="openModal6(template6, s.id_srv)">
+                          <md-icon class="md-24" aria-label="Ubiquiti Admin">book_online</md-icon>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
-            </ng-template>
-          </md-tab>
-
-        </md-tab-group>
-      </md-card-content>
-      <md-card-actions style="text-align: center">
-
-      </md-card-actions>
-    </md-card>
-  </ng-masonry-grid-item>
-
-  <!--===================================card de balance==========================================-->
-  <ng-masonry-grid-item class="card" *ngIf="usuario.perm && usuario.perm.includes('facturacion') && facturacion">
-
-    <md-card class="example-card card-body text-center">
-      <md-card-content>
-        <md-tab-group>
-          <md-tab label="Balance de pagos: moneda local" selected>
-            <button *ngIf="tipo_plan == 1||tipo_plan == 4||tipo_plan==3"style="float: right" md-raised-button color="#888888" [disabled]="!usuario.perm && !usuario.perm.includes('facturacion_w')" (click)="abono()">Cargar Pago</button>
-            <table [md2Data]="balance" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="balance && balance.length>0; else elsebal">
-              <thead>
-              <tr>
-                <td colspan="4">
-                  <md2-pagination>
-                  </md2-pagination>
-                </td><td>
-                <!--   <span class="example-spacer" style="text-align: center;"></span>-->
-
-
-              </td>
-              </tr>
-              <tr >
-                <th style="text-align: center; width: 10%" ><h3>N</h3></th>
-                <th style="text-align: center" ><h3>Fecha</h3></th>
-                <th style="text-align: center" ><h3>Monto</h3></th>
-                <th style="text-align: center"><h3>Referencia</h3></th>
-                <th style="text-align: center"><h3>Banco</h3></th>
-                <th style="text-align: center"><h3>Acciones</h3></th>
-
-              </tr>
-              </thead>
-              <tbody class="fac">
-              <tr class="fac montos" *ngFor="let i of md2.data">
-                <td class="fac montos" style="border-right: 1px solid #000000; text-align: right">
-                  {{i.id_bal}}
-                </td>
-                <td class="fac montos"  style="text-align: center">
-                <span *ngIf ="i.bal_fecha_mod == null || i.bal_fecha_mod ==''" class="fac montos" style="text-align: center">
-                  {{i.created_at | stringToDate | date: 'dd/M/yy'}}
-                </span>
-                  <span style=" width: 7%; text-align: center; color: #FF6C00" *ngIf="i.bal_fecha_mod"> {{i.bal_fecha_mod | stringToDate | date: 'dd/M/yy'}} </span>
-                </td>
-                <td class="fac montos" *ngIf="i.bal_tip!=8 && i.bal_tip!=9 && i.bal_tip!=10 && i.bal_tip!=11">
-                  {{i.bal_monto | number : '1.2-2'}} Bs.S
-                </td>
-                <td class="fac montos" *ngIf="i.bal_tip==8 || i.bal_tip==9 || i.bal_tip==10 || i.bal_tip==11">
-                  {{i.bal_monto | number : '1.2'}} US$
-                </td>
-                <td class="fac montos">
-                  <span *ngIf ="i.bal_comment_mod == null || i.bal_comment_mod =='' ">{{i.bal_comment}}</span>
-                  <span style=" width: 14%; text-align: center; color: #FF6C00; font-weight: bold;" *ngIf="i.bal_comment_mod"> {{i.bal_comment_mod}}</span>
-                </td>
-
-                <td class="fac" *ngIf="i.bal_tip==2">Transferencia Banesco</td>
-                <td class="fac" *ngIf="i.bal_tip==6">Transferencia Bicentenario</td>
-                <td class="fac" *ngIf="i.bal_tip==1">Transferencia BOD</td>
-                <td class="fac" *ngIf="i.bal_tip==3">Transferencia Venezuela</td>
-                <td class="fac" *ngIf="i.bal_tip==4">Retencion ISLR</td>
-                <td class="fac" *ngIf="i.bal_tip==5">Retencion IVA</td>
-                <td class="fac" *ngIf="i.bal_tip==7">Exonerado</td>
-                <td class="fac" *ngIf="i.bal_tip==8">Moneda Extranjera</td>
-                <td class="fac" *ngIf="i.bal_tip==9">Zelle</td>
-                <td class="fac" *ngIf="i.bal_tip==10">Wire Transfer</td>
-                <td class="fac" *ngIf="i.bal_tip==11">Efectivo en $</td>
-                <td class="fac" *ngIf="i.bal_tip==15">Efectivo en Bs.S.</td>
-
-                <td *ngIf="i.bal_stat == 2; else notpermited">
-                  <button md-icon-button style="color:#106cc8" (click)="aprov(i)">
-                    <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
-                  </button>
-                  <button md-icon-button color="warn" (click)="rem(i)">
-                    <md-icon class="md-24" aria-label="Eliminar Cliente">clear</md-icon>
-                  </button>
-                </td>
-                <ng-template #notpermited>
-                  <td>
-                    <md-icon class="md-24" aria-label="Eliminar Cliente">block</md-icon>
-                  </td>
-                </ng-template>
-
-
-              </tr>
-
-
-              </tbody>
-
-            </table>
-            <ng-template #elsebal>
-              <font><h1>no tiene abonos en su balance</h1></font>
-            </ng-template>
-          </md-tab>
-          <md-tab  label="Balance de pagos: moneda extranjera " selected>
-            <button *ngIf="tipo_plan == 2||tipo_plan == 5||tipo_plan==3" style="float: right" md-raised-button color="#888888" [disabled]="!usuario.perm && !usuario.perm.includes('facturacion_w')" (click)="abonod()">Cargar Pago</button>
-            <table [md2Data]="balance_in" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" *ngIf="balance_in && balance_in.length>0; else elsebal">
-              <thead>
-              <tr>
-                <td colspan="4">
-                  <md2-pagination>
-                  </md2-pagination>
-                </td><td>
-                <!--   <span class="example-spacer" style="text-align: center;"></span>-->
-
-
-              </td>
-              </tr>
-              <tr >
-                <th style="text-align: center; width: 10%" ><h3>N</h3></th>
-                <th style="text-align: center" ><h3>Fecha</h3></th>
-                <th style="text-align: center" ><h3>Monto</h3></th>
-                <th style="text-align: center"><h3>Referencia</h3></th>
-                <th style="text-align: center"><h3>tipo de transaccion</h3></th>
-                <th style="text-align: center"><h3>Acciones</h3></th>
-
-              </tr>
-              </thead>
-              <tbody class="fac">
-              <tr class="fac montos" *ngFor="let i of md2.data">
-                <td class="fac montos"  style="border-right: 1px solid #000000; text-align: right">
-                  {{i.id_bal_in}}
-                </td>
-                <td class="fac montos"  style="text-align: center">
-                   <span *ngIf ="i.bal_fecha_mod_in == null || i.bal_fecha_mod_in ==''" class="fac montos" style="text-align: center">
-                  {{i.created_at | stringToDate | date: 'dd/M/yy'}}
-                </span>
-                  <span style=" width: 7%; text-align: center; color: #FF6C00" *ngIf="i.bal_fecha_mod_in"> {{i.bal_fecha_mod_in | stringToDate | date: 'dd/M/yy'}} </span>
-                </td>
-
-                <td class="fac montos" >
-                  {{i.bal_monto_in | number : '1.2'}} US$
-                </td>
-                <td class="fac montos" >
-                  <span *ngIf ="i.bal_comment_mod_in == null || i.bal_comment_mod_in =='' ">{{i.bal_comment_in}}</span>
-                  <span style=" width: 14%; text-align: center; color: #FF6C00; font-weight: bold;" *ngIf="i.bal_comment_mod_in"> {{i.bal_comment_mod_in}}</span>
-                </td>
-
-
-                <td class="fac" *ngIf="i.bal_tip_in==12">Zelle (plan D)</td>
-                <td class="fac" *ngIf="i.bal_tip_in==13">Wire Transfer (Plan D)</td>
-                <td class="fac" *ngIf="i.bal_tip_in==14">Efectivo (Plan D)</td>
-
-                <td *ngIf="i.bal_stat_in == 2; else notpermited">
-                  <button md-icon-button style="color:#106cc8" (click)="aprov2(i)">
-                    <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
-                  </button>
-                  <button md-icon-button color="warn" (click)="rem(i)">
-                    <md-icon class="md-24" aria-label="Eliminar Cliente">clear</md-icon>
-                  </button>
-                </td>
-                <ng-template #notpermited>
-                  <td>
-                    <md-icon class="md-24" aria-label="Eliminar Cliente">block</md-icon>
-                  </td>
-                </ng-template>
-
-
-              </tr>
-
-
-              </tbody>
-
-            </table>
-            <ng-template #elsebal>
-              <font><h1>no tiene abonos en su balance</h1></font>
-            </ng-template>
-          </md-tab>
-        </md-tab-group>
-      </md-card-content>
-
-
-
-      <md-card-actions  style="text-align: center">
-    <span >
-      <p>Estatus de balance  planes en moneda local:</p>
-
-    </span>
-        <span *ngIf="balac>0 || balac_$>0" style="color: rgb(75, 170, 78)">
-      Saldo a favor: <span *ngIf="balac>0">
-        {{(balac) | number:'1.2-2'}} Bs.S
-        </span>
-        <span *ngIf="balac>0 && balac_$ >0">|</span>
-        <span *ngIf="balac_$>0">
-        {{balac_$ | number:'1.0-2'}} US$.
-          </span>
-    </span>
-        <span *ngIf="(facturado - pagado)>0" style="color: rgb(191, 76, 76)">
-      Total Adeudado: {{(facturado - pagado) | number:'1.2-2'}} Bs.S <!--cambio el 14/06/2019 para que las facturas contenga dos decimales-->
-    </span>
-
-
-      </md-card-actions>
-      <hr >
-
-      <md-card-actions   style="text-align: center">
-      <span >
-     <p> Estatus de balance planes moneda extranjera: </p>
-
-    </span>
-        <span *ngIf="balac_in>0" style="color: rgb(75, 170, 78)">
-      Saldo a favor: <span *ngIf="balac_in>0">
-        {{(balac_in) | number:'1.2'}} US$.
-        </span>
-
-    </span>
-        <span *ngIf="(facturadoin - pagadoin)>0" style="color: rgb(191, 76, 76)">
-      Total Adeudado: {{(facturadoin - pagadoin) | number:'1.2'}} US$. <!--cambio el 14/06/2019 para que las facturas contenga dos decimales-->
-    </span>
-
-
-      </md-card-actions>
-    </md-card>
-  </ng-masonry-grid-item>
-
-  <!--====================================================================================-->
-
-
-  <!-- card de Tickets -->
-
-  <ng-masonry-grid-item class="card" *ngIf="usuario.perm && usuario.perm.includes('soporte') && soporte && soporte.length > 0">
-
-    <md-card class="example-card card-body text-center">
-      <md-card-header>
-        <md-card-title><h4>Tickets</h4></md-card-title>
-      </md-card-header>
-      <md-card-content>
-        <table [md2Data]="soporte" #md2="md2DataTable" [rowsPerPage]="3" class="addClient x700" >
-          <thead>
-          <tr>
-            <td colspan="7">
-              <md2-pagination ></md2-pagination>
-            </td>
-          </tr>
-          <tr>
-            <th style="width: 10%; margin: 0 1em;">Ticket</th>
-            <th style="width: 15%">Estado</th>
-            <th style="width: 15%">Usuario</th>
-            <th style="width: 10%">Acciones</th>
-          </tr>
-          </thead>
-          <tbody class="fac">
-          <tr *ngFor="let t of md2.data">
-            <td style="width: 10%; margin: 0 1em;">{{t.id_soporte}}</td>
-
-            <td *ngIf="t.status_soporte == 1" style="width: 15%">Abierto</td>
-            <td *ngIf="t.status_soporte == 2" style="width: 15%">Cerrado</td>
-            <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
-
-            <td *ngIf="(t.nombre_user == null) && (t.apellido_user != null)" style="width: 15%">{{t.apellido_user}}</td>
-            <td *ngIf="(t.nombre_user != null) && (t.apellido_user == null)" style="width: 15%">{{t.nombre_user}}</td>
-            <td *ngIf="(t.nombre_user != null) && (t.apellido_user != null)" style="width: 15%">{{t.nombre_user+ " " +t.apellido_user}}</td>
-
-            <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
-              No Autorizado
-            </td>
-            <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-              <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
-                <md-icon class="md-24" aria-label="Editar AP" >rate_review</md-icon>
-              </button>
-              <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
-              <button md-icon-button color="warn"(click)="deleteDialog(i)">
-              <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
-            </button-->
-
-
-            </td>
-          </tr>
-          </tbody>
-          <tfoot>
-
-          </tfoot>
-        </table>
-      </md-card-content>
-
-    </md-card>
-  </ng-masonry-grid-item>
-  <!--====================================================================================-->
-
-  <ng-masonry-grid-item class="card" *ngIf="usuario.perm && usuario.perm.includes('soporte') && soporte">
-
-    <md-card class="example-card card-body text-center">
-      <md-card-header>
-        <md-card-title><h4>Datos de servicio del cliente</h4></md-card-title>
-      </md-card-header>
-      <md-card-content>
-        <div class="example-form">
-
-          <table class=example-full-width [md2Data]="servicios" #md2="md2DataTable" [rowsPerPage]="1" class="addClient x700" cellspacing="0">
-            <thead>
-            <tr>
-              <td colspan="3">
-                <md2-pagination></md2-pagination>
-              </td>
-            </tr>
-
-            <div *ngFor="let t of md2.data">
-
-              <tr>
-                <td colspan="2">
-                  <span style="font-weight: bold;"> Nombre del plan: </span>{{t.name_plan}}
-                  <span>({{t.id_srv}})</span>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  <span style="font-weight: bold;"> IP: </span>{{t.ip_srv}}
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  <span style="font-weight: bold;"> AP: </span> {{t.ip_ap + " " + t.nombre_ap}}
-                </td>
-              </tr>
-              <tr>
-                <td >
-                  <span style="font-weight: bold;"> Nombre de equipo: </span>  {{t.name}}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span style="font-weight: bold;"> Serial de equipo: </span>  {{t.serial_srv}}
-                </td>
-              </tr>
-              <tr>
-                <td >
-                  <span style="font-weight: bold;"> Mac de equipo: </span> {{t.mac_srv}}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span style="font-weight: bold;"> Intensidad de señal: </span>{{t.signal_srv}}
-                </td>
-              <tr><td colspan="2" [style.height]="'10%'"><br></td></tr>
-              <button (click)="edit_service(t)" md-raised-button color="#888888" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">Editar</button>
+              <pagination-controls previousLabel=" " nextLabel=" " id="servicios" (pageChange)="s = $event">
+              </pagination-controls>
             </div>
-            <tfoot>
-
-            </tfoot>
-          </table>
+          </div>
         </div>
-      </md-card-content>
+      </div>
 
-    </md-card>
-  </ng-masonry-grid-item>
-  <!--====================================================================================-->
+      <!--==============================================================================================-->
+      <div class="col-sm-7">
+        <div class="accordion">
+          <div class="contentBx">
+            <div (click)="mostrarCuerpoHistorial()" class="label2">Historial</div>
+            <div *ngIf="bodyHistorial" id="cuerpoHistorial">
+              <table style="width: 100%;" class="table table-borderless">
+                <tbody>
+                  <tr *ngFor="let h of historial | paginate: {id:'historial', itemsPerPage: 3, currentPage: h }">
+                    <td>{{h.history}}</td>
+                    <td>
+                      {{h.modulo}}
+                    </td>
+                    <td>{{h.nombre_user}} {{h.apellido_user}}</td>
+                    <td>
+                      {{h.created_at | stringToDate | date: "d/M/yy"}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls previousLabel=" " nextLabel=" " id="historial" (pageChange)="h = $event">
+              </pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
 
-</ng-masonry-grid>
+
+      <div class="col-sm-5">
+        <div class="accordion">
+          <div class="contentBx">
+            <div (click)="mostrarCuerpoDatosServicios()" class="label">Datos Servicios Del Cliente</div>
+            <div *ngIf="bodyDatosServices" id="cuerpoServicio">
+              <table style="width: 100%;" class="table table-borderless">
+                <tbody>
+                  <tr *ngFor="let t of servicios | paginate: {id:'datosServicios', itemsPerPage: 1, currentPage: ds }">
+                    <div>
+                      <p>ID: {{t.id_srv}}</p>
+                      <p>Nombre Plan: {{t.name_plan}}</p>
+                      <p>IP: {{t.ip_srv}}</p>
+                      <p>AP: {{t.ip_ap}} {{t.nombre_ap}}</p>
+                      <p>Nombre Equipo: {{t.nombre_equipo}}</p>
+                      <p>Serial Equipo: {{t.serial_srv}}</p>
+                      <p>Intensidad de Señal: {{t.signal_srv}}</p>
+                    </div>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls previousLabel=" " nextLabel=" " id="datosServicios" (pageChange)="ds = $event">
+              </pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <!-- card de historial -->
+      <div class="col-sm-6">
+
+
+
+      </div>
+
+      <!--===================================card de balance==========================================-->
+      <div class="col-sm-12">
+
+        <div class="accordion">
+          <div class="contentBx">
+            <div *ngIf="pagosExoneraciones" (click)="mostrarCuerpoRegistroPago()" class="label3">Balance de Pagos</div>
+            <div *ngIf="pagosExoneraciones == false" (click)="mostrarCuerpoRegistroPago()" class="label3">Exoneraciones
+            </div>
+
+            <div *ngIf="bodyRegistroPagos && (cliente.serie == 1)" id="cuerpoRegistroPagos">
+
+              <button *ngIf="usuario.perm && usuario.perm.includes('facturacion_w') && pagosExoneraciones"
+                (click)="abono()" type="button" class="btn btn-secondary botonBalancePago">Cargar Pago</button>
+              <table *ngIf="pagosExoneraciones" style="width: 100%;" class="table table-borderless">
+                <tbody>
+                  <tr *ngFor="let b of balance | paginate: {id:'balances', itemsPerPage: 3, currentPage: r }">
+                    <td>{{b.id_bal}}</td>
+                    <td>
+                      {{ b.created_at | stringToDate | date: "dd/M/yy" }}
+                    </td>
+                    <td>
+                      {{ b.bal_monto | number: "1.2-2" }} Bs
+                    </td>
+                    <td>
+                      {{ b.created_at | stringToDate | date: "dd/M/yy" }}
+                    </td>
+                    <td *ngIf="b.bal_tip == 2">
+                      Transferencia Banesco
+                    </td>
+                    <td *ngIf="b.bal_tip == 6">
+                      Transferencia Bicentenario
+                    </td>
+                    <td *ngIf="b.bal_tip == 1">
+                      Transferencia BOD
+                    </td>
+                    <td *ngIf="b.bal_tip == 3">
+                      Transferencia Venezuela
+                    </td>
+                    <td *ngIf="b.bal_tip == 9">Zelle</td>
+                    <td *ngIf="b.bal_tip == 10">Wire Transfer</td>
+                    <td *ngIf="b.bal_tip == 11">Efectivo en $</td>
+                    <td *ngIf="b.bal_tip == 18">Banesco Panama</td>
+                    <td *ngIf="b.bal_stat == 2; else notpermited">
+                      <button md-icon-button style="color: #106cc8" (click)="aprov(b)">
+                        <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
+                      </button>
+                      <button md-icon-button color="warn" (click)="rem(i)">
+                        <md-icon class="md-24" aria-label="Eliminar Cliente">clear</md-icon>
+                      </button>
+                    </td>
+                    <ng-template #notpermited>
+                      <td>
+                        <md-icon class="md-24" aria-label="Eliminar Cliente">block</md-icon>
+                        <md-icon *ngIf="b.bal_stat == 0" class="md-24" aria-label="cancelado">(clear)</md-icon>
+                        <md-icon *ngIf="b.bal_stat == 1" class="md-24" aria-label="aceptado">(done)</md-icon>
+                      </td>
+                    </ng-template>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table *ngIf="pagosExoneraciones == false" style="width: 100%;" class="table table-borderless">
+                <tbody>
+                  <tr *ngFor="let b of exoneraciones | paginate: {id:'balances', itemsPerPage: 3, currentPage: r }">
+                    <td>{{b.id_bal_in}}</td>
+                    <td>
+                      <span *ngIf="
+                          b.bal_fecha_mod_in == null ||
+                          b.bal_fecha_mod_in == ''
+                        " class="fac montos" style="text-align: center">
+                        {{ b.created_at | stringToDate | date: "dd/M/yy" }}
+                      </span>
+                      <span style="color: #ff6c00" *ngIf="b.bal_fecha_mod_in">
+                        {{
+                        b.bal_fecha_mod_in | stringToDate | date: "dd/M/yy"
+                        }}
+                      </span>
+                    </td>
+                    <td *ngIf="
+                          b.bal_tip_in != 12 &&
+                          b.bal_tip_in != 13 &&
+                          b.bal_tip_in != 14 &&
+                          b.bal_tip_in != 16 &&
+                          b.bal_tip_in != 20
+                        ">
+                      {{ b.conversion | number: "1.2-2" }} Bs (tasa:
+                      {{ b.tasa }} Bs)
+                    </td>
+                    <td *ngIf="
+                          b.bal_tip_in == 12 ||
+                          b.bal_tip_in == 13 ||
+                          b.bal_tip_in == 14 ||
+                          b.bal_tip_in == 16 ||
+                          b.bal_tip_in == 18 ||
+                          b.bal_tip_in == 20
+                        ">
+                      {{ b.bal_monto_in | number: "1.2" }} $
+                    </td>
+                    <td>
+                      <span *ngIf="
+                          b.bal_comment_mod_in == null ||
+                          b.bal_comment_mod_in == ''
+                        ">{{ b.bal_comment_in }}</span>
+                      <span style="
+                          width: 14%;
+                          text-align: center;
+                          color: #ff6c00;
+                          font-weight: bold;
+                        " *ngIf="b.bal_comment_mod_in">
+                        {{ b.bal_comment_mod_in }}</span>
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 2">
+                      Transferencia Banesco
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 6">
+                      Transferencia Bicentenario
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 1">
+                      Transferencia BOD
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 3">
+                      Transferencia Venezuela
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 12">Zelle</td>
+                    <td *ngIf="b.bal_tip_in == 10">Wire Transfer</td>
+                    <td *ngIf="b.bal_tip_in == 14">Efectivo en $</td>
+                    <td *ngIf="b.bal_tip_in == 18">Banesco Panama</td>
+                    <td *ngIf="b.bal_stat_in == 2; else notpermited">
+                      <button md-icon-button style="color: #106cc8" (click)="aprov2(b)">
+                        <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
+                      </button>
+                      <button md-icon-button color="warn" (click)="rem2(b)">
+                        <md-icon class="md-24" aria-label="Eliminar Cliente">clear</md-icon>
+                      </button>
+                    </td>
+                    <ng-template #notpermited>
+                      <td>
+                        <md-icon class="md-24" aria-label="Eliminar Cliente">block</md-icon>
+                        <md-icon *ngIf="b.bal_stat_in == 0" class="md-24" aria-label="cancelado">(clear)</md-icon>
+                        <md-icon *ngIf="b.bal_stat_in == 1" class="md-24" aria-label="aceptado">(done)</md-icon>
+                      </td>
+                    </ng-template>
+                  </tr>
+                </tbody>
+              </table>
+
+              <pagination-controls previousLabel=" " nextLabel=" " id="balances" (pageChange)="r = $event">
+              </pagination-controls>
+            </div>
+
+
+            <div *ngIf="bodyRegistroPagos && (cliente.serie != 1)" id="cuerpoRegistroPagos">
+              <button class="btn btn-info botonPagos" style="float: left" (click)="cambiarPagosExoneraciones()" *ngIf="
+                      usuario.perm && usuario.perm.includes('facturacion_w')
+                    ">
+                <md-icon [class.updateicon]="update">cached</md-icon>
+              </button>
+              <button *ngIf="usuario.perm && usuario.perm.includes('facturacion_w') && pagosExoneraciones"
+                (click)="openModal(template)" style="float: right" type="button" class="btn btn-info botonBalancePago">
+                Cargar Pago
+              </button>
+              <button class="btn btn-info botonBalancePago" style="float: right" (click)="openModal10(template10)"
+                *ngIf="
+                      usuario.perm && usuario.perm.includes('facturacion_w') && pagosExoneraciones == false
+                    ">
+                Cargar Exoneracion
+              </button>
+              <table *ngIf="pagosExoneraciones" style="width: 100%;" class="table table-borderless">
+                <tbody>
+                  <tr *ngFor="let b of balance_in | paginate: {id:'balances', itemsPerPage: 3, currentPage: r }">
+                    <td>{{b.id_bal_in}}</td>
+                    <td>
+                      <span *ngIf="
+                          b.bal_fecha_mod_in == null ||
+                          b.bal_fecha_mod_in == ''
+                        " class="fac montos" style="text-align: center">
+                        {{ b.created_at | stringToDate | date: "dd/M/yy" }}
+                      </span>
+                      <span style="color: #ff6c00" *ngIf="b.bal_fecha_mod_in">
+                        {{
+                        b.bal_fecha_mod_in | stringToDate | date: "dd/M/yy"
+                        }}
+                      </span>
+                    </td>
+                    <td *ngIf="
+                          b.bal_tip_in != 12 &&
+                          b.bal_tip_in != 13 &&
+                          b.bal_tip_in != 14 &&
+                          b.bal_tip_in != 16
+                        ">
+                      {{ b.conversion | number: "1.2-2" }} Bs (tasa:
+                      {{ b.tasa }} Bs)
+                    </td>
+                    <td *ngIf="
+                          b.bal_tip_in == 12 ||
+                          b.bal_tip_in == 13 ||
+                          b.bal_tip_in == 14 ||
+                          b.bal_tip_in == 16 ||
+                          b.bal_tip_in == 18
+                        ">
+                      {{ b.bal_monto_in | number: "1.2" }} $
+                    </td>
+                    <td>
+                      <span *ngIf="
+                          b.bal_comment_mod_in == null ||
+                          b.bal_comment_mod_in == ''
+                        ">{{ b.bal_comment_in }}</span>
+                      <span style="
+                          width: 14%;
+                          text-align: center;
+                          color: #ff6c00;
+                          font-weight: bold;
+                        " *ngIf="b.bal_comment_mod_in">
+                        {{ b.bal_comment_mod_in }}</span>
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 2">
+                      Transferencia Banesco
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 6">
+                      Transferencia Bicentenario
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 1">
+                      Transferencia BOD
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 3">
+                      Transferencia Venezuela
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 12">Zelle</td>
+                    <td *ngIf="b.bal_tip_in == 10">Wire Transfer</td>
+                    <td *ngIf="b.bal_tip_in == 14">Efectivo en $</td>
+                    <td *ngIf="b.bal_tip_in == 18">Banesco Panama</td>
+                    <td *ngIf="b.bal_stat_in == 2; else notpermited">
+                      <button md-icon-button style="color: #106cc8" (click)="aprov2(b)">
+                        <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
+                      </button>
+                      <button md-icon-button color="warn" (click)="rem2(b)">
+                        <md-icon class="md-24" aria-label="Eliminar Cliente">clear</md-icon>
+                      </button>
+                    </td>
+                    <ng-template #notpermited>
+                      <td>
+                        <md-icon class="md-24" aria-label="Eliminar Cliente">block</md-icon>
+                        <md-icon *ngIf="b.bal_stat_in == 0" class="md-24" aria-label="cancelado">(clear)</md-icon>
+                        <md-icon *ngIf="b.bal_stat_in == 1" class="md-24" aria-label="aceptado">(done)</md-icon>
+                      </td>
+                    </ng-template>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table *ngIf="pagosExoneraciones == false" style="width: 100%;" class="table table-borderless">
+                <tbody>
+                  <tr *ngFor="let b of exoneraciones_in | paginate: {id:'balances', itemsPerPage: 3, currentPage: r }">
+                    <td>{{b.id_bal_in}}</td>
+                    <td>
+                      <span *ngIf="
+                          b.bal_fecha_mod_in == null ||
+                          b.bal_fecha_mod_in == ''
+                        " class="fac montos" style="text-align: center">
+                        {{ b.created_at | stringToDate | date: "dd/M/yy" }}
+                      </span>
+                      <span style="color: #ff6c00" *ngIf="b.bal_fecha_mod_in">
+                        {{
+                        b.bal_fecha_mod_in | stringToDate | date: "dd/M/yy"
+                        }}
+                      </span>
+                    </td>
+                    <td *ngIf="
+                          b.bal_tip_in != 12 &&
+                          b.bal_tip_in != 13 &&
+                          b.bal_tip_in != 14 &&
+                          b.bal_tip_in != 16 &&
+                          b.bal_tip_in != 20
+                        ">
+                      {{ b.conversion | number: "1.2-2" }} Bs (tasa:
+                      {{ b.tasa }} Bs)
+                    </td>
+                    <td *ngIf="
+                          b.bal_tip_in == 12 ||
+                          b.bal_tip_in == 13 ||
+                          b.bal_tip_in == 14 ||
+                          b.bal_tip_in == 16 ||
+                          b.bal_tip_in == 18 ||
+                          b.bal_tip_in == 20
+                        ">
+                      {{ b.bal_monto_in | number: "1.2" }} $
+                    </td>
+                    <td>
+                      <span *ngIf="
+                          b.bal_comment_mod_in == null ||
+                          b.bal_comment_mod_in == ''
+                        ">{{ b.bal_comment_in }}</span>
+                      <span style="
+                          width: 14%;
+                          text-align: center;
+                          color: #ff6c00;
+                          font-weight: bold;
+                        " *ngIf="b.bal_comment_mod_in">
+                        {{ b.bal_comment_mod_in }}</span>
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 2">
+                      Transferencia Banesco
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 6">
+                      Transferencia Bicentenario
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 1">
+                      Transferencia BOD
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 3">
+                      Transferencia Venezuela
+                    </td>
+                    <td *ngIf="b.bal_tip_in == 12">Zelle</td>
+                    <td *ngIf="b.bal_tip_in == 10">Wire Transfer</td>
+                    <td *ngIf="b.bal_tip_in == 14">Efectivo en $</td>
+                    <td *ngIf="b.bal_tip_in == 18">Banesco Panama</td>
+                    <td *ngIf="b.bal_stat_in == 2; else notpermited">
+                      <button md-icon-button style="color: #106cc8" (click)="aprov2(b)">
+                        <md-icon class="md-24" aria-label="Eliminar Cliente">done</md-icon>
+                      </button>
+                      <button md-icon-button color="warn" (click)="rem2(b)">
+                        <md-icon class="md-24" aria-label="Eliminar Cliente">clear</md-icon>
+                      </button>
+                    </td>
+                    <ng-template #notpermited>
+                      <td>
+                        <md-icon class="md-24" aria-label="Eliminar Cliente">block</md-icon>
+                        <md-icon *ngIf="b.bal_stat_in == 0" class="md-24" aria-label="cancelado">(clear)</md-icon>
+                        <md-icon *ngIf="b.bal_stat_in == 1" class="md-24" aria-label="aceptado">(done)</md-icon>
+                      </td>
+                    </ng-template>
+                  </tr>
+                </tbody>
+              </table>
+
+              <pagination-controls previousLabel=" " nextLabel=" " id="balances" (pageChange)="r = $event">
+              </pagination-controls>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-sm-9">
+        <div class="accordion">
+          <div class="contentBx">
+            <div *ngIf="notasFacturas" (click)="mostrarCuerpoFacturas()" id="label5">Facturas</div>
+            <div *ngIf="notasFacturas == false" (click)="mostrarCuerpoFacturas()" id="label5">Ajustes de Factura</div>
+            <div *ngIf="bodyFacturas" id="cuerpoFacturas">
+              <button style="float: left;" class="btn btn-info btn-sm botonFacturas" *ngIf="estatus_prog >= 1 &&
+                    usuario.perm &&
+                    usuario.perm.includes('facturacion_w') && notasFacturas
+                  " (click)="fac_progr()">
+                <md-icon class="icono1" aria-label="opciones de factura programada">alarm_on</md-icon>
+              </button>
+              <button class="btn btn-info botonFacturas" style="float: left" (click)="cambiarNotasFacturas()" *ngIf="
+                      usuario.perm && usuario.perm.includes('facturacion_w')
+                    ">
+                <md-icon [class.updateicon]="update">cached</md-icon>
+              </button>
+
+              <button class="btn btn-info botonFacturas" style="float: right" (click)="openModal3(template3)" *ngIf="
+                      usuario.perm && usuario.perm.includes('facturacion_w') && notasFacturas">
+                Generar Factura
+              </button>
+              <button *ngIf="
+                usuario.perm && usuario.perm.includes('facturacion_w') && notasFacturas == false
+              " (click)="openModal4(template4)" style="float: right" type="button" class="btn btn-info botonFacturas">
+                Generar Nota
+              </button>
+              <br>
+              <table *ngIf="notasFacturas" style="width: 100%;" class="table table-borderless">
+                <tbody>
+                  <tr *ngFor="let f of facturacion | paginate: {id:'fac', itemsPerPage: 3, currentPage: f }">
+                    <td>
+                      {{f.id}}
+                    </td>
+                    <td>
+                      {{f.created_at | stringToDate | date: "dd/M/yy"}}
+                    </td>
+                    <td>
+                      {{f.monto | number: "1.2-2" }} {{f.denominacion}}
+                    </td>
+                    <td *ngIf="f.fac_status == 1 && f.pagado != null">
+                      {{ f.pagado | number: "1.2" }} {{ f.denominacion }}
+                    </td>
+                    <td *ngIf="
+                    (f.fac_status == 1 || f.fac_status == 3) &&
+                    f.pagado == null
+                  "></td>
+                    <td *ngIf="f.fac_status == 2">
+                      Anulado
+                    </td>
+                    <td>
+                      <button md-icon-button style="color: #2C2C30" title="Ver Factura" (click)="status(f)">
+                        <md-icon class="md-24" aria-label="Detalles De Factura">find_in_page</md-icon>
+                      </button>
+                      <button md-icon-button style="color: #2C2C30" title="Anular Factura" *ngIf="
+                      usuario.perm &&
+                      usuario.perm.includes('facturacion_esp') &&
+                      facturacion &&
+                      f.fac_status == 1
+                    " (click)="anularfactura(f, template7)">
+                        <md-icon class="md-24" aria-label="Detalles De Factura">block</md-icon>
+                      </button>
+                      <button md-icon-button style="color: #2C2C30" title="Anular Factura" *ngIf="
+                      usuario.perm &&
+                      usuario.perm.includes('facturacion_esp') &&
+                      facturacion &&
+                      f.fac_status == 2
+                    " (click)="anularfactura(f, template7)">
+                        <md-icon class="md-24" aria-label="Detalles De Factura">info</md-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls *ngIf="notasFacturas" previousLabel=" " nextLabel=" " id="fac"
+                (pageChange)="f = $event"></pagination-controls>
+
+              <table *ngIf="notasFacturas == false" class="table table-borderless">
+
+                <tbody>
+                  <tr class="tr"
+                    *ngFor="let n of notasCreditos  | paginate: {id:'notas', itemsPerPage: 3, currentPage: f }">
+                    <td class="td">{{ n.id_nota }}</td>
+                    <td class="td" *ngIf="n.tipo_nota == 1">Nota de Debito</td>
+                    <td class="td" *ngIf="n.tipo_nota == 2">Nota de Credito</td>
+                    <td class="td">{{ n.fac_num }}</td>
+                    <td class="td">
+                      {{ n.total | number: "1.2" }} Bs
+                    </td>
+                    <td class="td">
+                      {{ n.pagado | number: "1.2" }} Bs
+                    </td>
+                    <td class="td">
+                      <md-icon style="color: #2C2C30;" class="md-24" aria-label="Detalles De Factura"
+                        (click)="verNota(n.id_nota, lgModal)">
+                        find_in_page</md-icon>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls *ngIf="notasFacturas == false" previousLabel=" " nextLabel=" " id="notas"
+                (pageChange)="f = $event"></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- card de Tickets -->
+      <div class="col-sm-3">
+        <div class="accordion">
+          <div class="contentBx">
+            <div (click)="mostrarCuerpoTickets()" class="label4">Tickets</div>
+            <div *ngIf="bodyTickets" id="cuerpoTicket">
+              <table style="width: 100%;" class="table table-borderless">
+                <tbody>
+                  <tr *ngFor="let s of soporte | paginate: {id:'soporte', itemsPerPage: 1, currentPage: so }">
+                    <div>
+                      <button md-icon-button style="color: #2C2C30; float: right;"
+                        [routerLink]="['/editticket', s.id_soporte]">
+                        <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
+                      </button>
+                      <p>ID: {{s.id_soporte}}</p>
+                      <p *ngIf="s.status_soporte == 1">
+                        Estatus: Abierto
+                      </p>
+                      <p *ngIf="s.status_soporte == 2">
+                        Estatus: Cerrado
+                      </p>
+                      <td *ngIf="s.status_soporte == 3">
+                        Estatus: Anulado
+                      </td>
+                      <p>Usuario: {{s.nombre_user}} {{s.apellido_user}}</p>
+                    </div>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls previousLabel=" " nextLabel=" " id="soporte" (pageChange)="so = $event">
+              </pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--====================================================================================-->
+
+
+    </div>
+
+    <ng-template #template>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Cargar Pago</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="ocultarModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="card-body">
+        <label class="control-label" for="disabledInput">Metodo de Pago</label>
+        <select [(ngModel)]="MetodoSelected" class="form-control" id="exampleSelect1" required>
+          <option *ngFor="let m of metodos" [value]="m.id_metodo">
+            {{ m.nombre_metodo }}
+          </option>
+        </select>
+        <div *ngIf="MetodoSelected != 0">
+          <label class="col-form-label" for="inputDefault">Referencia</label>
+          <input [(ngModel)]="Referencia" type="text" class="form-control" placeholder="Referencia" id="inputDefault"
+            #cedula required />
+
+          <label class="col-form-label" for="inputDefault">Fecha Pago</label>
+          <my-date-picker [(ngModel)]="fecha" class="example-full-width" name="birthdate" mdInput required locale="es"
+            [options]="myDatePickerOptions"></my-date-picker>
+        </div>
+
+        <div *ngIf="fecha != 0 && Referencia != ' '">
+          <div class="form-group">
+            <label class="control-label">Monto</label>
+            <div class="form-group">
+              <div class="input-group mb-3">
+                <input (input)="hacerConversion($event.target.value)" [(ngModel)]="Monto" type="text" mask="separator,2"
+                  thousandSeparator="," class="form-control" aria-label="Amount (to the nearest dollar)" />
+                <div class="input-group-append">
+                  <span class="input-group-text">.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p *ngIf="
+          fecha != 0 &&
+          Referencia != ' ' &&
+          (MetodoSelected == 1 ||
+            MetodoSelected == 2 ||
+            MetodoSelected == 3 ||
+            MetodoSelected == 6)
+        " class="text-success">
+          Conversion: {{ conversion | number: "1.2-2" }}$
+        </p>
+        <div *ngIf="pagoCargado" class="alert alert-dismissible alert-danger">
+          El Pago ya esta Registrado en el Sistema, Chequee Porfavor la Seccion de Pagos!
+        </div>
+        <div *ngIf="Monto != 0">
+          <button (click)="registrarPago()" type="button" class="btn btn-info">
+            Cargar Pago
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #template2>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">
+          Promocion Servicio: {{ servicioPromo }}
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="ocultarModal2()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="card-body">
+        <div *ngIf="promoActiva == false">
+          <div>
+            <label class="control-label" for="disabledInput">Seleccionar Promocion</label>
+            <select [(ngModel)]="comentario" class="form-control" (change)="TipoPlan()" id="exampleSelect1" required>
+              <option *ngFor="let p of promociones" [value]="p.id_promocion">
+                {{ p.nombre_promocion }}
+              </option>
+            </select>
+            <br />
+          </div>
+          <div *ngIf="comentario != 0">
+            <label class="control-label" for="disabledInput">Seleccionar Tipo de Plan</label>
+            <select [(ngModel)]="tipoServicioPromo" class="form-control" (change)="TipoPlan()" id="exampleSelect1"
+              required>
+              <option value="1">Planes antiguos</option>
+              <option value="4">Planes nuevos</option>
+              <option value="3">Planes exclusivos en dolares</option>
+              <option value="5">Planes Solo Dedicados</option>
+              <option value="6">Planes Zulia</option>
+              <option value="7">Planes Fibra</option>
+            </select>
+            <br />
+          </div>
+          <div *ngIf="tipoServicioPromo != 0">
+            <label class="control-label" for="disabledInput">Seleccionar Plan</label>
+            <select [(ngModel)]="planPromo" class="form-control" id="exampleSelect1" required>
+              <option [value]="" selected></option>
+              <option *ngFor="let s of planesPromo" [value]="s.id_plan">
+                {{ s.name_plan }}
+              </option>
+            </select>
+            <br />
+          </div>
+
+          <div *ngIf="planPromo != 0">
+            <label class="col-form-label" for="inputDefault">Fecha Pago</label>
+            <my-date-picker [(ngModel)]="fecha" class="example-full-width" name="birthdate" mdInput required locale="es"
+              [options]="myDatePickerOptions"></my-date-picker>
+          </div>
+
+          <br />
+          <div *ngIf="fecha != 0 && planPromo != 0">
+            <button (click)="RealizarPromocion()" type="button" class="btn btn-info">
+              Realizar Promocion
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="promoActiva == true">
+          <div class="row">
+            <div class="col-sm-10">
+              <label for="">Promocion:</label>
+              <p>{{ datosPromo[0].nombre_promocion }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-10">
+              <label for="">Plan de Promocion:</label>
+              <p>{{ datosPromo[0].name_plan }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-10">
+              <label for="">Responsable</label>
+              <p>
+                {{ datosPromo[0].nombre_user }} {{ datosPromo[0].apellido_user }}
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-10">
+              <label for="">Fecha Limite:</label>
+              <p>{{ datosPromo[0].fecha | date: "dd/M/yy" }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #template3>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Generar Factura</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="ocultarModal3()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="card-body">
+        <!--<button style="float: right" class="btn btn-info btn-sm" (click)="factura_blanco()">Factura en blanco</button>-->
+        <div>
+          <h6>
+            Cliente:
+            {{
+            (addClient.value.nombre | capitalize) +
+            " " +
+            (addClient.value.apellido | capitalize)
+            }}
+          </h6>
+          <br />
+          <label class="control-label" for="disabledInput">Seleccionar Tipo de Factura</label>
+          <select [(ngModel)]="FacturaSeleccionada" class="form-control" id="exampleSelect1" required>
+            <option value="2">Completa</option>
+            <option value="1">Prorrateada</option>
+            <option value="3">Programada</option>
+            <option value="4">Promocion</option>
+            <option value="5">En Blanco</option>
+          </select>
+          <br />
+        </div>
+        <br />
+        <div *ngIf="ServiciosClientes.length > 1">
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="radio" [(ngModel)]="radio" class="form-check-input" name="optionsRadios"
+                  id="optionsRadios1" [value]="1" />
+                Factura por Servicio
+              </label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="radio" [(ngModel)]="radio" class="form-check-input" name="optionsRadios"
+                  id="optionsRadios2" [value]="2" />
+                Factura por Varios Servicios
+              </label>
+            </div>
+          </fieldset>
+        </div>
+
+        <div *ngIf="
+          ServiciosClientes.length > 1 && radio == 1 && FacturaSeleccionada != 0
+        ">
+          <select [(ngModel)]="ServicioSeleccionado" class="form-control" id="exampleSelect1" required>
+            <option value="0"></option>
+            <option *ngFor="let s of ServiciosClientes" [value]="s.id_srv">
+              {{ s.name_plan }}
+            </option>
+          </select>
+        </div>
+
+        <div *ngIf="
+          ServiciosClientes.length > 1 && radio == 2 && FacturaSeleccionada != 0
+        ">
+          <button class="btn btn-info btn-sm" style="font-size: 13px" type="button" (click)="seleccionarTServicios()">
+            Seleccionar todo
+          </button>
+          <button class="btn btn-danger btn-sm" style="font-size: 13px" type="button" (click)="LimpiarLista()">
+            limpiar seleccion
+          </button>
+          <br />
+          <div class="col-sm-11">
+            <table class="table table-hover">
+              <tbody>
+                <tr class="tr" (click)="agregarNservicio(s.id_srv, o)" *ngFor="
+                  let s of ServiciosClientes2
+                    | paginate
+                      : { id: 'respuesta', itemsPerPage: 3, currentPage: e };
+                  let o = index
+                ">
+                  <th *ngIf="s.estatus == 1" class="table-default td">
+                    {{ s.name_plan }}
+                  </th>
+                  <th *ngIf="s.estatus == 2" class="table-success td">
+                    {{ s.name_plan }}
+                  </th>
+                  <td class="td"></td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls id="respuesta" (pageChange)="e = $event"></pagination-controls>
+          </div>
+        </div>
+        <div *ngIf="FacturaSeleccionada == 5" class="row">
+          <div class="col-sm-6">
+            <label for="">Tipo de Moneda</label>
+            <select [(ngModel)]="facBlanco" class="form-control" id="exampleSelect1" required>
+              <option value="0"></option>
+              <option *ngIf="addClient.value.kind == 'V' || addClient.value.kind == 'E'" value="2">
+                Moneda extranjera
+              </option>
+              <option *ngIf="addClient.value.kind != 'V' || addClient.value.kind != 'E'" value="1">
+                Moneda Nacional
+              </option>
+            </select>
+          </div>
+
+          <div *ngIf="FacturaSeleccionada == 5 && facBlanco == 1" class="col-sm-6">
+            <label for="">Tipo de Factura</label>
+            <select [(ngModel)]="facBlancoTipo" class="form-control" id="exampleSelect1" required>
+              <option value="0"></option>
+              <option value="1">Fiscal</option>
+              <option value="2">No Fiscal</option>
+            </select>
+          </div>
+        </div>
+        <div *ngIf="FacturaSeleccionada == 1 || FacturaSeleccionada == 4" class="row">
+          <div class="col-sm-6">
+            <label class="col-form-label" for="inputDefault">Fecha Pago (Desde)</label>
+            <my-date-picker [(ngModel)]="fechaFDesde" class="example-full-width" name="birthdate" mdInput required
+              locale="es" [options]="myDatePickerOptions"></my-date-picker>
+          </div>
+
+          <div class="col-sm-6">
+            <label class="col-form-label" for="inputDefault">Fecha Pago (Hasta)</label>
+            <my-date-picker [(ngModel)]="fechaFHasta" class="example-full-width" name="birthdate" mdInput required
+              locale="es" [options]="myDatePickerOptions"></my-date-picker>
+          </div>
+        </div>
+        <div *ngIf="FacturaSeleccionada == 3" class="row">
+          <div class="col-sm-12">
+            <label class="col-form-label" for="inputDefault">Fecha</label>
+            <my-date-picker [(ngModel)]="fechaFDesde" class="example-full-width" name="birthdate" mdInput required
+              locale="es" [options]="myDatePickerOptions"></my-date-picker>
+          </div>
+          <br />
+        </div>
+
+        <div *ngIf="
+          (FacturaSeleccionada == 2 && ServiciosClientes.length <= 1) ||
+          ((FacturaSeleccionada == 1 || FacturaSeleccionada == 4) &&
+            fechaFDesde != 0 &&
+            fechaFHasta != 0 &&
+            ServiciosClientes.length <= 1) ||
+          (FacturaSeleccionada == 3 &&
+            fechaFDesde != 0 &&
+            ServiciosClientes.length <= 1)
+        ">
+          <button (click)="generarFactura()" type="button" class="btn btn-info">
+            Generar Factura
+          </button>
+        </div>
+
+        <div *ngIf="
+          (FacturaSeleccionada == 2 &&
+            ServiciosClientes.length > 1 &&
+            radio != 0 &&
+            ServicioSeleccionado != 0) ||
+          ((FacturaSeleccionada == 1 || FacturaSeleccionada == 4) &&
+            fechaFDesde != 0 &&
+            fechaFHasta != 0 &&
+            ServiciosClientes.length > 1 &&
+            radio != 0 &&
+            ServicioSeleccionado != 0) ||
+          (FacturaSeleccionada == 3 &&
+            fechaFDesde != 0 &&
+            ServiciosClientes.length > 1 &&
+            radio != 0 &&
+            ServicioSeleccionado != 0)
+        ">
+          <button (click)="generarFactura()" type="button" class="btn btn-info">
+            Generar Factura
+          </button>
+        </div>
+
+        <div *ngIf="
+          (FacturaSeleccionada == 2 &&
+            ServiciosClientes.length > 1 &&
+            radio != 0 &&
+            nservicio.length > 0) ||
+          ((FacturaSeleccionada == 1 || FacturaSeleccionada == 4) &&
+            fechaFDesde != 0 &&
+            fechaFHasta != 0 &&
+            ServiciosClientes.length > 1 &&
+            radio != 0 &&
+            nservicio.length > 0) ||
+          (FacturaSeleccionada == 3 &&
+            fechaFDesde != 0 &&
+            ServiciosClientes.length > 1 &&
+            radio != 0 &&
+            nservicio.length > 0)
+        ">
+          <button (click)="generarFactura()" type="button" class="btn btn-info">
+            Generar Factura
+          </button>
+        </div>
+        <br />
+        <div *ngIf="
+          (FacturaSeleccionada == 5 && facBlanco == 2) ||
+          (FacturaSeleccionada == 5 && facBlanco == 1 && facBlancoTipo != 0)
+        ">
+          <button (click)="generarFactura()" type="button" class="btn btn-info">
+            Generar Factura En Blanco
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #template4>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Agregar Ajuste de Factura</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="ocultarModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="card-body">
+        <div>
+          <label class="control-label" for="disabledInput">Tipo de Ajuste De Factura</label>
+          <select [(ngModel)]="tipoAjusteSeleccionado" class="form-control" id="exampleSelect1" required>
+            <option value="0"></option>
+            <option value="1">Debito</option>
+            <option value="2">Credito</option>
+          </select>
+        </div>
+
+        <div *ngIf="tipoAjusteSeleccionado != 0">
+          <label class="control-label" for="disabledInput">Seleccionar Factura</label>
+          <select (change)="traerProductos()" [(ngModel)]="notaSeleccionada" class="form-control" id="exampleSelect1"
+            required>
+            <option value="0"></option>
+            <option *ngFor="let f of facturacion" [value]="f.id">
+              [{{ f.created_at | stringToDate | date: "M/yy" }}]
+              {{ f.monto | number: "1.2" }} {{ f.denominacion }}
+            </option>
+          </select>
+        </div>
+
+        <div *ngIf="notaSeleccionada != 0">
+          <label class="control-label" for="disabledInput">Tipo de Nota</label>
+          <select (change)="tipodeNota()" [(ngModel)]="tipoNotaSeleccionada" class="form-control" id="exampleSelect1"
+            required>
+            <option value="0"></option>
+            <option value="1">Total</option>
+            <option value="2">Parcial</option>
+          </select>
+        </div>
+        <br />
+
+        <div *ngIf="notaSeleccionada != 0 && tipoNotaSeleccionada != 0">
+          <label for="">Seleccionar Servicio</label>
+          <select [(ngModel)]="productoSeleccionado" class="form-control" id="exampleSelect1" required>
+            <option value="0"></option>
+            <option *ngFor="let p of productos" [value]="p.id">
+              {{ p.nombre_articulo }}
+            </option>
+          </select>
+        </div>
+        <br />
+        <div *ngIf="tipoNotaSeleccionada == 2 && ProductoSeleccionado != 0">
+          <label class="control-label" for="disabledInput">Modo de Nota Parcial</label>
+          <select (change)="tipodeNotaParcial()" [(ngModel)]="tipoNotaParcial" class="form-control" id="exampleSelect1"
+            required>
+            <option value="0"></option>
+            <option value="1">Porcentaje</option>
+            <option value="2">Dias</option>
+            <option value="3">Ingresar Monto</option>
+          </select>
+        </div>
+        <br />
+
+        <div *ngIf="
+          tipoNotaParcial == 1 &&
+          tipoNotaSeleccionada == 2 &&
+          ProductoSeleccionado != 0
+        ">
+          <div class="form-group">
+            <label class="col-form-label" for="inputDefault">Ingrese Porcentaje:</label>
+            <input type="text" [(ngModel)]="porcentaje" class="form-control" placeholder="" id="inputDefault" />
+          </div>
+        </div>
+
+        <div *ngIf="
+          tipoNotaParcial == 2 &&
+          tipoNotaSeleccionada == 2 &&
+          ProductoSeleccionado != 0
+        ">
+          <div class="form-group">
+            <label class="col-form-label" for="inputDefault">Ingrese Cantidad de Dias:</label>
+            <input type="text" [(ngModel)]="dias" class="form-control" placeholder="" id="inputDefault" />
+          </div>
+        </div>
+
+        <div *ngIf="
+          tipoNotaParcial == 3 &&
+          tipoNotaSeleccionada == 2 &&
+          ProductoSeleccionado != 0
+        ">
+          <div class="form-group">
+            <label class="col-form-label" for="inputDefault">Ingresar Monto:</label>
+            <input type="text" [(ngModel)]="montoNota" class="form-control" placeholder="" id="inputDefault" />
+          </div>
+        </div>
+
+        <div *ngIf="
+          (tipoNotaSeleccionada == 1 && ProductoSeleccionado != 0) ||
+          (tipoNotaSeleccionada == 2 &&
+            tipoNotaSeleccionada == 1 &&
+            ProductoSeleccionado != 0) ||
+          (tipoNotaSeleccionada == 2 &&
+            ProductoSeleccionado != 0 &&
+            tipoNotaSeleccionada == 2 &&
+            tipoNotaParcial != 0 &&
+            (porcentaje != 0 || dias != 0 || montoNota != 0))
+        ">
+          <button (click)="generarNota()" type="button" class="btn btn-info">
+            Generar Nota de Credito
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
+    <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+      aria-labelledby="dialog-sizes-name1">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content notaCredito">
+          <h1 *ngIf="notaActiva && notaDeCredito.tipo_nota == 1">
+            Nota de Debito
+          </h1>
+          <h1 *ngIf="notaActiva && notaDeCredito.tipo_nota == 2">
+            Nota de Credito
+          </h1>
+          <div *ngIf="notaActiva" id="print-section">
+            <form id="producto" name="ProductForm" novalidate>
+              <span>Mes:
+                {{ notaDeCredito.updated_at | date: "MMMM yyyy" | capitalize }}
+              </span>
+              <table style="width: 100%">
+                <thead>
+                  <tr>
+                    <td class="fac" colspan="3">
+                      RIF :{{ notaDeCredito.kind }}-{{ notaDeCredito.dni }}
+                    </td>
+                    <td class="fac" colspan="2" style="text-align: center">
+                      Nota de Debito: 000{{ notaDeCredito.id_nota }}
+                    </td>
+                    <td class="fac" colspan="2" style="text-align: center">
+                      Serie: B
+                    </td>
+                    <td class="fontz" style="text-align: right">
+                      Emisión:
+                      {{
+                      notaDeCredito.created_at
+                      | stringToDate
+                      | date: "dd/MM/yyyy"
+                      }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" class="fac">
+                      Razon Social: {{ notaDeCredito.social }}
+                    </td>
+                    <td colspan="5" class="fac">
+                      Direccion: {{ notaDeCredito.direccion }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="4" class="fac">
+                      Correo electrónico: {{ notaDeCredito.email }}
+                    </td>
+                    <td class="fac" colspan="4">
+                      Telefono: {{ notaDeCredito.phone1 }}
+                    </td>
+                  </tr>
+                  <tr class="fact">
+                    <th colspan="2" class="fact fontz" style="
+                      font-weight: bold;
+                      text-align: center;
+                      min-width: 35%;
+                      width: 35%;
+                      max-width: 35%;
+                    ">
+                      Nombre del articulo
+                    </th>
+                    <th class="fact fontz" style="
+                      font-weight: bold;
+                      text-align: center;
+                      min-width: 20%;
+                      width: 20%;
+                      max-width: 20%;
+                    ">
+                      Comentario
+                    </th>
+                    <th colspan="2" class="fact fontz" style="font-weight: bold; text-align: center">
+                      Precio unitario
+                    </th>
+                    <th class="fact fontz" style="font-weight: bold; text-align: center">
+                      % IVA
+                    </th>
+                    <th colspan="2" class="fact fontz" style="font-weight: bold; text-align: center">
+                      Total neto
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let p of notaDeCredito.productos">
+                    <td colspan="2" class="fontprod" style="
+                      text-align: center;
+                      min-width: 35%;
+                      width: 35%;
+                      max-width: 35%;
+                    ">
+                      {{ p.nombre_nota }}
+                    </td>
+                    <td class="fontprod" style="
+                      text-align: center;
+                      min-width: 20%;
+                      width: 20%;
+                      max-width: 20%;
+                    ">
+                      {{ p.comentario }}
+                    </td>
+                    <td colspan="2" class="fontprod" style="text-align: center">
+                      {{ p.precio | number: "1.2" }} Bs
+                    </td>
+                    <td class="fontprod" style="text-align: center">
+                      {{ p.iva }}%
+                    </td>
+                    <td colspan="2" class="fontprod" style="text-align: center">
+                      {{ p.precio | number: "1.2" }} Bs
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+            <br /><br /><br /><br /><br /><br /><br />
+            <table style="width: 100%">
+              <tfoot>
+                <tr style="
+                  border-top: 1px solid black;
+                  border-bottom: 1px solid black;
+                " class="boto">
+                  <td class="fontz boto bobo">Base Imponible</td>
+                  <td class="fontz boto bobo">
+                    <span>
+                      {{ notaDeCredito.monto_nota | number: "1.2" }} Bs
+                    </span>
+                  </td>
+                  <td class="fontz bobo boto">Total I.V.A.%</td>
+                  <td class="fontz bobo boto">
+                    {{ notaDeCredito.iva | number: "1.2" }} Bs
+                  </td>
+                  <td class="fontz bobo boto">Total General</td>
+                  <td class="fontz bobo boto">
+                    {{
+                    notaDeCredito.total | number: "1.2"
+                    }}
+                    Bs
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <div>
+              <h6>
+                APLICA A LA FACTURA {{ notaDeCredito.fac_num }} FECHA
+                {{ notaDeCredito.created_at | stringToDate | date: "dd/MM/yyyy" }}
+                MONTO TOTAL BS.{{ notaDeCredito.monto | number: "1.2" }}
+              </h6>
+              <p class="text-danger">Deuda Nota: {{deudaNota | number: "1.2"}} Bs</p>
+            </div>
+          </div>
+          <br />
+          <div id="pago" name="PagoForm" [formGroup]="pagoAjustesFactura" ng-submit="ok(clientForm)" novalidate *ngIf="
+            usuario.perm && usuario.perm.includes('facturacion_w') && notaActiva
+          ">
+            <div class="row">
+              <table *ngIf="notasFacturas == false" class="table table-borderless">
+                <thead>
+                  <tr class="tr">
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Tipo de Pago</th>
+                    <th scope="col">Referencia</th>
+                    <th scope="col">Monto</th>
+                    <th scope="col">Fecha</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="tr" *ngFor="let pago of notaDeCredito.pagos ">
+                    <td>Pago Registrado</td>
+                    <td class="td" *ngIf="pago.tipo_pago == 1">Transferencia BOD</td>
+                    <td class="td" *ngIf="pago.tipo_pago == 2">Transferencia Banesco</td>
+                    <td class="td" *ngIf="pago.tipo_pago == 3">Transferencia Venezuela</td>
+                    <td class="td" *ngIf="pago.tipo_pago == 6">Transferencia Bicentenario</td>
+                    <td class="td" *ngIf="pago.tipo_pago == 8">Moneda Extranjera</td>
+                    <td class="td" *ngIf="pago.tipo_pago == 4">Retencion ISLR</td>
+                    <td class="td" *ngIf="pago.tipo_pago == 5">Retencion IVA</td>
+                    <td class="td" *ngIf="pago.tipo_pago == 17">Otras Retenciones</td>
+                    <td class="td">{{ pago.referencia }}</td>
+                    <td class="td">
+                      {{ pago.pago_monto | number: "1.2" }} Bs
+                    </td>
+                    <td>{{pago.created_at | stringToDate | date: "dd/M/yy" }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <br />
+            <form id="pago" name="PagoForm" [formGroup]="pagoAjustesFactura" ng-submit="ok(clientForm)" novalidate
+              *ngIf="
+              usuario.perm &&
+              usuario.perm.includes('facturacion_w') &&
+              notaActiva
+            ">
+              <div class="row">
+                <div class="col-sm-3">
+                  <select formControlName="metodo_pago" class="form-control form-control-sm" required>
+                    <option value="0" selected></option>
+                    <option value="1">Transferencia BOD</option>
+                    <option value="2">Transferencia Banesco</option>
+                    <option value="3">Transferencia Venezuela</option>
+                    <option value="6">Transferencia Bicentenario</option>
+                    <option value="8">Moneda Extranjera</option>
+                    <option value="4">Retencion ISLR</option>
+                    <option value="5">Retencion IVA</option>
+                    <option value="17">Otras Retenciones</option>
+                    <option value="7" *ngIf="
+                      usuario.perm && usuario.perm.includes('facturacion_esp')
+                    ">
+                      Exonerado
+                    </option>
+                    <option value="15">Efectivo Bs</option>
+                  </select>
+                </div>
+
+                <div class="col-sm-3">
+                  <input type="text" class="form-control form-control-sm" placeholder="Referencia"
+                    formControlName="Referencia" />
+                </div>
+
+                <div class="col-sm-2">
+                  <input type="date" class="form-control form-control-sm" formControlName="fecha" />
+                </div>
+
+                <div class="col-sm-3">
+                  <input type="numbre" mask="separator,2" thousandSeparator="." class="form-control form-control-sm"
+                    formControlName="monto" />
+                </div>
+
+                <div class="col-sm-1">
+                  <md-icon class="GenerarAjusteFacturaPago" (click)="GenerarPagoAjusteFactura()" aria-label="notificar">
+                    done
+                  </md-icon>
+                </div>
+              </div>
+            </form>
+            <br />
+            <button md-raised-button (click)="print()">Imprimir</button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #template5>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Editar Servicio</h4>
+
+          <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal2()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="row">
+              <div class="col-sm-5">
+                <h5>Cliente</h5>
+
+                <p *ngIf="
+                  servicioEditable.kind == 'V' || servicioEditable.kind == 'E'
+                ">
+                  {{ servicioEditable.nombre }} {{ servicioEditable.apellido }}
+                </p>
+                <p *ngIf="
+                  servicioEditable.kind != 'V' || servicioEditable.kind != 'E'
+                ">
+                  {{ servicioEditable.social }}
+                </p>
+              </div>
+
+              <div class="col-sm-4">
+                <h5>Tipo de Cliente</h5>
+                <select [(ngModel)]="servicioEditable.serie_srv" class="form-control form-control-sm"
+                  id="exampleSelect1" #ubicacion required>
+                  <option value="1">Cliente Facturable</option>
+                  <option value="0">Cliente No Facturable</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <h5>Estado</h5>
+                <select [(ngModel)]="servicioEditable.stat_srv" class="form-control form-control-sm" required>
+                  <option [value]="1">Activo</option>
+                  <option [value]="3">Suspendido</option>
+                  <option [value]="4">Retirado</option>
+                  <option [value]="5">Exonerado</option>
+                </select>
+              </div>
+            </div>
+
+            <br />
+            <div class="row">
+              <div class="col-sm-4">
+                <h5>Tipo Plan</h5>
+                <p *ngIf="servicioEditable.tipo_plan == 1">Planes Antiguos</p>
+                <p *ngIf="servicioEditable.tipo_plan == 3">Planes En Dolares</p>
+                <p *ngIf="servicioEditable.tipo_plan == 4">Planes Nuevos</p>
+                <p *ngIf="servicioEditable.tipo_plan == 5">
+                  Planes Solo Dedicados
+                </p>
+                <p *ngIf="servicioEditable.tipo_plan == 6">Planes Zulia</p>
+                <p *ngIf="servicioEditable.tipo_plan == 7">Planes Fibra</p>
+
+                <select [(ngModel)]="tipoPlanSeleccionado" (change)="onChange()" class="form-control form-control-sm"
+                  id="exampleSelect1" #ubicacion required>
+                  <option [value]="0" selected></option>
+                  <option *ngIf="servicioEditable.tipo_srv == 1" [value]="1">
+                    Planes Antiguos
+                  </option>
+                  <option *ngIf="servicioEditable.tipo_srv == 1" [value]="4">
+                    Planes Nuevos
+                  </option>
+                  <option *ngIf="servicioEditable.tipo_srv == 1" [value]="3">
+                    Planes en dolares
+                  </option>
+                  <option *ngIf="servicioEditable.tipo_srv == 1" [value]="5">
+                    Planes solo Dedicados
+                  </option>
+                  <option *ngIf="servicioEditable.tipo_srv == 1" [value]="6">
+                    Planes Zulia
+                  </option>
+                  <option *ngIf="servicioEditable.tipo_srv == 2" [value]="7">
+                    Planes Fibra
+                  </option>
+                </select>
+
+                <br />
+              </div>
+              <div class="col-sm-4">
+                <h5>Plan</h5>
+                <p style="font-size: 12px">{{ servicioEditable.name_plan }}</p>
+
+                <select [(ngModel)]="planSeleccionado" (change)="cambioPlan()" class="form-control form-control-sm"
+                  id="exampleSelect1" #ubicacion required>
+                  <option value="0"></option>
+                  <option *ngFor="let plan of planes" [value]="plan.id_plan">
+                    {{ plan.name_plan }}
+                  </option>
+                </select>
+
+                <br />
+              </div>
+              <div *ngIf="servicioEditable.tipo_srv == 1" class="col-sm-4">
+                <h5>Ip</h5>
+                <p>{{ servicioEditable.ip_srv }}</p>
+                <!--
+                <span *ngIf="visualizarIp == true" class="badge badge-pill badge-danger"> Disculpe, pero la Ip ya esta
+                  en
+                  Uso!!</span>
+                <input  *ngIf="usuario.perm.includes('soporte_w')" [(ngModel)]="ipSeleccionada" (input)="onSearchIpEditable($event.target.value)" type="text"
+                  class="form-control form-control-sm" placeholder="IP" id="inputDefault" required>
+                -->
+                <br />
+              </div>
+              <div *ngIf="servicioEditable.tipo_srv == 2" class="col-sm-4">
+                <h5>Caja Distribucion</h5>
+                <p>{{ servicioEditable.nombre_caja }}</p>
+                <select [(ngModel)]="servicioEditable.ap_srv" (change)="cambioEquipo()" class="form-control"
+                  id="exampleSelect1" #ubicacion required>
+                  <option value="0"></option>
+                  <option *ngFor="let caja of cajas" [value]="caja.id_caja">
+                    {{ caja.nombre_caja }}
+                  </option>
+                </select>
+                <br />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <h5>Equipo</h5>
+                <p>{{ servicioEditable.nombre_equipo }}</p>
+
+                <select [(ngModel)]="servicioEditable.nombre_equipo" (change)="cambioEquipo()" class="form-control"
+                  id="exampleSelect1" #ubicacion required>
+                  <option *ngFor="let equipo of equipos" [value]="equipo.nombre_equipo">
+                    {{ equipo.nombre_equipo }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-sm-4">
+                <h5>Serial</h5>
+                <p *ngIf="servicioEditable.serial_srv != '0'">
+                  {{ servicioEditable.serial_srv }}
+                </p>
+                <p *ngIf="servicioEditable.serial_srv == '0'">Equipo Usado</p>
+
+                <select [(ngModel)]="servicioEditable.serial_srv" class="form-control form-control-sm" required>
+                  <option [value]="" selected></option>
+                  <option *ngFor="let d of disponibles" [value]="d.serial_articulo">
+                    {{ d.serial_articulo }}
+                  </option>
+                </select>
+              </div>
+              <div *ngIf="servicioEditable.tipo_srv == 1" class="col-sm-4">
+                <h5>AP</h5>
+                <p>{{ servicioEditable.nombre_ap }}</p>
+
+                <select [(ngModel)]="servicioEditable.ap_srv" (change)="cambioEquipo()" class="form-control"
+                  id="exampleSelect1" #ubicacion required>
+                  <option value="0"></option>
+                  <option *ngFor="let ap of aps" [value]="ap.id">
+                    {{ ap.nombre_ap }}
+                  </option>
+                </select>
+              </div>
+              <div *ngIf="servicioEditable.tipo_srv == 2" class="col-sm-4">
+                <h5>Mnaga Empalme</h5>
+                <p>{{ servicioEditable.nombre_manga }}</p>
+                <!--
+                <span *ngIf="visualizarIp == true" class="badge badge-pill badge-danger"> Disculpe, pero la Ip ya esta
+                  en
+                  Uso!!</span>
+                <input  *ngIf="usuario.perm.includes('soporte_w')" [(ngModel)]="ipSeleccionada" (input)="onSearchIpEditable($event.target.value)" type="text"
+                  class="form-control form-control-sm" placeholder="IP" id="inputDefault" required>
+                -->
+                <br />
+              </div>
+            </div>
+            <div></div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" [(ngModel)]="isCheckedS" (change)="comision()" class="custom-control-input"
+                    id="customCheck1" />
+                  <label class="custom-control-label" for="customCheck1">Genera Comision</label>
+                </div>
+              </div>
+            </div>
+            <br />
+            <div *ngIf="isCheckedS">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h5>Usuario</h5>
+
+                  <select [(ngModel)]="servicioEditable.user_comision_serv" class="form-control form-control-sm"
+                    required>
+                    <option *ngFor="let u of userComisiones" [value]="u.id_user">
+                      {{ u.nombre_user }} {{ u.apellido_user }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-sm-6">
+                  <h5>%</h5>
+                  <input [(ngModel)]="servicioEditable.porcentaje_comision_serv" type="text"
+                    class="form-control form-control-sm" placeholder="Comision" id="inputDefault" required />
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="row">
+              <div class="col-sm-4">
+                <h5>Comentario</h5>
+                <input [(ngModel)]="servicioEditable.comment_srv" type="text" class="form-control form-control-sm"
+                  placeholder="Comentario" id="inputDefault" required />
+                <br />
+              </div>
+              <div class="col-sm-4">
+                <h5>Costo Inst</h5>
+                <input [(ngModel)]="servicioEditable.costo_instalacion_srv" type="text"
+                  class="form-control form-control-sm" placeholder="Costo Instalacion" id="inputDefault" required />
+                <br />
+              </div>
+              <div class="col-sm-4">
+                <h5>Dias de Credito</h5>
+                <input [(ngModel)]="servicioEditable.credito_srv" type="text" class="form-control form-control-sm"
+                  placeholder="Dias de Credito" id="inputDefault" required />
+                <br />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <label class="col-form-label" for="inputDefault">Fecha de Instalacion</label>
+                <input [(ngModel)]="servicioEditable.instalacion_srv" type="date" class="form-control" />
+              </div>
+              <div class="col-sm-4">
+                <label class="col-form-label" for="inputDefault">Fecha de Inicio del Servicio</label>
+                <input [(ngModel)]="servicioEditable.start_srv" type="date" class="form-control" />
+              </div>
+              <div class="col-sm-4">
+                <div>
+                  <br />
+                  <br />
+                  <button type="button" (click)="EditarData()" class="btn btn-info">
+                    Editar Servicio
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #template6>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Compromiso de Servicio</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal6()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div *ngIf="compromisosServicios.length <= 0" class="container">
+            <div>
+              <label for="">Seleccionar Servicio</label>
+              <select [(ngModel)]="compromisSerSeleccionado" class="form-control" id="exampleSelect1" required>
+                <option value="0"></option>
+                <option *ngFor="let ser of servicios" [value]="ser.id_srv">
+                  {{ ser.name_plan }}
+                </option>
+              </select>
+            </div>
+            <br />
+            <label *ngIf="compromisSerSeleccionado != 0" for="">Tipo de Plan</label>
+            <select *ngIf="compromisSerSeleccionado != 0" [(ngModel)]="tipoPlanSeleccionado" (change)="onChange()"
+              class="form-control" id="exampleSelect1" #ubicacion required>
+              <option [value]="0" selected></option>
+              <option [value]="1">Planes Antiguos</option>
+              <option [value]="4">Planes Nuevos</option>
+              <option [value]="3">Planes en dolares</option>
+              <option [value]="5">Planes solo Dedicados</option>
+              <option [value]="6">Planes Zulia</option>
+              <option [value]="7">Planes Fibra</option>
+            </select>
+            <br />
+            <label *ngIf="tipoPlanSeleccionado != 0" for="">Plan</label>
+            <select *ngIf="tipoPlanSeleccionado != 0" [(ngModel)]="planSeleccionado" class="form-control"
+              id="exampleSelect1" #ubicacion required>
+              <option value="0"></option>
+              <option *ngFor="let plan of planes" [value]="plan.id_plan">
+                {{ plan.name_plan }}
+              </option>
+            </select>
+            <br />
+            <div>
+              <label *ngIf="planSeleccionado != 0" class="col-form-label" for="inputDefault">Fecha de Limite de
+                Compromiso
+                de Servicio</label>
+              <input *ngIf="planSeleccionado != 0" [(ngModel)]="fechaLimiteCompromisoServicio" type="date"
+                class="form-control" />
+            </div>
+            <br />
+            <div>
+              <button (click)="generarCompromisoServicio()" type="button" class="btn btn-info">
+                Generar Compromiso de Servicio
+              </button>
+            </div>
+          </div>
+          <div *ngIf="compromisosServicios.length > 0">
+            <h6>Codigo Servicio</h6>
+            <p>{{ compromisosServicios[0].id_servicio_com }}</p>
+            <br />
+            <h6>Tipo de Plan</h6>
+            <p *ngIf="compromisosServicios[0].tipo_plan == 4">Planes Nuevos</p>
+            <p *ngIf="compromisosServicios[0].tipo_plan == 3">
+              Planes en Dolares
+            </p>
+            <p *ngIf="compromisosServicios[0].tipo_plan == 7">Planes Fibra</p>
+            <p *ngIf="compromisosServicios[0].tipo_plan == 1">Planes Antiguos</p>
+            <p *ngIf="compromisosServicios[0].tipo_plan == 5">
+              Planes Solo Dedicados
+            </p>
+            <p *ngIf="compromisosServicios[0].tipo_plan == 6">Planes Zulia</p>
+            <select *ngIf="edicionComprosimo" [(ngModel)]="tipoPlanSeleccionado" (change)="onChange()"
+              class="form-control" id="exampleSelect1" #ubicacion required>
+              <option [value]="0" selected></option>
+              <option [value]="1">Planes Antiguos</option>
+              <option [value]="4">Planes Nuevos</option>
+              <option [value]="3">Planes en dolares</option>
+              <option [value]="5">Planes solo Dedicados</option>
+              <option [value]="6">Planes Zulia</option>
+              <option [value]="7">Planes Fibra</option>
+            </select>
+            <br />
+            <h6>Nombre Plan Compromiso</h6>
+            <p>{{ compromisosServicios[0].name_plan }}</p>
+            <select *ngIf="edicionComprosimo" [(ngModel)]="planSeleccionado" class="form-control" id="exampleSelect1"
+              #ubicacion required>
+              <option value="0"></option>
+              <option *ngFor="let plan of planes" [value]="plan.id_plan">
+                {{ plan.name_plan }}
+              </option>
+            </select>
+            <br />
+            <h6>Fecha Culminacion</h6>
+            <p>
+              {{
+              compromisosServicios[0].fecha_finalizacion
+              | stringToDate
+              | date: "d/M/yy"
+              }}
+            </p>
+            <input *ngIf="edicionComprosimo" [(ngModel)]="fechaLimiteCompromisoServicio" type="date"
+              class="form-control" />
+            <br />
+            <button *ngIf="edicionComprosimo == false" (click)="activarEdicion()" type="button"
+              class="btn btn-info btn-sm">
+              <md-icon class="md-24" aria-label="notificar">edit</md-icon>
+            </button>
+            <button *ngIf="edicionComprosimo" (click)="
+              EditarCompromisoServicio(
+                compromisosServicios[0].id_compromiso,
+                compromisosServicios[0].id_servicio_com
+              )
+            " type="button" class="btn btn-info btn-sm">
+              <md-icon class="md-24" aria-label="notificar">done</md-icon>
+            </button>
+            <button (click)="
+              EliminarCompromisoServicio(
+                compromisosServicios[0].id_compromiso,
+                compromisosServicios[0].id_servicio_com
+              )
+            " type="button" class="btn btn-danger btn-sm">
+              <md-icon class="md-24" aria-label="notificar">close</md-icon>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #template7>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Anulacion de Factura</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal7()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div *ngIf="comprobacionAnulacion == false" class="container">
+            <div class="form-group">
+              <label for="exampleTextarea">Razon de Anulacion</label>
+              <textarea [(ngModel)]="RazonAnulacion" class="form-control" id="exampleTextarea" rows="3"></textarea>
+            </div>
+            <br />
+            <div>
+              <button *ngIf="RazonAnulacion.length > 5" (click)="generarAnulacionFactura()" type="button"
+                class="btn btn-info">
+                Anular Factura
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="comprobacionAnulacion" class="container">
+            <div class="form-group">
+              <label for="exampleTextarea">Razon de Anulacion</label>
+              <textarea [(ngModel)]="comprobacionAnulacionMotivo" class="form-control" id="exampleTextarea"
+                rows="3"></textarea>
+            </div>
+            <br />
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #template8>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Compromiso de Pago</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal8()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div class="container">
+            <div class="form-group">
+              <label for="exampleTextarea">Seleccionar Servicio</label>
+              <select [(ngModel)]="servicioCorteProgSeleccionado" class="form-control" id="exampleSelect1" required>
+                <option value="0"></option>
+                <option *ngFor="let s of servicios" [value]="s.id_srv">
+                  {{ s.name_plan }}
+                </option>
+              </select>
+              <br />
+
+              <label *ngIf="servicioCorteProgSeleccionado != 0" class="col-form-label" for="inputDefault">Fecha de Corte
+                Programado</label>
+              <input *ngIf="servicioCorteProgSeleccionado != 0" [(ngModel)]="fechaCorteProgSeleccionado" type="date"
+                class="form-control" />
+            </div>
+            <br />
+            <div>
+              <button *ngIf="
+                servicioCorteProgSeleccionado != 0 &&
+                fechaCorteProgSeleccionado != ' '
+              " (click)="generarCorteProgramado()" type="button" class="btn btn-info">
+                Generar Corte Programado
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #template9>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Prorateo de Factura</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal9()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div class="container">
+            <div class="form-group">
+              <label for="exampleTextarea">Seleccionar Factura</label>
+              <select [(ngModel)]="facturaProSeleccionada" class="form-control" id="exampleSelect1" required>
+                <option value="0"></option>
+                <option *ngFor="let f of facturacion" [value]="f.id">
+                  [{{ f.created_at | stringToDate | date: "d/M/yy" }}] {{ f.monto
+                  }}{{ f.denominacion }}
+                </option>
+              </select>
+              <br />
+
+              <div *ngIf="facturaProSeleccionada != 0">
+                <label class="control-label" for="disabledInput">Seleccionar Tipo de Plan</label>
+                <select [(ngModel)]="tipoPlanProSeleccionado" class="form-control" (change)="TipoPlanPro()"
+                  id="exampleSelect1" required>
+                  <option value="1">Planes antiguos</option>
+                  <option value="4">Planes nuevos</option>
+                  <option value="3">Planes exclusivos en dolares</option>
+                  <option value="5">Planes Solo Dedicados</option>
+                  <option value="6">Planes Zulia</option>
+                  <option value="7">Planes Fibra</option>
+                </select>
+                <br />
+              </div>
+              <div *ngIf="tipoPlanProSeleccionado != 0">
+                <label class="control-label" for="disabledInput">Seleccionar Plan</label>
+                <select [(ngModel)]="planProSeleccionado" class="form-control" id="exampleSelect1" required>
+                  <option [value]="" selected></option>
+                  <option *ngFor="let p of planesPro" [value]="p.id_plan">
+                    {{ p.name_plan }}
+                  </option>
+                </select>
+                <br />
+              </div>
+            </div>
+            <div>
+              <button *ngIf="facturaProSeleccionada != 0 && planProSeleccionado != 0" (click)="guardarFacturaPro()"
+                type="button" class="btn btn-info">
+                Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+
+
+      <ng-template #template10>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Descuento de Factura</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal10()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div class="container">
+            <div class="form-group">
+              <label for="exampleTextarea">Seleccionar Factura</label>
+              <select [(ngModel)]="facturaDescuentoSeleccionada" class="form-control" id="exampleSelect1" required>
+                <option value="0"></option>
+                <option *ngFor="let f of facturacion" [value]="f.id">
+                  [{{ f.created_at | stringToDate | date: "d/M/yy" }}] {{ f.monto
+                  }}{{ f.denominacion }}
+                </option>
+              </select>
+              <br />
+
+              <div *ngIf="facturaDescuentoSeleccionada != 0">
+                <label class="control-label" for="disabledInput">Seleccionar Tipo de Descuento</label>
+                <select [(ngModel)]="tipoDescuentoSeleccionado" class="form-control" (change)="TipoPlanPro()"
+                  id="exampleSelect1" required>
+                  <option value="1">Descuento Dias sin Servicio</option>
+                  <option value="2">Descuento Intermitencia del servicio</option>
+                  <option value="3">Descuento 50%</option>
+                </select>
+                <br />
+              </div>
+              <div *ngIf="tipoDescuentoSeleccionado != 3 && tipoDescuentoSeleccionado != 0">
+                <label class="control-label" for="disabledInput">Dias Sin Servicio</label>
+                <input [(ngModel)]="diasSinServicio" type="number" class="form-control" />
+                <br />
+              </div>
+
+              <div
+                *ngIf=" (tipoDescuentoSeleccionado != 3 && tipoDescuentoSeleccionado != 0 && diasSinServicio != 0) || tipoDescuentoSeleccionado == 3">
+                <label class="control-label" for="disabledInput">Comentario</label>
+                <textarea [(ngModel)]="comentarioDescuento" class="form-control" id="exampleTextarea"
+                  rows="3"></textarea>
+                <br />
+              </div>
+            </div>
+            <div>
+              <button
+                *ngIf="(facturaDescuentoSeleccionada != 0 && diasSinServicio != 0 && comentarioDescuento.length > 5) || facturaDescuentoSeleccionada != 0 && tipoDescuentoSeleccionado == 3 && comentarioDescuento.length > 5"
+                (click)="guardarDescuento()" type="button" class="btn btn-info">
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+
+
+
+    </div>
+  </div>

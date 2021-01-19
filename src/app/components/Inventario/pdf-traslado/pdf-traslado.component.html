@@ -1,0 +1,79 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <button (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+  </div>
+  <div class="col-sm-7">
+  </div>
+  <div class="col-sm-2">
+    <button (click)="pdf()" type="button" class="btn btn-warning boton">Obtener PDF</button>
+  </div>
+</div>
+<div id="contenedor">
+
+  <div id="pdf" class="pdf">
+    <img class="imagen1" src="../../../assets/images/presu2.jpg" alt="">
+    <h2 class="titulo">ORDEN DE TRASLADO</h2>
+
+    <div class="comentario">
+
+      <p class="texto">
+        Por medio de la presente se realiza entrega al señor <b class="negrita">{{id_chofer}}</b>
+        titular de la cédula: <b class="negrita">{{cedula}}</b>, los equipos
+        con
+        las especificaciones descritas en tabla adjunta.
+        El cual se trasladará en vehículo: <b class="negrita">{{vehiculo}}</b> Color: <b class="negrita">{{color}}</b>
+        Placa: <b class="negrita">{{placa}}</b> año: <b class="negrita">{{ano}}</b>, desde <b
+          class="negrita">{{desde}}</b> hasta su destino <b class="negrita">{{hasta}}</b>.
+      </p>
+
+      <table class="table tabla">
+        <thead>
+          <tr class="table-info">
+            <th scope="col">#</th>
+            <th *ngIf='serialCaja != "0"'>Serial Caja</th>
+            <th scope="col">Modelo Equipo</th>
+            <th scope="col">Seriales</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let equipo of equipos">
+            <th scope="row">{{equipo.id_equipo}}</th>
+            <th *ngIf='serialCaja != "0"'>{{equipo.serial_caja}}</th>
+            <td>{{equipo.modelo_articulo}}({{equipo.articulos.length}})</td>
+            <td>
+              <p *ngFor="let articulos of equipo.articulos" class="articulos">{{articulos.serial_articulo}},</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="loque">
+      <div class="recibido">
+        <p>
+          Recibido: ________________________
+        </p>
+        <p>
+          Fecha: __________________________
+        </p>
+        <p>
+          Firma: __________________________
+        </p>
+
+      </div>
+      <div class="recibido2">
+        <p>
+          Entregado: _____________________
+        </p>
+        <p>
+          Fecha: _________________________
+        </p>
+        <p>
+          Firma: _________________________
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+</div>

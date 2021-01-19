@@ -1,0 +1,79 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <button (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+  </div>
+  <div class="col-sm-7">
+  </div>
+  <div class="col-sm-2">
+    <button (click)="pdf()" type="button" class="btn btn-warning boton">Obtener PDF</button>
+  </div>
+</div>
+
+<div id="contenedor">
+
+  <div id="pdf" class="pdf">
+    <img class="imagen1" src="../../../assets/images/presu2.jpg" alt="">
+    <h2 class="titulo">Datos de Comisiones: </h2>
+    <p class="texto">
+      Por medio de la presente se da la informacion a detalle de las comisiones que ha generado el señor: xxxx,
+      en el transcurso del mes de: xxxxxxxxxx, hasta la fecha: xxxxxxxxx
+    </p>
+
+
+    <div class="row">
+
+      <div class="col-sm-12">
+        <table class="table table-borderless tabla">
+          <thead>
+            <tr class="table-default">
+              <th scope="col">Cliente</th>
+              <th scope="col">Monto</th>
+              <th scope="col">Pagado</th>
+              <th scope="col">Deuda</th>
+              <th scope="col">Comision</th>
+              <th scope="col">Estatus</th>
+              <th scope="col">Comision</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of instalaciones">
+              <th scope="row" *ngIf="i.kind == 'V'">{{i.nombre}} {{i.apellido}}</th>
+              <th scope="row" *ngIf="i.kind == 'E'">{{i.nombre}} {{i.apellido}}</th>
+              <th scope="row" *ngIf="i.kind != 'V' && i.kind != 'E'">{{i.social}}</th>
+              <th scope="row">
+                <p *ngIf="i.moneda == '$'" class="text-info">{{i.monto | number : '1.2-2'}}{{i.denominacion}}</p>
+                <p *ngIf="i.moneda == 'Bs.S'" class="text-info">{{i.montoBS | number : '1.2-2'}} Bs.S</p>
+                <p *ngIf="i.tasa == 2" class="text-info">{{i.monto}}</p>
+              </th>
+              <th scope="row">
+                <p *ngIf="i.moneda == '$'" class="text-info">{{i.pagado | number : '1.2-2'}}{{i.denominacion}}</p>
+                <p *ngIf="i.moneda == 'Bs.S'" class="text-info">{{i.pagadoBS | number : '1.2-2'}} Bs.S</p>
+                <p *ngIf="i.tasa == 2" class="text-info">{{i.pagado}}</p>
+              </th>
+              <th scope="row">
+                <p *ngIf="i.moneda == '$'" class="text-danger">{{i.deuda | number : '1.2-2'}}{{i.denominacion}}</p>
+                <p *ngIf="i.moneda == 'Bs.S'" class="text-danger">{{i.deudaBS | number : '1.2-2'}} Bs.S</p>
+                <p *ngIf="i.tasa == 2" class="text-info">{{i.deuda}}</p>
+              </th>
+              <th scope="row">
+                <p *ngIf="i.moneda == '$'" class="text-success">{{i.comision | number : '1.2-2'}}{{i.denominacion}}</p>
+                <p *ngIf="i.moneda == 'Bs.S'" class="text-success">{{i.comisionBS | number : '1.2-2'}} Bs.S</p>
+                <p *ngIf="i.tasa == 2" class="text-info">{{i.comision}}</p>
+              </th>
+              <th scope="row">{{i.estado}}</th>
+              <th scope="row">
+                <p class="text-warning">{{i.porcentaje_comision_serv}} %</p>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+
+
+  </div>
+
+</div>

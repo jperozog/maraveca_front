@@ -1,4 +1,4 @@
-<script src="notify.component.ts"></script>
+<!--<script src="notify.component.ts"></script>
 <md-toolbar class="submenu">
   <button md-raised-button class="btn" (click)="Close()">Atras</button>
   <span class="example-spacer" style="text-align: center;">Mensajes a clientes con deuda</span>
@@ -46,4 +46,61 @@
   </form>
  <button color="warn" md-raised-button (click)="sendSMS()"  class="btn btn-danger">Enviar Mensajes</button>
 
+</div>
+-->
+<div class="row primero">
+  <div class="col-sm-1">
+    <button style="background-color:#2C2C30;" (click)="Close()" type="button" class="btn btn-info boton">Atras</button>
+  </div>
+  <div class="col-sm-4">
+    <h2 class="titulo">Mensaje a Cliente con Deudas</h2>
+  </div>
+
+
+</div>
+<div class="row">
+  <div class="col-sm-7">
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr style="background-color:#2C2C30; color: white;" class="table-defaukt">
+          <th scope="col">Cantidad</th>
+          <th scope="col">Ejemplo Mensaje</th>
+          <th scope="col">Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor=" let m of mensajes | paginate: { id:'mensajes', itemsPerPage: 3, currentPage: e }">
+          <td>{{m.cantidad}}</td>
+          <td>{{m.detalle}}</td>
+          <td>{{m.created_at | stringToDate | date: 'd/M/yy'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="mensajes" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-1"></div>
+  <div class="col-sm-3">
+    <div class="formulario">
+      <div class="card border-light mb-3">
+        <div class="card-header">Enviar Mensaje</div>
+        <div class="card-body">
+          <div>
+            <div>
+              <p class="text-warning">* La plantilla <b>{{monto}}</b> es para indicar el monto de la deuda del cliente</p>
+              <p  class="text-warning">* Los mensajes de notificación poseen de forma predeterminada el saludo y el apellido del cliente como en el siguiente ejemplo: <b><i>MARAVECA:Sr(a) Perez,</i></b></p>
+              <label for="">Mensaje</label>
+              <textarea (keyup)="onKey($event)" class="form-control" placeholder="Escribe Aqui El Mensaje De Notificacion"  [(ngModel)]="messaje" id="exampleTextarea" rows="5"></textarea>
+              <br>
+              <p class="text-success">{{contador}}</p>
+            </div>
+            
+            <div>
+              <button type="button" (click)="sendSMS()" class="btn btn-info btn">Enviar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 </div>

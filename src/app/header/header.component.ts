@@ -1,16 +1,19 @@
-import { ChangeDetectionStrategy,
+import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Output,
-  OnInit } from '@angular/core';
+  OnInit
+} from '@angular/core';
 import { User } from '../_models/index';
 import { AuthGuard } from '../_guards/index';
 import { AuthenticationService } from '../_services/index';
 import { Observable } from 'rxjs/Observable';
-import {Http, Response} from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 
 import { environment } from '../../environments/environment'
+import { AlarmasService } from '../services/alarmas/alarmas.service';
 
 @Component({
   selector: 'app-header',
@@ -18,9 +21,9 @@ import { environment } from '../../environments/environment'
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  autoupdate=true;
-  dash_t=[];
-  dash=[];
+  autoupdate = true;
+  dash_t = [];
+  dash = [];
   averias: number;
   total: number;
   balance: number;
@@ -29,12 +32,16 @@ export class HeaderComponent implements OnInit {
   tickets: number;
   factibilidades: number;
   otrost: number;
+  alarmas: any = []
+  alerta: number = 0
+  cantidadAlertas: number = 0
   constructor(
     public usuario: AuthGuard,
     public test: AuthenticationService,
     public http: Http,
+    public alarmarService: AlarmasService
   ) {
-    if(this.usuario.currentUser){
+    if (this.usuario.currentUser) {
       this.refresh(true);
     }
   }
@@ -46,11 +53,11 @@ export class HeaderComponent implements OnInit {
         this.refresh(false);
       });
 
-
+    this.notificacion();
   }
 
-  refresh(test){
-    this.http.get(environment.apiEndpoint+'dash/', {params:{uid: this.usuario.currentUser.id_user}})
+  refresh(test) {
+    this.http.get(environment.apiEndpoint + 'dash/', { params: { uid: this.usuario.currentUser.id_user } })
 
       .subscribe((data) => {
         this.dash_t = data.json();
@@ -63,16 +70,20 @@ export class HeaderComponent implements OnInit {
         this.factibilidades = data.json().factibilidades;
         this.otrost = data.json().otrost;
         this.balance_in = data.json().balance_in;
-
-      /* console.log(this.dash);
-        console.log(this.total);
-       console.log(this.averias);
-       console.log(this.dash_t );
-        console.log(this.balance_in);
-        console.log(this.factibilidades);
-        console.log(this.otrost);*/
-
-
       });
+    this.notificacion();
   }
+
+  notificacion() {
+    this.alarmarService.notificacion().subscribe(res => { console.log(res), this.alarmas = res }, err => console.log(err))
+  }
+  cambiarAlerta() {
+    if (this.alerta < this.alarmas.length - 1) {
+      this.alerta++
+    } else {
+      this.alerta = 0
+      
+    }
+  }
+
 }

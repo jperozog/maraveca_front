@@ -74,11 +74,12 @@
             <md-option value="2">Completa</md-option>
             <md-option value="1">Prorrateada</md-option>
             <md-option value="3">Programada</md-option>
+            <md-option value="4">Promocion</md-option>
           </md-select>
         </td>
       </tr>
       <div align="center" md-dialog-actions>
-      <tr *ngIf="this.genFAC.value.pro == 1 || this.genFAC.value.pro == 3">
+      <tr *ngIf="this.genFAC.value.pro == 1 || this.genFAC.value.pro == 3 || this.genFAC.value.pro == 4">
         <td>
           <my-date-picker class="example-full-width"
                         name="birthdate"

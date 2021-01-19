@@ -159,3 +159,119 @@ table{
 background-color: #106cc8;
 color:white;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.zonas{
+  width: 100%;
+  margin-top: 5%;
+}
+.titulo{
+  margin-left: 2%;
+}
+.zonas2{
+  margin-left: 1%;
+  margin-top: 1%;
+}
+.minizona{
+  margin-top: 2%;
+}
+
+.carta-zona{
+  margin-left: 6%;
+  margin-top: 1%;
+  float: left;
+  padding: 1%;
+  cursor: pointer;
+}   
+
+md-grid-list{
+  margin-bottom: 10% ;
+}
+
+.md-button{
+  justify-content: center;
+}
+
+img{
+  margin-left: 2%;
+}
+
+.formulario{
+  width: 20%;
+  margin-top: 5%; 
+  float: left;
+}
+.primary{
+  background-color: #249CC8;
+  color: white;
+}
+.boton{
+float: left;
+margin-right:5px;
+}
+
+
+.prueba{
+  flex-direction: row;
+}
+
+.prueba1{
+  width: 42%;
+  float: left;
+}
+.prueba2{
+  margin-left: 2%;
+  width: 42%;
+  float: left;
+}
+
+.boton2{
+  margin-top: 7%;
+  margin-left: 3%;
+}
+
+.icono{
+  font-size: 45px;
+  margin-left: 40%;
+}
+
+.imagen1{
+  width: 90%;
+  height: 250px;
+}
+
+.titulo{
+  margin-left: 15%;
+  margin-top: -1%;
+}
+
+
+.tr{
+  line-height: 1px;
+  min-height: 1px;
+  height: 1px;
+  cursor: pointer;
+}
+
+.td{
+  line-height: 1px;
+  min-height: 1px;
+  height: 1px;
+  padding: 15px;
+}

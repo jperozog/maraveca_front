@@ -1,0 +1,236 @@
+<div class="zonas">
+
+  <div class="row">
+    <div class="col-sm-2">
+      <h2 class="titulo">Factibilidades</h2>
+    </div>
+    <div class="col-sm-3 filtrado">
+      <input (input)="buscarFact($event.target.value)" (keyup.backspace)="BuscarFactBackSpace($event.target.value)"
+        type="text" class="form-control" name="filtrado" placeholder="Filtrar" id="input2">
+    </div>
+    <div class="col-sm-1 filtrado">
+      <button style="background-color:#1F9BCF;" (click)="actualizarFact()" title="Actualizar Instalaciones"
+        type="button" class="btn btn-info btn-sm ">
+        <md-icon>loop</md-icon>
+      </button>
+    </div>
+  </div>
+
+  <table class="table table-borderless tabla">
+    <thead>
+      <tr class="table-info">
+        <th scope="col">FACT</th>
+        <th scope="col">CLIENTE</th>
+        <th scope="col">ESTADO</th>
+        <th scope="col">CIUDAD</th>
+        <th scope="col">FECHA</th>
+        <!--<th scope="col">ACCIONES</th>-->
+      </tr>
+    </thead>
+    <tbody>
+      <tr (click)="openModal(f.id,template)"
+        *ngFor="let f of factibilidades | paginate: {id:'facti', itemsPerPage: 12, currentPage: e }">
+        <td>
+          {{f.id}}
+        </td>
+        <td *ngIf="f.kind == 'V' || f.kind == 'E'"> {{f.nombre+" "+f.apellido}}</td>
+        <td *ngIf="f.kind == 'J' || f.kind == 'G' || f.kind == 'V-'"> {{f.social}}</td>
+        <td *ngIf="f.status == 1">
+          <p class="text-info">Pendiente</p>
+        </td>
+        <td *ngIf="f.status == 2 && f.factible == 2">
+          <p class="text-danger">No Factible</p>
+        </td>
+        <td *ngIf="f.status == 2 && f.factible == 1">
+          <p class="text-success">Factible</p>
+        </td>
+        <td *ngIf="f.status == 2 && f.factible == 3">
+          <p class="text-warning">Corregir Coordenadas</p>
+        </td>
+        <td *ngIf="f.status == 2 && f.factible == 4">
+          <p class="text-secondary">Amerita Visita</p>
+        </td>
+        <td>{{f.ciudad}}</td>
+        <td>
+          {{f.created_at | stringToDate | date: 'd/M/yy'}}
+          <!-- <button (click)="openModal2(f.id,template2)" *ngIf="f.status != 1 && usuario.perm && usuario.perm.includes('factibilidades_w')" style="background-color:#1F9BCF;" (click)="actualizarFact()"
+            title="Actualizar Instalaciones" type="button" class="btn btn-info btn-sm ">
+            <i id="icono" class="fa fa-pencil"></i>
+          </button>
+          -->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls id="facti" (pageChange)="e = $event"></pagination-controls>
+
+</div>
+
+
+<ng-template #template>
+
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Detalles Factibilidad </h4>
+    
+    <button *ngIf="usuario.perm && usuario.perm.includes('factibilidades_esp') && statusCliente != 1"
+      style="background-color:#1F9BCF;" (click)="editarEstado()" title="Editar Factibilidad" type="button"
+      class="btn btn-info btn-sm ">
+      <i id="icono" class="fa fa-pencil"></i>
+    </button>
+    
+    <button type="button" class="close pull-right" aria-label="Close" (click)="ocultarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="card-body">
+
+    <p>
+      Cliente: {{nombreCliente}} {{apellidoCliente}}
+    </p>
+    <br>
+    <p>
+      Coordenadas: {{coorLatCliente}} {{coorLonCliente}}
+    </p>
+    <br>
+    <p>
+      Ciudad: {{ciudadCliente}}
+    </p>
+    <br>
+
+    <div *ngIf="existe == 1" class="row">
+      <div class="col-sm-6">
+        <h5>Celda</h5>
+        <p>{{celdaCliente}}</p>
+        <select *ngIf="editar == true" [(ngModel)]="celda" class="form-control" id="exampleSelect1" #ubicacion
+          required>
+          <option *ngFor="let celda of celdas" [value]="celda.id_celda">
+            {{celda.nombre_celda}}
+          </option>
+        </select>
+        <br>
+      </div>
+      <div class="col-sm-6">
+        <h5>Equipo</h5>
+        <p>{{equipoCliente}}</p>
+        <select *ngIf="editar == true" [(ngModel)]="equipo" class="form-control" id="exampleSelect1" #ubicacion
+          required>
+          <option *ngFor="let equipo of equipos" [value]="equipo.id_equipo">
+            {{equipo.nombre_equipo}}
+          </option>
+        </select>
+        <br>
+      </div>
+    </div>
+    <div *ngIf="existe == 1" class="row">
+      <div class="col-sm-6">
+        <h5>Usuario</h5>
+        <p>{{usuarioCliente}}</p>
+      </div>
+      <div class="col-sm-6">
+        <h5>Altura(Mts)</h5>
+        <p>{{alturaCliente}}</p>
+        <input *ngIf="editar == true" [(ngModel)]="altura" type="number" class="form-control" id="inputDefault">
+        <br>
+      </div>
+      <div *ngIf="factibleCliente != null" class="col-sm-6">
+        <h5>Factibilidad</h5>
+        <p *ngIf="factibleCliente == 1">Factible</p>
+        <p *ngIf="factibleCliente == 2">No Factible</p>
+        <p *ngIf="factibleCliente == 3">Corregir Coordenadas</p>
+        <p *ngIf="factibleCliente == 4">Amerita Visita</p>
+        <select *ngIf="editar == true" [(ngModel)]="estado" class="form-control" id="exampleSelect1" #ubicacion required>
+          <option value="1">Factible</option>
+          <option value="2">No Factible</option>
+          <option value="3">Corregir Coordenadas</option>
+          <option value="4">Amerita Visita</option>
+        </select>
+        <br>
+      </div>
+      <div class="col-sm-6">
+        <h5>PTP</h5>
+        <p>{{ptpCliente}}</p>
+        <br>
+      </div>
+
+      <div *ngIf="editar == true" class="col-sm-6">
+        <h5>PTP</h5>
+        <label class="col-form-label" for="inputDefault">PTP</label>
+        <select [(ngModel)]="ptp" class="form-control" id="exampleSelect1" #ubicacion required>
+          <option value="0" selected> No Requiere</option>
+          <option *ngFor="let equipo of equipos" [value]="equipo.id_equipo">
+            {{equipo.nombre_equipo}}
+          </option>
+        </select>
+      </div>
+      
+      <div  *ngIf="(estado == 2 || estado == 3) || equipo != 0 && celda != 0 && estado != 0 && altura !=0" class="col-sm-8" >
+        <button type="button" (click)="editarData()" class="btn btn-info">Editar</button>
+      </div>
+    
+    </div>
+
+    <div *ngIf="existe ==0 && usuario.perm && usuario.perm.includes('factibilidades_w')">
+      <h5>Agregar Datos</h5>
+
+      <div class="row">
+        <div class="col-sm-6">
+
+          <label class="col-form-label" for="inputDefault">Factibilidad</label>
+          <select (change)="estadoFact()" [(ngModel)]="estado" class="form-control" id="exampleSelect1" #ubicacion required>
+            <option value="1">Factible</option>
+            <option value="2">No Factible</option>
+            <option value="3">Corregir Coordenadas</option>
+            <option value="4">Amerita Visita</option>
+          </select>
+        </div>
+        <div *ngIf="estado == 1 || estado == 4" class="col-sm-6">
+          <label class="col-form-label" for="inputDefault">Modelo</label>
+          <select [(ngModel)]="equipo" class="form-control" id="exampleSelect1" #ubicacion required>
+            <option *ngFor="let equipo of equipos" [value]="equipo.id_equipo">
+              {{equipo.nombre_equipo}}
+            </option>
+          </select>
+        </div>
+      </div>
+
+
+      <div *ngIf="equipo !=0 && (estado == 1 || estado == 4)" class="row">
+        <div class="col-sm-6">
+          <label class="col-form-label" for="inputDefault">Celdas</label>
+          <select [(ngModel)]="celda" class="form-control" id="exampleSelect1" #ubicacion required>
+            <option *ngFor="let celda of celdas" [value]="celda.id_celda">
+              {{celda.nombre_celda}}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="celda !=0 && (estado == 1 || estado == 4)" class="col-sm-6">
+          <label class="col-form-label" for="inputDefault">Altura</label>
+          <input [(ngModel)]="altura" type="number" class="form-control" id="inputDefault">
+        </div>
+      </div>
+
+      <div *ngIf="altura !=0 && (estado == 1 || estado == 4)" class="row">
+        <div class="col-sm-6">
+          <label class="col-form-label" for="inputDefault">PTP</label>
+          <select [(ngModel)]="ptp" class="form-control" id="exampleSelect1" #ubicacion required>
+            <option value="0" selected> No Requiere</option>
+            <option *ngFor="let equipo of equipos" [value]="equipo.id_equipo">
+              {{equipo.nombre_equipo}}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <br>
+      <div *ngIf="(estado == 2 || estado == 3) || (estado == 1 || estado == 4) && equipo != 0 && celda != 0 && estado != 0 && altura !=0">
+        <button type="button" (click)="guardarData()" class="btn btn-info">Guardar</button>
+      </div>
+
+    </div>
+
+
+  </div>
+</ng-template>
+
+

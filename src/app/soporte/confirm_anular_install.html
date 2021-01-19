@@ -1,0 +1,32 @@
+<h1 md-dialog-title>Confirmacion</h1>
+<div md-dialog-content>
+
+
+
+
+  <p >¿Está seguro que desea anular la instalacion del del cliente:
+    <span *ngIf="row.kind.toUpperCase() == 'V'">{{(row.nombre | capitalize) +' '+(row.apellido | capitalize)}}</span>
+    <span *ngIf="row.kind.toUpperCase() == 'E'">{{(row.nombre | capitalize) +' '+(row.apellido | capitalize)}}</span>
+    <span *ngIf="row.kind.toUpperCase() == 'J'">{{(row.social | capitalize)}}</span>
+    <span *ngIf="row.kind.toUpperCase() == 'G'">{{(row.social | capitalize)}}</span>
+    ?
+
+  </p>
+
+
+
+</div>
+<div md-dialog-actions>
+  <tr>
+    <td>
+
+      <button  md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="anular_install()" tabindex="2">Sí</button>
+
+
+    </td>
+    <td>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">No</button>
+
+    </td>
+  </tr>
+</div>

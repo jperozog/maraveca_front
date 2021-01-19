@@ -33,6 +33,9 @@ export class PlanesComponent implements OnInit, OnDestroy{
     planes2: any;
     planesd: any;
     planesn:any;
+    planes3:any;
+    planes6:any;
+    planes7:any;
     constructor(
       public usuario: AuthGuard,
       private http: Http,
@@ -67,6 +70,9 @@ export class PlanesComponent implements OnInit, OnDestroy{
           this.planesn = data.json().planesn;
           this.planesd = data.json().planesd;
           this.planes2 = data.json().planes2;
+          this.planes3 = data.json().planes3;
+          this.planes6 = data.json().planes6;
+          this.planes7 = data.json().planes7;
           this.data=this.data_t;
           this.mb_t = data.json().mb;
           this.mb=this.mb_t;
@@ -79,6 +85,8 @@ export class PlanesComponent implements OnInit, OnDestroy{
             console.log(this.planesd);
             console.log(this.planesn);
             console.log(this.planes2);
+            console.log(this.planes6);
+            console.log(this.planes7);
           }
         });
 
@@ -234,6 +242,8 @@ export class PlanesComponent implements OnInit, OnDestroy{
 
 
       Enviar(){
+       
+        
         var plan = this.addplan.value;
         console.log(JSON.stringify(this.addplan.value));
         var url = environment.apiEndpoint+"planes";
@@ -307,10 +317,12 @@ export class PlanesComponent implements OnInit, OnDestroy{
          public dialog: MdDialog,
          public snackBar:MdSnackBar,
          private router: Router,
+        private usuario: AuthGuard,
          private fb: FormBuilder) {
           this.myService = new MyService(http, router);
           this.addplan = this.fb.group({
             taza: '',
+            responsable: this.usuario.currentUser.id_user,
 
           });
          }

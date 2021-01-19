@@ -74,6 +74,8 @@ export class InstalacionesComponent implements OnInit, OnDestroy {
     .subscribe(() => {
       this.refresh(false);
     });
+
+    
   }
   ngOnDestroy(){
     this.autoupdate=false

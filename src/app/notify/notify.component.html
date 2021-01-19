@@ -1,198 +1,455 @@
+<div class="row primero">
+  <div class="col-sm-2">
+    <button style="background-color:#2C2C30;" routerLink="/sms_morosos"
+      *ngIf="usuario.perm && usuario.perm.includes('sms_w')" type="button" class="btn btn-info boton">Mensaje
+      Clientes con Deuda</button>
+  </div>
+  <div class="col-sm-4">
+    <h2 class="titulo">Notificaciones</h2>
+  </div>
+
+
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr style="background-color:#2C2C30; color: white;" class="table-defaukt">
+          <th scope="col">Cantidad</th>
+          <th scope="col">Ejemplo Mensaje</th>
+          <th scope="col">Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor=" let m of mensajes | paginate: { id:'mensajes', itemsPerPage: 3, currentPage: e }">
+          <td>{{m.cantidad}}</td>
+          <td>{{m.detalle}}</td>
+          <td>{{m.created_at | stringToDate | date: 'd/M/yy'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="mensajes" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div style="margin-left: 5%" class="col-sm-5">
+    <div class="formulario">
+      <div class="card border-light mb-3">
+        <div class="card-header">Enviar Mensaje</div>
+        <div class="card-body">
+          <div>
+            <div>
+              <div>
+                <label class="col-form-label" for="inputDefault">Tipo Notificacion</label>
+                <select [(ngModel)]="tipoNotificacion" class="form-control" id="exampleSelect1" #equipo required>
+                  <option value="1">SMS</option>
+                  <option value="2">Email</option>
+                </select>
+              </div>
+
+              <div *ngIf="tipoNotificacion != 0">
+                <label class="col-form-label" for="inputDefault">Grupo</label>
+                <select (change)="cambioGrupo()" [(ngModel)]="tipoGrupo" class="form-control" id="exampleSelect1"
+                  #equipo required>
+                  <option value="0" selected></option>
+                  <option value="1">Cliente</option>
+                  <option value="2">Mikrotic</option>
+                  <option value="3">Celda</option>
+                  <option value="4">AP</option>
+                  <option value="5">Caja Distribucion</option>
+                  <option value="6">Manga Empalme</option>
+                  <option value="7">OLT</option>
+                  <option value="8">Todos</option>
+                </select>
+              </div>
+
+              <div *ngIf="tipoGrupo == 1">
+                <label class="col-form-label" for="inputDefault">Clientes</label>
+                <input type="text" class="form-control form-control-sm" (input)="onSearchDatos($event.target.value)">
+                <br>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h6>Lista Clientes</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="agregarDatosLista(c)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let c of busqueda | paginate: { id:'clientes', itemsPerPage: 3, currentPage: e }">
+                          <td class="td">{{c.nombre}}</td>
+                          <td class="td">{{c.apellido}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientes" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                  <div class="col-sm-6">
+                    <h6>Clientes Seleccionados</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="DeseleccionarCliente(i)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let b of DatosSeleccionados | paginate: { id:'clientesS', itemsPerPage: 3, currentPage: e }; let i = index">
+                          <td class="td">{{b.nombre}}</td>
+                          <td class="td">{{b.apellido}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientesS" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="tipoGrupo == 2">
+                <label class="col-form-label" for="inputDefault">Mikrotic</label>
+                <input type="text" class="form-control form-control-sm" (input)="onSearchDatos($event.target.value)">
+                <br>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h6>Lista Mikrotic</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="agregarDatosLista(b)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let b of busqueda | paginate: { id:'clientes', itemsPerPage: 3, currentPage: e }">
+                          <td class="td">{{b.nombre_srvidor}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientes" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                  <div class="col-sm-6">
+                    <h6>Mikrotic Seleccionados</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="DeseleccionarCliente(i)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let c of DatosSeleccionados | paginate: { id:'clientesS', itemsPerPage: 3, currentPage: e }; let i = index">
+                          <td class="td">{{c.nombre_srvidor}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientesS" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="tipoGrupo == 3">
+                <label class="col-form-label" for="inputDefault">Celdas</label>
+                <input type="text" class="form-control form-control-sm" (input)="onSearchDatos($event.target.value)">
+                <br>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h6>Lista Celdas</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="agregarDatosLista(b)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let b of busqueda | paginate: { id:'clientes', itemsPerPage: 3, currentPage: e }">
+                          <td class="td">{{b.nombre_celda}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientes" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                  <div class="col-sm-6">
+                    <h6>Celdas Seleccionados</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="DeseleccionarCliente(i)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let c of DatosSeleccionados | paginate: { id:'clientesS', itemsPerPage: 3, currentPage: e }; let i = index">
+                          <td class="td">{{c.nombre_celda}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientesS" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="tipoGrupo == 4">
+                <label class="col-form-label" for="inputDefault">Aps</label>
+                <input type="text" class="form-control form-control-sm" (input)="onSearchDatos($event.target.value)">
+                <br>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h6>Lista Aps</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="agregarDatosLista(b)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let b of busqueda | paginate: { id:'clientes', itemsPerPage: 3, currentPage: e }">
+                          <td class="td">{{b.nombre_ap}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientes" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                  <div class="col-sm-6">
+                    <h6>Aps Seleccionados</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="DeseleccionarCliente(i)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let c of DatosSeleccionados | paginate: { id:'clientesS', itemsPerPage: 3, currentPage: e }; let i = index">
+                          <td class="td">{{c.nombre_ap}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientesS" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="tipoGrupo == 5">
+                <label class="col-form-label" for="inputDefault">Cajas Distribucion</label>
+                <input type="text" class="form-control form-control-sm" (input)="onSearchDatos($event.target.value)">
+                <br>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h6>Lista Cajas</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="agregarDatosLista(b)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let b of busqueda | paginate: { id:'clientes', itemsPerPage: 3, currentPage: e }">
+                          <td class="td">{{b.nombre_caja}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientes" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                  <div class="col-sm-6">
+                    <h6>Cajas Seleccionados</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="DeseleccionarCliente(i)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let c of DatosSeleccionados | paginate: { id:'clientesS', itemsPerPage: 3, currentPage: e }; let i = index">
+                          <td class="td">{{c.nombre_caja}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientesS" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="tipoGrupo == 6">
+                <label class="col-form-label" for="inputDefault">Mangas Emplames</label>
+                <input type="text" class="form-control form-control-sm" (input)="onSearchDatos($event.target.value)">
+                <br>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h6>Lista Mangas</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="agregarDatosLista(b)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let b of busqueda | paginate: { id:'clientes', itemsPerPage: 3, currentPage: e }">
+                          <td class="td">{{b.nombre_manga}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientes" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                  <div class="col-sm-6">
+                    <h6>Mangas Seleccionados</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="DeseleccionarCliente(i)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let c of DatosSeleccionados | paginate: { id:'clientesS', itemsPerPage: 3, currentPage: e }; let i = index">
+                          <td class="td">{{c.nombre_manga}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientesS" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="tipoGrupo == 7">
+                <label class="col-form-label" for="inputDefault">Olts</label>
+                <input type="text" class="form-control form-control-sm" (input)="onSearchDatos($event.target.value)">
+                <br>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h6>Lista Olts</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="agregarDatosLista(b)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let b of busqueda | paginate: { id:'clientes', itemsPerPage: 3, currentPage: e }">
+                          <td class="td">{{b.nombre_olt}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientes" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                  <div class="col-sm-6">
+                    <h6>Olts Seleccionados</h6>
+                    <table class="table table-borderless tabla">
+                      <tbody>
+                        <tr (click)="DeseleccionarCliente(i)" class="tr" style="cursor: pointer;"
+                          *ngFor=" let c of DatosSeleccionados | paginate: { id:'clientesS', itemsPerPage: 3, currentPage: e }; let i = index">
+                          <td class="td">{{c.nombre_olt}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <pagination-controls id="clientesS" (pageChange)="e = $event"></pagination-controls>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <label for="">Mensaje</label>
+              <textarea (keyup)="onKey($event)" class="form-control"
+                placeholder="Escribe Aqui El Mensaje De Notificacion" [(ngModel)]="messaje" id="exampleTextarea"
+                rows="5"></textarea>
+              <br>
+              <p class="text-success">{{contador}}</p>
+            </div>
+
+            <div>
+              <button type="button" (click)="enviarSMS()" class="btn btn-info btn">Enviar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!--
 <md-toolbar class="submenu">
 
-  <button md-raised-button class="btn"  style="float: left" routerLink="/sms_morosos" *ngIf="usuario.perm && usuario.perm.includes('sms_w')">Mensajes a clientes con deuda</button>
+  <button md-raised-button class="btn" style="float: left" routerLink="/sms_morosos"
+    *ngIf="usuario.perm && usuario.perm.includes('sms_w')">Mensajes a clientes con deuda</button>
   <span class="example-spacer" style="text-align: center;">Notificaciones</span>
-  <button color="warn" md-raised-button (click)="sendSMS()" [disabled]="!notify.valid" class="btn btn-danger">Enviar Mensajes Masivos</button>
+  <button color="warn" md-raised-button (click)="sendSMS()" [disabled]="!notify.valid" class="btn btn-danger">Enviar
+    Mensajes Masivos</button>
 
 </md-toolbar>
-<div  style="margin: auto; align-content: center; text-align: center ;">
+<div style="margin: auto; align-content: center; text-align: center ;">
   <p><b>Punto a tomar en cuenta: </b></p>
-  <p> los mensajes de notificación poseen de forma predeterminada el saludo y el apellido del cliente como en el siguiente ejemplo: <b><i>MARAVECA:Sr(a) Perez,</i></b> </p>
+  <p> los mensajes de notificación poseen de forma predeterminada el saludo y el apellido del cliente como en el
+    siguiente ejemplo: <b><i>MARAVECA:Sr(a) Perez,</i></b> </p>
 </div>
-  <div class="contenido" style="margin: auto; align-content: center; text-align: center ;">
-    <form class="example-form" id="client" name="clientForm" [formGroup]="notify" ng-submit="ok(clientForm)" novalidate>
+<div class="contenido" style="margin: auto; align-content: center; text-align: center ;">
+  <form class="example-form" id="client" name="clientForm" [formGroup]="notify" ng-submit="ok(clientForm)" novalidate>
     <table>
       <tr>
         <td colspan="2">
-          <md2-select name="Tipo"
-            placeholder="Via de notificacion"
-            floatPlaceholder="never"
-            class="example-full-width"
-            formControlName="via"
-            mdInput
-            >
+          <md2-select name="Tipo" placeholder="Via de notificacion" floatPlaceholder="never" class="example-full-width"
+            formControlName="via" mdInput>
             <md2-option value="0">
               <span>SMS</span>
             </md2-option>
             <md2-option value="1">
               <span>Email</span>
             </md2-option>
-            <md2-option *ngIf="usuario.perm && usuario.perm.includes('sms_w')" value="2">
-              <span>Email con mensaje navideño</span>
-            </md2-option>
+            
 
           </md2-select>
 
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <md2-select name="Tipo"
-          placeholder="Tipo"
-          floatPlaceholder="never"
-          class="example-full-width"
-          formControlName="tipo"
-          mdInput
-          >
-          <md2-option value="6">
-            <span>Cliente</span>
-          </md2-option>
-          <md2-option value="1">
-            <span>Router</span>
-          </md2-option>
-          <md2-option value="2">
-            <span>Celda</span>
-          </md2-option>
-          <md2-option value="3">
-            <span>AP</span>
-          </md2-option>
-          <md2-option value="4">
-            <span>Plan</span>
-          </md2-option>
-          <md2-option value="5">
-            <span>Todos</span>
-          </md2-option>
-        </md2-select>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <md2-select name="Tipo" placeholder="Tipo" floatPlaceholder="never" class="example-full-width"
+            formControlName="tipo" mdInput>
+            <md2-option value="6">
+              <span>Cliente</span>
+            </md2-option>
+            <md2-option value="1">
+              <span>Router</span>
+            </md2-option>
+            <md2-option value="2">
+              <span>Celda</span>
+            </md2-option>
+            <md2-option value="3">
+              <span>AP</span>
+            </md2-option>
+            <md2-option value="4">
+              <span>Plan</span>
+            </md2-option>
+            <md2-option value="5">
+              <span>Todos</span>
+            </md2-option>
+          </md2-select>
 
-    </td>
-  </tr>
-  <tr>
-      <td *ngIf="notify.value.tipo == '3'" colspan="2">
-          <md2-select multiple name="AP"
-          floatPlaceholder="never"
-          placeholder="AccessPoint"
-          class="example-full-width"
-          formControlName="detail" [(ngModel)]="detail"
-          mdInput
-          >
-          <md2-select-header>
-            <input name="a_search"
-            type="text"
-            formControlName="a_search"
-            placeholder="Buscar..."
-            mdInput
-            style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
-            />
-          </md2-select-header>
+        </td>
+      </tr>
+      <tr>
+        <td *ngIf="notify.value.tipo == '3'" colspan="2">
+          <md2-select multiple name="AP" floatPlaceholder="never" placeholder="AccessPoint" class="example-full-width"
+            formControlName="detail" [(ngModel)]="detail" mdInput>
+            <md2-select-header>
+              <input name="a_search" type="text" formControlName="a_search" placeholder="Buscar..." mdInput
+                style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" />
+            </md2-select-header>
 
-          <md2-option *ngFor="let i of (aps | dataPipe : {nombre_ap: notify.value.a_search, ip_ap: notify.value.a_search})" [value]="i.id">{{i.ip_ap + " " + i.nombre_ap}}</md2-option>
-        </md2-select>
+            <md2-option
+              *ngFor="let i of (aps | dataPipe : {nombre_ap: notify.value.a_search, ip_ap: notify.value.a_search})"
+              [value]="i.id">{{i.ip_ap + " " + i.nombre_ap}}</md2-option>
+          </md2-select>
 
-    </td>
-    <td *ngIf="notify.value.tipo == '4'" colspan="2">
-        <md2-select multiple name="Plan"
-        floatPlaceholder="never"
-        placeholder="Planes"
-        class="example-full-width"
-        mdInput
-        formControlName="detail" [(ngModel)]="detail"
-        >
-        <md2-select-header>
-          <input class="search" name="p_search"
-          type="text"
+        </td>
+        <td *ngIf="notify.value.tipo == '4'" colspan="2">
+          <md2-select multiple name="Plan" floatPlaceholder="never" placeholder="Planes" class="example-full-width"
+            mdInput formControlName="detail" [(ngModel)]="detail">
+            <md2-select-header>
+              <input class="search" name="p_search" type="text" formControlName="p_search" placeholder="Buscar..."
+                mdInput style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" />
+            </md2-select-header>
+            <md2-option *ngFor="let i of (planes | dataPipe : {name_plan: notify.value.p_search})" [value]="i.id_plan">
+              {{i.name_plan}}</md2-option>
+          </md2-select>
 
-          formControlName="p_search"
-          placeholder="Buscar..."
-          mdInput
-          style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
-          />
-        </md2-select-header>
-        <md2-option *ngFor="let i of (planes | dataPipe : {name_plan: notify.value.p_search})" [value]="i.id_plan">{{i.name_plan}}</md2-option>
-      </md2-select>
+        </td>
+        <td *ngIf="notify.value.tipo == '2'" colspan="2">
+          <md2-select multiple name="celdas" floatPlaceholder="never" placeholder="Celdas" class="example-full-width"
+            mdInput formControlName="detail" [(ngModel)]="detail">
+            <md2-select-header>
+              <input class="search" name="c_search" type="text" formControlName="c_search" placeholder="Buscar..."
+                mdInput style="width=95%; min-width: 95%; border: none; outline: none;
+        height: 100%; padding: 0;" />
+            </md2-select-header>
+            <md2-option
+              *ngFor="let i of (celdas | dataPipe : {ip_celda: notify.value.c_search, nombre_celda: notify.value.c_search})"
+              [value]="i.id_celda">{{i.nombre_celda}}</md2-option>
+          </md2-select>
 
-  </td>
-  <td *ngIf="notify.value.tipo == '2'" colspan="2">
-      <md2-select multiple name="celdas"
-      floatPlaceholder="never"
-      placeholder="Celdas"
-      class="example-full-width"
-      mdInput
-      formControlName="detail" [(ngModel)]="detail"
-      >
-      <md2-select-header>
-        <input class="search" name="c_search"
-        type="text"
-        formControlName="c_search"
-        placeholder="Buscar..."
-        mdInput
-        style="width=95%; min-width: 95%; border: none; outline: none;
-        height: 100%; padding: 0;"
-        />
-      </md2-select-header>
-      <md2-option *ngFor="let i of (celdas | dataPipe : {ip_celda: notify.value.c_search, nombre_celda: notify.value.c_search})" [value]="i.id_celda">{{i.nombre_celda}}</md2-option>
-    </md2-select>
+        </td>
+        <td *ngIf="notify.value.tipo == '1'" colspan="2">
+          <md2-select multiple placeholder="Router" floatPlaceholder="never" class="example-full-width" mdInput
+            formControlName="detail" [(ngModel)]="detail">
+            <md2-select-header>
+              <input class="search" type="text" formControlName="r_celda" placeholder="Buscar..." mdInput
+                style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" />
+            </md2-select-header>
+            <md2-option
+              *ngFor="let i of (routers | dataPipe : {nombre_srvidor: notify.value.r_celda, ip_srvidor: notify.value.r_celda})"
+              [value]="i.id_srvidor">{{i.id_srvidor +" | "+i.ip_srvidor+' / '+ i.nombre_srvidor}}</md2-option>
+          </md2-select>
 
-</td>
-<td *ngIf="notify.value.tipo == '1'" colspan="2">
-    <md2-select multiple placeholder="Router"
-    floatPlaceholder="never"
-    class="example-full-width"
-    mdInput
-    formControlName="detail" [(ngModel)]="detail"
-    >
-    <md2-select-header>
-      <input class="search" type="text"
-      formControlName="r_celda"
-      placeholder="Buscar..."
-      mdInput
-      style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
-      />
-    </md2-select-header>
-    <md2-option *ngFor="let i of (routers | dataPipe : {nombre_srvidor: notify.value.r_celda, ip_srvidor: notify.value.r_celda})" [value]="i.id_srvidor">{{i.id_srvidor +" | "+i.ip_srvidor+' / '+ i.nombre_srvidor}}</md2-option>
-  </md2-select>
+        </td>
+        <td *ngIf="notify.value.tipo == '6'" colspan="2">
+          <md2-select multiple placeholder="Clientes" floatPlaceholder="never" class="example-full-width " mdInput
+            formControlName="detail" [(ngModel)]="detail">
+            <md2-select-header>
+              <input class="search" type="text" formControlName="u_celda" placeholder="Buscar..." mdInput
+                style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;" />
+            </md2-select-header>
+            <md2-option
+              *ngFor="let i of (clientes | dataPipe : {apellido: notify.value.u_celda, nombre: notify.value.u_celda, dni: notify.value.u_celda})"
+              [value]="i.id">{{i.kind+i.dni +" | "+(i.nombre|capitalize)+' '+ (i.apellido|capitalize)}}</md2-option>
+          </md2-select>
 
-</td>
-<td *ngIf="notify.value.tipo == '6'" colspan="2">
-    <md2-select multiple placeholder="Clientes"
-    floatPlaceholder="never"
-    class="example-full-width "
-    mdInput
-    formControlName="detail" [(ngModel)]="detail"
-    >
-    <md2-select-header>
-      <input class="search" type="text"
-      formControlName="u_celda"
-      placeholder="Buscar..."
-      mdInput
-
-      style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
-      />
-    </md2-select-header>
-    <md2-option   *ngFor="let i of (clientes | dataPipe : {apellido: notify.value.u_celda, nombre: notify.value.u_celda, dni: notify.value.u_celda})" [value]="i.id">{{i.kind+i.dni +" | "+(i.nombre|capitalize)+' '+ (i.apellido|capitalize)}}</md2-option>
-  </md2-select>
-
-</td>
-</tr>
+        </td>
+      </tr>
       <br>
-<tr *ngIf="notify.value.via == '0' || notify.value.via =='1'">
-  <td>
+      <tr *ngIf="notify.value.via == '0' || notify.value.via =='1'">
+        <td>
 
-    <div>
-      <md-form-field class="example-full-width">
-        <textarea mdInput name="Comentarios"
-        mdInput
-        [(ngModel)]="messaje"
-        class="form-control"
-        class="example-full-width"
-        formControlName="message"
-                  rows ="4"
-        placeholder="Escribe Aqui El Mensaje De Notificacion"></textarea>
+          <div>
+            <md-form-field class="example-full-width">
+              <textarea mdInput name="Comentarios" mdInput [(ngModel)]="messaje" class="form-control"
+                class="example-full-width" formControlName="message" rows="4"
+                placeholder="Escribe Aqui El Mensaje De Notificacion"></textarea>
 
-      </md-form-field>
-    </div>
-  </td>
-</tr>
-</table>
+            </md-form-field>
+          </div>
+        </td>
+      </tr>
+    </table>
 
-</form>
+  </form>
 </div>
+-->

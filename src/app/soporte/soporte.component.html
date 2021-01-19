@@ -14,18 +14,30 @@
     <md-icon [class.updateicon]="update">cached</md-icon>
     Actualizar
   </button>
-  <button class="x490 x700" md-raised-button (click)="openDialog()" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
+  <!--
+  <button class="x490 x700" md-raised-button (click)="openDialog()"
+    *ngIf="(usuario.perm && usuario.perm.includes('soporte_w')) ||(usuario.perm && usuario.perm.includes('instalaciones_w'))">
     <md-icon>add_circle_outline</md-icon>
     Agregar
   </button>
-  <button class="x490 x700" md-raised-button routerLink="/ticket_cerrado_user" *ngIf="usuario.perm && usuario.perm.includes('soporte_esp')">
+-->
+  <button
+    *ngIf="(usuario.perm && usuario.perm.includes('soporte_w')) ||(usuario.perm && usuario.perm.includes('instalaciones_w'))"
+    type="button" class="btn btn-info btn-sm" (click)="openModal(template)">
+    <md-icon>add_circle_outline</md-icon>
+    Agregar
+  </button>
+
+
+  <button class="x490 x700" md-raised-button routerLink="/ticket_cerrado_user"
+    *ngIf="usuario.perm && usuario.perm.includes('soporte_esp')">
     <md-icon>event_available</md-icon>
     tickets cerrados por usuarios
   </button>
   <button md-raised-button class="btn" routerLink="/show_ip">Lista de IP asignadas</button>
 </md-toolbar>
 <md-accordion>
-  <md-expansion-panel hideToggle="true" expanded="false" (opened)="this.modouno==1">
+  <!--<md-expansion-panel hideToggle="true" expanded="false" (opened)="this.modouno==1">
     <md-expansion-panel-header style="background-color: lightpink;">
       <md-panel-title>
         Instalaciones
@@ -35,10 +47,12 @@
       </md-panel-description>
     </md-expansion-panel-header>
 
-    <!-- instalaciones-->
+   
     <div class="x700" *ngIf="modouno== 1">
 
-      <table class="addClient x700" [md2Data]="datai | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="10">
+      <table class="addClient x700"
+        [md2Data]="datai | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}"
+        #md2="md2DataTable" [rowsPerPage]="10">
         <thead>
           <tr>
             <td colspan="7">
@@ -46,54 +60,78 @@
             </td>
           </tr>
           <tr>
-            <th md2SortBy="id_soporte" style="width: 15%; margin: 0 1em;">Ticket</th>
+            <th md2SortBy="id_soporte" style="width: 7%; margin: 0 1em;">Ticket</th>
             <th md2SortBy="nombre" style="width: 15%">Cliente</th>
-            <th style="width: 15%">Zona</th>
-            <th style="width: 15%">Router</th>
-            <th md2SortBy="status_soporte" style="width: 15%">Estado</th>
-            <th style="width: 15%">Serial</th>
-            <th style="width: 15%">Usuario</th>
+            <th style="width: 10%">Zona</th>
+            <th style="width: 10%">Router</th>
+            <th md2SortBy="status_soporte" style="width: 7%">Estado</th>
+
+            <th style="width: 10%">Ip Instalacion</th>
+            <th style="width: 10%">Serial</th>
+
+            <th style="width: 10%">Usuario</th>
             <th style="width: 10%">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let t of md2.data">
-            <td style="width: 15%; margin: 0 1em;">{{t.id_soporte}}</td>
+            <td style="width: 7%; margin: 0 1em;">{{t.id_soporte}}</td>
+            <td style="width: 15%">
+              <span
+                *ngIf="(t.nombre != null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')">{{(t.nombre|capitalize2: true)+" "+(t.apellido|capitalize2: true)}}</span>
+              <span
+                *ngIf="(t.nombre != null) && (t.apellido == null) && (t.social=='' || t.social==null || t.social=='null')">{{(t.nombre|capitalize2: true)}}</span>
+              <span
+                *ngIf="(t.nombre == null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')">{{(t.apellido|capitalize2: true)}}</span>
+              <span
+                *ngIf="(t.social != '' && t.social != null && t.social != 'null')">{{(t.social|capitalize2: true)}}</span>
 
-            <td *ngIf="(t.nombre != null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre|capitalize2: true)+" "+(t.apellido|capitalize2: true)}}</td>
-            <td *ngIf="(t.nombre != null) && (t.apellido == null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre|capitalize2: true)}}</td>
-            <td *ngIf="(t.nombre == null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.apellido|capitalize2: true)}}</td>
-            <td *ngIf="(t.social != '' && t.social != null && t.social != 'null')" style="width: 15%">{{(t.social|capitalize2: true)}}</td>
+            </td>
+            <td style="width: 10%">{{t.nombre_celda}}</td>
 
 
-            <td style="width: 15%">{{t.celdas.value}}</td>
+            <td style="width: 10%">{{t.nombre_srvidor}}</td>
+            <td style="width: 7%;">
+              <span *ngIf="t.status_soporte == 1" style="color:#00c402;">Abierto</span>
+              <span *ngIf="t.status_soporte == 2 || t.status_soporte == 4" style="color:#d10512">Cerrado</span>
+              <span *ngIf="t.status_soporte == 3">Anulado</span>
 
+            </td>
+            <td style="width: 10%">{{t.ip}}</td>
+            <td style="width: 10%">{{t.serial}}</td>
 
-            <td style="width: 15%">{{t.nombre_srvidor}}</td>
+            <td style="width: 10%">
 
-            <td *ngIf="t.status_soporte == 1" style="width: 15%; color:#00c402;">Abierto</td>
-            <td *ngIf="t.status_soporte == 2 || t.status_soporte == 4" style="width: 15%; color:#d10512">Cerrado</td>
-            <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
-
-            <td style="width: 15%">{{t.serial}}</td>
-
-            <td *ngIf="(t.nombre_user == null) && (t.apellido_user != null)" style="width: 15%">{{t.apellido_user}}</td>
-            <td *ngIf="(t.nombre_user != null) && (t.apellido_user == null)" style="width: 15%">{{t.nombre_user}}</td>
-            <td *ngIf="(t.nombre_user != null) && (t.apellido_user != null)" style="width: 15%">{{t.nombre_user+ " " +t.apellido_user}}</td>
-
-            <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
+              <span *ngIf="(t.nombre_user == null) && (t.apellido_user != null)">{{t.apellido_user}}</span>
+              <span *ngIf="(t.nombre_user != null) && (t.apellido_user == null)">{{t.nombre_user}}</span>
+              <span
+                *ngIf="(t.nombre_user != null) && (t.apellido_user != null)">{{t.nombre_user+ " " +t.apellido_user}}</span>
+            </td>
+            <td style="width: 10%"
+              *ngIf="(usuario.perm && !usuario.perm.includes('soporte_w')) && (usuario.perm && !usuario.perm.includes('instalaciones_w'))">
               No Autorizado
             </td>
-            <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-              <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
+            <td style="width: 10%"
+              *ngIf="(usuario.perm && usuario.perm.includes('soporte_w')) ||(usuario.perm && usuario.perm.includes('instalaciones_w'))">
+              <button md-icon-button *ngIf="usuario.perm && usuario.perm.includes('soporte_w')" style="color:#106cc8"
+                [routerLink]="['/editticket', t.id_soporte]">
 
                 <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
               </button>
-              <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
+              button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
               <button md-icon-button color="warn"(click)="deleteDialog(i)">
               <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
-            </button-->
+            </button
 
+              <button
+                *ngIf="t.status_soporte == 1  && user == t.user_soporte && (usuario.perm && usuario.perm.includes('instalaciones_w'))"
+                md-icon-button color="warn" (click)="edit(t)">
+                <md-icon class="md-24" style="color:#106cc8;" aria-label="Editar instalacion">mode_edit</md-icon>
+              </button> <button
+                *ngIf="t.status_soporte == 1  &&(usuario.perm && usuario.perm.includes('soporte_esp') ) " md-icon-button
+                color="warn" (click)="edit(t)">
+                <md-icon class="md-24" style="color:#106cc8;" aria-label="Editar instalacion">mode_edit</md-icon>
+              </button>
 
             </td>
           </tr>
@@ -105,7 +143,9 @@
     </div>
     <div class="x290" *ngIf="modouno == 1">
 
-      <table class="addClient x290" [md2Data]="datai | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="15">
+      <table class="addClient x290"
+        [md2Data]="datai | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}"
+        #md2="md2DataTable" [rowsPerPage]="15">
         <thead>
           <tr>
             <td colspan="6">
@@ -122,10 +162,17 @@
           <tr *ngFor="let t of md2.data">
             <td style="width: 15%; margin: 0 1em;">{{t.id_soporte}}</td>
 
-            <td *ngIf="(t.nombre != null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre | capitalize2: true)+" "+(t.apellido | capitalize2: true)}}</td>
-            <td *ngIf="(t.nombre != null) && (t.apellido == null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{t.nombre | capitalize2: true}}</td>
-            <td *ngIf="(t.nombre == null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{t.apellido | capitalize2: true}}</td>
-            <td *ngIf="(t.social != '' && t.social != null && t.social != 'null')" style="width: 15%">{{t.social | capitalize2: true}}</td>
+            <td
+              *ngIf="(t.nombre != null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{(t.nombre | capitalize2: true)+" "+(t.apellido | capitalize2: true)}}</td>
+            <td
+              *ngIf="(t.nombre != null) && (t.apellido == null) && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{t.nombre | capitalize2: true}}</td>
+            <td
+              *ngIf="(t.nombre == null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{t.apellido | capitalize2: true}}</td>
+            <td *ngIf="(t.social != '' && t.social != null && t.social != 'null')" style="width: 15%">
+              {{t.social | capitalize2: true}}</td>
 
             <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
               No Autorizado
@@ -143,6 +190,7 @@
       </table>
     </div>
   </md-expansion-panel>
+    -->
   <!-- soportes -->
   <md-expansion-panel hideToggle="true" expanded="false" (opened)="this.modouno==1">
     <md-expansion-panel-header>
@@ -154,7 +202,8 @@
       </md-panel-description>
     </md-expansion-panel-header>
     <div class="x700" *ngIf="modouno == 1">
-      <table [md2Data]="datat | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="10" class="addClient x700">
+      <table [md2Data]="datat | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}"
+        #md2="md2DataTable" [rowsPerPage]="10" class="addClient x700">
         <thead>
           <tr>
             <td colspan="7">
@@ -163,11 +212,11 @@
           </tr>
           <tr>
             <th md2SortBy="id_soporte" style="width: 10%; margin: 0 1em;">Ticket</th>
-            <th md2SortBy="nombre"  style="width: 15%">Cliente</th>
+            <th md2SortBy="nombre" style="width: 15%">Cliente</th>
             <th md2SortBy="nombre_celda" style="width: 15%">Zona</th>
             <th style="width: 15%">Router</th>
             <th md2SortBy="status_soporte" style="width: 15%">Estado</th>
-            <th md2SortBy="nombre_use"rstyle="width: 15%">Usuario</th>
+            <th md2SortBy="nombre_use" rstyle="width: 15%">Usuario</th>
             <th style="width: 10%">Acciones</th>
           </tr>
         </thead>
@@ -175,10 +224,20 @@
           <tr *ngFor="let t of md2.data">
             <td style="width: 10%; margin: 0 1em;">{{t.id_soporte}}</td>
 
-            <td *ngIf="(t.nombre != null) && (t.apellido != null)&& (t.kind.toUpperCase() == 'V' || t.kind.toUpperCase() == 'E') && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre|capitalize2: true)+" "+(t.apellido|capitalize2: true)}}</td>
-            <td *ngIf="(t.nombre != null) && (t.apellido == null)&& (t.kind.toUpperCase() == 'V' || t.kind.toUpperCase() == 'E') && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre|capitalize2: true)}}</td>
-            <td *ngIf="(t.nombre == null) && (t.apellido != null)&& (t.kind.toUpperCase() == 'V' || t.kind.toUpperCase() == 'E') && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.apellido|capitalize2: true)}}</td>
-            <td *ngIf="(t.social != '' && t.social != null && t.social != 'null') && (t.kind.toUpperCase() == 'J' || t.kind.toUpperCase() == 'G')" style="width: 15%">{{(t.social|capitalize2: true)}}</td>
+            <td
+              *ngIf="(t.nombre != null) && (t.apellido != null)&& (t.kind.toUpperCase() == 'V' || t.kind.toUpperCase() == 'E') && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{(t.nombre|capitalize2: true)+" "+(t.apellido|capitalize2: true)}}</td>
+            <td
+              *ngIf="(t.nombre != null) && (t.apellido == null)&& (t.kind.toUpperCase() == 'V' || t.kind.toUpperCase() == 'E') && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{(t.nombre|capitalize2: true)}}</td>
+            <td
+              *ngIf="(t.nombre == null) && (t.apellido != null)&& (t.kind.toUpperCase() == 'V' || t.kind.toUpperCase() == 'E') && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{(t.apellido|capitalize2: true)}}</td>
+            <td
+              *ngIf="(t.social != '' && t.social != null && t.social != 'null') && (t.kind.toUpperCase() == 'J' || t.kind.toUpperCase() == 'G'|| t.kind.toUpperCase() == 'V-')"
+              style="width: 15%">{{(t.social|capitalize2: true)}}
+            </td>
+
 
 
             <td style="width: 15%">{{t.nombre_celda}}</td>
@@ -190,7 +249,8 @@
 
             <td *ngIf="(t.nombre_user == null) && (t.apellido_user != null)" style="width: 15%">{{t.apellido_user}}</td>
             <td *ngIf="(t.nombre_user != null) && (t.apellido_user == null)" style="width: 15%">{{t.nombre_user}}</td>
-            <td *ngIf="(t.nombre_user != null) && (t.apellido_user != null)" style="width: 15%">{{t.nombre_user+ " " +t.apellido_user}}</td>
+            <td *ngIf="(t.nombre_user != null) && (t.apellido_user != null)" style="width: 15%">
+              {{t.nombre_user+ " " +t.apellido_user}}</td>
 
             <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
               No Autorizado
@@ -215,7 +275,9 @@
     </div>
     <div class="x290" *ngIf="modouno == 1">
 
-      <table class="addClient x290" [md2Data]="datat | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="15">
+      <table class="addClient x290"
+        [md2Data]="datat | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}"
+        #md2="md2DataTable" [rowsPerPage]="15">
         <thead>
           <tr>
             <td colspan="6">
@@ -232,10 +294,17 @@
           <tr *ngFor="let t of md2.data">
             <td style="width: 15%; margin: 0 1em;">{{t.id_soporte}}</td>
 
-            <td *ngIf="(t.nombre != null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre | capitalize2: true)+" "+(t.apellido | capitalize2: true)}}</td>
-            <td *ngIf="(t.nombre != null) && (t.apellido == null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{t.nombre | capitalize2: true}}</td>
-            <td *ngIf="(t.nombre == null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{t.apellido | capitalize2: true}}</td>
-            <td *ngIf="(t.social != '' && t.social != null && t.social != 'null')" style="width: 15%">{{t.social | capitalize2: true}}</td>
+            <td
+              *ngIf="(t.nombre != null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{(t.nombre | capitalize2: true)+" "+(t.apellido | capitalize2: true)}}</td>
+            <td
+              *ngIf="(t.nombre != null) && (t.apellido == null) && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{t.nombre | capitalize2: true}}</td>
+            <td
+              *ngIf="(t.nombre == null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{t.apellido | capitalize2: true}}</td>
+            <td *ngIf="(t.social != '' && t.social != null && t.social != 'null')" style="width: 15%">
+              {{t.social | capitalize2: true}}</td>
 
             <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
               No Autorizado
@@ -265,7 +334,8 @@
       </md-panel-description>
     </md-expansion-panel-header>
     <div class="x700" *ngIf="modouno ==1">
-      <table [md2Data]="dataa | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="10" class="addClient x700">
+      <table [md2Data]="dataa | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}"
+        #md2="md2DataTable" [rowsPerPage]="10" class="addClient x700">
         <thead>
           <tr>
             <td colspan="7">
@@ -286,7 +356,7 @@
 
         </thead>
 
-        <tbody >
+        <tbody>
 
           <tr *ngFor="let t of md2.data">
 
@@ -302,7 +372,8 @@
             <td *ngIf="t.status_soporte == 2" style="width: 15%;color:#d10512">Cerrado</td>
             <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
 
-            <td style="width: 15%"><hr>{{t.comment_soporte}}  </td>
+            <td style="width: 15%">
+              <hr>{{t.comment_soporte}} </td>
 
             <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
               No Autorizado
@@ -329,7 +400,9 @@
     </div>
     <div class="x290" *ngIf="modouno == 1">
 
-      <table class="addClient x290" [md2Data]="datat | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="15">
+      <table class="addClient x290"
+        [md2Data]="datat | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}"
+        #md2="md2DataTable" [rowsPerPage]="15">
         <thead>
           <tr>
             <td colspan="6">
@@ -346,10 +419,17 @@
           <tr *ngFor="let t of md2.data">
             <td style="width: 15%; margin: 0 1em;">{{t.id_soporte}}</td>
 
-            <td *ngIf="(t.nombre != null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre | capitalize2: true)+" "+(t.apellido | capitalize2: true)}}</td>
-            <td *ngIf="(t.nombre != null) && (t.apellido == null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{t.nombre | capitalize2: true}}</td>
-            <td *ngIf="(t.nombre == null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{t.apellido | capitalize2: true}}</td>
-            <td *ngIf="(t.social != '' && t.social != null && t.social != 'null')" style="width: 15%">{{t.social | capitalize2: true}}</td>
+            <td
+              *ngIf="(t.nombre != null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{(t.nombre | capitalize2: true)+" "+(t.apellido | capitalize2: true)}}</td>
+            <td
+              *ngIf="(t.nombre != null) && (t.apellido == null) && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{t.nombre | capitalize2: true}}</td>
+            <td
+              *ngIf="(t.nombre == null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{t.apellido | capitalize2: true}}</td>
+            <td *ngIf="(t.social != '' && t.social != null && t.social != 'null')" style="width: 15%">
+              {{t.social | capitalize2: true}}</td>
 
             <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
               No Autorizado
@@ -379,53 +459,54 @@
       </md-panel-description>
     </md-expansion-panel-header>
     <div class="x700" *ngIf=" modouno == 1">
-      <table [md2Data]="datao | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="10" class="addClient x700">
+      <table [md2Data]="datao | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}"
+        #md2="md2DataTable" [rowsPerPage]="10" class="addClient x700">
         <thead>
-        <tr>
-          <td colspan="7">
-            <md2-pagination [rowsPerPageSet]="[10,15]" paginationLabel="Filas por pagina"></md2-pagination>
-          </td>
-        </tr>
-        <tr>
-          <th md2SortBy="id_soporte" style="width: 10%; margin: 0 1em;">Ticket</th>
-          <th md2SortBy="nombre_celda" style="width: 15%">Celda</th>
-          <th style="width: 15%">Router</th>
-          <th md2SortBy="status_soporte" style="width: 15%">Estado</th>
-          <th style="width: 15%">Trabajo Realizado</th>
-          <th style="width: 10%">Acciones</th>
-        </tr>
+          <tr>
+            <td colspan="7">
+              <md2-pagination [rowsPerPageSet]="[10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+            </td>
+          </tr>
+          <tr>
+            <th md2SortBy="id_soporte" style="width: 10%; margin: 0 1em;">Ticket</th>
+            <th md2SortBy="nombre_celda" style="width: 15%">Celda</th>
+            <th style="width: 15%">Router</th>
+            <th md2SortBy="status_soporte" style="width: 15%">Estado</th>
+            <th style="width: 15%">Trabajo Realizado</th>
+            <th style="width: 10%">Acciones</th>
+          </tr>
 
         </thead>
         <tbody>
-        <tr *ngFor="let t of md2.data">
-          <td style="width: 10%; margin: 0 1em;">{{t.id_soporte}}</td>
+          <tr *ngFor="let t of md2.data">
+            <td style="width: 10%; margin: 0 1em;">{{t.id_soporte}}</td>
 
-          <td style="width: 15%">{{(t.nombre_celda|capitalize2: true)}}</td>
+            <td style="width: 15%">{{(t.nombre_celda|capitalize2: true)}}</td>
 
 
-          <td style="width: 15%">{{t.nombre_srvidor}}</td>
+            <td style="width: 15%">{{t.nombre_srvidor}}</td>
 
-          <td *ngIf="t.status_soporte == 1" style="width: 15%; color:#00c402;">Abierto</td>
-          <td *ngIf="t.status_soporte == 2" style="width: 15%; color:#d10512">Cerrado</td>
-          <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
+            <td *ngIf="t.status_soporte == 1" style="width: 15%; color:#00c402;">Abierto</td>
+            <td *ngIf="t.status_soporte == 2" style="width: 15%; color:#d10512">Cerrado</td>
+            <td *ngIf="t.status_soporte == 3" style="width: 15%">Anulado</td>
 
-          <td style="width: 15%">{{t.comment_soporte}}</td>
+            <td style="width: 15%">{{t.comment_soporte}}</td>
 
-          <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
-            No Autorizado
-          </td>
-          <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-            <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
-              <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
-            </button>
-            <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
+            <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
+              No Autorizado
+            </td>
+            <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
+              <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
+                <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
+              </button>
+              <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
           <button md-icon-button color="warn"(click)="deleteDialog(i)">
           <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
         </button-->
 
 
-          </td>
-        </tr>
+            </td>
+          </tr>
         </tbody>
         <tfoot>
 
@@ -434,38 +515,47 @@
     </div>
     <div class="x290" *ngIf="mododos == 2">
 
-      <table class="addClient x290" [md2Data]="datat | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}" #md2="md2DataTable" [rowsPerPage]="15">
+      <table class="addClient x290"
+        [md2Data]="datat | dataPipe: { nombre: search, apellido: search, social: search, nombre_servidor: search}"
+        #md2="md2DataTable" [rowsPerPage]="15">
         <thead>
-        <tr>
-          <td colspan="6">
-            <md2-pagination [rowsPerPageSet]="[5,10,15]" paginationLabel="Filas por pagina"></md2-pagination>
-          </td>
-        </tr>
-        <tr>
-          <th style="width: 15%; margin: 0 1em;">Ticket</th>
-          <th style="width: 15%">Celda</th>
-          <th style="width: 10%">Acciones</th>
-        </tr>
+          <tr>
+            <td colspan="6">
+              <md2-pagination [rowsPerPageSet]="[5,10,15]" paginationLabel="Filas por pagina"></md2-pagination>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 15%; margin: 0 1em;">Ticket</th>
+            <th style="width: 15%">Celda</th>
+            <th style="width: 10%">Acciones</th>
+          </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let t of md2.data">
-          <td style="width: 15%; margin: 0 1em;">{{t.id_soporte}}</td>
+          <tr *ngFor="let t of md2.data">
+            <td style="width: 15%; margin: 0 1em;">{{t.id_soporte}}</td>
 
-          <td *ngIf="(t.nombre != null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{(t.nombre | capitalize2: true)+" "+(t.apellido | capitalize2: true)}}</td>
-          <td *ngIf="(t.nombre != null) && (t.apellido == null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{t.nombre | capitalize2: true}}</td>
-          <td *ngIf="(t.nombre == null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')" style="width: 15%">{{t.apellido | capitalize2: true}}</td>
-          <td *ngIf="(t.social != '' && t.social != null && t.social != 'null')" style="width: 15%">{{t.social | capitalize2: true}}</td>
+            <td
+              *ngIf="(t.nombre != null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{(t.nombre | capitalize2: true)+" "+(t.apellido | capitalize2: true)}}</td>
+            <td
+              *ngIf="(t.nombre != null) && (t.apellido == null) && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{t.nombre | capitalize2: true}}</td>
+            <td
+              *ngIf="(t.nombre == null) && (t.apellido != null) && (t.social=='' || t.social==null || t.social=='null')"
+              style="width: 15%">{{t.apellido | capitalize2: true}}</td>
+            <td *ngIf="(t.social != '' && t.social != null && t.social != 'null')" style="width: 15%">
+              {{t.social | capitalize2: true}}</td>
 
-          <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
-            No Autorizado
-          </td>
-          <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
-            <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
-              <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
-            </button>
+            <td style="width: 15%" *ngIf="usuario.perm && !usuario.perm.includes('soporte_w')">
+              No Autorizado
+            </td>
+            <td style="width: 15%" *ngIf="usuario.perm && usuario.perm.includes('soporte_w')">
+              <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
+                <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
+              </button>
 
-          </td>
-        </tr>
+            </td>
+          </tr>
         </tbody>
         <tfoot>
         </tfoot>
@@ -473,3 +563,96 @@
     </div>
   </md-expansion-panel>
 </md-accordion>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Tipo de Soportes</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label for="exampleSelect1">Tipo Soporte</label>
+    <select [(ngModel)]="soporteSelected" class="form-control form-control-sm" id="exampleSelect1" #ubicacion required>
+      <option [value]="2">Ticket</option>
+      <option [value]="2">Averia</option>
+      <option [value]="2">Otros trabajos e Instalaciones</option>
+    </select>
+    <div *ngIf="soporteSelected == 1 || soporteSelected == 2">
+      <label for="">Cliente</label>
+      <div *ngIf="clienteSeleccionado == false">
+        <input type="text" class="form-control form-control-sm" (input)="onSearchCliente($event.target.value)">
+        <br>
+        <div *ngFor=" let cliente of listacliente">
+          <button type="button" (click)="SeleccionCliente(cliente.id,cliente.dni, cliente.nombre, cliente.apellido)"
+            class="btn btn-info btn-sm boton"><i id="icono" class="fa fa-check"></i></button>
+          <p>{{cliente.kind}}{{cliente.dni}} || {{cliente.nombre}} {{cliente.apellido}}</p>
+        </div>
+      </div>
+
+      <div *ngIf="clienteSeleccionado == true">
+        <button type="button" (click)="deseleccionarCliente()" class="btn btn-info btn-sm boton"><i id="icono"
+            class="fa fa-times"></i></button>
+        <p>{{cedulaSeleccionado}} || {{nombreSeleccionado}} {{apellidoSeleccionado}}</p>
+      </div>
+
+      <!--tickets-->
+      <div *ngIf="visualizarDivEquipos == true && soporteSelected == 2" class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isChecked1" class="custom-control-input" id="customCheck1">
+        <label class="custom-control-label" for="customCheck1">Lentitud</label>
+        <br>
+      </div>
+
+      <div *ngIf="visualizarDivEquipos == true && soporteSelected == 2" class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isChecked2" class="custom-control-input" id="customCheck2">
+        <label class="custom-control-label" for="customCheck2">Lan Desconectado</label>
+        <br>
+      </div>
+
+      <div *ngIf="visualizarDivEquipos == true && soporteSelected == 2" class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isChecked3" class="custom-control-input" id="customCheck3">
+        <label class="custom-control-label" for="customCheck3">Señal Degradada</label>
+        <br>
+      </div>
+
+      <div *ngIf="visualizarDivEquipos == true && soporteSelected == 2" class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isChecked4" class="custom-control-input" id="customCheck4">
+        <label class="custom-control-label" for="customCheck4">Equipo Inaccesible</label>
+        <br>
+        <br>
+      </div>
+
+
+      <div *ngIf=" instalacionSelected == 2 && planSeleccionado != 0 ||visualizarIp == false  && visualizarDivGuardar == true ">
+        <button type="button" (click)="GuardarData()" class="btn btn-info btn-sm">Guardar Instalacion</button>
+      </div>
+
+
+      <div *ngIf="isChecked1 == true || isChecked2 == true || isChecked3 == true || isChecked4 == true">
+        <button type="button" (click)="GuardarData()" class="btn btn-info btn-sm">Guardar Ticket</button>
+      </div>
+
+
+    </div>
+  </div>
+</ng-template>

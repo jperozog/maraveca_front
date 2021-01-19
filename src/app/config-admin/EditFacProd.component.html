@@ -1,0 +1,87 @@
+<form class="example-form" id="client" name="clientForm" [formGroup]="editFacProd" ng-submit="ok(clientForm)" novalidate>
+  <table class="example-full-width" cellspacing="0">
+
+    <tr>
+    <td colspan="2">
+      <md-form-field class="example-full-width">
+        <input
+          mdInput
+          placeholder="Cliente"  [readonly]="true"  />
+        <span style="color:#9E9E9E;">{{cliente+' '+dni}}</span>
+      </md-form-field>
+    </td>
+  </tr>
+    <tr>
+    <td colspan="2">
+
+        <md-form-field class="example-full-width">
+          <input style=" color:#9E9E9E;" mdInput formControlName="codigo_factura" placeholder="Codigo de factura" [readonly]="true"/>
+        </md-form-field>
+      </td>
+
+    </tr>
+
+    <tr>
+    <td colspan="2">
+
+      <md-form-field class="example-full-width">
+        <input mdInput formControlName="nombre_articulo" placeholder="Nombre del producto"/>
+      </md-form-field>
+
+    </td>
+  </tr>
+  <tr>
+
+    <td colspan="2">
+      <md-form-field class="example-full-width">
+        <input type="text" mask="separator,2" thousandSeparator="." mdInput formControlName="cantidad" placeholder="cantidad"/>
+      </md-form-field>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" >
+      <md-form-field class="example-full-width" *ngIf=" denominacion == 'Bs.S'">
+      <input mdInput formControlName="precio_articulo" placeholder="Precio de articulo mas iva"
+             type="text" mask="separator,2" thousandSeparator="."  suffix=" Bs.S."  *ngIf=" serie_fac == 1"/>
+
+        <input mdInput formControlName="precio_articulo" placeholder="Precio de articulo"
+             type="text" mask="separator,2" thousandSeparator="."  suffix=" Bs.S."  *ngIf=" serie_fac == 0"/>
+    </md-form-field>
+
+      <md-form-field class="example-full-width" *ngIf=" denominacion == '$'" >
+        <input mdInput formControlName="precio_articulo" placeholder="Precio de articulo"
+               type="text" mask="separator,2" thousandSeparator="."  suffix="$"/>
+      </md-form-field>
+    </td>
+  </tr>
+
+    <tr>
+    <td colspan='2'>
+      <md-form-field class="example-full-width">
+        <textarea mdInput name="coment" data-ng-model="user.comments"
+                  class="form-control"
+                  #coment
+                  maxlength="256"
+                  formControlName="comment_articulo"
+                  placeholder="Comentarios en factura"></textarea>
+        <md-hint align="end">{{ coment.value.length}} / 256</md-hint>
+      </md-form-field>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+
+
+
+      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Editar()" [disabled]="!editFacProd.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+    </td><td>
+
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
+    </td>
+  </tr>
+  <p>
+
+  </p>
+</table>
+</form>

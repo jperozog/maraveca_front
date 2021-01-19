@@ -19,10 +19,12 @@
             <md2-option value="1">Planes antiguos</md2-option>
             <md2-option value="2">Planes nuevos</md2-option>
          <md2-option value="3">Planes solo en moneda extranjera</md2-option>
+         <md2-option value="6">Planes Zulia</md2-option>
+         <md2-option value="7">Planes Fibra</md2-option>
 
 
           </md2-select>
-        </td>
+        </td> 
 
       </tr>
 
@@ -49,6 +51,21 @@
             <md-option value="c3">Comerciales en dolares</md-option>
             <md-option value="h3">Happy Time en dolares</md-option>
             <md-option value="d3">Dedicados en dolares</md-option>
+          </md-select>
+        </td>
+        <td *ngIf="pre.value.tipo_plan==6">
+          <md-select class="example-full-width" mdInput placeholder="Planes" formControlName="planes">
+            <md-option value="r6">Residenciales Zulia</md-option>
+            <md-option value="c6">Comerciales Zulia</md-option>
+          <md-option value="h6">Happy Time Zulia</md-option>
+          </md-select>
+        </td>
+
+        <td *ngIf="pre.value.tipo_plan==7">
+          <md-select class="example-full-width" mdInput placeholder="Planes" formControlName="planes">
+            <md-option value="r7">Residenciales Fibra</md-option>
+            <md-option value="c7">Comerciales Fibra</md-option>
+          <md-option value="h7">Happy Time Fibra</md-option>
           </md-select>
         </td>
 
@@ -96,7 +113,7 @@
 <div md-dialog-actions>
   <tr>
     <td>
-      <button *ngIf="tipo && tipo=='p'" md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="confirm()" tabindex="2" [disabled]="!pre.valid">Enviar Presupuesto</button>
+      <button *ngIf="tipo && tipo=='p'" md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="enviar()" tabindex="2" [disabled]="!pre.valid">Enviar Presupuesto</button>
       <button *ngIf="tipo && tipo=='c'" md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="enviar()" tabindex="2" [disabled]="!pre.valid">Enviar Presupuesto</button>
     </td>
     <td>

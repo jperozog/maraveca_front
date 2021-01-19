@@ -129,3 +129,65 @@ table{
   border-collapse: collapse;
 
 }
+
+.boton{
+  margin-top: 20%;
+}
+
+.primero{
+  margin-top: 5%;
+  margin-left: 2%;
+}
+
+.boton2{
+  float: left;
+}
+
+.titulo{
+  margin-top: 6%;
+}
+
+
+.cedula{
+  margin-top: 28px;
+}
+.social{
+  margin-top: -15px;
+}
+
+
+
+
+.zonas{
+  width: 97%;
+  margin-left: 1%;
+  margin-top: 5%;
+  float: left;
+  justify-content: center;
+}
+
+.filtrado{
+  margin-top: 1%;
+}
+
+
+.tabla{
+  margin-top: 1%;
+}
+tr{
+  line-height: 1px;
+  min-height: 1px;
+  height: 1px;
+  cursor: pointer;
+}
+
+td{
+  line-height: 1px;
+  min-height: 1px;
+  height: 1px;
+  padding: 15px;
+}
+
+#icono{
+  margin-top: -5%;
+}

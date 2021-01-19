@@ -1,0 +1,171 @@
+<div class="row primero">
+  <div class="col-sm-3">
+    <h2 class="titulo">Promociones</h2>
+  </div>
+  <!--
+  <div class="col-sm-3 filtrado">
+    <input (input)="BuscarVenta($event.target.value)" (keyup.backspace)="BuscarVentaBackSpace($event.target.value)"
+      type="text" class="form-control" name="filtrado" placeholder="Filtrar" id="inputDefault">
+  </div>
+-->
+</div>
+<div class="row">
+  <div class="col-sm-7">
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">Nombre Promocion</th>
+          <th scope="col">Duracion</th>
+          <th scope="col">Meses sin Facturar</th>
+          <th scope="col">MB Gratis</th>
+          <th scope="col">Multiplicador</th>
+          <th scope="col">Equipo Adicional</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor=" let promo of promociones | paginate: { id:'promociones', itemsPerPage: 6, currentPage: e }">
+          <td>{{promo.nombre_promocion}}</td>
+          <td>{{promo.duracion}} Mes(es)</td>
+          <td *ngIf="promo.meses == 0">Sin Caracteristica</td>
+          <td *ngIf="promo.meses != 0">{{promo.meses}} Mes(es)</td>
+          <td *ngIf="promo.mbGratis == 0">Sin Caracteristica</td>
+          <td *ngIf="promo.mbGratis != 0">{{promo.mbGratis}} Mb</td>
+          <td *ngIf="promo.mbAdicionales == 0">Sin Caracteristica</td>
+          <td *ngIf="promo.mbAdicionales != 0">x{{promo.mbAdicionales}}</td>
+          <td *ngIf="promo.equipoAdi == 0">Sin Caracteristica</td>
+          <td *ngIf="promo.equipoAdi != 0">{{promo.equipoAdi}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="promociones" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-4 form">
+    <div class="formulario">
+      <div class="card border-light mb-3">
+        <div class="card-header">Agregar Promocion</div>
+
+        <div class="card-body">
+          <div>
+            <label for="">Nombre Promocion</label>
+            <input type="text" class="form-control" placeholder="Promocion" id="inputDefault" [(ngModel)]="Promocion"
+              required>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" [(ngModel)]="isChecked" class="custom-control-input" id="customCheck">
+                <label class="custom-control-label" for="customCheck">Meses sin Facturacion</label>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" [(ngModel)]="isChecked2" class="custom-control-input" id="customCheck2">
+                <label class="custom-control-label" for="customCheck2">MB Gratis</label>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" [(ngModel)]="isChecked3" class="custom-control-input" id="customCheck3">
+                <label class="custom-control-label" for="customCheck3">Multiplicador de MB</label>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" [(ngModel)]="isChecked4" class="custom-control-input" id="customCheck4">
+                <label class="custom-control-label" for="customCheck4">Equipo Adicional</label>
+              </div>
+            </div>
+
+          </div>
+          <br>
+          <div *ngIf="isChecked">
+            <label for="">Cantidad de Meses sin Facturacion</label>
+            <input type="number" [(ngModel)]="Facturacion" class="form-control" id="inputDefault"
+              required>
+          </div>
+          
+          <div *ngIf="isChecked2">
+            <label for="">Cantidad de MB Gratis</label>
+            <input type="number" [(ngModel)]="Gratis" class="form-control" id="inputDefault"
+              required>
+          </div>
+
+          <div *ngIf="isChecked3">
+            <label for="">Multiplicador de MB</label>
+            <input type="number" [(ngModel)]="Adicionales" class="form-control" id="inputDefault"
+              required>
+          </div>
+          <br>
+          <div *ngIf="Promocion.length > 5 && isChecked && Facturacion != 0 || Promocion.length > 5 && isChecked2 && Gratis !=0 || Promocion.length > 5 && isChecked3 && Adicionales != 0">
+            <label for="">Duracion de la Promocion para el Cliente (Meses)</label>
+            <input type="number" [(ngModel)]="Duracion" class="form-control" id="inputDefault"
+              required>
+          </div>
+          <br>
+          <div *ngIf="Promocion.length > 5 && isChecked && Facturacion != 0 && Duracion != 0 || Promocion.length > 5 && isChecked2 && Gratis !=0 && Duracion != 0 || Promocion.length > 5 && isChecked3 && Adicionales != 0 && Duracion != 0">
+            <button type="button" (click)="GuardarData()" class="btn btn-info btn">Guardar Promocion</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Detalles de Venta</h4>
+    <button type="button" (click)="detallesVenta(template,venta.id_venta)" class="btn btn-info btn-sm">
+      <i id="icono" class="fa fa-pencil">
+      </i>
+    </button>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="this.modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="card border-light mb-3" style="max-width: 40rem;">
+    <div *ngFor="let d of detalles" class="card-body">
+      <h6 class="control-label" for="disabledInput">Comprador: </h6>
+      <p>{{d.cliente}}</p>
+      <br>
+      <h6>Detalles de Articulo</h6>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Modelo Equipo:</label>
+          <p>{{d.modelo_articulo}}</p>
+        </div>
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Serial Equipo</label>
+          <p>{{d.serial_articulo}}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Zona Equipo</label>
+          <p>{{d.nombre_zona}}</p>
+        </div>
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Tipo de Venta</label>
+          <p>{{d.tipo}}</p>
+        </div>
+
+      </div>
+      <br>
+      <h6>Responsable de Venta</h6>
+      <p>{{d.nombre_user}} {{d.apellido_user}}</p>
+      <br>
+      <h6>Datos de Venta</h6>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Monto:</label>
+          <p>{{d.monto}} $</p>
+        </div>
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Fecha</label>
+          <p>{{d.fecha_venta |date:"shortDate" }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,111 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <button style=" background-color:#2C2C30;" (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+  </div>
+  <div class="col-sm-3 filtro">
+    <h1 style="margin-top:1%;">{{zonaSeleccionada}}</h1>
+  </div>
+  <div class="col-sm-1">
+
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-1"></div>
+  <div class="col-sm-2 tabla2">
+    <h4 style="color: white;">Agregar Consumible</h4>
+    <div class="form-group">
+      <label for="">Consumible</label>
+      <select [(ngModel)]="NuevoEquipoSelected" class="form-control" id="exampleSelect1" #ubicacion required>
+        <option selected *ngFor="let equipo of nuevaLista" [value]="equipo.id_equipo">{{equipo.nombre_equipo}}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="">Cantidad</label>
+      <input [(ngModel)]="NuevaCantidadSelected" type="text" class="form-control" id="inputDefault">
+    </div>
+    <div class="form-group">
+      <label for="">Unidad de Medicion</label>
+      <select [(ngModel)]="NuevaUnidadSelected" class="form-control" id="exampleSelect1">
+        <option>Unds</option>
+        <option>Mts</option>
+        <option>Pcs</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn btn-info btn-block boton3" (click)="agregarConsumible()">
+        Agregar Consumible
+      </button>
+    </div>
+  </div>
+  <div class="col-sm-8 tabla">
+    <table class="table table-bordeless">
+      <thead>
+        <tr style=" background-color:#2C2C30; color: white;">
+          <th scope="col">#</th>
+          <th scope="col">Nombre Cosumible</th>
+          <th scope="col">Cantidad</th>
+          <th scope="col"> Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of listaConsumibles | paginate: { id:'Consumibles', itemsPerPage: 5, currentPage: p }">
+          <th>{{c.id_consumible}}</th>
+          <td>{{c.nombre_equipo}}</td>
+          <td>{{c.cantidad}} {{c.unidad}}</td>
+          <td>
+            <button type="button" class="btn btn-info btn-sm" (click)="openModal2(template,c.id_consumible)">
+              <i id="icono" class="fa fa-pencil"></i>
+            </button>
+           
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="Consumibles" (pageChange)="p = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-1"></div>
+</div>
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Datos de Consumible</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h6>Nombre Consumible: </h6>
+    <p>{{detallesConsumible.nombre_equipo}}</p>
+    <br>
+    <div class="form-group">
+      <label for="">Agregar Cantidad </label>
+      <input [(ngModel)]="aggCantidad" type="text" class="form-control" placeholder="Cantidad" id="inputDefault">
+    </div>
+    <br>
+    <button type="button" class="btn btn-info" (click)="modificarConsumible(detallesConsumible.id_consumible)">
+      Agregar
+    </button>
+  </div>
+</ng-template>
+
+
+
+
+<ng-template #template2>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Seguro que Desea Eliminar Este Consumible?</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef2.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <button type="button" class="btn btn-info btn-sm" (click)="eliminar()">
+      <i id="icono" class="fa fa-check"></i>
+    </button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="noEliminar()">
+      <i id="icono" class="fa fa-times"></i>
+    </button>
+  </div>
+</ng-template>

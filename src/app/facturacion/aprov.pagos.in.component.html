@@ -55,7 +55,16 @@
 
         <td *ngIf="i.bal_tip_in==12">Zelle</td>
         <td *ngIf="i.bal_tip_in==13">Wire Transfer</td>
-        <td *ngIf="i.bal_tip_in==14">Efectivo</td>
+        <td *ngIf="i.bal_tip_in==14">Efectivo ($)</td>
+        <td *ngIf="i.bal_tip_in==16">Exonerado</td>
+        <td *ngIf="i.bal_tip_in==2">Transferencia Banesco</td>
+        <td *ngIf="i.bal_tip_in==6">Transferencia Bicentenario</td>
+        <td *ngIf="i.bal_tip_in==1">Transferencia BOD</td>
+        <td *ngIf="i.bal_tip_in==3">Transferencia Venezuela</td>
+        <td *ngIf="i.bal_tip_in==15">Efectivo en Bs.S.</td>
+
+
+
 
         <td *ngIf="i.bal_from_in==1">Mismo Banco</td>
         <td *ngIf="i.bal_from_in==2">Otro Banco</td>
@@ -65,9 +74,11 @@
         <td *ngIf="i.bal_from_in==6">Taquilla Dabajuro</td>
 
 
-
-        <td style="text-align: left;">
-          {{i.bal_monto_in  | number : '1.0-3'}} US$.
+        <td style="text-align: left;" *ngIf="i.bal_tip_in!=12 && i.bal_tip_in!=13 && i.bal_tip_in!=14 && i.bal_tip_in!=16">
+          {{i.bal_monto_in | number : '1.2-2'}} Bs.S
+        </td>
+        <td style="text-align: left;" *ngIf=" i.bal_tip_in==12 || i.bal_tip_in==13 || i.bal_tip_in==14 || i.bal_tip_in==16">
+          {{i.bal_monto_in | number : '1.2'}} US$
         </td>
         <td style="text-align: left;">
           {{i.bal_comment_in}}

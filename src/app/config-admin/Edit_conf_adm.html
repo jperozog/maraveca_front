@@ -1,0 +1,62 @@
+
+<form class="example-form" id="client" name="clientForm" [formGroup]="editconfig" ng-submit="ok(clientForm)" novalidate>
+  <table class="example-full-width" cellspacing="0">
+
+
+    <tr>
+    <td colspan="2">
+
+      <md-form-field class="example-full-width">
+        <input  mdInput type="text" mask="percent" suffix="%" formControlName="iva" placeholder="Iva" />
+      </md-form-field>
+      </td>
+
+    </tr>
+    <tr>
+    <td colspan="2">
+
+      <md-form-field class="example-full-width">
+        <input  mdInput formControlName="moneda_local" placeholder="Moneda local" />
+      </md-form-field>
+      </td>
+
+    </tr>
+    <tr>
+    <td colspan="2">
+
+      <md-form-field class="example-full-width">
+        <input mdInput formControlName="moneda_ex" placeholder="Moneda extranjera" />
+      </md-form-field>
+      </td>
+
+    </tr>
+    <tr>
+    <td colspan="2">
+
+      <md-form-field class="example-full-width">
+        <input  mdInput formControlName="tasa" type="text" mask="separator,2" thousandSeparator="." placeholder="Tasa de cambio del sistema" />
+      </md-form-field>
+      </td>
+
+    </tr>
+
+
+
+
+
+
+  <tr>
+<td>
+      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="editar()" [disabled]="!editconfig.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+    </td>
+    <td>
+
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
+    </td>
+  </tr>
+  <p>
+
+  </p>
+</table>
+</form>
+

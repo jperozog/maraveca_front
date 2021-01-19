@@ -1,0 +1,304 @@
+<div class="row zonas">
+  <div class="col-sm-4">
+    <h2 class="titulo">Comisiones Instalador</h2>
+  </div>
+</div>
+<div class="row zonas2">
+  <div class="col-sm-1">
+  </div>
+  <div class="col-sm-3">
+    <select [(ngModel)]="instaladorSeleccionado" class="form-control" id="exampleSelect2" required>
+      <option value='0' selected> Seleccione Instalador</option>
+      <option *ngFor="let v of instaladores" [value]="v.id_user">{{v.nombre_user}} {{v.apellido_user}}</option>
+    </select>
+  </div>
+
+  <div class="col-sm-2">
+    <select [(ngModel)]="mesSeleccionado" class="form-control" id="exampleSelect2" required>
+      <option value='0' selected> Seleccione Mes</option>
+      <option [value]='1' selected> Enero</option>
+      <option [value]='2' selected> Febrero</option>
+      <option [value]='3' selected> Marzo</option>
+      <option [value]='4' selected> Abril</option>
+      <option [value]='5' selected> Mayo</option>
+      <option [value]='6' selected> Junio</option>
+      <option [value]='7' selected> Julio</option>
+      <option [value]='8' selected> Agosto</option>
+      <option [value]='9' selected> Septiembre</option>
+      <option [value]='10' selected> Octubre</option>
+      <option [value]='11' selected> Noviembre</option>
+      <option [value]='12' selected> Diciembre</option>
+    </select>
+  </div>
+
+  <div class="col-sm-1">
+    <select [(ngModel)]="anioSeleccionado" class="form-control" id="exampleSelect2" required>
+      <option value='0' selected> Seleccione Año</option>
+      <option [value]='2021' selected> 2021</option>
+      <option [value]='2020' selected> 2020</option>
+      <option [value]='2019' selected> 2019</option>
+      <option [value]='2018' selected> 2018</option>
+    </select>
+  </div>
+
+  <div class="col-sm-3">
+    <button title="Buscar comisiones" *ngIf="mesSeleccionado !=0 && anioSeleccionado !=0" type="button"
+      (click)="verDetalles()" class="btn btn-default" style="background-color: #2C2C30; color: white;">
+      <md-icon style="font-size: 25px;">search</md-icon>
+    </button>
+    <button title="Configuraciones comision" *ngIf="mesSeleccionado !=0 && anioSeleccionado !=0" type="button"
+      (click)="openModal(template)" class="btn btn-default" style="background-color: #2C2C30; color: white;">
+      <md-icon style="font-size: 25px;">assessment</md-icon>
+    </button>
+  </div>
+</div>
+<br>
+<div *ngIf="visualizar == true" class="row">
+  <div class="col-sm-1"></div>
+
+
+
+  <div class="col-sm-5">
+    <div class="alert alert-dismissible alert-warning">
+
+      <h4 class="alert-heading">Comisiones Totales</h4>
+      <p>
+        Comisiones: {{comisionesTotales | number : '1.2'}} Bs
+      </p>
+
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <div class="alert alert-dismissible alert-danger">
+
+      <h4 class="alert-heading">Comisiones Pendientes Por Cobrar</h4>
+      <p>
+        Comisiones: {{comisionesTotales | number : '1.2'}} Bs
+      </p>
+
+    </div>
+  </div>
+
+  <div class="col-sm-1"></div>
+  <div class="col-sm-1"></div>
+
+
+
+  <div class="col-sm-5">
+    <div class="alert alert-dismissible alert-info">
+      <h4 class="alert-heading">Comisiones Cobradas Por Pagar</h4>
+      <p>
+        Comisiones: {{ comisionDisponibleBs | number : '1.2'}} Bs
+      </p>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <div class="alert alert-dismissible alert-success">
+      <h4 class="alert-heading">Comisiones Pagadas</h4>
+      <p>
+        Comisiones: {{comisionesPagadasBs | number : '1.2'}} Bs
+      </p>
+    </div>
+  </div>
+  <div class="col-sm-1"></div>
+
+  <div class="col-sm-1"></div>
+  <div class="col-sm-10">
+    <h2>Instalaciones</h2>
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr class="table-default" style="background-color: #2C2C30; color: white;">
+          <th scope="col">#</th>
+          <th scope="col">CLIENTE</th>
+          <th scope="col">EQUIPO</th>
+          <th scope="col">SERIAL</th>
+          <th scope="col">FECHA AGENDADO</th>
+          <th scope="col">ESTADO COMISION</th>
+          <!--<th scope="col">ACCIONES</th>-->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of comisionesInstalador | paginate: {id:'comisiones', itemsPerPage: 7, currentPage: e }">
+          <td>
+            {{f.id}}
+          </td>
+          <td *ngIf="f.kind == 'V' || f.kind == 'E'">
+            <md-icon *ngIf="f.tipo_insta == 1" style="font-size: 25px;">wifi</md-icon>
+            <md-icon *ngIf="f.tipo_insta == 2" style="font-size: 25px;">settings_input_hdmi</md-icon> {{f.nombre+"
+            "+f.apellido}}
+          </td>
+          <td *ngIf="f.kind == 'J' || f.kind == 'G' || f.kind == 'V-'">
+            <md-icon *ngIf="f.tipo_insta == 1" style="font-size: 25px;">wifi</md-icon>
+            <md-icon *ngIf="f.tipo_insta == 2" style="font-size: 25px;">settings_input_hdmi</md-icon> {{f.social}}
+          </td>
+          <td>
+            {{f.nombre_equipo }}
+          </td>
+          <td *ngIf="f.serial_det != 0">
+            {{f.serial_det }}
+          </td>
+          <td *ngIf="f.serial_det == 0">
+            Equipo Usado
+          </td>
+          <td>
+            {{f.created_at | stringToDate | date: 'd/M/yy'}}
+          </td>
+          <td *ngIf="f.estadoComision == 0 && (f.status_insta == 2 || f.status_insta == 1 || f.status_insta == 4)">
+            <p class="text-warning">En Proceso</p>
+          </td>
+          <td *ngIf="f.estadoComision == 1 && (f.status_insta == 2 || f.status_insta == 1 || f.status_insta == 4) ">
+            <p class="text-success">Disponible</p>
+          </td>
+          <td *ngIf="f.estadoComision == 0 && f.status_insta == 3">
+            <p class="text-danger">No Disponible</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="comisiones" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-1"></div>
+
+
+  <div class="col-sm-1"></div>
+  <div class="col-sm-10">
+    <h2>Migraciones</h2>
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr class="table-default" style="background-color: #2C2C30; color: white;">
+          <th scope="col">#</th>
+          <th scope="col">CLIENTE</th>
+          <th scope="col">EQUIPO</th>
+          <th scope="col">SERIAL</th>
+          <th scope="col">OLT</th>
+          <th scope="col">FECHA AGENDADO</th>
+          <th scope="col">ESTADO COMISION</th>
+          <!--<th scope="col">ACCIONES</th>-->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of comisionesInstalador | paginate: {id:'comisiones', itemsPerPage: 7, currentPage: e }">
+          <td>
+            {{f.id}}
+          </td>
+          <td *ngIf="f.kind == 'V' || f.kind == 'E'">
+            <md-icon *ngIf="f.tipo_insta == 1" style="font-size: 25px;">wifi</md-icon>
+            <md-icon *ngIf="f.tipo_insta == 2" style="font-size: 25px;">settings_input_hdmi</md-icon> {{f.nombre+"
+            "+f.apellido}}
+          </td>
+          <td *ngIf="f.kind == 'J' || f.kind == 'G' || f.kind == 'V-'">
+            <md-icon *ngIf="f.tipo_insta == 1" style="font-size: 25px;">wifi</md-icon>
+            <md-icon *ngIf="f.tipo_insta == 2" style="font-size: 25px;">settings_input_hdmi</md-icon> {{f.social}}
+          </td>
+          <td>
+            {{f.nombre_equipo }}
+          </td>
+          <td *ngIf="f.serial_det != 0">
+            {{f.serial_det }}
+          </td>
+          <td *ngIf="f.serial_det == 0">
+            Equipo Usado
+          </td>
+          <td>
+            {{f.created_at | stringToDate | date: 'd/M/yy'}}
+          </td>
+          <td *ngIf="f.estadoComision == 0 && (f.status_insta == 2 || f.status_insta == 1 || f.status_insta == 4)">
+            <p class="text-warning">En Proceso</p>
+          </td>
+          <td *ngIf="f.estadoComision == 1 && (f.status_insta == 2 || f.status_insta == 1 || f.status_insta == 4) ">
+            <p class="text-success">Disponible</p>
+          </td>
+          <td *ngIf="f.estadoComision == 0 && f.status_insta == 3">
+            <p class="text-danger">No Disponible</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="comisiones" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-1"></div>
+
+
+
+
+
+  <div class="col-sm-1"></div>
+  <div class="col-sm-10">
+    <h2>Mudanzas</h2>
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr class="table-default" style="background-color: #2C2C30; color: white;">
+          <th scope="col">#</th>
+          <th scope="col">CLIENTE</th>
+          <th scope="col">IP</th>
+          <th scope="col">AP</th>
+          <th scope="col">MIKROTIC</th>
+          <th scope="col">FECHA AGENDADO</th>
+          <th scope="col">ESTADO COMISION</th>
+          <!--<th scope="col">ACCIONES</th>-->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of comisionesInstaladorMu | paginate: {id:'comisionesMu', itemsPerPage: 7, currentPage: m }">
+          <td>
+            {{f.id_muda}}
+          </td>
+          <td >
+            {{f.ncliente}}
+          </td>
+          <td>
+            {{f.ip_muda }}
+          </td>
+          <td >
+            {{f.nombre_ap }}
+          </td>
+          <td >
+            {{f.nombre_srvidor}}
+          </td>
+          <td>
+            {{f.created_at | stringToDate | date: 'd/M/yy'}}
+          </td>
+          <td *ngIf="f.estadoComision == 0 && (f.status_muda == 2 || f.status_muda == 1 || f.status_muda == 4)">
+            <p class="text-warning">En Proceso</p>
+          </td>
+          <td *ngIf="f.estadoComision == 1 && (f.status_muda == 2 || f.status_muda == 1 || f.status_muda == 4) ">
+            <p class="text-success">Disponible</p>
+          </td>
+          <td *ngIf="f.estadoComision == 0 && f.status_muda == 3">
+            <p class="text-danger">No Disponible</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="comisionesMu" (pageChange)="m = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-1"></div>
+
+</div>
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <div>
+        <label for="">Pago por instalacion ($)</label>
+        <input [(ngModel)]="cuota" type="text" class="form-control form-control-sm">
+      </div>
+      <br>
+      <div>
+        <button type="button" (click)="guardarCuota()" class="btn btn-primary btn-sm">Guardar</button>
+      </div>
+
+    </div>
+
+
+
+
+  </div>
+</ng-template>

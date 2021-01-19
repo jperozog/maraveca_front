@@ -23,9 +23,7 @@
     </md-select>
   </md-menu>
 
-  <button md-icon-button style="color:#106cc8" (click)="stopPropagation($event)" (click)="notify()" tooltip="Enviar recordatorios de pago" *ngIf="usuario.perm && usuario.perm.includes('notify')">
-    <md-icon class="md-24" aria-label="notificar" >notifications</md-icon>
-  </button>
+
   <button class="x490 x700" md-raised-button (click)="refresh(true)" >
     <md-icon [class.updateicon]="update">cached</md-icon>
     Actualizar

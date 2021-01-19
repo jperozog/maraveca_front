@@ -13,15 +13,15 @@
       <tr  >
         <td colspan="2" >
           <md-select [style.width]="'100%'" mdInput placeholder="Tipo de Moneda" formControlName="denominacion">
-            <md-option value="1">Moneda nacional</md-option>
-            <md-option value="2">Moneda extranjera</md-option>
+            <md-option *ngIf="serie == '1'" value="1">Moneda nacional</md-option>
+            <md-option *ngIf="serie == '0'" value="2">Moneda extranjera</md-option>
           </md-select>
         </td>
       </tr>
       <tr  >
         <td colspan="2" >
           <md-select *ngIf="this.genFAC.value.denominacion == 1" [style.width]="'100%'" mdInput placeholder="Tipo de factura" formControlName="serie">
-            <md-option value="1">Fiscal</md-option>
+            <md-option  value="1">Fiscal</md-option>
             <md-option value="2">No Fiscal</md-option>
           </md-select>
         </td>

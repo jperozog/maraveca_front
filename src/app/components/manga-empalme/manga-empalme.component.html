@@ -1,0 +1,86 @@
+<div class="row primero">
+  <div class="col-sm-3">
+    <h1>Mangas de Empalme</h1>
+  </div>
+  <div class="col-sm-2">
+    <button style="background-color:#2C2C30; color: white;" type="button" class="btn btn-info btn-sm" (click)="openModal(template)">
+      <md-icon>add_circle_outline</md-icon>
+    </button>
+    <button style="background-color:#2C2C30; color: white;" (click)="traerMangasEmpalme()" title="Actualizar Instalaciones" type="button"
+      class="btn btn-info btn-sm ">
+      <md-icon>loop</md-icon>
+    </button>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-sm-11 tabla">
+    <table class="table table-borderless">
+      <thead>
+        <tr style="background-color:#2C2C30; color: white;" class="table-default">
+          <th scope="col">#</th>
+          <th scope="col">Manga Empalme</th>
+          <th scope="col">OLT</th>
+          <th scope="col">Puerto OLT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr  style="cursor: pointer;" (click)="openModal2(template2,m.id_manga)" *ngFor="let m of mangas | paginate: { id:'manga', itemsPerPage: 8, currentPage: p } ">
+          <th scope="row">{{m.id_manga}}</th>
+          <td>{{m.nombre_manga}}</td>
+          <td>{{m.nombre_olt}}</td>
+          <td>{{m.puerto_olt}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="manga" (pageChange)="p = $event"></pagination-controls>
+  </div>
+
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Agregar Manga Empalme</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label class="col-form-label" for="inputDefault">Nombre Manga Empalme</label>
+    <input [(ngModel)]="mangaEmpalme" type="text" class="form-control">
+    <br>
+    <label  class="col-form-label" for="inputDefault">Olt</label>
+    <select  [(ngModel)]="olt" class="form-control" id="exampleSelect1" required>
+      <option value="0"></option>
+      <option *ngFor="let o of olts" [value]="o.id_olt">{{o.nombre_olt}}</option>
+    </select>
+    <br>
+    <button *ngIf="mangaEmpalme.length > 4 && olt != 0" type="button" class="btn btn-info" (click)="agregarMangaEmpalme()">
+    Agregar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #template2>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar Manga Empalme</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal2()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h6 class="col-form-label" >Nombre Manga:</h6>
+    <input [(ngModel)]="mangaSeleccionada.nombre_manga" type="text" class="form-control">
+    <br>
+    <label class="col-form-label" for="inputDefault">Olt de la Manga de Empalme</label>
+    <select [(ngModel)]="mangaSeleccionada.olt_manga" class="form-control" id="exampleSelect1" required>
+      <option value="0"></option>
+      <option *ngFor="let o of olts" [value]="o.id_olt">{{o.nombre_olt}}</option>
+    </select>
+    <br>
+  
+    <button type="button" class="btn btn-info" (click)="editarManga()">
+      Editar
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,191 @@
+
+<div class="row zonas">
+  <div class="col-sm-10">
+    <h2 class="titulo">Seleccione una Sede Administrativa</h2>
+  </div>
+</div>
+<div class="row zonas2">
+  <div class="col-sm-1">
+    <h4 class="titulo2">Sede:</h4>
+  </div>
+  <div class="col-sm-5">
+    <select [(ngModel)]="sedeSeleccionada" (change)="verDetalles($event.target.value)" class="form-control"
+      id="exampleSelect2" required>
+      <option [value]='0'> Seleccione Sede</option>
+      <option [value]='100'> Todas las Sede</option>
+      <option *ngFor="let zona of zonas" [value]="zona.id_zonas_admi">{{zona.nombre_zonas_admi}}</option>
+    </select>
+  </div>
+
+  <div class="col-sm-2">
+    <button *ngIf="id_user_actual == 87 || id_user_actual == 10 || id_user_actual == 3 " type="button" (click)="irA()"
+      class="btn btn-secondary">Cierres De Caja</button>
+
+  </div>
+
+</div>
+
+<div class="row zonas2">
+  <div *ngIf="sedeSeleccionada != 0" class="col-sm-11">
+    <div class="card border-light mb-3">
+      <div class="card-header">Detalles de Zona Administrativa</div>
+      <div class="card-body">
+        <div class="alert alert-dismissible alert-info">
+          <p>Ultimo Cierre: {{ultimoCierre| stringToDate | date: 'dd/M/yy'}}, Usuario: {{responsable}}</p>
+        </div>
+        <h6>Movimientos de Sede</h6>
+        <div class="col-sm-5 filtro">
+          <input (input)="onSearchMovimiento($event.target.value)" type="text" class="form-control" name="filtrado"
+            placeholder="Filtrar" id="inputDefault" [(ngModel)]="filtrado">
+        </div>
+        <br>
+        <table class="table table-borderless">
+          <thead>
+            <tr class="table-info">
+              <th scope="col">N</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Monto</th>
+              <th scope="col">Metodo de Pago</th>
+              <th scope="col">Referencia</th>
+              <th scope="col">Fecha de Pago</th>
+              <th scope="col">Usuario</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let mov of movimientos | paginate: {id:'movimientos', itemsPerPage: 5, currentPage: p }">
+              <th scope="row">{{mov.id_registro}}</th>
+              <th scope="row">{{mov.nombre}} {{mov.apellido}}</th>
+              <th scope="row">{{mov.monto | number : '1.2-2'}} {{mov.moneda}}</th>
+              <th scope="row">{{mov.nombre_metodo}}</th>
+              <th scope="row">{{mov.comentario}}</th>
+              <th scope="row">{{mov.fecha_pago| stringToDate | date: 'dd/M/yy'}}</th>
+              <th scope="row">{{mov.nombre_user}} {{mov.apellido_user}}</th>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="movimientos" (pageChange)="p = $event"></pagination-controls>
+        <br>
+        <h6>Registro de Dinero</h6>
+        <br>
+        <table class="table table-borderless">
+          <tbody>
+            <tr>
+              <td scope="row">
+                <p>
+                  <md-icon>attach_money</md-icon> Dinero en Efectivo: {{cantidadEfectivo | number : '1.2'}}$
+                </p>
+              </td>
+              <td scope="row">
+                <p>
+                  <md-icon>swap_horizontal_circle</md-icon> Dinero en Transferencia (Banco Nacionales):
+                  {{cantidadTransferencia | number : '1.2-2'}}Bs.S
+                </p>
+              </td>
+              <td scope="row">
+                <p>
+                  <md-icon>swap_horizontal_circle</md-icon> Dinero en Transferencias (Zelle):
+                  {{cantidadZelle | number : '1.2'}}$
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row">
+          <div class="col-sm-6">
+            <h6>Usuarios Administrativos</h6>
+            <br>
+            <div class="minizona" *ngFor="let u of users">
+              <div class="card border-light mb-3 carta-zona" (click)="userSeleccionado(template,u.id_user)"
+                style="max-width: 20rem;">
+                <img src="../../../../assets/images/user.png" width="50px" height="50px">
+                <p>{{u.nombre_user}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Movimientos {{user}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="this.modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="card border-light" style="max-width: 70rem;">
+    <div class="card-body">
+
+
+
+      <h6>Movimientos de Usuario</h6>
+      <table class="table table-borderless">
+        <thead>
+          <tr class="table-info">
+            <th scope="col">N</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Monto</th>
+            <th scope="col">Metodo</th>
+            <th scope="col">Referencia</th>
+            <th scope="col">Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let movU of movimientosUser | paginate: {id:'movimientosUser', itemsPerPage: 3, currentPage: e }">
+            <th scope="row">{{movU.id_registro}}</th>
+            <th scope="row">{{movU.nombre}} {{movU.apellido}}</th>
+            <th scope="row">{{movU.monto | number : '1.2-2'}} {{movU.moneda}}</th>
+            <th scope="row">{{movU.nombre_metodo}}</th>
+            <th scope="row">{{movU.comentario}}</th>
+            <th scope="row">{{movU.fecha_pago| stringToDate | date: 'dd/M/yy'}}</th>
+          </tr>
+        </tbody>
+      </table>
+      <pagination-controls id="movimientosUser" (pageChange)="e = $event"></pagination-controls>
+
+      <br>
+
+      <p>
+        <md-icon>attach_money</md-icon> Dinero en Efectivo: {{cantidadEfectivoUser | number : '1.2'}}$
+      </p>
+
+      <p>
+        <md-icon>swap_horizontal_circle</md-icon> Dinero en Transferencia (Banco Nacionales):
+        {{cantidadTransferenciaUser | number : '1.2-2'}}Bs.S
+      </p>
+
+      <p>
+        <md-icon>swap_horizontal_circle</md-icon> Dinero en Transferencias (Zelle):
+        {{cantidadZelleUser | number : '1.2'}}$
+      </p>
+      <br>
+      <button
+        *ngIf="id_user == id_user_actual && cantidadEfectivoUser > 0 || cantidadEfectivoUser > 0 && usuario.perm.includes('arqueo_w')"
+        (click)="openModal2(template2)" type="button" class="btn btn-info">Cierre
+        Caja</button>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #template2>
+  <div class="modal-body text-center">
+    <p>Seguro Desea Confirmar el Cierre de Caja de {{user}}?</p>
+    <br>
+    <p>Dinero en Efectivo: {{cantidadEfectivoUser | number : '1.2'}}$</p>
+    <button type="button" class="btn btn-info" (click)="confirmar()">Si</button>
+    <button type="button" class="btn btn-danger" (click)="this.modalRef.hide()">No</button>
+  </div>
+</ng-template>

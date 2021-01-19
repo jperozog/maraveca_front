@@ -1,0 +1,224 @@
+<div class="row zonas">
+  <div class="col-sm-4">
+    <h2 class="titulo">Comisiones Vendedores</h2>
+  </div>
+</div>
+<div class="row zonas2">
+  <div class="col-sm-1">
+  </div>
+  <div class="col-sm-1">
+    <h4 class="titulo2">Usuario:</h4>
+  </div>
+  <div class="col-sm-2">
+    <select [(ngModel)]="vendedorSeleccionado" class="form-control" id="exampleSelect2" required>
+      <option value='0' selected> Seleccione Vendedor</option>
+      <option *ngFor="let v of vendedores" [value]="v.id_user">{{v.nombre_user}} {{v.apellido_user}}</option>
+    </select>
+  </div>
+
+  <div class="col-sm-2">
+    <select [(ngModel)]="mesSeleccionado" class="form-control" id="exampleSelect2" required>
+      <option value='0' selected> Seleccione Mes</option>
+      <option [value]='1' selected> Enero</option>
+      <option [value]='2' selected> Febrero</option>
+      <option [value]='3' selected> Marzo</option>
+      <option [value]='4' selected> Abril</option>
+      <option [value]='5' selected> Mayo</option>
+      <option [value]='6' selected> Junio</option>
+      <option [value]='7' selected> Julio</option>
+      <option [value]='8' selected> Agosto</option>
+      <option [value]='9' selected> Septiembre</option>
+      <option [value]='10' selected> Octubre</option>
+      <option [value]='11' selected> Noviembre</option>
+      <option [value]='12' selected> Diciembre</option>
+    </select>
+  </div>
+
+  <div class="col-sm-1">
+    <select [(ngModel)]="anioSeleccionado" class="form-control" id="exampleSelect2" required>
+      <option value='0' selected> Seleccione Año</option>
+      <option [value]='2021' selected> 2021</option>
+      <option [value]='2020' selected> 2020</option>
+      <option [value]='2019' selected> 2019</option>
+      <option [value]='2018' selected> 2018</option>
+    </select>
+  </div>
+
+  <div class="col-sm-3">
+    <button class="boton" *ngIf="mesSeleccionado !=0 && anioSeleccionado !=0" type="button"
+      (click)="verDetalles()">Buscar Comisiones</button>
+    <button *ngIf="visualizar" type="button" class="boton2">
+      <md-icon (click)="openModal2(template2)" style="cursor: pointer;" class="icon">assignment_late
+      </md-icon>
+    </button>
+    <button *ngIf="visualizar" type="button" class="boton2">
+      <md-icon (click)="openModal(template)" style="cursor: pointer;" class="icon">create
+      </md-icon>
+    </button>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-sm-12"></div>
+</div>
+<div *ngIf="visualizar" class="row">
+  <div class="col-sm-1"></div>
+  <div class="col-sm-4 Totales">
+    <h6>Totales $</h6>
+    <h2> {{comisionesVendedor["cantidadTodalT"] | number: "1.2"}}$ /
+      {{comisionesVendedor["cantidadTodalTBs"] | number: "1.2"}}Bs</h2>
+  </div>
+  <div class="col-sm-1"></div>
+  <div class="col-sm-4 Disponible">
+    <h6>Disponibles $</h6>
+    <h2> {{comisionesVendedor["cantidadTodalD"] | number: "1.2"}}$ /
+      {{comisionesVendedor["cantidadTodalDBs"] | number: "1.2"}}Bs </h2>
+  </div>
+  <div class="col-sm-2"></div>
+
+
+
+
+  <div class="col-sm-1"></div>
+  <div class="col-sm-4 Pendientes">
+    <h6>Pendientes $ </h6>
+    <h2>{{comisionesVendedor["cantidadTodalP"] | number: "1.2"}}$ /
+      {{comisionesVendedor["cantidadTodalPBs"] | number: "1.2"}}Bs</h2>
+  </div>
+  <div class="col-sm-1"></div>
+  <div class="col-sm-4 Pagadas">
+    <h6>Pagadas $ </h6>
+    <h2>{{comisionesVendedor["cantidadTodalPA"] | number: "1.2"}}$ /
+      {{comisionesVendedor["cantidadTodalPABs"] | number: "1.2"}}Bs</h2>
+  </div>
+  <div class="col-sm-2"></div>
+
+
+
+
+
+  <div class="col-sm-1"></div>
+  <div class="col-sm-9">
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">#</th>
+          <th scope="col">CLIENTE</th>
+          <th scope="col">FECHA AGENDADO</th>
+          <th scope="col">INSTALACION</th>
+          <th scope="col">ESTADO COMISION</th>
+          <th scope="col">CANTIDAD COMISION</th>
+          <!--<th scope="col">ACCIONES</th>-->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of comisionesVendedor | paginate: {id:'comisiones', itemsPerPage: 7, currentPage: e }">
+          <td>
+            {{f.id}}
+          </td>
+          <td *ngIf="f.kind == 'V' || f.kind == 'E'"> {{f.nombre+" "+f.apellido}}</td>
+          <td *ngIf="f.kind == 'J' || f.kind == 'G' || f.kind == 'V-'"> {{f.social}}</td>
+          <td>
+            {{f.created_at | stringToDate | date: 'd/M/yy'}}
+          </td>
+          <td *ngIf="f.serial_det != 0">Completa</td>
+          <td *ngIf="f.serial_det == 0">Con Equipo Usado</td>
+          <td *ngIf="f.estadoComision == 0 && (f.status_insta == 2 || f.status_insta == 1)">
+            <p class="text-warning">En Proceso</p>
+          </td>
+          <td *ngIf="f.estadoComision == 1 && (f.status_insta == 2 || f.status_insta == 1)">
+            <p class="text-warning">En Proceso</p>
+          </td>
+          <td *ngIf="f.estadoComision == 1 && f.status_insta == 4">
+            <p class="text-success">Disponible</p>
+          </td>
+          <td *ngIf="f.estadoComision == 0 && f.status_insta == 3">
+            <p class="text-danger">No Disponible</p>
+          </td>
+          <td *ngIf="f.tasa_insta > 0">{{f.porcentajeComisionBs | number: "1.2"}}Bs</td>
+          <td *ngIf="f.tasa_insta == 0">{{f.porcentajeComision | number: "1.2"}}$</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="comisiones" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-1"></div>
+</div>
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Cargar Pago Comision</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <label for="exampleSelect1">Tipo de Pago</label>
+        <select [(ngModel)]="tipoPagoSelected" (change)="cambioTipoPago()" class="form-control form-control-sm"
+          id="exampleSelect1" #ubicacion required>
+          <option [value]="0" selected></option>
+          <option [value]="1">$</option>
+          <option [value]="2">Bs</option>
+        </select>
+        <br>
+      </div>
+      <div *ngIf="tipoPagoSelected != 0" class="col-sm-12">
+        <p *ngIf="tipoPagoSelected == 1" class="text-danger">*NOTA: Solo Tiene Disponible {{comisionesVendedor["cantidadTodalD"] | number: "1.2"}} $</p>
+        <p  *ngIf="tipoPagoSelected == 2" class="text-danger">*NOTA: Solo Tiene Disponible {{comisionesVendedor["cantidadTodalDBs"] | number: "1.2"}} Bs</p>
+        <h6>Cantidad a Pagar</h6>
+        <input type="text" thousandSeparator="," [(ngModel)]="cantidadPago" class="form-control">
+        <br>
+      </div>
+      <br>
+      <div *ngIf="tipoPagoSelected == 1 && cantidadPago < comisionesVendedor['cantidadTodalD'] || tipoPagoSelected == 2 && cantidadPago < comisionesVendedor['cantidadTodalDBs']" class="col-sm-12">
+        <br>
+        <h6>Fecha de Pago</h6>
+        <input type="date" [(ngModel)]="fechaPago" class="form-control">
+        <br>
+      </div>
+      <div class="col-sm-12">
+        <button *ngIf="fechaPago != '' && cantidadPago != 0 && tipoPagoSelected != 0"
+          type="button" (click)="realizarPago()" class="btn btn-info">Pagar Comision</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #template2>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Pagos Realizados</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal2()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <table class="table table-borderless tabla">
+          <thead>
+            <tr class="table-info">
+              <th scope="col">#</th>
+              <th scope="col">MONTO</th>
+              <th scope="col">FECHA</th>
+              <th scope="col">RESPONSABLE</th>
+              <!--<th scope="col">ACCIONES</th>-->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of pagosVendedor | paginate: {id:'pagos', itemsPerPage: 3, currentPage: p }">
+              <td>{{p.id_pago_comisionV}}</td>
+              <td *ngIf="p.tipo_pago_comision == 2">{{p.monto | number: "1.2"}}Bs</td>
+              <td *ngIf="p.tipo_pago_comision == 1">{{p.monto | number: "1.2"}}$</td>
+              <td>{{p.fecha_pago | stringToDate | date: 'd/M/yy'}}</td>
+              <td>{{p.nombre_user}} {{p.apellido_user}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="pagos" (pageChange)="p = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</ng-template>

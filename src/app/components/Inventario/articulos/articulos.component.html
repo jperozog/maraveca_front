@@ -1,0 +1,267 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <button style=" background-color:#2C2C30;" (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+  </div>
+  <div class="col-sm-3 filtro">
+  </div>
+  <div class="col-sm-1">
+    <!--
+          <td>
+            <button type="button" (click)="consumibles(lgModal)" class="btn btn-info btn-block">Consumibles</button>
+          </td>
+          -->
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-11">
+    <div class="row" style="margin-top: 1%;">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-1">
+        <button title="Transferir Equipos" type="button" (click)="openModal1(template1)"
+        class="btn btn-info btn-block boton2">
+        <md-icon class="md-24" aria-label="status">add_circle</md-icon>
+      </button>
+      </div>
+      <div class="col-sm-3">
+        <input *ngIf="visualizar==true" (input)="buscarEquipo($event.target.value)"  (keyup.backspace)="filtradoEquipoBackSpace($event.target.value)" type="text"
+          class="form-control filtrado" name="filtrado" placeholder="Filtrar" id="inputDefault" [(ngModel)]="filtrado">
+      </div>
+      <div class="col-sm-3">
+
+      </div>
+      <div (click)="clickTotal()" class="col-sm-1 indiceTotal">
+        <i id="icono" class="fa fa-server"></i>{{disponibles.length + enProceso.length}}
+      </div>
+      <div (click)="clickDisponibles()" class="col-sm-1 indiceDisponibles">
+        <i id="icono" class="fa fa-check"></i> {{disponibles.length}}
+      </div>
+      <div (click)="clickEnProceso()" class="col-sm-1 indiceProceso">
+        <i id="icono" class="fa fa-exclamation"></i>
+        {{enProceso.length}}
+      </div>
+      <div (click)="clickNoDisponibles()" class="col-sm-1 indiceNoDisponibles">
+        <i id="icono" class="fa fa-times"></i>
+        {{noDisponibles.length}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-11">
+        <table *ngIf="visualizar==true" class="table table-borderless tabla">
+          <thead>
+            <tr class="table-default" style="background-color: #2C2C30; color:white;">
+              <th scope="col"><a (click)="volverCategorias()"><i id="icono2" class="fa fa-arrow-circle-left"></i></a>
+              </th>
+              <th scope="col">Modelo del Equipo</th>
+              <th scope="col">Serial del Equipo</th>
+              <th scope="col">Tipo de Equipo</th>
+              <th scope="col">Estatus</th>
+              <th scope="col" colspan="2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of datos | paginate: { itemsPerPage: 7, currentPage: p }">
+              <td></td>
+              <td>{{dato.modelo_articulo}}</td>
+              <td>{{dato.serial_articulo}}</td>
+              <td>{{dato.nombre_tipo_art}}</td>
+              <td class="table-success" *ngIf="dato.estatus == 1">En Stock</td>
+              <td class="table-warning" *ngIf="dato.estatus == 2">Proceso de transferencia</td>
+              <td class="table-danger" *ngIf="dato.estatus == 3 && dato.social == null">Asignado a Instalacion, cliente:
+                {{dato.nombre}} {{dato.apellido}}, servicio: {{dato.id_srv}}</td>
+              <td class="table-danger" *ngIf="dato.estatus == 3 && dato.social != null">Asignado a Instalacion, cliente:
+                {{dato.social}}, servicio: {{dato.id_srv}}</td>
+              <td class="table-danger" *ngIf="dato.estatus == 4">Problemas en Traslado</td>
+              <td class="table-active" *ngIf="dato.estatus == 5">Vendido a Cliente</td>
+              <td class="table-active" *ngIf="dato.estatus == 6">Asignado a Infraesctrutura de MARAVECA</td>
+              <td class="table-primary" *ngIf="dato.estatus == 7">Asignado como Equipo Grupal</td>
+              <td>
+                <button
+                  *ngIf="dato.estatus == 4 && (this.id_user == 87 || this.id_user == 3 || this.id_user == 10 || this.id_user == 28 || this.id_user == 39)"
+                  type="button" class="btn btn-info btn-sm botonCategorias" (click)="openModal(template,dato.id_articulo)">
+                  <i id="icono" class="fa fa-angle-double-right"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+        <table *ngIf="visualizar==false" class="table table-borderless tabla">
+          <thead>
+            <tr class="table-default" style="background-color: #2C2C30; color:white;">
+              <th scope="col">Equipos</th>
+              <th scope="col">Tipo de Equipo</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of datos | paginate: { itemsPerPage: 5, currentPage: e }">
+              <td>{{dato.modelo_articulo}}</td>
+              <td>{{dato.nombre_tipo_art}}</td>
+              <td>
+                <button type="button" class="btn btn-info btn-sm botonCategorias" (click)="categoriaSeleccionada(dato.modelo_articulo)" >
+
+                  <i id="icono" class="fa fa-arrow-circle-right"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls *ngIf="visualizar==true" (pageChange)="p = $event"></pagination-controls>
+        <pagination-controls *ngIf="visualizar==false" (pageChange)="e = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+  
+
+
+<!--
+  <div class="col-sm-3 form">
+    <div class="row">
+      <div class="formulario">
+        <div class="card border-light mb-3" style="background-color: #2C2C30; color: white;">
+          <div class="card-header">Agregar Equipo</div>
+          <div class="card-body">
+            <label class="col-form-label" for="inputDefault">Modelo</label>
+            <select [(ngModel)]="equipoSelected" class="form-control" id="exampleSelect1" #equipo required>
+              <option *ngFor="let equipo of modeloEquipos" [value]="equipo.nombre_equipo">[{{equipo.nombre_tipo_art}}]
+                {{equipo.nombre_equipo}}
+              </option>
+            </select>
+            <br>
+            <label *ngIf="equipoSelected != ''" class="col-form-label" for="inputDefault">Tipo de Ingreso</label>
+            <select *ngIf="equipoSelected != ''" [(ngModel)]="ingresoSelected" class="form-control" id="exampleSelect1"
+              #ubicacion required>
+              <option value="1">Caja</option>
+              <option value="2">Individual</option>
+              <option value="3">Grupo</option>
+            </select>
+            <label *ngIf="ingresoSelected == 1" class="col-form-label" for="inputDefault">Serial de Caja</label>
+            <input *ngIf="ingresoSelected == 1" [(ngModel)]="serialCaja" type="text" class="form-control"
+              placeholder="Serial Caja">
+            <label class="col-form-label" for="inputDefault">Serial</label>
+            <input [(ngModel)]="serial1" (keyup.enter)="colaEquipos(serial)" type="text" class="form-control"
+              placeholder="Serial" id="inputDefault" #serial>
+            <p *ngIf="ingresoSelected == 1 || ingresoSelected == 3">Equipos En Cola:</p>
+            <p *ngFor=" let equipo of equiposEnCola">{{equipo.serial_articulo}}</p>
+            <br>
+            <button *ngIf="ingresoSelected == 1 || ingresoSelected == 3" type="button" (click)="colaEquipos(serial)"
+              class="btn btn-info btn-block botonAgregarCola">Agregar Cola
+              Equipo
+            </button>
+            <button type="button" (click)="Guardar(serial)" class="btn btn-info btn-block botonAgregar">Agregar
+              Equipo</button>
+          </div>
+          <div *ngIf="ConsumibleBajo" class="alert alert-dismissible alert-danger">
+            <strong>{{CBequipo}}</strong> Cantidad Baja en el Stock!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    -->
+
+</div>
+
+<ng-template #template1>
+    <div class="formulario">
+      <div class="card border-light">
+        <div class="card-header">
+          Agregar Equipo
+          <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal1()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="card-body">
+          <label class="col-form-label" for="inputDefault">Modelo</label>
+          <select [(ngModel)]="equipoSelected" class="form-control" id="exampleSelect1" #equipo required>
+            <option *ngFor="let equipo of modeloEquipos" [value]="equipo.nombre_equipo">[{{equipo.nombre_tipo_art}}]
+              {{equipo.nombre_equipo}}
+            </option>
+          </select>
+          <br>
+          <label *ngIf="equipoSelected != ''" class="col-form-label" for="inputDefault">Tipo de Ingreso</label>
+          <select *ngIf="equipoSelected != ''" [(ngModel)]="ingresoSelected" class="form-control" id="exampleSelect1"
+            #ubicacion required>
+            <option value="1">Caja</option>
+            <option value="2">Individual</option>
+            <option value="3">Grupo</option>
+          </select>
+          <br>
+          <label *ngIf="equipoSelected != '' && ingresoSelected != 0" class="col-form-label" for="inputDefault">Proveedor</label>
+          <input *ngIf="equipoSelected != '' && ingresoSelected != 0" [(ngModel)]="Proveedor"type="text" class="form-control" placeholder="Proveedor" id="inputDefault" #serial>
+          <br>
+          <label *ngIf="equipoSelected != '' && ingresoSelected != 0 && Proveedor != ''" class="col-form-label" for="inputDefault">Nota de Entrega</label>
+          <input *ngIf="equipoSelected != '' && ingresoSelected != 0  && Proveedor != ''" [(ngModel)]="notaEntrega"type="text" class="form-control" placeholder="Proveedor" id="inputDefault" #serial>
+          <br>
+          <label *ngIf="ingresoSelected == 1 && equipoSelected != '' && ingresoSelected != 0  && Proveedor != '' && notaEntrega != ' '" class="col-form-label" for="inputDefault">Serial de Caja</label>
+          <input *ngIf="ingresoSelected == 1 && equipoSelected != '' && ingresoSelected != 0  && Proveedor != '' && notaEntrega != ' '" [(ngModel)]="serialCaja" type="text" class="form-control"
+            placeholder="Serial Caja">
+          <label *ngIf="equipoSelected != '' && ingresoSelected != 0  && Proveedor != '' && notaEntrega != ' '" class="col-form-label" for="inputDefault">Serial</label>
+          <input id="serial" *ngIf="equipoSelected != '' && ingresoSelected != 0  && Proveedor != '' && notaEntrega != ' '" [(ngModel)]="serial1" (keyup.enter)="colaEquipos(serial)" type="text" class="form-control"
+            placeholder="Serial" > 
+          <p *ngIf="ingresoSelected == 1 || ingresoSelected == 3">Equipos En Cola:</p>
+          <p *ngFor=" let equipo of equiposEnCola">{{equipo.serial_articulo}}</p>
+          <br>
+          <button *ngIf="ingresoSelected == 1 || ingresoSelected == 3" type="button" (click)="colaEquipos(serial)"
+            class="btn btn-info btn-block botonAgregarCola">Agregar Cola
+            Equipo
+          </button>
+          <button type="button"  *ngIf="(equipoSelected != '' && ingresoSelected != 0  && Proveedor != '' && notaEntrega != ' ' && serial1 != '') || equipoSelected != '' && ingresoSelected != 0  && Proveedor != '' && notaEntrega != ' ' && equiposEnCola.length > 0" (click)="Guardar(serial)" class="btn btn-info btn-block botonAgregar">Agregar
+            Equipo</button>
+        </div>
+        <div *ngIf="ConsumibleBajo" class="alert alert-dismissible alert-danger">
+          <strong>{{CBequipo}}</strong> Cantidad Baja en el Stock!
+        </div>
+      </div>
+    </div>
+</ng-template>
+
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Datos de Consumible</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Nombre Consumible: {{detallesConsumible.nombre_equipo}}</p>
+    <br>
+    <div class="form-group">
+      <label for="">Cantidad de Consumibles</label>
+      <input [(ngModel)]="NuevaCantidad" type="text" class="form-control" placeholder="Cantidad" id="inputDefault"
+        [value]="detallesConsumible.cantidad">
+    </div>
+    <br>
+    <button type="button" class="btn btn-info btn-sm" (click)="modificarConsumible(detallesConsumible.id_consumible)">
+      <i id="icono" class="fa fa-pencil"></i>
+    </button>
+    <button type="button" class="btn btn-danger btn-sm"
+      (click)="eliminarConsumible(template2,detallesConsumible.id_consumible)">
+      <i id="icono" class="fa fa-times"></i>
+    </button>
+  </div>
+</ng-template>
+
+
+
+
+<ng-template #template2>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Seguro que Desea Eliminar Este Consumible?</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef2.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <button type="button" class="btn btn-info btn-sm" (click)="eliminar()">
+      <i id="icono" class="fa fa-check"></i>
+    </button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="noEliminar()">
+      <i id="icono" class="fa fa-times"></i>
+    </button>
+  </div>
+</ng-template>

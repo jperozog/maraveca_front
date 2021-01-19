@@ -1,0 +1,114 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <button (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+  </div>
+  <div class="col-sm-5">
+    <h2 class="titulo">migracion</h2>
+  </div>
+</div>
+<br>
+<div class="row segundo">
+  <div class="col-sm-3">
+    <h5 *ngIf="migracion.kind == 'V' || migracion.kind == 'E'">Cliente:</h5>
+    <p *ngIf="migracion.kind == 'V' || migracion.kind == 'E'">{{migracion.nombre}} {{migracion.apellido}}</p>
+    <h5 *ngIf="migracion.kind != 'V' || migracion.kind != 'E'">Cliente: </h5>
+    <p *ngIf="migracion.kind == 'V' || migracion.kind == 'E'">{{migracion.social}}</p>
+    <h5>Plan:</h5>
+    <p>{{migracion.name_plan}}</p>
+    <h5>Direccion:</h5>
+    <p>{{migracion.direccion}}</p>
+    <h5>Telefono: </h5>
+    <p>{{migracion.phone1}}</p>
+
+   
+    <h5>Manga Empalme:</h5>
+    <p>{{migracion.nombre_manga}}</p>
+    <h5>Caja Distribucion: </h5>
+    <p>{{migracion.nombre_caja}}</p>
+
+    <h5>Equipo:</h5>
+    <p>{{migracion.modelo_articulo}}</p>
+    <h5>Serial:</h5>
+    <p>{{migracion.serial_articulo}}</p>
+    <h5>Datos PPPOE:</h5>
+    <p>Usuario: {{migracion.clientePPPOE}}({{migracion.id_srv}})</p>
+    <p>Contraseña: {{migracion.dni}}</p>
+    <button *ngIf="migracion.status_migra == 1" (click)="CerrarMigracion()" type="button"
+      class="btn btn-info ">Cerrar migracion</button>
+  </div>
+  <div class="col-sm-1"></div>
+  <div class="col-sm-7">
+    
+
+    <div style=" margin-top: -20px; background-color: white; padding: 10px;" *ngIf="cierre">
+      <div class="row">
+        <div class="col-sm-12">
+          <h4 class="modal-title pull-left">Cerrar migracion</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label class="col-form-label" for="inputDefault">Cantidad de Cable Fibra (Mts)</label>
+            <input type="number" [(ngModel)]="cableFibra" class="form-control" placeholder="" id="inputDefault">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label class="col-form-label" for="inputDefault">Cantidad Fast-Connector</label>
+            <input type="number" [(ngModel)]="fconnector" class="form-control" placeholder="" id="inputDefault">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <label class="col-form-label" for="inputDefault">Instaladores</label>
+        <input type="text" class="form-control " (input)="onSearchDatos($event.target.value)">
+        <br>
+        <div class="row">
+          <div class="col-sm-6">
+            <h6>Lista Instaladores</h6>
+            <table class="table table-borderless tabla">
+              <tbody>
+                <tr (click)="agregarDatosLista(c)" class="tr" style="cursor: pointer;"
+                  *ngFor=" let c of busqueda | paginate: { id:'instaladores', itemsPerPage: 3, currentPage: e }">
+                  <td class="td">{{c.nombre_user}}</td>
+                  <td class="td">{{c.apellido_user}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls id="instaladores" (pageChange)="p = $event"></pagination-controls>
+          </div>
+          <div class="col-sm-6">
+            <h6>Instaladores Seleccionados</h6>
+            <table class="table table-borderless tabla">
+              <tbody>
+                <tr (click)="DeseleccionarCliente(i)" class="tr" style="cursor: pointer;"
+                  *ngFor=" let b of DatosSeleccionados | paginate: { id:'instaladoresS', itemsPerPage: 3, currentPage: e }; let i = index">
+                  <td class="td">{{b.nombre_user}}</td>
+                  <td class="td">{{b.apellido_user}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls id="instaladoresS" (pageChange)="e = $event"></pagination-controls>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="cableFibra != 0 && fconnector != 0 && DatosSeleccionados.length >= 1">
+        <button (click)="cerrarMigracionF()" type="button" class="btn btn-info">Cerrar migracion</button>
+      </div>
+    </div>
+    <br>
+    <h5>Historial</h5>
+    <table class="table table-borderless">
+      <tbody>
+        <tr *ngFor="let h of historial">
+          <td> {{h.comment}}</td>
+          <td> {{h.created_at| stringToDate | date: 'd/M/yy'}}</td>
+          <td> {{h.nombre_user}} {{h.apellido_user}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

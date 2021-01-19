@@ -1,0 +1,183 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <button style="background-color: #2C2C30;" (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+  </div>
+  <div class="col-sm-5">
+    <h2 class="titulo">Lista Equipos Asignados</h2>
+  </div>
+  <div class="col-sm-3 filtrado">
+    <input (input)="BuscarInfra($event.target.value)" (keyup.backspace)="BuscarInfraBackSpace($event.target.value)"
+      type="text" class="form-control" name="filtrado" placeholder="Filtrar" id="inputDefault">
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-sm-8">
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr class="table-default" style="background-color: #2C2C30; color: white;">
+          <th scope="col">Equipo</th>
+          <th scope="col">Serial / Cantidad</th>
+          <th scope="col">Comentario</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Responsable</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="cursor: pointer;" (click)="detallesInfra(template,i.id_equipo_infra)"
+          *ngFor=" let i of infra | paginate: {id:'infra', itemsPerPage: 7, currentPage: e }">
+          <td>{{i.modelo_articulo}}</td>
+          <td>{{i.serial_articulo}}</td>
+          <td>{{i.comentario}}</td>
+          <td *ngIf="i.status == 2" class="table-warning"></td>
+          <td *ngIf="i.status == 1" class="table-success"></td>
+          <td>{{i.nombre_user}} {{i.apellido_user}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="infra" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-1"></div>
+  <div class="col-sm-3">
+    <div class="formulario">
+      <div class="card border-light mb-3">
+        <div class="card-header">Asignar a Infraestructura de Maraveca</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-6">
+              <label for="exampleSelect1">Zona a Seleccionar</label>
+              <select [(ngModel)]="zonasSeleccionada" (change)="cambioEquipo(tipoSeleccionado)"
+                class="form-control form-control-sm" id="exampleSelect1" #ubicacion required>
+                <option [value]="0" selected></option>
+                <option *ngFor="let z of zonas" [value]="z.id_zona">{{z.nombre_zona}}</option>
+              </select>
+            </div>
+            <div class="col-sm-6">
+              <label for="exampleSelect1">Tipo</label>
+              <select [(ngModel)]="tipoSeleccionado" (change)="cambioEquipo(tipoSeleccionado)"
+                class="form-control form-control-sm" id="exampleSelect1" required>
+                <option value=0 selected></option>
+                <option value="1">Equipos</option>
+                <option value="2">Consumibles</option>
+              </select>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div *ngIf="zonasSeleccionada !=0 && tipoSeleccionado != 0 " class="col-sm-10">
+              <label for="exampleSelect1">Seleccionar par Infraestructura</label>
+              <select [(ngModel)]="modeloSeleccionado" class="form-control form-control-sm" id="exampleSelect1"
+                required>
+                <option [value]=" " selected></option>
+                <option *ngFor="let e of equipos" [value]="e.nombre_equipo">[{{e.nombre_tipo_art}}] {{e.nombre_equipo}}
+                </option>
+              </select>
+            </div>
+            <div *ngIf="zonasSeleccionada !=0 && tipoSeleccionado != 0 && equipoSeleccionado != ''" class="col-sm-1">
+              <label for="exampleSelect1">Accion</label>
+              <button type="button" (click)="buscarEquipo()" class="btn btn-info btn-sm boton2"><i id="icono"
+                  class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+          <div *ngIf="busqueda == true && tipoSeleccionado == 1">
+            <label>Disponibles</label>
+            <select [(ngModel)]="idSeleccionado" class="form-control form-control-sm" id="exampleSelect1" required>
+              <option [value]=" " selected></option>
+              <option *ngFor="let d of disponibles" [value]="d.id_articulo">{{d.modelo_articulo}} -
+                {{d.serial_articulo}}
+              </option>
+            </select>
+            <br>
+            <div *ngIf="idSeleccionado != 0" class="form-group">
+              <label for="exampleTextarea">Comentario</label>
+              <textarea [(ngModel)]="Comentario" class="form-control" id="exampleTextarea" rows="5"></textarea>
+            </div>
+          </div>
+          <br>
+          <div *ngIf="busqueda == true && tipoSeleccionado == 2">
+            <label>Disponibles</label>
+            <select [(ngModel)]="idSeleccionado" class="form-control form-control-sm" id="exampleSelect1" required>
+              <option [value]=" " selected></option>
+              <option *ngFor="let d of disponibles" [value]="d.id_consumible">{{d.nombre_equipo}} -
+                {{d.cantidad}} {{d.unidad}}
+              </option>
+            </select>
+            <br>
+            <div *ngIf="idSeleccionado != 0" class="form-group">
+              <div class="form-group">
+                <label class="col-form-label" for="inputDefault">Cantidad</label>
+                <input type="number" [(ngModel)]="cantidad" class="form-control" placeholder="Default input"
+                  id="inputDefault">
+              </div>
+            </div>
+            <div *ngIf="idSeleccionado != 0" class="form-group">
+              <label for="exampleTextarea">Comentario</label>
+              <textarea [(ngModel)]="Comentario" class="form-control" id="exampleTextarea" rows="5"></textarea>
+            </div>
+          </div>
+          <div
+            *ngIf="(zonasSeleccionada != 0 && tipoSeleccionado == 1 && equipoSeleccionado !='' && idSeleccionado !=0 && Comentario != '') ||
+                      (zonasSeleccionada != 0 && tipoSeleccionado == 2 && equipoSeleccionado !='' && idSeleccionado !=0 && Comentario != '' && cantidad != 0)">
+            <button type="button" (click)="GuardarData()" class="btn btn-info btn">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #template>
+
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Incidencia</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="card border-light mb-3" style="max-width: 40rem;">
+    <div *ngIf="equipoInfraestructura.status == 1" class="container">
+      <br>
+      <label>Tipo de Incidencia</label>
+      <select [(ngModel)]="tipoIncidencia" class="form-control form-control-sm" id="exampleSelect1" required>
+        <option value="Garantia" selected>Por Garantia</option>
+        <option value="Intercambio" selected>Intercambio</option>
+        <option value="Daño" selected>Daño</option>
+        <option value="Otra Incidencia" selected>Otra Incidencia</option>
+      </select>
+      <br>
+      <div *ngIf="incidenciaEquipo != ''">
+        <label for="exampleTextarea">Comentario</label>
+        <textarea [(ngModel)]="comentarioIncidencia" class="form-control" id="exampleTextarea" rows="5"></textarea>
+      </div>
+      <br>
+      <div *ngIf="incidenciaEquipo != '' && comentarioIncidencia.length > 15">
+        <button type="button" (click)="agregarIncidecia()" class="btn btn-info">
+          Agregar Incidencia
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="equipoInfraestructura.status == 2" class="container">
+      <br>
+      <h6>Tipo de Incidencia</h6>
+      <p>{{equipoInfraestructura.incidencia}}</p>
+      <br>
+      <div *ngIf="incidenciaEquipo != ''">
+        <label for="exampleTextarea">Comentario</label>
+        <textarea disabled [(ngModel)]="equipoInfraestructura.comentarioIncidencia" class="form-control"
+          id="exampleTextarea" rows="5"></textarea>
+      </div>
+      <br>
+      <h6>Responsable</h6>
+      <p>{{equipoInfraestructura.resposanbleIncidencia}}</p>
+      <br>
+      <h6>Creacion de Incidencia</h6>
+      <p>{{equipoInfraestructura.creacionIncidencia |date:"shortDate" }}</p>
+    </div>
+
+  </div>
+</ng-template>

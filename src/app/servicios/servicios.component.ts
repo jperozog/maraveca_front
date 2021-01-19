@@ -61,7 +61,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
         this.refresh(false);
         console.log(this.spr)
         console.log('check')
-          });
+      });
 
     this.http.get(environment.apiEndpoint + 'planes/')
       .subscribe((data) => {
@@ -223,24 +223,24 @@ export class DeleteserviceDialog {
     public dialogRef: MdDialogRef<DeleteserviceDialog>,
     @Inject(MD_DIALOG_DATA) public data: any, private http: Http, public dialog: MdDialog, public snackBar:MdSnackBar, private router: Router, private usuario: AuthGuard) {
     this.myService = new MyService(http, router, usuario);
- console.log(data);
+    console.log(data);
 
   }
 
 
-delete(): void {
+  delete(): void {
 
-  console.log("borrando"+" "+this.data+"...");
-  this.myService.deleteData(this.data)
+    console.log("borrando"+" "+this.data+"...");
+    this.myService.deleteData(this.data)
       .subscribe((data) => { console.log(data) });
 
     this.snackBar.open("Borrando Servicio: Por favor espere", null, {
       duration: 3000,
     });
     //this.myService.refresh();*!/
-  this.dialogRef.close(
+    this.dialogRef.close(
 
-  );
+    );
   }
 
   onNoClick(): void {
@@ -266,8 +266,8 @@ export class MyService {
     var refreshUrl = currentUrl.indexOf('services') > -1 ? '/celdas' : '/services';
 
     setTimeout(() => {
-      this.router.navigateByUrl(refreshUrl).then(() => this.router.navigateByUrl(currentUrl));
-    },
+        this.router.navigateByUrl(refreshUrl).then(() => this.router.navigateByUrl(currentUrl));
+      },
       2000);
   }
 
@@ -299,26 +299,29 @@ export class AddservicesComponent implements OnInit {
   a_search: string;
   planes1:any;
   planesd:any;
-planes2:any;
-user_comisiones: any;
+  planes2:any;
+  planes3:any;
+  planes6:any;
+  planes7:any;
+  user_comisiones: any;
   //address : string;
   direccion: any;
   valor_serie = 0;
-nombre_ap: any;
-ip_ap: any;
-ap_srv: any;
+  nombre_ap: any;
+  ip_ap: any;
+  ap_srv: any;
 
   constructor(private http: Http,
-    public usuario: AuthGuard,
-    private fb: FormBuilder,
-    public dialogRef: MdDialogRef<AddservicesComponent>,
-    @Inject(MD_DIALOG_DATA) public row: any,
-    public snackBar: MdSnackBar,
-    private router: Router,
-    private _fb: FormBuilder,
+              public usuario: AuthGuard,
+              private fb: FormBuilder,
+              public dialogRef: MdDialogRef<AddservicesComponent>,
+              @Inject(MD_DIALOG_DATA) public row: any,
+              public snackBar: MdSnackBar,
+              private router: Router,
+              private _fb: FormBuilder,
               private validacion_ip: IpValidators,
               private validacion_serial: SerialValidators,
-    private date: DatePipe) {
+              private date: DatePipe) {
 
 
     this.http.get(environment.apiEndpoint + 'add_preload/')
@@ -330,6 +333,9 @@ ap_srv: any;
         this.planes1 = data.json().planes1;
         this.planes2 = data.json().planes2;
         this.planesd = data.json().planesd;
+        this.planes3 = data.json().planes3;
+        this.planes6 = data.json().planes6;
+        this.planes7 = data.json().planes7;
         this.user_comisiones = data.json().user_comisiones;
         this.direccion = data.json().clientes.direccion;
         console.log(this.direccion);
@@ -337,12 +343,13 @@ ap_srv: any;
         console.log(this.planesd);
         console.log(this.planes1);
         console.log(this.planes2);
+        console.log(this.planes6);
         console.log(this.user_comisiones);
 
       });
 
     this.funciones = new MyService(http, router, usuario);
-console.log(row);
+    console.log(row);
     if (row != null) {
       this.ip_ap = row.ip_ap;
       this.nombre_ap = row.nombre_ap;
@@ -355,7 +362,7 @@ console.log(row);
         plan_srv: [row.plan_srv,[Validators.required]],
         tipo_plan_srv: row.tipo_plan_srv,
         cliente_srv: row.cliente_srv,
-       // direccion_srv: row.direccion_srv,
+        // direccion_srv: row.direccion_srv,
         modo_pago_srv: row.modo_pago_srv,
         serie_srv: row.serie_srv,
         instalacion_srv: row.instalacion_srv,
@@ -382,7 +389,7 @@ console.log(row);
         c_search: '',
         p_search: '',
         C_search: '',
-      //  a_search: '',
+        //  a_search: '',
 
         //email: [row.email, [Validators.required, Validators.pattern(null)]],
         //phone1: [row.phone1, [Validators.required, Validators.pattern(null)]],
@@ -396,7 +403,7 @@ console.log(row);
         plan_srv: ['', Validators.required],
         modo_pago_srv: '',
         tipo_plan_srv: ['', Validators.required],
-      //  direccion_srv: ['', Validators.required],
+        //  direccion_srv: ['', Validators.required],
         serie_srv: [0, Validators.required],
         cliente_srv: ['', Validators.required],
         instalacion_srv: ['', Validators.required],
@@ -459,7 +466,8 @@ console.log(row);
         if (gen_comision_serv == true) {
           this.addClient.get('user_comision_serv').setValidators([Validators.required]);
           this.addClient.get('porcentaje_comision_serv').setValidators([Validators.required]);
-        } if (gen_comision_serv == 0) {
+        }
+        if (gen_comision_serv == 0) {
           this.addClient.get('user_comision_serv').setValue(null);
           this.addClient.get('porcentaje_comision_serv').setValue(null);
           this.addClient.get('user_comision_serv').setValidators([]);
@@ -470,8 +478,22 @@ console.log(row);
 
       }
     );
-  }
+    this.addClient.get('tipo_plan_srv').valueChanges.subscribe(
+      (tipo_plan_srv) => {
+        if (tipo_plan_srv === 1) {
+          this.addClient.get('modo_pago_srv').setValue('1');
 
+        }  if (tipo_plan_srv === 4) {
+        this.addClient.get('modo_pago_srv').setValidators([Validators.required]);
+
+      } if (tipo_plan_srv === 3) {
+          this.addClient.get('modo_pago_srv').setValue('2');
+        }
+      this.addClient.get('modo_pago_srv').updateValueAndValidity();
+      }
+
+    );
+  }
   Enviar() {
 
     var client = this.addClient.value;
@@ -487,10 +509,10 @@ console.log(row);
     this.snackBar.open("Agregando Cliente: Por favor espere", null, {
       duration: 2000,
     });
-      this.http.post(url, this.addClient.value).delay(1000).subscribe((data) => {
-        this.http.put(url2, put.value).subscribe((data) => {
+    this.http.post(url, this.addClient.value).delay(1000).subscribe((data) => {
+      this.http.put(url2, put.value).subscribe((data) => {
 
-        });
+      });
       this.dialogRef.close();
     });
     console.log(this.addClient.value);
@@ -506,9 +528,10 @@ console.log(row);
     });*/
     //  this.funciones.refresh();
     //this.router.navigate(['/clientes']);
-   // console.log(client.cliente_srv);
+    // console.log(client.cliente_srv);
   }
   Editar() {
+    console.log(this.addClient.value);
     var client = this.addClient.value;
     //console.log(JSON.stringify(this.addClient.value));
     let dp = new DatePipe(navigator.language);
@@ -531,16 +554,16 @@ console.log(row);
       this.dialogRef.close();
 
     });
-  /*  console.log(this.addClient.value);
-    var put: FormGroup
+    /*  console.log(this.addClient.value);
+      var put: FormGroup
 
-    put = this.fb.group({
-      cliente_srv: client.cliente_srv
-    })
-    var url = environment.apiEndpoint + "tplancl/" +  client.cliente_srv;
-    this.http.put(url, put.value).subscribe((data) => {
+      put = this.fb.group({
+        cliente_srv: client.cliente_srv
+      })
+      var url = environment.apiEndpoint + "tplancl/" +  client.cliente_srv;
+      this.http.put(url, put.value).subscribe((data) => {
 
-    });*/
+      });*/
     //this.funciones.refresh();
     //this.router.navigate(['/clientes']);
   }
@@ -578,28 +601,31 @@ export class AddPendingComponent implements OnInit {
   planesd: any = [];
   planes1:any = [];
   planes2:any = [];
+  planes3:any = [];
+  planes6:any = [];
+  planes7:any = [];
   planes_p:any = [];
   plan_f:any;
   valor_serie = 0;
   user_comisiones: any;
- // address: string;
+  // address: string;
 
   //value.replace(/\b\w/g, first => first.toLocaleUpperCase())
 
 
   constructor(private http: Http,
-    private fb: FormBuilder,
-    public dialogRef: MdDialogRef<AddPendingComponent>,
-    @Inject(MD_DIALOG_DATA) public row: any,
-    public snackBar: MdSnackBar,
-    private router: Router,
+              private fb: FormBuilder,
+              public dialogRef: MdDialogRef<AddPendingComponent>,
+              @Inject(MD_DIALOG_DATA) public row: any,
+              public snackBar: MdSnackBar,
+              private router: Router,
               private validacion_ip: IpValidators,
               //private validacion_serial: SerialValidators,
-    private _fb: FormBuilder,
-    private date: DatePipe,
-    public usuario: AuthGuard) {
+              private _fb: FormBuilder,
+              private date: DatePipe,
+              public usuario: AuthGuard) {
 
-console.log(row);
+    console.log(row);
     this.http.get(environment.apiEndpoint + 'planes/'+ row.plan)
       .subscribe((data) => {
         this.planes_p = data.json();
@@ -616,6 +642,9 @@ console.log(row);
         this.planes = data.json().planes;
         this.planes1 = data.json().planes1;
         this.planes2 = data.json().planes2;
+        this.planes3 = data.json().planes3;
+        this.planes6 = data.json().planes6;
+        this.planes7 = data.json().planes7;
         this.planesd = data.json().planesd;
         this.user_comisiones = data.json().user_comisiones
 
@@ -625,52 +654,52 @@ console.log(row);
         console.log(this.planesd);
         console.log(this.planes1);
         console.log(this.planes2);
-console.log(this.equipo);
+        console.log(this.equipo);
       });
     this.funciones = new MyService(http, router, usuario);
 
-  this.addClient = this.fb.group({
-    plan_srv: ['', Validators.required],
-    tipo_plan_srv: ['', Validators.required],
-    cliente_srv: ['', Validators.required],
-    // direccion_srv: ['', Validators.required],
-    instalacion_srv: [this.row.updated_at, Validators.required],
-    recibo_srv: '',
-    costo_instalacion_srv: '',
-    modo_pago_srv: 1,
-    credito_srv: '40',
-    notify_srv: '',
-    start_srv: ['', Validators.required],
-    ip_srv: ['', [Validators.required]],
-    planes_: '',
-    serie_srv: [0, Validators.required],
-    comment_: '',
-    //celda_srv: '',
-    //servidor_srv: '',
-    ap_srv: ['', Validators.required],
-    serial_srv: ['', Validators.required],
-    mac_srv: ['', [Validators.required, Validators.pattern(MAC_REGEX)]],
-    zona_srv: '',
-    stat_srv: ['', Validators.required],
-    comment_srv: '',
-    equipo_srv: ['', Validators.required],
-    gen_comision_serv:  '',
-    user_comision_serv: '',
-    porcentaje_comision_serv: '',
-    c_search: '',
-    p_search: '',
-    C_search: '',
-    a_search: '',
-    //email: ['', [Validators.required, Validators.pattern(null)]],
-    //phone1: ['', [Validators.required, Validators.pattern(null)]],
+    this.addClient = this.fb.group({
+      plan_srv: ['', Validators.required],
+      tipo_plan_srv: ['', Validators.required],
+      cliente_srv: ['', Validators.required],
+      // direccion_srv: ['', Validators.required],
+      instalacion_srv: [this.row.updated_at, Validators.required],
+      recibo_srv: '',
+      costo_instalacion_srv: '',
+      modo_pago_srv: 1,
+      credito_srv: '40',
+      notify_srv: '',
+      start_srv: ['', Validators.required],
+      ip_srv: ['', [Validators.required]],
+      planes_: '',
+      serie_srv: [0, Validators.required],
+      comment_: '',
+      //celda_srv: '',
+      //servidor_srv: '',
+      ap_srv: ['', Validators.required],
+      serial_srv: ['', Validators.required],
+      mac_srv: ['', [Validators.required, Validators.pattern(MAC_REGEX)]],
+      zona_srv: '',
+      stat_srv: ['', Validators.required],
+      comment_srv: '',
+      equipo_srv: ['', Validators.required],
+      gen_comision_serv:  '',
+      user_comision_serv: '',
+      porcentaje_comision_serv: '',
+      c_search: '',
+      p_search: '',
+      C_search: '',
+      a_search: '',
+      //email: ['', [Validators.required, Validators.pattern(null)]],
+      //phone1: ['', [Validators.required, Validators.pattern(null)]],
 
-  });
+    });
 
 
     //console.log("llego vacio"+ row)
 
 
-    }
+  }
 
 
 
@@ -683,39 +712,39 @@ console.log(this.equipo);
       var serial = "";
       var pre = "";
       setTimeout(() => {
-        if (this.row.serial) {
-          pre = this.row.serial.replace(/(.{2})/g, '$&:')
-          serial = this.row.serial
-        }
-        console.log(this.row.plan);
+          if (this.row.serial) {
+            pre = this.row.serial.replace(/(.{2})/g, '$&:')
+            serial = this.row.serial
+          }
+          console.log(this.row.plan);
 
-        this.addClient.patchValue({
-          plan_srv: +this.row.plan_srv,
-          tipo_plan_srv:  this.row.tipo_plan_srv,
+          this.addClient.patchValue({
+            plan_srv: +this.row.plan_srv,
+            tipo_plan_srv:  this.row.tipo_plan_srv,
 
-          serie_srv: 0,
-          modo_pago_srv: 1,
-          //direccion_srv: this.row.direccion,
-          cliente_srv: +this.row.servicio_soporte,
-          equipo_srv: +this.row.equipo,
-          ap_srv: Number(this.row.ap),
-          instalacion_srv: +this.row.updated_at,
-          recibo_srv: +this.row.recibo_srv,
-          costo_instalacion_srv: '0',
-          credito_srv: '40',
-          notify_srv: +this.row.notify_srv,
-          start_srv: this.row.start_srv,
-          ip_srv: this.row.ipP,
-          serial_srv: serial,
-          zona_srv: +this.row.zona_srv,
-          comment_srv: this.row.comment_srv,
-          planes_: this.plan_f,
-          mac_srv: pre.replace(/(^:+|:+$)/g, "")
+            serie_srv: 0,
+            modo_pago_srv: 1,
+            //direccion_srv: this.row.direccion,
+            cliente_srv: +this.row.servicio_soporte,
+            equipo_srv: +this.row.equipo,
+            ap_srv: Number(this.row.ap),
+            instalacion_srv: +this.row.updated_at,
+            recibo_srv: +this.row.recibo_srv,
+            costo_instalacion_srv: '0',
+            credito_srv: '40',
+            notify_srv: +this.row.notify_srv,
+            start_srv: this.row.start_srv,
+            ip_srv: this.row.ipP,
+            serial_srv: serial,
+            zona_srv: +this.row.zona_srv,
+            comment_srv: this.row.comment_srv,
+            planes_: this.plan_f,
+            mac_srv: pre.replace(/(^:+|:+$)/g, "")
 
-        })
-        this.addClient.updateValueAndValidity();
+          })
+          this.addClient.updateValueAndValidity();
 
-      },
+        },
         200);
 
     }
@@ -756,6 +785,21 @@ console.log(this.equipo);
       }
     );
 
+    this.addClient.get('tipo_plan_srv').valueChanges.subscribe(
+      (tipo_plan_srv) => {
+        if (tipo_plan_srv == 1) {
+          this.addClient.get('modo_pago_srv').setValue('1');
+
+        } else if (tipo_plan_srv == 4) {
+          this.addClient.get('modo_pago_srv').setValidators([Validators.required]);
+
+        }else if (tipo_plan_srv == 3) {
+          this.addClient.get('modo_pago_srv').setValue('2');
+        }
+        this.addClient.get('modo_pago_srv').updateValueAndValidity();
+
+      }
+      );
 
   }
   deleter(req) {
@@ -801,7 +845,7 @@ console.log(this.equipo);
           modo_pago_srv: post.modo_pago_srv,
           instalacion_srv: post.instalacion_srv,
           serie_srv: post.serie_srv,
-         // direccion_srv: post.direccion_srv,
+          // direccion_srv: post.direccion_srv,
           tipo_plan_srv:  post.tipo_plan_srv,
           recibo_srv: post.recibo_srv,
           costo_instalacion_srv: post.costo_instalacion_srv,
@@ -824,13 +868,13 @@ console.log(this.equipo);
           responsable: this.usuario.currentUser.id_user,
 
         });
+console.log(this.post.value);
+      var url1 = environment.apiEndpoint + "retirar_ip_mk/" + this.row.id_soporte;
+  this.http.put(url1, this.post.value).subscribe((data) => {
 
-        var url = environment.apiEndpoint + "retirar_ip_mk/" + this.row.id_soporte;
-        this.http.put(url, this.post.value).subscribe((data) => {
 
-        });
-        var url = environment.apiEndpoint + "servicios";
-        this.http.post(url, this.post.value).subscribe((data) => {
+        var url2 = environment.apiEndpoint + "servicios";
+        this.http.post(url2, this.post.value).subscribe((data) => {
           var put: FormGroup
           put = this.fb.group({
             status_soporte: "4"
@@ -838,24 +882,26 @@ console.log(this.equipo);
           })
           console.log(this.row.id_soporte);
           console.log(put.value);
-          var url = environment.apiEndpoint + "soporte/" + this.row.id_soporte;
-          this.http.put(url, put.value).subscribe((data) => {
+          var url3 = environment.apiEndpoint + "soporte/" + this.row.id_soporte;
+          this.http.put(url3, put.value).subscribe((data) => {
             console.log(put.value);
           });
           var put1: FormGroup
           put1 = this.fb.group({
             cliente_srv: post.cliente_srv
           })
-          var url = environment.apiEndpoint + "tplancl/" + this.row.servicio_soporte;
-          this.http.put(url, put1.value).subscribe((data) => {
-console.log(put1.value);
-          });
+          var url4 = environment.apiEndpoint + "tplancl/" + this.row.servicio_soporte;
+          this.http.put(url4, put1.value).subscribe((data) => {
+            console.log(put1.value);
+
         });
         this.dialogRef.close();
         this.snackBar.open("Servicio Registrado", null, {
           duration: 2000,
         });
 
+      });
+      });
       });
 
     }
@@ -946,6 +992,7 @@ export class UpdateserviceComponent implements OnInit {
               private validacion_ip: IpValidators,
               private validacion_serial: SerialValidators,
               private date: DatePipe) {
+
 
 
     this.http.get(environment.apiEndpoint + 'add_preload/')

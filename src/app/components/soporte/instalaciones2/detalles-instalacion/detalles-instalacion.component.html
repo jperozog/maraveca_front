@@ -1,0 +1,270 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <button (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+  </div>
+  <div class="col-sm-5">
+    <h2 class="titulo">Instalacion</h2>
+  </div>
+</div>
+<br>
+<div class="row segundo">
+  <div class="col-sm-3">
+    <h5 *ngIf="instalacion.kind == 'V' || instalacion.kind == 'E'">Cliente:</h5>
+    <p *ngIf="instalacion.kind == 'V' || instalacion.kind == 'E'">{{instalacion.nombre}} {{instalacion.apellido}}</p>
+    <h5 *ngIf="instalacion.kind != 'V' || instalacion.kind != 'E'">Cliente: </h5>
+    <p *ngIf="instalacion.kind == 'V' || instalacion.kind == 'E'">{{instalacion.social}}</p>
+    <h5>Direccion:</h5>
+    <p>{{instalacion.direccion}}</p>
+    <h5>Telefono: </h5>
+    <p>{{instalacion.phone1}}</p>
+
+    <h5 *ngIf="instalacion.tipo_insta == '1'">IP:</h5>
+    <p *ngIf="instalacion.tipo_insta == '1'">{{instalacion.ipP_det}}</p>
+    <h5 *ngIf="instalacion.tipo_insta == '1'">Celda: </h5>
+    <p *ngIf="instalacion.tipo_insta == '1'">{{instalacion.nombre_celda}}</p>
+
+    <h5 *ngIf="instalacion.tipo_insta == '2'">Manga Empalme:</h5>
+    <p *ngIf="instalacion.tipo_insta == '2'">{{instalacion.nombre_manga}}</p>
+    <h5 *ngIf="instalacion.tipo_insta == '2'">Caja Distribucion: </h5>
+    <p *ngIf="instalacion.tipo_insta == '2'">{{instalacion.nombre_caja}}</p>
+
+    <h5>Equipo:</h5>
+    <p>{{instalacion.nombre_equipo}}</p>
+    <h5 *ngIf="instalacion.serial_det != '0'">Serial:</h5>
+    <p *ngIf="instalacion.serial_det != '0'">{{instalacion.serial_det}}</p>
+    <h5>Datos PPPOE:</h5>
+    <p>Usuario: {{instalacion.clientePPPOE}}({{instalacion.id_insta}})</p>
+    <p>Contraseña: {{instalacion.dni}}</p>
+    <button *ngIf="instalacion.status_insta == 1" (click)="CerrarInstalacion()" type="button"
+      class="btn btn-info ">Cerrar Instalacion</button>
+  </div>
+  <div class="col-sm-1"></div>
+  <div class="col-sm-7">
+    <div style=" margin-top: -20px; background-color: white; padding: 10px;" *ngIf="cierreI">
+      <div class="row">
+        <div class="col-sm-12">
+          <h4 class="modal-title pull-left">Cerrar Instalacion Inalambrica </h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label class="col-form-label" for="inputDefault">Tipo de Cable Exterior</label>
+            <select [(ngModel)]="exteriorSelected" class="form-control" id="exampleSelect1" required>
+              <option [value]="0" selected></option>
+              <option *ngFor="let e of exteriores" [value]="e.id_equipo">{{e.nombre_equipo}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div *ngIf="exteriorSelected != 0" class="form-group">
+            <label class="col-form-label" for="inputDefault">Cantd Usada (Mts)(Exterior):</label>
+            <input type="number" [(ngModel)]="exterior" class="form-control" placeholder="" id="inputDefault">
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="exterior > 0" class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label class="col-form-label" for="inputDefault">Tipo de Cable Interior</label>
+            <select [(ngModel)]="interiorSelected" class="form-control" id="exampleSelect1" required>
+              <option [value]="0" selected></option>
+              <option *ngFor="let e of interiores" [value]="e.id_equipo">{{e.nombre_equipo}}</option>
+            </select>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" [(ngModel)]="isChecked" class="custom-control-input" id="customCheck1">
+            <label class="custom-control-label" for="customCheck1">No Fue Necesario</label>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div *ngIf="interiorSelected != 0 && exterior > 0 " class="form-group">
+            <label class="col-form-label" for="inputDefault">Cantd Usada (Mts)(Interior):</label>
+            <input type="number" [(ngModel)]="interior" class="form-control" placeholder="" id="inputDefault">
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="exterior > 0 && interior > 0 || exterior > 0 && isChecked && interiorSelected != 0" class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label class="col-form-label" for="inputDefault">Tipo de Conector</label>
+            <select [(ngModel)]="conectorSelected" class="form-control" id="exampleSelect1" required>
+              <option [value]="0" selected></option>
+              <option *ngFor="let e of conectores" [value]="e.id_equipo">{{e.nombre_equipo}}</option>
+            </select>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [(ngModel)]="isChecked2" class="custom-control-input" id="customCheck2">
+              <label class="custom-control-label" for="customCheck2">No Fue Necesario</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div *ngIf="interiorSelected != 0 && conectorSelected != 0 " class="form-group">
+            <label class="col-form-label" for="inputDefault">Cantd Usada:</label>
+            <input type="number" [(ngModel)]="conector" class="form-control" placeholder="" id="inputDefault">
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="exterior > 0 && interior > 0 && conector > 0 || exterior > 0 && isChecked && isChecked2 && conectorSelected != 0 || exterior > 0 && isChecked && conector > 0"
+        class="row">
+        <div class="col-sm-6">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" [(ngModel)]="isChecked3" class="custom-control-input" id="customCheck3">
+            <label class="custom-control-label" for="customCheck3">Se Usaron Base Para Antenas?</label>
+          </div>
+          <label class="col-form-label" for="inputDefault">Cantd Usada:</label>
+          <input *ngIf="isChecked3" type="number" [(ngModel)]="baseAntena" class="form-control" placeholder=""
+            id="inputDefault">
+          <br>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" [(ngModel)]="isChecked5" (change)=alambref() class="custom-control-input"
+              id="customCheck5">
+            <label class="custom-control-label" for="customCheck5">Se Uso Alambre?</label>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" [(ngModel)]="isChecked4" class="custom-control-input" id="customCheck4">
+            <label class="custom-control-label" for="customCheck4">Se Usaron Grapas en la Instalacion?</label>
+            <label class="col-form-label" for="inputDefault">Cantd Usada:</label>
+            <input *ngIf="isChecked4" type="number" [(ngModel)]="grapas" class="form-control" placeholder=""
+              id="inputDefault">
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="exterior > 0 && interior > 0 && conector > 0 || exterior > 0 && isChecked && isChecked2 && conectorSelected != 0 || exterior > 0 && isChecked && conector > 0"
+        class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label class="col-form-label" for="inputDefault">Ap</label>
+            <select [(ngModel)]="apSelected" class="form-control" id="exampleSelect1" required>
+              <option [value]="0" selected></option>
+              <option *ngFor="let a of aps" [value]="a.id">{{a.ip_ap}} {{a.nombre_ap}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="exterior > 0 && interior >0 && conector > 0 && apSelected != 0 || exterior > 0 && isChecked && isChecked2 && conectorSelected != 0 && apSelected != 0 || exterior > 0 && isChecked && conector > 0 && apSelected != 0 "
+        class="row">
+
+        <div class="col-sm-12">
+          <label class="col-form-label" for="inputDefault">Instaladores</label>
+          <input type="text" class="form-control " (input)="onSearchDatos($event.target.value)">
+          <br>
+          <div class="row">
+            <div class="col-sm-6">
+              <h6>Lista Instaladores</h6>
+              <table class="table table-borderless tabla">
+                <tbody>
+                  <tr (click)="agregarDatosLista(c)" class="tr" style="cursor: pointer;"
+                    *ngFor=" let c of busqueda | paginate: { id:'instaladores', itemsPerPage: 3, currentPage: e }">
+                    <td class="td">{{c.nombre_user}}</td>
+                    <td class="td">{{c.apellido_user}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls id="instaladores" (pageChange)="p = $event"></pagination-controls>
+            </div>
+            <div class="col-sm-6">
+              <h6>Instaladores Seleccionados</h6>
+              <table class="table table-borderless tabla">
+                <tbody>
+                  <tr (click)="DeseleccionarCliente(i)" class="tr" style="cursor: pointer;"
+                    *ngFor=" let b of DatosSeleccionados | paginate: { id:'instaladoresS', itemsPerPage: 3, currentPage: e }; let i = index">
+                    <td class="td">{{b.nombre_user}}</td>
+                    <td class="td">{{b.apellido_user}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls id="instaladoresS" (pageChange)="e = $event"></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="exterior > 0 && interior >0 && conector > 0 && apSelected != 0 && DatosSeleccionados.length >= 1 || exterior > 0 && isChecked && isChecked2 && conectorSelected != 0 && apSelected != 0 && DatosSeleccionados.length >= 1 || exterior > 0 && isChecked && conector > 0 && apSelected != 0 && DatosSeleccionados.length >= 1 ">
+        <button (click)="cerrarInstalacion()" type="button" class="btn btn-info">Cerrar Instalacion</button>
+      </div>
+    </div>
+
+    <div style=" margin-top: -20px; background-color: white; padding: 10px;" *ngIf="cierreF">
+      <div class="row">
+        <div class="col-sm-12">
+          <h4 class="modal-title pull-left">Cerrar Instalacion Fibra Optica </h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label class="col-form-label" for="inputDefault">Cantidad de Cable Fibra (Mts)</label>
+            <input type="number" [(ngModel)]="cableFibra" class="form-control" placeholder="" id="inputDefault">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label class="col-form-label" for="inputDefault">Cantidad Fast-Connector</label>
+            <input type="number" [(ngModel)]="fconnector" class="form-control" placeholder="" id="inputDefault">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <label class="col-form-label" for="inputDefault">Instaladores</label>
+        <input type="text" class="form-control " (input)="onSearchDatos($event.target.value)">
+        <br>
+        <div class="row">
+          <div class="col-sm-6">
+            <h6>Lista Instaladores</h6>
+            <table class="table table-borderless tabla">
+              <tbody>
+                <tr (click)="agregarDatosLista(c)" class="tr" style="cursor: pointer;"
+                  *ngFor=" let c of busqueda | paginate: { id:'instaladores', itemsPerPage: 3, currentPage: e }">
+                  <td class="td">{{c.nombre_user}}</td>
+                  <td class="td">{{c.apellido_user}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls id="instaladores" (pageChange)="p = $event"></pagination-controls>
+          </div>
+          <div class="col-sm-6">
+            <h6>Instaladores Seleccionados</h6>
+            <table class="table table-borderless tabla">
+              <tbody>
+                <tr (click)="DeseleccionarCliente(i)" class="tr" style="cursor: pointer;"
+                  *ngFor=" let b of DatosSeleccionados | paginate: { id:'instaladoresS', itemsPerPage: 3, currentPage: e }; let i = index">
+                  <td class="td">{{b.nombre_user}}</td>
+                  <td class="td">{{b.apellido_user}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls id="instaladoresS" (pageChange)="e = $event"></pagination-controls>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="cableFibra != 0 && fconnector != 0 && DatosSeleccionados.length >= 1">
+        <button (click)="cerrarInstalacionF()" type="button" class="btn btn-info">Cerrar Instalacion</button>
+      </div>
+    </div>
+    <br>
+    <h5>Historial</h5>
+    <table class="table table-borderless">
+      <tbody>
+        <tr *ngFor="let h of historial">
+          <td> {{h.comment}}</td>
+          <td> {{h.created_at| stringToDate | date: 'd/M/yy'}}</td>
+          <td> {{h.nombre_user}} {{h.apellido_user}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

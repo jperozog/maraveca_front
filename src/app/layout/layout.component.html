@@ -1,6 +1,422 @@
-
 <router-outlet>
-<div class="submenu">
-  Bienvenido a Maraveca!
+  <div class="submenu">
+
   </div>
+
+  <div *ngIf="this.usuario.currentUser.departamento == 'Gerencia'">
+
+    <div class="row Gerencia">
+      <div class="col-sm-2">
+        <div class="row">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-8 clientesActivos">
+            <p class="numeroClientes">{{clientesActivos}}</p>
+            <p class="cliente"> Clientes Activos</p>
+          </div>
+          <div class="col-sm-2"></div>
+
+          <div class="col-sm-2"></div>
+          <div class="col-sm-8 clientesSuspendidos">
+            <p class="numeroClientes">{{clientesSuspendidos}}</p>
+            <p class="cliente"> Clientes Suspendidos</p>
+          </div>
+          <div class="col-sm-2"></div>
+
+        </div>
+
+      </div>
+
+      <div class="col-sm-4">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="graficaNumeroClientes">
+              <canvas baseChart [data]="doughnutChartDataC" [colors]="doughnutColorsC" [labels]="doughnutChartLabelsC"
+                [chartType]="doughnutChartTypeC">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="graficaServiciosCreados">
+              <h5>Servicios Creados</h5>
+              <canvas baseChart [datasets]="lineChartDataG2" [labels]="lineChartLabelsG2" [options]="lineChartOptionsG2"
+                [colors]="lineChartColorsG2" [legend]="lineChartLegendG2" [chartType]="lineChartTypeG2"
+                (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="row">
+          <div class="col-sm-2"></div>
+          <div routerLink="/clients" class="col-sm-8 botones">
+            <md-icon class="icono" aria-label="Editar AP">face</md-icon>
+            <p class="cliente"> Clientes</p>
+          </div>
+          <div class="col-sm-2"></div>
+
+          <div class="col-sm-2"></div>
+          <div routerLink="/facturacion" class="col-sm-8 botones">
+            <md-icon class="icono" aria-label="Editar AP">assignment</md-icon>
+            <p class="cliente">Facturacion</p>
+          </div>
+          <div class="col-sm-2"></div>
+
+        </div>
+
+      </div>
+      <div class="col-sm-2">
+        <div class="row">
+
+          <div class="col-sm-2"></div>
+          <div class="col-sm-8 clientesExonerados">
+            <p class="numeroClientes">{{clientesExonerados}}</p>
+            <p class="cliente"> Clientes Exonerados</p>
+
+          </div>
+          <div class="col-sm-2"></div>
+          <div class="col-sm-2"></div>
+          <div class="col-sm-8 clientesRetirados">
+            <p class="numeroClientes">{{clientesRetirados}}</p>
+            <p class="cliente"> Clientes Retirados</p>
+          </div>
+          <div class="col-sm-2"></div>
+        </div>
+
+      </div>
+      <div class="col-sm-3">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="graficaNumeroClientesyPotenciales">
+              <canvas baseChart [data]="pieChartDataG" [labels]="pieChartLabelsG" [chartType]="pieChartTypeG"
+                [options]="pieChartOptionsG" (chartClick)="chartClicked($event)" [colors]="pieChartColorsG"
+                [legend]="pieChartLegendG">
+
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="row numerosCuentas">
+              <div class="col-12">
+               <p class="montoCuentas">{{MontoTotalDl | number: "1.2-2" }} $</p>
+               <p>Cuenta Extranjera</p>
+              </div>
+              <hr>
+              <div class="col-12">
+                <p class="montoCuentas">{{MontoTotalBs | number: "1.2-2" }} Bs</p>
+               <p>Cuenta Nacional</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="row numerosSoporte">
+              <div class="col-12">
+                <p class="cantidadSoporte">{{instalacionesAbiertas}}</p>
+                <p>Instalaciones Pendientes</p>
+               </div>
+               <hr>
+               <div class="col-12">
+                 <p class="cantidadSoporte">{{ticketsAbiertos}}</p>
+                <p>Tickets Abiertos</p>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--
+      <div class="row tablas">
+
+        <div class="col-sm-6">
+          <div>
+            <h5>Clientes</h5>
+            <canvas baseChart [datasets]="barChartDataG" [labels]="barChartLabelsG" [options]="barChartOptionsG"
+              [colors]="barChartColorsG" [legend]="barChartLegendG" [chartType]="barChartTypeG">
+            </canvas>
+          </div>
+
+        </div>
+     
+
+      </div>
+ -->
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div *ngIf="this.usuario.currentUser.departamento == 'Soporte'">
+
+
+    <div class="row graficos">
+      <div class="col-sm-2">
+
+        <div class="tickets">
+
+          <h5>Tickets</h5>
+          <canvas baseChart [data]="doughnutChartDataT" [labels]="doughnutChartLabelsT" [colors]="doughnutColorsT"
+            [chartType]="doughnutChartTypeT">
+          </canvas>
+
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="tickets">
+          <h5>Instalaciones</h5>
+          <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"
+            [options]="pieChartOptions" (chartClick)="chartClicked($event)" [colors]="pieChartColors"
+            [legend]="pieChartLegend">
+
+          </canvas>
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="tickets">
+          <h5>Factibilidades</h5>
+          <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+            [colors]="barChartColors" [legend]="barChartLegend" [chartType]="barChartType">
+          </canvas>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="tickets">
+          <h5>Registro De Operaciones</h5>
+          <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+            [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"
+            (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row tablas">
+
+      <div class="col-sm-6">
+        <h5>Tickets</h5>
+        <table class="table table-hover tabla">
+          <thead>
+            <tr class="table-info">
+              <th scope="col">TICKET</th>
+              <th scope="col">CLIENTE</th>
+              <th scope="col">ZONA</th>
+              <th scope="col">ROUTER</th>
+              <th scope="col">ESTADO</th>
+              <th scope="col">USUARIO</th>
+              <th scope="col">ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of tickets | paginate: {id:'tickets', itemsPerPage: 3, currentPage: p }">
+              <td *ngIf="t.importancia_soporte == 0">{{t.id_soporte}}
+              </td>
+              <td *ngIf="t.importancia_soporte == 1"><span class="badge badge-pill badge-danger"> </span>
+                {{t.id_soporte}}
+              </td>
+              <td *ngIf="t.importancia_soporte == 2"><span class="badge badge-pill badge-warning"> </span>
+                {{t.id_soporte}}
+              </td>
+              <td *ngIf="t.importancia_soporte == 3"><span class="badge badge-pill badge-info"> </span>
+                {{t.id_soporte}}
+              </td>
+              <td *ngIf="t.serie == 0">{{t.nombre}} {{t.apellido}}</td>
+              <td *ngIf="t.serie == 1">{{t.social}}</td>
+              <td>{{t.nombre_celda}}</td>
+              <td>{{t.nombre_srvidor}}</td>
+              <td *ngIf="t.status_soporte == 1">
+                <p class="text-success">Abierto.</p>
+              </td>
+              <td *ngIf="t.status_soporte == 2">
+                <p class="text-danger">Cerrado.</p>
+              </td>
+              <td>{{t.nombre_user}} {{t.apellido_user}}</td>
+              <td>
+                <button md-icon-button style="color:#106cc8" [routerLink]="['/editticket', t.id_soporte]">
+                  <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="tickets" (pageChange)="p = $event"></pagination-controls>
+      </div>
+
+      <div class="col-sm-6">
+        <h5>Factibilidades</h5>
+        <table class="table table-hover tabla">
+          <thead>
+            <tr class="table-success">
+              <th scope="col">FACT</th>
+              <th scope="col">CLIENTE</th>
+              <th scope="col">ESTADO</th>
+              <th scope="col">CIUDAD</th>
+              <th scope="col">FECHA</th>
+              <!--<th scope="col">ACCIONES</th>-->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let f of factibilidades | paginate: {id:'facti', itemsPerPage: 3, currentPage: e }">
+              <td>{{f.id}}</td>
+              <td *ngIf="f.kind == 'V' || f.kind == 'E'"> {{f.nombre+" "+f.apellido}}</td>
+              <td *ngIf="f.kind == 'J' || f.kind == 'G' || f.kind == 'V-'"> {{f.social}}</td>
+              <td *ngIf="f.status == 1">
+                <p class="text-danger">Pendiente</p>
+              </td>
+              <td *ngIf="f.status == 2 && f.factible == 2">
+                <p class="text-danger">No Factible</p>
+              </td>
+              <td *ngIf="f.status == 2 && f.factible == 1">
+                <p class="text-success">Factible</p>
+              </td>
+              <td *ngIf="f.status == 2 && f.factible == 3">
+                <p class="text-warning">Corregir Coordenadas</p>
+              </td>
+              <td *ngIf="f.status == 2 && f.factible == 4">
+                <p class="text-secondary">Amerita Visita</p>
+              </td>
+              <td>{{f.ciudad}}</td>
+              <td>{{f.created_at | stringToDate | date: 'd/M/yy'}}</td>
+              <!--<td>
+              <button md-icon-button style="color:#106cc8" >
+                <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
+              </button>
+            </td>
+          -->
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="facti" (pageChange)="e = $event"></pagination-controls>
+      </div>
+
+
+      <div class="col-sm-8">
+        <h5>Instalaciones</h5>
+        <table class="table table-hover tabla">
+          <thead>
+            <tr class="table-danger">
+              <th scope="col">#</th>
+              <th scope="col">CLIENTE</th>
+              <th scope="col">ZONA</th>
+              <th scope="col">ROUTER</th>
+              <th scope="col">ESTADO</th>
+              <th scope="col">IP</th>
+              <th scope="col">SERIAL</th>
+              <th scope="col">USUARIO</th>
+              <th scope="col">ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of instalaciones | paginate: {id:'Instalaciones', itemsPerPage: 3, currentPage: i }">
+              <td> {{t.id_soporte}}</td>
+              <td *ngIf="t.kind == 'V' || t.kind == 'E'">{{t.nombre}} {{t.apellido}}</td>
+              <td *ngIf="t.kind == 'V-' || t.kind == 'J' || t.kind == 'G'">{{t.social}}</td>
+              <td>{{t.celda}}</td>
+              <td>{{t.servidor}}</td>
+              <td *ngIf="t.status_soporte == 1">
+                <p class="text-success">Abierto.</p>
+              </td>
+              <td *ngIf="t.status_soporte == 2 || t.status_soporte == 4">
+                <p class="text-danger">Cerrado.</p>
+              </td>
+              <td *ngIf="t.status_soporte == 3 ">
+                <p class="text-primary">Anulada.</p>
+              </td>
+              <td>{{t.ip}}</td>
+              <td>{{t.serial}}</td>
+              <td>{{t.nombre_user}} {{t.apellido_user}}</td>
+              <td>
+                <button md-icon-button *ngIf="usuario.perm && usuario.perm.includes('soporte_w')" style="color:#106cc8"
+                  [routerLink]="['/editticket', t.id_soporte]">
+
+                  <md-icon class="md-24" aria-label="Editar AP">rate_review</md-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="Instalaciones" (pageChange)="i = $event"></pagination-controls>
+      </div>
+
+      <div class="col-sm-4">
+        <h5>Lista de Ips</h5>
+        <table class="table table-hover tabla">
+          <thead>
+            <tr class="table-warning">
+              <th scope="col">CLIENTE</th>
+              <th scope="col">IP</th>
+              <th scope="col">ESTADO</th>
+              <th scope="col">ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ip of ips | paginate: {id:'ips', itemsPerPage: 3, currentPage: s }">
+              <td *ngIf="ip.kind == 'V' || ip.kind == 'E'"> {{ip.nombre+" "+ip.apellido}}</td>
+              <td *ngIf="ip.kind == 'J' || ip.kind == 'G' || ip.kind == 'V-'"> {{ip.social}}</td>
+              <td>{{ip.ip_srv}}</td>
+              <td *ngIf="ip.stat_srv == 1">
+                <p class="text-success">Activo</p>
+              </td>
+              <td *ngIf="ip.stat_srv == 2">
+                <p class="text-danger">Moroso</p>
+              </td>
+              <td *ngIf="ip.stat_srv == 3">
+                <p class="text-danger">Suspendido</p>
+              </td>
+              <td *ngIf="ip.stat_srv == 4">
+                <p class="text-warning">Retirado</p>
+              </td>
+              <td *ngIf="ip.stat_srv == 5">
+                <p class="text-secondary">Exonerado</p>
+              </td>
+              <td>
+                <button md-icon-button style="color:#106cc8" [routerLink]="['/ClientOverview', ip.cliente_srv]">
+                  <!---->
+                  <md-icon class="md-24" aria-label="Mas Detalles">search</md-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="ips" (pageChange)="s = $event"></pagination-controls>
+      </div>
+
+
+
+    </div>
+  </div>
+
 </router-outlet>

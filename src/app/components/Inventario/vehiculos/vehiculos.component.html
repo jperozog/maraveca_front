@@ -1,0 +1,133 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <button style="background-color:#2C2C30;" (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+  </div>
+  <div class="col-sm-4">
+    <h2 class="titulo">Lista de Vehiculos</h2>
+  </div>
+
+
+</div>
+<div class="row">
+  <div class="col-sm-7">
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr style="background-color:#2C2C30; color: white;" class="table-defaukt">
+          <th scope="col">Marca</th>
+          <th scope="col">Modelo</th>
+          <th scope="col">Color</th>
+          <th scope="col">Placa</th>
+          <th scope="col">Año</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor=" let v of vehiculos | paginate: { id:'vehiculos', itemsPerPage: 6, currentPage: e }">
+          <td>{{v.marca}}</td>
+          <td>{{v.modelo}}</td>
+          <td>{{v.color}}</td>
+          <td>{{v.placa}}</td>
+          <td>{{v.anio}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="vehiculos" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-1"></div>
+  <div class="col-sm-3">
+    <div class="formulario">
+      <div class="card border-light mb-3">
+        <div class="card-header">Agregar Vehiculo</div>
+        <div class="card-body">
+          <div>
+            <div>
+              <label for="">Marca Vehiculo</label>
+              <input type="text" class="form-control" [(ngModel)]="marca">
+              <br>
+            </div>
+            <div>
+              <label for="">Modelo Vehiculo</label>
+              <input type="text" class="form-control" [(ngModel)]="modelo">
+              <br>
+            </div>
+            <div>
+              <label for="">Color Vehiculo</label>
+              <input type="text" class="form-control" [(ngModel)]="color">
+              <br>
+            </div>
+            <div>
+              <label for="">Placa Vehiculo</label>
+              <input type="text" class="form-control" [(ngModel)]="placa">
+              <br>
+            </div>
+            <div>
+              <label for="">Año Vehiculo</label>
+              <input type="text" class="form-control" [(ngModel)]="anio">
+              <br>
+            </div>
+            <div *ngIf="marca != '' && modelo != '' && placa != '' && color != '' && anio != 0">
+              <button type="button" (click)="agregarVehiculo()" class="btn btn-info btn">Agregar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Detalles de Venta</h4>
+    <button type="button" (click)="detallesVenta(template,venta.id_venta)" class="btn btn-info btn-sm">
+      <i id="icono" class="fa fa-pencil">
+      </i>
+    </button>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="this.modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="card border-light mb-3" style="max-width: 40rem;">
+    <div *ngFor="let d of detalles" class="card-body">
+      <h6 class="control-label" for="disabledInput">Comprador: </h6>
+      <p>{{d.cliente}}</p>
+      <br>
+      <h6>Detalles de Articulo</h6>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Modelo Equipo:</label>
+          <p>{{d.modelo_articulo}}</p>
+        </div>
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Serial Equipo</label>
+          <p>{{d.serial_articulo}}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Zona Equipo</label>
+          <p>{{d.nombre_zona}}</p>
+        </div>
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Tipo de Venta</label>
+          <p>{{d.tipo}}</p>
+        </div>
+
+      </div>
+      <br>
+      <h6>Responsable de Venta</h6>
+      <p>{{d.nombre_user}} {{d.apellido_user}}</p>
+      <br>
+      <h6>Datos de Venta</h6>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Monto:</label>
+          <p>{{d.monto}} $</p>
+        </div>
+        <div class="col-sm-6">
+          <label for="exampleSelect1">Fecha</label>
+          <p>{{d.fecha_venta |date:"shortDate" }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

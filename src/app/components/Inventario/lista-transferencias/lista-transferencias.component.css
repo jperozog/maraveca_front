@@ -1,0 +1,50 @@
+.primero{
+    margin-top: 5%;
+    margin-left: 2%;
+}
+.boton{
+    margin-top: 10%;
+}
+
+.separador{
+    margin-top: 1%;
+    margin-left: 4%;
+}
+.separador2{
+    margin-left: 4%;
+}
+.primary{
+    background-color: #249CC8;
+    color: white;
+  }
+  .boton{
+  float: left;
+  margin-right:5px;
+  }
+  
+.boton2{
+    float: left;
+}
+
+.titulo{
+    margin-top: 3%;
+}
+
+.filtrado{
+    margin-top: 1%;
+    margin-left: -5%;
+}
+
+.filtrado2{
+    margin-top: 1%;
+}
+
+select{
+    border-left: 5px solid #2C2C30;
+}
+
+.botonNuevo{
+    margin-top: 5%;
+   background-color: #2C2C30;
+   color: white;
+}

@@ -13,7 +13,7 @@ import { PlanesComponent, AddplanesComponent, DeletePlanDialog, UpdatePlanPrices
 import { EquiposComponent, AddequipoComponent } from './equipos/equipos.component';
 import { LoginComponent } from './login/login.component';
 import { ApsComponent, AddapsComponent, DeleteApsDialog } from './aps/aps.component';
-import { SoporteComponent, DeleteticketDialog, Deleteotherinstall,DeleteInstallDialog, AddticketComponent, EditticketComponent, Ipasignadascomponent, tickets_cerrados_user, tickets_cerrados_por_usuarios } from './soporte/soporte.component';
+import { SoporteComponent, DeleteticketDialog, Deleteotherinstall,DeleteInstallDialog, AddticketComponent, EditticketComponent, Ipasignadascomponent, tickets_cerrados_user, tickets_cerrados_por_usuarios, Edit_InstallComponent, confirm_anular_install } from './soporte/soporte.component';
 import {UsuariosComponent, DetallesUsuarios, AdduserComponent, DeleteuserDialog, ResetCounter} from './usuarios/usuarios.component';
 import { NotifyComponent, sms_morosoComponent } from './notify/notify.component';
 import { AuthGuard } from './_guards/index';
@@ -24,6 +24,47 @@ import { InstalacionesComponent, AddInstallComponent, EditInstallComponent } fro
 import { StatsComponent, StatsdlComponent, PagarComponent, DetallesInstallerComponent,DetallesotherInstallerComponent , cargarPagocomponent , OtrosPagosComponent, cargarOpagocomponent, Pagar_comisones_Component, factura_comision, pagar_comisionescomponent } from './stats/stats.component';
 import { ZonaComponent, AddZonaComponent } from './zona/zona.component';
 import { InventariosComponent, AddEquipoComponent, SelectEquipoComponent, EditEquipoComponent, TransfEquiposComponent, ShowEquipoComponent, SelectTipoComponent, EquiposasigndosComponent } from './inventarios/inventarios.component';
+import { ConfigAdminComponent, Facturacionconfig, prod_pagos_fac_component, EditFacProdComponent, EditFacPagComponent, eliminar_prod_pag, edit_conf_adm, edit_balances, EditPagoBs, confirm_edit_bal_pagos, confirm_anular_bal_pagos, EditPagoDl } from './config-admin/config-admin.component';
+import { ArticulosComponent } from './components/Inventario/articulos/articulos.component';
+import {Zonas2Component} from './components/Inventario/zonas2/zonas2.component';
+import {DetallesArticulosComponent} from './components/Inventario/detalles-articulos/detalles-articulos.component';
+import {TransferenciaEquiposComponent} from './components/Inventario/transferencia-equipos/transferencia-equipos.component';
+import {ListaTransferenciasComponent} from './components/Inventario/lista-transferencias/lista-transferencias.component';
+import {OrdenTrasladoComponent} from './components/Inventario/orden-traslado/orden-traslado.component';
+import {VentaEquiposComponent} from './components/Inventario/venta-equipos/venta-equipos.component';
+import {ZonasComponent} from './components/administracion/zonas/zonas.component';
+import {PagosComponent} from './components/administracion/pagos/pagos.component';
+import {TicketsComponent} from './components/soporte/tickets/tickets.component';
+import {Instalaciones2Component} from './components/soporte/instalaciones2/instalaciones2.component';
+import {ProcesoComponent} from './components/procesos/proceso/proceso.component'
+import {InfraestructuraComponent} from './components/Inventario/infraestructura/infraestructura.component';
+import {AlarmasComponent} from './components/alarmas/alarmas.component';
+import {PdfComisionesComponent} from './components/comisiones/pdf-comisiones/pdf-comisiones.component';
+import {FactibilidadComponent} from './components/factibilidades/factibilidad/factibilidad.component';
+import {ZonasClientesComponent} from './components/clientes/zonas-clientes/zonas-clientes.component';
+import {SoporteTrasladoComponent} from './components/Inventario/soporte-traslado/soporte-traslado.component';
+import {PdfTrasladoComponent} from './components/Inventario/pdf-traslado/pdf-traslado.component';
+import {Equipos2Component} from './components/equipos/equipos2/equipos2.component';
+import {Celdas2Component} from './components/celdas/celdas/celdas.component';
+import {Aps2Component} from './components/aps/aps2/aps2.component';
+import {Servidores2Component} from './components/servidores/servidores2/servidores2.component';
+import {PromocionesComponent} from './components/promociones/promociones/promociones.component';
+import {DetallesInstalacionComponent} from './components/soporte/instalaciones2/detalles-instalacion/detalles-instalacion.component';
+import {Servicios2Component} from './components/servicios/servicios/servicios.component';
+import {ComisionesVendedoresComponent} from './components/comisiones-vendedores/comisiones-vendedores.component';
+import {ComisionesInstaladoresComponent} from './components/comisiones-instaladores/comisiones-instaladores.component';
+import {HistorialUsuariosComponent} from './components/usuarios/historial-usuarios/historial-usuarios.component';
+import {OltComponent} from './components/olts/olt.component'
+import {MangaEmpalmeComponent} from './components/manga-empalme/manga-empalme.component'
+import {CajaDistribucionComponent} from './components/caja-distribucion/caja-distribucion.component'
+import {Articulos2Component} from './components/inventario/articulos2/articulos2.component';
+import {VehiculosComponent} from './components/Inventario/vehiculos/vehiculos.component';
+import {EquiposGrupalesComponent} from './components/Inventario/equipos-grupales/equipos-grupales.component';
+import { CuentasIncombrablesComponent } from './components/cuentas-incombrables/cuentas-incombrables.component';
+import {DetallesTicketComponent} from './components/soporte/tickets/detalles-ticket/detalles-ticket.component';
+import {DetallesMigracionComponent} from './components/soporte/instalaciones2/detalles-migracion/detalles-migracion.component';
+import {DetallesMudanzaComponent} from './components/soporte/instalaciones2/detalles-mudanza/detalles-mudanza.component';
+
 
 const appRoutes: Routes = [
   {path: '', component: LayoutComponent, canActivate: [AuthGuard]},
@@ -33,10 +74,10 @@ const appRoutes: Routes = [
   {path: 'inventarios', component: InventariosComponent, canActivate: [AuthGuard]},
   {path: 'pclients', component: PClientsComponent, canActivate: [AuthGuard]},
   {path: 'router', component: ServidoresComponent, canActivate: [AuthGuard]},
-  {path: 'equipos',component: EquiposComponent, canActivate: [AuthGuard]},
-  {path: 'celdas',component: CeldasComponent, canActivate: [AuthGuard]},
+  {path: 'equipos',component: Equipos2Component, canActivate: [AuthGuard]},
+  {path: 'celdas',component: Celdas2Component, canActivate: [AuthGuard]},
   {path: 'services', component: ServiciosComponent, canActivate: [AuthGuard]},
-  {path: 'aps', component: ApsComponent, canActivate: [AuthGuard]},
+  {path: 'aps', component: Aps2Component, canActivate: [AuthGuard]},
   {path: 'users', component: UsuariosComponent, canActivate: [AuthGuard]},
   {path: 'addticket', component: AddticketComponent, canActivate: [AuthGuard]},
   {path: 'editticket/:ticket', component: EditticketComponent, canActivate: [AuthGuard]},
@@ -90,7 +131,7 @@ const appRoutes: Routes = [
   {path: 'delticket', component: DeleteInstallDialog},
   {path: 'delticket', component: Deleteotherinstall},
   {path: 'show_ip', component: Ipasignadascomponent},
-  {path: 'addceldas', component: AddceldasComponent},
+  //{path: 'addceldas', component: AddceldasComponent},
   {path: 'addaps', component: AddapsComponent},
   {path: 'addfac', component: AddFactComponent},
   {path: 'addclients', component: AddclientsComponent},
@@ -118,20 +159,67 @@ const appRoutes: Routes = [
   {path: 'pagar_comisiones', component: Pagar_comisones_Component, canActivate: [AuthGuard]},
   {path: 'factura_comision/:id_user', component: factura_comision, canActivate: [AuthGuard]},
   {path: 'pagar_comision', component: pagar_comisionescomponent},
-  {path: 'balance_mod_nacional', component: balance_bs},
-  {path: 'balance_mod_inter', component: balance_dl},
+  {path: 'balance_mod_nacional', component: balance_bs, canActivate: [AuthGuard]},
+  {path: 'balance_mod_inter', component: balance_dl, canActivate: [AuthGuard]},
   {path: 'Edit_bal_bs', component: Editar_ref_dl},
   {path: 'Edit_bal_dl', component: Editar_ref_bs},
   {path: 'Gen_Fac_blanco', component: GenFactura_blanco},
-  {path: 'sms_morosos', component: sms_morosoComponent},
+  {path: 'sms_morosos', component: sms_morosoComponent, canActivate: [AuthGuard]},
   {path: 'fac_prog', component: fac_programadas},
   {path: 'Anular_fac_prog', component: Anularprog_fac},
   {path: 'Anular_cort_prog', component: Anularprog_cort},
   {path: 'program_corte', component: program_corte},
-  {path: 'cortes_programados', component: cortes_programados}
-
-
-
+  {path: 'cortes_programados', component: cortes_programados},
+  {path: 'config_admin', component: ConfigAdminComponent, canActivate: [AuthGuard]},
+  {path: 'config_fac', component: Facturacionconfig, canActivate: [AuthGuard] },
+  {path: 'prod_pagos_fac', component: prod_pagos_fac_component },
+  {path: 'edit_prod_fac', component: EditFacProdComponent  },
+  {path: 'edit_pag_fac', component: EditFacPagComponent },
+  {path: 'delete_fac_prog', component: eliminar_prod_pag },
+  {path: 'edit_config_adm', component: edit_conf_adm },
+  {path: 'edit_install', component: Edit_InstallComponent},
+  {path: 'config_balances', component: edit_balances, canActivate: [AuthGuard]},
+  {path: 'Edit_pago_bs', component: EditPagoBs},
+  {path: 'Edit_pago_dl', component: EditPagoDl},
+  {path: 'confirm_edit_pagos', component: confirm_edit_bal_pagos},
+  {path: 'confirm_anular_pagos', component: confirm_anular_bal_pagos},
+  {path: 'confirm_anular_install', component: confirm_anular_install},
+  {path: 'zonas2/:id', component: ArticulosComponent, canActivate: [AuthGuard]},
+  {path: 'zonas2', component: Zonas2Component, canActivate: [AuthGuard]},
+  {path: 'equipo/:idzona/:id', component: DetallesArticulosComponent, canActivate: [AuthGuard]},
+  {path: 'transferenciaEquipos', component: TransferenciaEquiposComponent, canActivate: [AuthGuard]},
+  {path: 'listaTransferencias', component: ListaTransferenciasComponent, canActivate: [AuthGuard]},
+  {path: 'ordenTraslado/:id_transferencia/:filtro', component: OrdenTrasladoComponent, canActivate: [AuthGuard]},
+  {path: 'ventaEquipos', component: VentaEquiposComponent, canActivate: [AuthGuard]},
+  {path: 'administrativo', component: ZonasComponent, canActivate: [AuthGuard]},
+  {path: 'CierresPendientes', component: PagosComponent, canActivate: [AuthGuard]},
+  {path: 'Tickets', component: TicketsComponent, canActivate: [AuthGuard]},
+  {path: 'Instalaciones2', component: Instalaciones2Component, canActivate: [AuthGuard]},
+  {path: 'detallesInstalacion/:id', component: DetallesInstalacionComponent, canActivate: [AuthGuard]},
+  {path: 'detallesMigracion/:id', component: DetallesMigracionComponent, canActivate: [AuthGuard]},
+  {path: 'detallesMudanza/:id', component: DetallesMudanzaComponent, canActivate: [AuthGuard]},
+  {path: 'procesos', component: ProcesoComponent, canActivate: [AuthGuard]},
+  {path: 'infraestructura', component: InfraestructuraComponent, canActivate: [AuthGuard]},
+  {path: 'alarmas', component: AlarmasComponent, canActivate: [AuthGuard]},
+  {path: 'pdfComisiones/:userSeleccionado/:mesSeleccionado/:anioSeleccionado', component: PdfComisionesComponent, canActivate: [AuthGuard]},
+  {path: 'Factibilidades', component: FactibilidadComponent, canActivate: [AuthGuard]},
+  {path: 'zonasClientes', component: ZonasClientesComponent, canActivate: [AuthGuard]},
+  {path: 'soporteTraslado', component: SoporteTrasladoComponent, canActivate: [AuthGuard]},
+  {path: 'pdfTraslado/:id_traslado', component: PdfTrasladoComponent, canActivate: [AuthGuard]},
+  {path: 'Promociones', component: PromocionesComponent, canActivate: [AuthGuard]},
+  {path: 'Servicios', component: Servicios2Component, canActivate: [AuthGuard]},
+  {path: 'ComisionesVendedores', component: ComisionesVendedoresComponent, canActivate: [AuthGuard]},
+  {path: 'ComisionesInstaladores', component: ComisionesInstaladoresComponent, canActivate: [AuthGuard]},
+  {path: 'HistorialUsuarios', component: HistorialUsuariosComponent, canActivate: [AuthGuard]},
+  {path: 'Olts',component: OltComponent, canActivate: [AuthGuard]},
+  {path: 'MangasEmpalme',component: MangaEmpalmeComponent, canActivate: [AuthGuard]},
+  {path: 'CajasDistribucion',component: CajaDistribucionComponent, canActivate: [AuthGuard]},
+  {path: 'Consumibles/:id',component: Articulos2Component, canActivate: [AuthGuard]},
+  {path: 'Vehiculos',component: VehiculosComponent, canActivate: [AuthGuard]},
+  {path: 'EquiposGrupales',component: EquiposGrupalesComponent, canActivate: [AuthGuard]},
+  {path: 'CuentasIncobrables',component: CuentasIncombrablesComponent, canActivate: [AuthGuard]},
+  {path: 'detallesTicket/:id/:tipo', component: DetallesTicketComponent, canActivate: [AuthGuard]},
+  
 ]
 
 

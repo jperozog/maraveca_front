@@ -1,4 +1,5 @@
-<md-toolbar class="submenu">
+<!--
+  <md-toolbar class="submenu">
   <md-form-field floatPlaceholder="never">
     <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
   </md-form-field>
@@ -43,3 +44,516 @@
     </tfoot>
   </table>
 </div>
+-->
+
+<div class="row zonas">
+  <div class="col-sm-10">
+  </div>
+</div>
+<div class="row zonas2">
+  <div class="col-sm-1">
+    <h4 class="titulo2">Usuario:</h4>
+  </div>
+  <div class="col-sm-3">
+    <select *ngIf="usuario.perm && usuario.perm.includes('comision_w')" [(ngModel)]="userSeleccionado"
+      class="form-control" id="exampleSelect2" required>
+      <option value='0' selected> Seleccione Usuario</option>
+      <option *ngFor="let d of data" [value]="d.id_user">{{d.nombre_user}} {{d.apellido_user}}</option>
+    </select>
+  </div>
+
+  <div class="col-sm-2">
+    <select [(ngModel)]="mesSeleccionado" class="form-control" id="exampleSelect2" required>
+      <option value='0' selected> Seleccione Mes</option>
+      <option [value]='1' selected> Enero</option>
+      <option [value]='2' selected> Febrero</option>
+      <option [value]='3' selected> Marzo</option>
+      <option [value]='4' selected> Abril</option>
+      <option [value]='5' selected> Mayo</option>
+      <option [value]='6' selected> Junio</option>
+      <option [value]='7' selected> Julio</option>
+      <option [value]='8' selected> Agosto</option>
+      <option [value]='9' selected> Septiembre</option>
+      <option [value]='10' selected> Octubre</option>
+      <option [value]='11' selected> Noviembre</option>
+      <option [value]='12' selected> Diciembre</option>
+    </select>
+  </div>
+
+  <div class="col-sm-2">
+    <select [(ngModel)]="anioSeleccionado" class="form-control" id="exampleSelect2" required>
+      <option value='0' selected> Seleccione Año</option>
+      <option [value]='2021' selected> 2021</option>
+      <option [value]='2020' selected> 2020</option>
+      <option [value]='2019' selected> 2019</option>
+      <option [value]='2018' selected> 2018</option>
+    </select>
+  </div>
+
+  <div class="col-sm-2">
+    <button *ngIf="mesSeleccionado !=0 && anioSeleccionado !=0" type="button" (click)="verDetalles()"
+      class="btn btn-info">Buscar Comisiones</button>
+
+  </div>
+
+</div>
+
+<div class="row zonas2">
+  <div *ngIf="visualizar == true" class="col-sm-12">
+    <div class="card border-light mb-3">
+      <div class="card-header">Comisiones a Pagar</div>
+      <div class="card-body">
+        <h6>Comisiones de Usuario</h6>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="text-info">{{instalaciones.length}} Servicios Con Comision</p>
+          </div>
+          <div class="col-sm-2">
+          </div>
+          <div class="col-sm-4">
+            <input (input)="onSearchComision($event.target.value)"
+              (keyup.backspace)="comisionBackSpace($event.target.value)" type="text" class="form-control"
+              name="filtrado" placeholder="Filtrar" id="inputDefault" [(ngModel)]="filtrado">
+          </div>
+          <div class="col-sm-3">
+            <button type="button" (click)="openModal3(lgModal2)" class="btn btn-success btn-sm ">
+              <md-icon>assignment_turned_in</md-icon>
+            </button>
+            <button type="button" (click)="openModal(lgModal)" class="btn btn-danger btn-sm ">
+              <md-icon>assignment_late</md-icon>
+            </button>
+            <button *ngIf="usuario.perm.includes('comision_w')" type="button" (click)="openModal2(template)"
+              class="btn btn-info btn-sm ">
+              <md-icon>payment</md-icon>
+            </button>
+            <button *ngIf="usuario.perm.includes('comision_w')" (click)="irAPdf()" type="button"
+              class="btn btn-warning btn-sm">
+              <md-icon>note</md-icon>
+            </button>
+          </div>
+        </div>
+        <br>
+        <table class="table table-borderless">
+          <thead>
+            <tr class="table-info">
+              <th scope="col">N</th>
+              <th scope="col">Identificacion</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Monto</th>
+              <th scope="col">Pagado</th>
+              <th scope="col">Deuda</th>
+              <th scope="col">Comision</th>
+              <th scope="col">Estatus</th>
+              <th scope="col">Comision</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of instalaciones | paginate: {id:'comisiones', itemsPerPage: 5, currentPage: p }">
+              <th scope="row">{{i.id_srv}}</th>
+              <th scope="row">{{i.kind}}{{i.dni}}</th>
+              <th scope="row" *ngIf="i.kind == 'V'">{{i.nombre}} {{i.apellido}}</th>
+              <th scope="row" *ngIf="i.kind == 'E'">{{i.nombre}} {{i.apellido}}</th>
+              <th scope="row" *ngIf="i.kind != 'V' && i.kind != 'E'">{{i.social}}</th>
+              <th scope="row">
+                <p *ngIf="i.moneda == '$'" class="text-info">{{i.monto | number : '1.2-2'}}{{i.denominacion}}</p>
+                <p *ngIf="i.moneda == 'Bs.S'" class="text-info">{{i.montoBS | number : '1.2-2'}} Bs.S</p>
+                <p *ngIf="i.tasa == 2" class="text-info">{{i.monto}}</p>
+              </th>
+              <th scope="row">
+                <p *ngIf="i.moneda == '$'" class="text-info">{{i.pagado | number : '1.2-2'}}{{i.denominacion}}</p>
+                <p *ngIf="i.moneda == 'Bs.S'" class="text-info">{{i.pagadoBS | number : '1.2-2'}} Bs.S</p>
+                <p *ngIf="i.tasa == 2" class="text-info">{{i.pagado}}</p>
+              </th>
+              <th scope="row">
+                <p *ngIf="i.moneda == '$'" class="text-danger">{{i.deuda | number : '1.2-2'}}{{i.denominacion}}</p>
+                <p *ngIf="i.moneda == 'Bs.S'" class="text-danger">{{i.deudaBS | number : '1.2-2'}} Bs.S</p>
+                <p *ngIf="i.tasa == 2" class="text-info">{{i.deuda}}</p>
+              </th>
+              <th scope="row">
+                <p *ngIf="i.moneda == '$'" class="text-success">{{i.comision | number : '1.2-2'}}{{i.denominacion}}</p>
+                <p *ngIf="i.moneda == 'Bs.S'" class="text-success">{{i.comisionBS | number : '1.2-2'}} Bs.S</p>
+                <p *ngIf="i.tasa == 2" class="text-info">{{i.comision}}</p>
+              </th>
+              <th scope="row">{{i.estado}}</th>
+              <th scope="row">
+                <p class="text-warning">{{i.porcentaje_comision_serv}} %</p>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="comisiones" (pageChange)="p = $event"></pagination-controls>
+        <br>
+        <br>
+
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="alert alert-dismissible alert-warning">
+
+              <h4 class="alert-heading">Registro de Comisiones Totales</h4>
+              <p>
+                Comisiones ($): {{comisionesdl | number : '1.2'}}$
+              </p>
+              <p>
+                Comisiones (Bs.S): {{comisionesConversion | number : '1.2'}}Bs.S
+              </p>
+              <p>
+                Comisiones (Clientes Facturables): {{comisionesbs | number : '1.2-2'}}Bs.S
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="alert alert-dismissible alert-danger">
+
+              <h4 class="alert-heading">Registro de Comisiones Pendientes Por Cobrar</h4>
+              <p>
+                Comisiones ($): {{comisionRestanteDl | number : '1.2'}}$
+              </p>
+              <p>
+                Comisiones (Bs.S): {{comisionRestanteConversion | number : '1.2'}}Bs.S
+              </p>
+              <p>
+                Comisiones (Clientes Facturables): {{comisionRestanteBs | number : '1.2-2'}}Bs.S
+              </p>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="alert alert-dismissible alert-info">
+              <h4 class="alert-heading">Registro de Comisiones Cobradas Por Pagar</h4>
+              <p>
+                Comisiones ($): {{comisionDisponibleDl | number : '1.2'}}$
+              </p>
+              <p>
+                Comisiones (Bs.S): {{ comisionDisponibleBs | number : '1.2'}}Bs.S
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="alert alert-dismissible alert-success">
+              <h4 class="alert-heading">Registro de Comisiones Pagadas</h4>
+              <p>
+                Comisiones ($): {{comisionPagadaDl | number : '1.2'}}$
+              </p>
+              <p>
+                Comisiones (Bs.S): {{comisionesPagadasBs | number : '1.2'}}Bs.S
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Comisiones Pendientes</h4>
+        <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-borderless">
+          <thead>
+            <tr class="table-info">
+              <th scope="col">N</th>
+              <th scope="col">Identificacion</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Monto</th>
+              <th scope="col">Pagado</th>
+              <th scope="col">Deuda</th>
+              <th scope="col">Comision</th>
+              <th scope="col">Estatus</th>
+              <th scope="col">Comision</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of pendientes | paginate: {id:'comisionesPendientes', itemsPerPage: 3, currentPage: e }">
+              <th scope="row">{{p.id_srv}}</th>
+              <th scope="row">{{p.kind}}{{p.dni}}</th>
+              <th scope="row" *ngIf="p.serie == 0">{{p.nombre}} {{p.apellido}}</th>
+              <th scope="row" *ngIf="p.serie == 1">{{p.social}}</th>
+              <th scope="row">
+                <p class="text-info">{{p.monto | number : '1.2-2'}}{{p.denominacion}}</p>
+              </th>
+              <th scope="row">
+                <p class="text-info">{{p.pagado | number : '1.2-2'}}{{p.denominacion}}</p>
+              </th>
+              <th scope="row">
+                <p class="text-danger">{{p.deuda | number : '1.2-2'}}{{p.denominacion}}</p>
+              </th>
+              <th scope="row">
+                <p class="text-success">{{p.comision | number : '1.2-2'}}{{p.denominacion}}</p>
+              </th>
+              <th scope="row">{{p.estado}}</th>
+              <th scope="row">
+                <p class="text-warning">{{p.porcentaje_comision_serv}} %</p>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="comisionesPendientes" (pageChange)="e = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div bsModal #lgModal2="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Pago de Comisiones en el Mes</h4>
+        <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-borderless">
+          <thead>
+            <tr class="table-info">
+              <th scope="col">N</th>
+              <th scope="col">Emisor</th>
+              <th scope="col">Receptor</th>
+              <th scope="col">Monto</th>
+              <th scope="col">Referencia</th>
+              <th scope="col">Responsable</th>
+              <th scope="col">Fecha De Pago</th>
+              <th scope="col">Accion</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let l of listaPagos | paginate: {id:'listaPagos', itemsPerPage: 3, currentPage: e }">
+              <th scope="row">{{l.id_pago}}</th>
+              <th scope="row">{{l.emisor}}</th>
+              <th scope="row">{{l.receptor}}</th>
+              <th scope="row">{{l.monto | number : '1.2-2'}}{{l.tipo_comision}}</th>
+              <th scope="row">{{l.referencia}}</th>
+              <th scope="row">{{l.responsable}}</th>
+              <th scope="row">{{l.created_at | date: 'dd/M/yy'}}</th>
+              <th>
+                <button (click)="openModal4(lgModal3)" type="button" class="btn btn-info">
+                  <i id="icono" class="fa fa-file"></i>
+                </button>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="listaPagos" (pageChange)="e = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #lgModal3="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">PDF</h4>
+        <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img class="imagen1" src="../../../assets/images/presu2.jpg" alt="">
+        <h2 class="titulo">ORDEN DE TRASLADO</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Pagar Comisiones</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div class="row">
+      <div class="col-sm-9">
+        Comisiones ($): {{comisionDisponibleDl | number : '1.2'}}$
+      </div>
+      <div class="col-sm-3">
+        <button type="button" (click)="pagar$()" class="btn btn-info btn-sm">
+          Pagar
+        </button>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-9">
+        Comisiones (Bs.S): {{comisionDisponibleBs  | number : '1.2'}}Bs.S
+      </div>
+      <div class="col-sm-3">
+        <button type="button" (click)="pagarBs()" class="btn btn-info btn-sm">
+          Pagar
+        </button>
+      </div>
+    </div>
+    <br>
+    <div *ngIf="pago$ == true">
+      <div class="col-sm-11">
+        <table class="table table-borderless">
+          <tbody>
+            <tr class="tr" (click)="agregarNinstalacion(ins.id_srv, o)"
+              *ngFor=" let ins of instalacionesPagos | paginate: { id: 'respuesta', itemsPerPage: 3, currentPage: e }; let o = index">
+              <th *ngIf="ins.estatus == 1 && ins.estado == 'pagado'" class="table-default td">{{ ins.nombre }}
+                {{ ins.apellido}}</th>
+              <th *ngIf="ins.estatus == 2 && ins.estado == 'pagado'" class="table-success td">{{ ins.nombre }}
+                {{ ins.apellido}}</th>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls previousLabel=" " nextLabel=" " id="respuesta" (pageChange)="e = $event">
+        </pagination-controls>
+      </div>
+      <h5>Pagos De Comisiones $</h5>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="exampleSelect1">Emisor</label>
+            <select [(ngModel)]="emisorSeleccionado" class="form-control" id="exampleSelect1">
+              <option value=""></option>
+              <option value="Efectivo $">Efectivo $</option>
+              <option value="Zelle">Zelle</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="exampleSelect1">Receptor</label>
+            <select [(ngModel)]="receptorSeleccionado" class="form-control" id="exampleSelect1">
+              <option value=""></option>
+              <option value="Efectivo $">Efectivo $</option>
+              <option value="Zelle">Zelle</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="receptorSeleccionado != '' && emisorSeleccionado != ''">
+        <div class="form-group">
+          <label class="col-form-label" for="inputDefault">Referencia</label>
+          <input [(ngModel)]="referencia" type="text" class="form-control" id="inputDefault">
+        </div>
+      </div>
+      <div *ngIf="receptorSeleccionado != '' && emisorSeleccionado != '' && referencia != ''" class="form-group">
+        <label for="exampleSelect1">Tipo de Pago</label>
+        <select [(ngModel)]="tipoSeleccionado" class="form-control" id="exampleSelect1">
+          <option value=""></option>
+          <option value="Comisiones Completa">Comisiones Completa</option>
+          <option value="Adelanto de Comision">Adelanto de Comision</option>
+        </select>
+      </div>
+      <div *ngIf="receptorSeleccionado != '' && emisorSeleccionado != '' && referencia != '' && tipoSeleccionado != ''">
+        <div class="form-group">
+          <label class="col-form-label" for="inputDefault">Monto a Pagar</label>
+          <input [(ngModel)]="monto" type="text" class="form-control" id="inputDefault">
+        </div>
+      </div>
+      <button *ngIf=" monto > 1 && monto <= comisionDisponibleDl" type="button" (click)="guardarData()"
+        class="btn btn-info ">
+        Pagar Comisiones
+      </button>
+    </div>
+
+
+    <div *ngIf="pagoBs == true">
+      <h5>Pagos De Comisiones Bs.S</h5>
+
+
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="exampleSelect1">Banco Emisor</label>
+            <select [(ngModel)]="emisorSeleccionado" class="form-control" id="exampleSelect1">
+              <option value=""></option>
+              <option value="Banesco">Banesco</option>
+              <option value="BOD">BOD</option>
+              <option value="Bicentenario">Bicentenario</option>
+              <option value="Venezuela">Venezuela</option>
+              <option value="Mercantil">Mercantil</option>
+              <option value="Provincial ">Provincial </option>
+              <option value="Fondo Comun">Fondo Comun</option>
+              <option value="Nacional de crédito">Nacional de crédito</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="exampleSelect1">Banco Receptor</label>
+            <select [(ngModel)]="receptorSeleccionado" class="form-control" id="exampleSelect1">
+              <option value=""></option>
+              <option value="Banesco">Banesco</option>
+              <option value="BOD">BOD</option>
+              <option value="Bicentenario">Bicentenario</option>
+              <option value="Venezuela">Venezuela</option>
+              <option value="Mercantil">Mercantil</option>
+              <option value="Provincial ">Provincial </option>
+              <option value="Fondo Comun">Fondo Comun</option>
+              <option value="Nacional de crédito">Nacional de crédito</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="receptorSeleccionado != '' && emisorSeleccionado != ''">
+        <div class="form-group">
+          <label class="col-form-label" for="inputDefault">Referencia</label>
+          <input [(ngModel)]="referencia" type="text" class="form-control" id="inputDefault">
+        </div>
+      </div>
+      <div *ngIf="receptorSeleccionado != '' && emisorSeleccionado != '' && referencia != ''" class="form-group">
+        <label for="exampleSelect1">Tipo de Pago</label>
+        <select [(ngModel)]="tipoSeleccionado" class="form-control" id="exampleSelect1">
+          <option value=""></option>
+          <option value="Comision Completa">Comision Completa</option>
+          <option value="Adelanto de Comision">Adelanto de Comision</option>
+        </select>
+      </div>
+      <div *ngIf="receptorSeleccionado != '' && emisorSeleccionado != '' && referencia != '' && tipoSeleccionado != ''">
+        <div class="form-group">
+          <label class="col-form-label" for="inputDefault">Fecha de Pago</label>
+          <input [(ngModel)]="fechaPago" type="date" class="form-control" id="inputDefault">
+        </div>
+      </div>
+      <div *ngIf="receptorSeleccionado != '' && emisorSeleccionado != '' && referencia != '' && tipoSeleccionado != '' && fechaPago != ''">
+        <div class="form-group">
+          <label class="col-form-label" for="inputDefault">Monto a Pagar</label>
+          <input [(ngModel)]="monto" type="text" class="form-control" id="inputDefault">
+        </div>
+      </div>
+      <button *ngIf=" monto > 10000 && monto <= comisionDisponibleBs" type="button" (click)="guardarData()"
+        class="btn btn-info ">
+        Pagar Comisiones
+      </button>
+    </div>
+    <br>
+
+  </div>
+
+
+</ng-template>

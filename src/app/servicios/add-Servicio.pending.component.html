@@ -157,7 +157,9 @@
         <md2-option value="1">Planes Antiguos</md2-option>
         <md2-option value="4">Planes Nuevos</md2-option>
         <md2-option value="3">Planes en dolares</md2-option>
-
+        <md2-option value="5">Planes Solo Dedicados</md2-option>
+        <md2-option value="6">Planes Zulia</md2-option>
+        <md2-option value="7">Planes Fibra</md2-option>
 
       </md2-select>
     </td>
@@ -214,6 +216,81 @@
         </md2-select>
       </td>
     </tr>
+    <tr *ngIf="addClient.value.tipo_plan_srv==5">
+      <ng-container *ngFor="let pln of planes3">
+        <td *ngIf="pln == plan_f && !plan_edit" (click)=edit_plan() tooltip="Click para editar">
+          <span> {{pln.name_plan}} </span>
+        </td>
+      </ng-container>
+      <td *ngIf="plan_edit "colspan="2">
+        <md2-select name="Planes"
+                    formControlName="planes_"
+                    placeholder="Planes"
+                    style="width=100%; min-width: 100%;"
+                    mdInput
+        >
+          <md2-select-header>
+            <input name="p_search"
+                   type="text"
+                   [(ngModel)]="p_search"
+                   placeholder="Buscar..."
+                   style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                   formControlName="p_search" />
+          </md2-select-header>
+          <md2-option *ngFor="let i of (planes3 | dataPipe : {name_plan: p_search})" [value]="i">{{i.name_plan}}</md2-option>
+        </md2-select>
+      </td>
+    </tr>
+    <tr *ngIf="addClient.value.tipo_plan_srv==6">
+      <ng-container *ngFor="let pln of planes3">
+        <td *ngIf="pln == plan_f && !plan_edit" (click)=edit_plan() tooltip="Click para editar">
+          <span> {{pln.name_plan}} </span>
+        </td>
+      </ng-container>
+      <td *ngIf="plan_edit "colspan="2">
+        <md2-select name="Planes"
+                    formControlName="planes_"
+                    placeholder="Planes"
+                    style="width=100%; min-width: 100%;"
+                    mdInput
+        >
+          <md2-select-header>
+            <input name="p_search"
+                   type="text"
+                   [(ngModel)]="p_search"
+                   placeholder="Buscar..."
+                   style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                   formControlName="p_search" />
+          </md2-select-header>
+          <md2-option *ngFor="let i of (planes6 | dataPipe : {name_plan: p_search})" [value]="i">{{i.name_plan}}</md2-option>
+        </md2-select>
+      </td>
+    </tr>
+    <tr *ngIf="addClient.value.tipo_plan_srv==7">
+      <ng-container *ngFor="let pln of planes3">
+        <td *ngIf="pln == plan_f && !plan_edit" (click)=edit_plan() tooltip="Click para editar">
+          <span> {{pln.name_plan}} </span>
+        </td>
+      </ng-container>
+      <td *ngIf="plan_edit "colspan="2">
+        <md2-select name="Planes"
+                    formControlName="planes_"
+                    placeholder="Planes"
+                    style="width=100%; min-width: 100%;"
+                    mdInput
+        >
+          <md2-select-header>
+            <input name="p_search"
+                   type="text"
+                   [(ngModel)]="p_search"
+                   placeholder="Buscar..."
+                   style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                   formControlName="p_search" />
+          </md2-select-header>
+          <md2-option *ngFor="let i of (planes7 | dataPipe : {name_plan: p_search})" [value]="i">{{i.name_plan}}</md2-option>
+        </md2-select>
+      </td>
+    </tr>
     <tr *ngIf="addClient.value.tipo_plan_srv==3">
       <ng-container *ngFor="let pln of planesd">
         <td *ngIf="pln == plan_f && !plan_edit" (click)=edit_plan() tooltip="Click para editar">
@@ -240,7 +317,7 @@
       </td>
     </tr>
     <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
-    <tr><td colspan="2" *ngIf="addClient.value.tipo_plan_srv== 4">
+    <tr><td colspan="2" *ngIf="addClient.value.tipo_plan_srv== 4 || addClient.value.tipo_plan_srv== 5 || addClient.value.tipo_plan_srv== 6">
       <md2-select mu name="modo de pago"  formControlName="modo_pago_srv" class="example-full-width" placeholder="seleccion la modalidad de pago" >
         <md2-option  [value]="1" >Moneda local Bs.S</md2-option>
         <md2-option  [value]="2" >Moneda extranjera US$</md2-option>
@@ -260,7 +337,7 @@
 
         <!--/md-form-field-->
       </td>
-      <td colspan="2" *ngIf="addClient.value.tipo_plan_srv == 4 && addClient.value.modo_pago_srv == 1">
+      <td colspan="2" *ngIf="(addClient.value.tipo_plan_srv == 4 || addClient.value.tipo_plan_srv == 5 || addClient.value.tipo_plan_srv == 6 )&& addClient.value.modo_pago_srv == 1">
 
         <md2-select class="example-full-width" name="Facturable"  mdInput placeholder="seleccione si el servicio es o no facturable" formControlName="serie_srv">
           <md2-option  [value]="0">No Facturable</md2-option>
@@ -280,7 +357,7 @@
         </md2-select>
 
         <!--/md-form-field-->
-      </td><td colspan="2" *ngIf=" addClient.value.tipo_plan_srv == 4 &&  addClient.value.modo_pago_srv ==2">
+      </td><td colspan="2" *ngIf=" (addClient.value.tipo_plan_srv == 4 || addClient.value.tipo_plan_srv == 5 || addClient.value.tipo_plan_srv == 6 ) &&  addClient.value.modo_pago_srv ==2">
 
       <md2-select  [(ngModel)]="valor_serie" disabled=" true" class="example-full-width" name="Facturable" mdInput placeholder="seleccione si el servicio es o no facturable" formControlName="serie_srv">
         <md2-option ng-selected="true" [value]="0">No Facturable</md2-option>

@@ -1,0 +1,103 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <button (click)="atras()" type="button" class="btn btn-info boton">Atras</button>
+  </div>
+  <div class="col-sm-3">
+    <h1>Clientes Por Zonas</h1>
+  </div>
+  <div class="col-sm-4">
+    <select (change)="traerDatosEstado()" [(ngModel)]="estadoSeleccionado" class="form-control" id="exampleSelect2"
+      required>
+      <option value='0' selected>Seleccione Estado</option>
+      <option *ngFor="let e of estados" [value]="e.id_estado">{{e.estado}}</option>
+    </select>
+  </div>
+</div>
+<br>
+
+
+<div *ngIf="estadoSeleccionado != 0" class="row">
+
+  <div class="col-sm-3">
+    <div class="col-sm-12">
+      <md-icon class="icono">accessibility</md-icon>
+      <h1 class="clientes">{{clientes.length}}</h1>
+    </div>
+    <br>
+    <br>
+    <div class="col-sm-12">
+      <table class="table table-borderless tabla">
+        <tbody>
+          <tr (click)="mostrarDatosMunicipio(m.id_municipio)"
+            *ngFor="let m of municipios | paginate: {id:'muni', itemsPerPage: 12, currentPage: m }">
+            <td>{{m.municipio}}</td>
+            <td>{{m.cantidad}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination-controls id="muni" (pageChange)="m = $event"></pagination-controls>
+    </div>
+
+  </div>
+
+  <div class="col-sm-8">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="row">
+          <div class="col-sm-6 filtro2">
+            <h4>{{municipioActual}}</h4>
+          </div>
+          <div class="col-sm-6 filtro">
+            <select (change)="FiltroClientes()" [(ngModel)]="FiltroActivo" class="form-control"
+              id="exampleSelect2" required>
+              <option value="0">Todos</option>
+              <option value="1">Clientes Naturales</option>
+              <option value="2">Empresas</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4"></div>
+
+      <div class="col-sm-4">
+        <div class="row">
+          <div class="col-sm-10 filtro">
+            <input (input)="buscarCliente($event.target.value)"
+              (keyup.backspace)="BuscarClienteBackSpace($event.target.value)" type="text" class="form-control"
+              name="filtrado" placeholder="Filtrar" id="inputDefault">
+          </div>
+          <div class="col-sm-2 boton2">
+            <button type="button" (click)="exportAsXLSX()" class="btn btn-info btn-sm"><i id="icono"
+                class="fa fa-file"></i></button>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+    <table class="table table-borderless">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">#</th>
+          <th scope="col">Identificacion</th>
+          <th scope="col">Nombres</th>
+          <th scope="col">Apellidos</th>
+          <th scope="col">Numero</th>
+          <th scope="col">Direccion</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of listaClientes | paginate: {id:'clientes', itemsPerPage: 10, currentPage: c }">
+          <th scope="row">{{c.id}}</th>
+          <td>{{c.kind}}{{c.dni}}</td>
+          <td *ngIf="c.kind == 'E' || c.kind == 'V' || c.kind == 'V-'">{{c.nombre}}</td>
+          <td *ngIf="c.kind == 'E' || c.kind == 'V' || c.kind == 'V-'">{{c.apellido}}</td>
+          <td *ngIf="c.kind == 'G' || c.kind == 'J'">{{c.social}}</td>
+          <td *ngIf="c.kind == 'G' || c.kind == 'J'"></td>
+          <td>{{c.phone1}}</td>
+          <td class="trim-info">{{c.direccion}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="clientes" (pageChange)="c = $event"></pagination-controls>
+  </div>
+</div>

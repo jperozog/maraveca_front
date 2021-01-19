@@ -16,7 +16,7 @@ Cliente: {{(row.nombre+" "+row.apellido) | capitalize2:true }}
     <td  colspan="4" *ngIf="row && ((row.kind | capitalize2)=='V' || (row.kind | capitalize2)=='E')" class="fac">
       Cedula:  {{row.kind+row.dni}}
     </td>
-    <td colspan="4" *ngIf="(row.kind | capitalize2)=='J' || (row.kind | capitalize2)=='G'"class="fac">
+    <td colspan="4" *ngIf="(row.kind | capitalize2)=='J' || (row.kind | capitalize2)=='V-' || (row.kind | capitalize2)=='G'"class="fac">
       R.I.F.:  {{row.kind+row.dni}}
     </td>
     <td class="fac" style="text-align: center" colspan="3">

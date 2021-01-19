@@ -1,0 +1,246 @@
+<div class="row zonas">
+  <div class="col-sm-1"></div>
+  <div class="col-sm-3">
+    <h2 class="titulo">Zonas Disponibles</h2>
+  </div>
+  <div class="col-sm-3">
+
+  </div>
+  <div class="col-sm-5">
+  </div>
+  <div class="col-sm-7">
+    <div class="row">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-10">
+        <div class="row">
+          <div
+            style="background-color: #2C2C30; height: 100px; width: 100%; padding: 10px; margin-top: 2%; margin-left: 2%;"
+            class="col-sm-5" *ngFor="let zona of zonas">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h6 style="color: white;">{{zona.nombre_zona}}</h6>
+                  </div>
+                  <div class="col-sm-6">
+                    <button type="button" (click)="zonaSeleccionada(zona.id_zona)"
+                      class="btn btn-default btn-block botones2">
+                      Equipos
+                    </button>
+                  </div>
+                  <div class="col-sm-6">
+                    <button title="Soporte Traslado" type="button" (click)="zonaSeleccionada2(zona.id_zona)"
+                      class="btn btn-default btn-block botones2">
+                      Consumibles
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-sm-1"></div>
+    </div>
+    <div>
+    </div>
+  </div>
+
+  <div class="col-sm-5 botones">
+    <table class="table table-borderless">
+      <thead>
+        <tr style=" background-color:#2C2C30; color: white;">
+          <th scope="col">Detalles</th>
+          <th scope="col">Responsable</th>
+          <th scope="col">Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let h of historial | paginate: {id:'historial', itemsPerPage: 3, currentPage: e }">
+          <td>{{h.detalle}}</td>
+          <td>{{h.nombre_user}} {{h.apellido_user}}</td>
+          <td>{{h.created_at | stringToDate | date: 'dd/M/yy'}}</td>
+        </tr>
+
+      </tbody>
+    </table>
+    <pagination-controls id="historial" (pageChange)="e = $event"></pagination-controls>
+    <br>
+    <div class="row">
+      <div class="col-sm-6">
+        <button title="Transferir Equipos" type="button" (click)="transferencias()"
+          class="btn btn-info btn-block boton">
+
+          Transferencia de Equipos
+        </button>
+      </div>
+      <div class="col-sm-6">
+        <button title="Lista de Transferencias" type="button" (click)="listaTransferencias()"
+          class="btn btn-info btn-block boton">
+
+          Lista de Transferencias
+        </button>
+      </div>
+      <div  *ngIf="usuario.perm && usuario.perm.includes('inventarios_esp')" class="col-sm-6">
+        <button title="Venta de Equipos" type="button" (click)="ventaEquipos()" class="btn btn-info btn-block boton">
+
+          Venta de Equipos
+        </button>
+      </div>
+      <div class="col-sm-6">
+        <button title="Infraestructura Maraveca" type="button" (click)="estructura()"
+          class="btn btn-info btn-block boton">
+
+          Infraestructura Maravaveca
+        </button>
+      </div>
+      <div *ngIf="usuario.perm && usuario.perm.includes('inventarios_esp')" class="col-sm-6">
+        <button  title="Soporte Traslado" type="button" (click)="soporteTraslado()" class="btn btn-info btn-block boton">
+
+          Soporte Traslado
+        </button>
+      </div>
+      <div *ngIf="usuario.perm && usuario.perm.includes('inventarios_esp')" class="col-sm-6">
+        <button  title="Soporte Traslado" type="button" (click)="equiposGrupales()" class="btn btn-info btn-block boton">
+
+          Equipos Grupales
+        </button>
+      </div>
+      <div *ngIf="usuario.perm && usuario.perm.includes('inventarios_esp')" class="col-sm-6">
+        <button  title="Soporte Traslado" type="button" (click)="vehiculos()" class="btn btn-info btn-block boton">
+
+          Vehiculos
+        </button>
+      </div>
+      <div *ngIf="usuario.perm && usuario.perm.includes('inventarios_esp')" class="col-sm-6">
+        <button  title="Buscador" type="button" class="btn btn-info btn-block boton" (click)=buscador(template)>
+
+          Buscador
+        </button>
+      </div>
+      <div *ngIf="usuario.perm && usuario.perm.includes('inventarios_esp')" class="col-sm-6">
+        <button  title="Buscador" type="button" class="btn btn-info btn-block boton" (click)=buscador(template)>
+          Reposicion de Equipos
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Buscador</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-10">
+        <label class="col-form-label" for="inputDefault">Serial Equipo</label>
+        <input [(ngModel)]="serialEquipo" type="text" class="form-control">
+      </div>
+      <div class="col-sm-2">
+        <button style="background-color:#1F9BCF; margin-top: 50px; float:right;" (click)="limpiarTodo()" title="limpiar"
+          type="button" class="btn btn-info btn-sm ">
+          <i id="icono" class="fa fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <br>
+    <div *ngIf="detalles" class="row">
+      <div class="col-sm-6">
+        <p *ngIf="detallesEquipo.estatus == 1">Estado: Disponible en Stock </p>
+        <p *ngIf="detallesEquipo.estatus == 2">Estado: En Proceso de Transferencias </p>
+        <p *ngIf="detallesEquipo.estatus == 3">Estado: Asignado A Instalacion </p>
+        <p *ngIf="detallesEquipo.estatus == 6">Estado: Asignado A Infraestructura de Maraveca </p>
+        <p *ngIf="detallesEquipo.estatus == 5">Estado: Vendido a Cliente </p>
+      </div>
+      <div class="col-sm-6">
+        <p>Ubicacion (Invetario): {{detallesEquipo.nombre_zona}} </p>
+      </div>
+    </div>
+    <br>
+
+    <div *ngIf="detalles2 && masDetallesDatos.estatus == 3" class="row">
+
+      <div class="col-sm-11">
+        <p>Identificacion: {{masDetallesDatos.kind}}{{masDetallesDatos.dni}}</p>
+      </div>
+
+      <div class="col-sm-11">
+        <p>Cliente: {{masDetallesDatos.nombre}} {{masDetallesDatos.apellido}}</p>
+      </div>
+
+      <div class="col-sm-11">
+        <p>Social: {{masDetallesDatos.social}}</p>
+      </div>
+
+    </div>
+
+    <div *ngIf="detalles2 && masDetallesDatos.estatus == 5" class="row">
+
+      <div class="col-sm-11">
+        <p>Reponsable: {{masDetallesDatos.usuario}}</p>
+      </div>
+
+      <div class="col-sm-11">
+        <p>Cliente: {{masDetallesDatos.cliente}}</p>
+      </div>
+
+      <div class="col-sm-11">
+        <p>Tipo: {{masDetallesDatos.tipo}}</p>
+      </div>
+
+      <div class="col-sm-11">
+        <p>Fecha de Venta: {{masDetallesDatos.fecha}}</p>
+      </div>
+
+    </div>
+
+    <div *ngIf="detalles2 && masDetallesDatos.estatus == 6" class="row">
+
+      <div class="col-sm-11">
+        <p>Reponsable: {{masDetallesDatos.usuario}}</p>
+      </div>
+
+      <div class="col-sm-11">
+        <p>Comentario: {{masDetallesDatos.comentario}}</p>
+      </div>
+
+      <div class="col-sm-11">
+        <p>Fecha de Venta: {{masDetallesDatos.fecha}}</p>
+      </div>
+
+    </div>
+
+    <div *ngIf="detalles2 && masDetallesDatos.estatus == 2" class="row">
+
+      <div class="col-sm-11">
+        <p>Reponsable: {{masDetallesDatos.usuario}}</p>
+      </div>
+
+      <div class="col-sm-11">
+        <p>id_transferencia: {{masDetallesDatos.id_transferencia}}</p>
+      </div>
+
+      <div class="col-sm-11">
+        <p>Destino: {{masDetallesDatos.destino}}</p>
+      </div>
+
+    </div>
+
+    <button *ngIf="serialEquipo.length > 6 && detalles == false" type="button" class="btn btn-info"
+      (click)="buscarEquipo()">
+      Buscar
+    </button>
+    <button *ngIf="detalles && detallesEquipo.estatus != 1 && detalles2 == false" type="button" class="btn btn-info"
+      (click)="masDetalles()">
+      Mas Detalles
+    </button>
+  </div>
+</ng-template>

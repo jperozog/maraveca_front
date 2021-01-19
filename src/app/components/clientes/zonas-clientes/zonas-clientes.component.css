@@ -1,0 +1,57 @@
+.primero{
+    margin-top: 5%;
+    margin-left: 2%;
+    padding-bottom: 2%;
+}
+.icono{
+    font-size: 150px;
+    margin-left: 5%;
+    float: left;
+}
+
+.clientes{
+    margin-left: 30%;
+    margin-top: 10%;
+    color: #55595c;
+}
+
+.tabla{
+    margin-top: 20%;
+}
+
+tr{
+    line-height: 1px;
+    min-height: 1px;
+    height: 1px;
+    cursor: pointer;
+}
+
+td{
+    line-height: 1px;
+    min-height: 1px;
+    height: 1px;
+    padding: 15px;
+}
+
+.filtro{
+    margin-top: -20px;
+}
+.filtro2{
+    margin-top: -10px;
+}
+
+
+.boton2{
+    margin-top: -12px;
+}
+
+.trim-info {
+    max-width: 200px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;  
+    line-height: 15px;
+    position: relative;
+ }
+ 

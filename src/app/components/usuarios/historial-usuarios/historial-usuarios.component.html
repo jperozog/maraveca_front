@@ -1,0 +1,81 @@
+<div class="row zonas">
+  <div class="col-sm-4">
+    <h2 class="titulo">Historial de Usuarios</h2>
+  </div>
+</div>
+<div class="row zonas2">
+  <div class="col-sm-1"></div>
+  <div class="col-sm-1">
+    <h4 class="titulo2">Usuario:</h4>
+  </div>
+  <div class="col-sm-2">
+    <select [(ngModel)]="usuarioSeleccionado" class="form-control" id="exampleSelect2" required>
+      <option value='0' selected> Seleccione Vendedor</option>
+      <option *ngFor="let u of usuarios" [value]="u.id_user">{{u.nombre_user}} {{u.apellido_user}}</option>
+    </select>
+  </div>
+  <div class="col-sm-3">
+    <button class="boton" *ngIf="usuarioSeleccionado != 0" type="button"
+      (click)="traerHistorial()">Buscar Comisiones</button>
+  </div>
+</div>
+<div *ngIf="visualizar" class="row">
+  <div class="col-sm-1"></div>
+  <div class="col-sm-5 tabla">
+    <h3>Historial General</h3>
+    <table class="table table-borderless">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">#</th>
+          <th scope="col">MODULO</th>
+          <th scope="col">DETALLES</th>
+          <th scope="col">FECHA</th>
+          <!--<th scope="col">ACCIONES</th>-->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let h of historico | paginate: {id:'historico', itemsPerPage: 7, currentPage: e }">
+          <td>
+            {{h.id}}
+          </td>
+          <td>{{h.modulo}}</td>
+          <td>{{h.detalle}}</td>
+          <td>
+            {{h.created_at | stringToDate | date: 'd/M/yy'}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="historico" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-5 tabla">
+    <h3>Historial Cliente</h3>
+    <table class="table table-borderless">
+      <thead>
+        <tr class="table-warning">
+          <th scope="col">#</th>
+          <th scope="col">MODULO</th>
+          <th scope="col">CLIENTE</th>
+          <th scope="col">DETALLES</th>
+          <th scope="col">FECHA</th>
+          <!--<th scope="col">ACCIONES</th>-->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let h of historicoCliente | paginate: {id:'historicoC', itemsPerPage: 7, currentPage: p }">
+          <td>
+            {{h.id}}
+          </td>
+          <td>{{h.modulo}}</td>
+          <td>{{h.nombre}} {{h.apellido}}</td>
+          <td>{{h.history}}</td>
+          <td>
+            {{h.created_at | stringToDate | date: 'd/M/yy'}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="historicoC" (pageChange)="p = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-1"></div>
+</div>

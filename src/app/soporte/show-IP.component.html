@@ -1,139 +1,106 @@
-<md-toolbar class="submenu">
-  <md-form-field floatPlaceholder="never">
-    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
-  </md-form-field>
-  <span class="example-spacer" style="text-align: center;">Lista de IP Asignadas</span>
-  <button md-raised-button class="btn" (click)="Close()">Atras</button>
-
-
-</md-toolbar>
-<md-accordion>
-  <md-expansion-panel hideToggle="true" expanded="true" (opened)="this.modouno==1">
-    <md-expansion-panel-header>
-      <md-panel-title>
-        {{ ip_asig.length }} IP
-      </md-panel-title>
-      <md-panel-description>
-        Lista de IP Asignadas a clientes con servicios registrados
-      </md-panel-description>
-    </md-expansion-panel-header>
-    <div class="x700" *ngIf="modouno == 1" >
-
-<table class="addClient x700" [md2Data]=" ip_asig| dataPipe: { nombre: search, apellido: search, name_equipo:search, dni: search, ip_srv:search, social:search, status:search }" #md2="md2DataTable" [rowsPerPage]="10">
-  <thead>
-  <tr>
-    <td colspan="7">
-      <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
-    </td>
-  </tr>
-  <tr>
-    <th style="width: 20%" md2SortBy="dni">Cedula</th>
-    <th style="width: 20%" md2SortBy="nombre">Nombre y Apellido</th>
-    <th style="width: 20%" md2SortBy="ModeloEquipo">IP</th>
-
-    <th style="width: 20%" md2SortBy="status">Estatus del servicio</th>
-
-    <th style="width: 20%">Acciones</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let i of md2.data">
-    <td style="width: 15%">{{(i.kind|capitalize)+i.dni}}</td>
-    <td *ngIf="i.kind.toUpperCase() == 'V'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-    <td *ngIf="i.kind.toUpperCase() == 'E'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-    <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 15%">{{(i.social|capitalize)}}</td>
-    <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 15%">{{(i.social|capitalize)}}</td>
-
-    <td style="width: 10%">{{i.ip_srv}}</td>
-    <td style="width: 20%">
-      <button md-icon-button *ngIf="i.stat_srv == 1" >
-        <span>Activo</span>
-      </button>
-      <button md-icon-button *ngIf="i.stat_srv == 2" >
-        <span>Moroso</span>
-      </button>
-      <button md-icon-button *ngIf="i.stat_srv == 3" >
-        <span>Suspendido</span>
-      </button>
-      <button md-icon-button *ngIf="i.stat_srv == 4" >
-        <span>Retirado</span>
-      </button>
-      <button md-icon-button *ngIf="i.stat_srv == 5" >
-        <span>Exonerado</span>
-      </button>
-    </td>
-    <td>
-      <button md-icon-button style="color:#106cc8" [routerLink]="['/ClientOverview', i.cliente_srv]"><!---->
-        <md-icon class="md-24" aria-label="Mas Detalles" >search</md-icon>
-      </button>
-
-    </td>
-  </tr>
-  </tbody>
-  <tfoot>
-
-  </tfoot>
-</table>
+<div class="zonas">
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10 header">
+            <div class="row">
+                <div class="col-sm-2">
+                    <h2 class="titulo">Lista de Ip</h2>
+                </div>
+                <div class="col-sm-3">
+                    <select [(ngModel)]="mkSeleccionado" (change)="buscarIps()" class="form-control" id="input"
+                        required>
+                        <option value="0"></option>
+                        <option *ngFor="let s of servidores" [value]="s.id_srvidor">{{s.nombre_srvidor}}
+                            [{{s.ip_srvidor}}]</option>
+                    </select>
+                </div>
+                <div class="col-sm-1 filtrado">
+                    <button id="boton" (click)="actualizarLista()" title="Actualizar Lista Ips" type="button"
+                        class="btn btn-info btn-sm ">
+                        <md-icon>loop</md-icon>
+                    </button>
+                </div>
+                <div class="col-sm-4"></div>
+                <div class="col-sm-2">
+                    <input *ngIf="mkSeleccionado != 0" (input)="filtradoIp($event.target.value)"
+                        (keyup.backspace)="filtradoIpBackSpace($event.target.value)" type="text" class="form-control"
+                        name="filtrado" placeholder="Filtrar" id="input2">
+                </div>
+            </div>
+        </div>
     </div>
-  </md-expansion-panel>
 
-  <!-- pendientes -->
-  <md-expansion-panel hideToggle="true"  (opened)=" this.mododos==2">
-    <md-expansion-panel-header style="background-color: lightpink;">
-      <md-panel-title>
-        {{ ip_p.length }} IP
-      </md-panel-title>
-      <md-panel-description>
-       Lista de  IP asigandas a clientes pendientes por instalacion
-      </md-panel-description>
-    </md-expansion-panel-header>
-    <div class="x700" *ngIf="mododos == 2">
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10 header1 ">
+            <div class="row">
+                <div class="col-sm-3">
 
-      <table class="addClient x700" [md2Data]=" ip_p| dataPipe: { nombre: search, apellido: search, name_equipo:search, dni: search, ipP:search, social:search }" #md2="md2DataTable" [rowsPerPage]="10">
-        <thead>
-        <tr>
-          <td colspan="7">
-            <md2-pagination [rowsPerPageSet]="[5,10]" paginationLabel="Filas por pagina"></md2-pagination>
-          </td>
-        </tr>
-        <tr>
-          <th style="width: 20%" md2SortBy="dni">Cedula</th>
-          <th style="width: 20%" md2SortBy="nombre">Nombre y Apellido</th>
-          <th style="width: 20%" md2SortBy="ModeloEquipo">IP</th>
+                </div>
+            </div>
+            <div class="row tablas">
+                <div class="col-sm-6">
+                    <table class="table table-borderless tabla">
+                        <thead>
+                            <tr class="table-default tr" style="background-color: #2C2C30; color:white;">
+                                <th class="th" scope="col">ID</th>
+                                <th class="th" scope="col">NOMBRE</th>
+                                <th class="th" scope="col">APELLIDO</th>
+                                <th class="th" scope="col">IP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="tr" (click)="irCliente(i.id)"
+                                *ngFor="let i of ips | paginate: {id:'ips', itemsPerPage: 10, currentPage: e }">
+                                <td>
+                                    {{i.id}}
+                                </td>
+                                <td>
+                                    {{i.nombre}}
+                                </td>
+                                <td>
+                                    {{i.apellido}}
+                                </td>
+                                <td>
+                                    {{i.ip}}
+                                </td>
 
-          <th style="width: 20%" md2SortBy="status">Estatus del servicio</th>
-
-          <th style="width: 20%">Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let i of md2.data">
-          <td style="width: 15%">{{(i.kind|capitalize)+i.dni}}</td>
-          <td *ngIf="i.kind.toUpperCase() == 'V'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-          <td *ngIf="i.kind.toUpperCase() == 'E'" style="width: 15%">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-          <td *ngIf="i.kind.toUpperCase() == 'G'" style="width: 15%">{{(i.social|capitalize)}}</td>
-          <td *ngIf="i.kind.toUpperCase() == 'J'" style="width: 15%">{{(i.social|capitalize)}}</td>
-
-          <td style="width: 10%">{{i.ipP}}</td>
-          <td style="width: 20%">
-            <button md-icon-button >
-              <span>Pendiente por instalacion</span>
-            </button>
-
-          </td>
-          <td>
-            <button md-icon-button style="color:#106cc8" [routerLink]="['/ClientOverview', i.id_cliente]"><!---->
-              <md-icon class="md-24" aria-label="Mas Detalles" >search</md-icon>
-            </button>
-
-          </td>
-        </tr>
-        </tbody>
-        <tfoot>
-
-        </tfoot>
-      </table>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination-controls id="ips" (pageChange)="e = $event"></pagination-controls>
+                </div>
+                <div class="col-sm-6">
+                    <table class="table table-borderless tabla">
+                        <thead>
+                            <tr class="table-default tr" style="background-color: #DF7979; color:white;">
+                                <th class="th" scope="col">ID</th>
+                                <th class="th" scope="col">NOMBRE</th>
+                                <th class="th" scope="col">APELLIDO</th>
+                                <th class="th" scope="col">IP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="tr" (click)="irCliente(i2.id)"
+                                *ngFor="let i2 of ips2 | paginate: {id:'ips2', itemsPerPage: 10, currentPage: p }">
+                                <td>
+                                    {{i2.id}}
+                                </td>
+                                <td>
+                                    {{i2.nombre}}
+                                </td>
+                                <td>
+                                    {{i2.apellido}}
+                                </td>
+                                <td>
+                                    {{i2.ip}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination-controls id="ips2" (pageChange)="p = $event"></pagination-controls>
+                </div>
+            </div>
+        </div>
     </div>
-  </md-expansion-panel>
-</md-accordion>
-
+</div>

@@ -1,0 +1,118 @@
+<form class="example-form" id="client" name="clientForm" [formGroup]="editFacPag" ng-submit="ok(clientForm)" novalidate>
+  <table class="example-full-width" cellspacing="0">
+
+    <tr>
+    <td colspan="2">
+      <md-form-field class="example-full-width">
+        <input
+          mdInput
+          placeholder="Cliente"  [readonly]="true"  />
+        <span style="color:#9E9E9E;">{{cliente+' '+dni}}</span>
+      </md-form-field>
+    </td>
+  </tr>
+    <tr>
+    <td colspan="2">
+
+      <md-form-field class="example-full-width">
+        <input style=" color:#9E9E9E;" mdInput formControlName="fac_id" placeholder="Codigo de factura" [readonly]="true"/>
+      </md-form-field>
+      </td>
+
+    </tr>
+
+<tr>
+  <td colspan="2">
+
+
+    <md2-select name="Tipo de pago"
+                formControlName="pag_tip"
+                placeholder="Tipo de pago"
+                mdInput
+                style="width= 100%; min-width: 100%; min-height: 100%;"
+
+                floatPlaceholder="never"
+                *ngIf=" denominacion == 'Bs.S'">
+
+
+
+      <md2-option  value=2 >Transferencia Banesco</md2-option>
+  <md2-option value=6>Transferencia Bicentenario</md2-option>
+  <md2-option value=1>Transferencia BOD</md2-option>
+  <md2-option value=3>Transferencia Venezuela</md2-option>
+  <md2-option value=4>Retencion ISLR</md2-option>
+  <md2-option value=5>Retencion IVA</md2-option>
+  <md2-option value=17>Otras Retenciones</md2-option>
+  <md2-option value=7>Exonerado</md2-option>
+  <md2-option value=8>Moneda Extranjera</md2-option>
+  <md2-option value=9>Zelle</md2-option>
+  <md2-option value=10>Wire Transfer</md2-option>
+  <md2-option value=11>Efectivo $</md2-option>
+  <md2-option value=15>Efectivo Bs.S</md2-option>
+
+    </md2-select>
+
+    <md2-select
+                formControlName="pag_tip"
+                placeholder="Tipo de pago"
+                style="width:100%; min-width: 100%;"
+                mdInput
+                floatPlaceholder="never"
+                *ngIf=" denominacion == '$'">
+
+      <md2-option value=12>Zelle</md2-option>
+      <md2-option value=13>Wire Transfer</md2-option>
+      <md2-option value=14>Efectivo $</md2-option>
+
+    </md2-select>
+
+
+  </td>
+
+
+</tr>
+    <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
+  <tr>
+    <td colspan="2" >
+      <md-form-field class="example-full-width" *ngIf=" denominacion == 'Bs.S'">
+        <input mdInput formControlName="pag_monto" placeholder="Monto de pago"
+             type="text" mask="separator,2" thousandSeparator="."  suffix=" Bs.S." />
+    </md-form-field>
+
+      <md-form-field class="example-full-width" *ngIf=" denominacion == '$'" >
+        <input mdInput formControlName="pag_monto" placeholder="Monto de pago"
+               type="text" mask="separator,2" thousandSeparator="."  suffix="$"/>
+      </md-form-field>
+    </td>
+  </tr>
+
+    <tr>
+    <td colspan= "2" >
+      <md-form-field class="example-full-width">
+        <textarea mdInput name="coment" data-ng-model="user.comments"
+                  class="form-control"
+                  #coment
+                  maxlength="256"
+                  formControlName="pag_comment"
+                  placeholder="Comentarios en factura"></textarea>
+        <md-hint align="end">{{ coment.value.length}} / 256</md-hint>
+      </md-form-field>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+
+
+
+      <button md-raised-button color="primary" class="example-half-width btn btn-primary" (click)="Editar()" [disabled]="!editFacPag.valid"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+    </td><td>
+
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
+    </td>
+  </tr>
+  <p>
+
+  </p>
+</table>
+</form>

@@ -3,44 +3,31 @@
   <table [formGroup]="addAbono" style="width=100%; min-width: 100%;">
     <tr>
       <md-select formControlName='bal_tip_in' style="width=100%; min-width: 100%;" placeholder="Modo de pago">
-        <md-option value="14" >Efectivo $</md-option>
-        <md-option value="13" >Wire Transfer</md-option>
-        <md-option value="12" >Zelle</md-option>
+        <md-option value="14">Efectivo $</md-option>
+        <md-option value="13">Wire Transfer</md-option>
+        <md-option value="12">Zelle</md-option>
+        <md-option value="2">Transferencia Banesco</md-option>
+        <md-option value="6">Transferencia Bicentenario</md-option>
+        <md-option value="1">Transferencia BOD</md-option>
+        <md-option value="3">Transferencia Venezuela</md-option>
+        <md-option value="15">Efectivo en Bs.S.</md-option>
       </md-select>
     </tr>
     <tr>
       <md-form-field class="example-full-width">
-        <input
-          formControlName='bal_comment_in'
-          placeholder="Referencia"
-          style="width=100%; min-width: 100%;"
-          mdInput
+        <input formControlName='bal_comment_in' placeholder="Referencia" style="width=100%; min-width: 100%;" mdInput
           autocomplete="off">
       </md-form-field>
     </tr>
     <tr>
       <span>Fecha de pago</span>
-      <my-date-picker class="example-full-width"
-                      name="birthdate"
-                      mdInput
-                      placeholder="Fecha de nacimiento"
-                      formControlName='created_at'
-                      required
-                      locale=es
-                      [options]="myDatePickerOptions"
-      ></my-date-picker>
+      <my-date-picker class="example-full-width" name="birthdate" mdInput placeholder="Fecha de nacimiento"
+        formControlName='created_at' required locale=es [options]="myDatePickerOptions"></my-date-picker>
     </tr>
     <tr>
       <md-form-field class="example-full-width">
-        <input
-
-          formControlName='bal_monto_in'
-          type="text"
-          placeholder="Monto"
-          style="width=100%; min-width: 100%;"
-          mdInput
-          mask="separator.2" thousandSeparator=","
-          autocomplete="off">
+        <input formControlName='bal_monto_in' type="text" placeholder="Monto" style="width=100%; min-width: 100%;"
+          mdInput mask="separator,2" thousandSeparator="." autocomplete="off">
       </md-form-field>
     </tr>
   </table>
@@ -48,10 +35,12 @@
 <div md-dialog-actions>
   <tr>
     <td>
-      <button md-raised-button [disabled]=" !addAbono.valid " md-button class="b-btn" [mat-dialog-close]="addAbono.value" cdkFocusInitial>Si</button>
+      <button md-raised-button [disabled]=" !addAbono.valid " md-button class="b-btn"
+        [mat-dialog-close]="addAbono.value" cdkFocusInitial>Si</button>
     </td>
     <td>
-      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">NO</button>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button"
+        (click)="onNoClick()" tabindex="-1">NO</button>
 
     </td>
   </tr>

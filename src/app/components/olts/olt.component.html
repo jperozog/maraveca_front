@@ -1,0 +1,91 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <h1>OLTS</h1>
+  </div>
+  <div class="col-sm-2">
+    <button style="background-color:#2C2C30;" type="button" class="btn btn-info btn-sm" (click)="openModal(template)">
+      <md-icon>add_circle_outline</md-icon>
+    </button>
+    <button style="background-color:#2C2C30;" (click)="traerOlts()" title="Actualizar Instalaciones" type="button"
+      class="btn btn-info btn-sm ">
+      <md-icon>loop</md-icon>
+    </button>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-sm-11 tabla">
+    <table class="table table-borderless">
+      <thead>
+        <tr style="background-color:#2C2C30; color: white;" class="table-default">
+          <th scope="col">#</th>
+          <th scope="col">Olt</th>
+          <th scope="col">Ip</th>
+          <th scope="col">Puertos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="cursor: pointer;" (click)="openModal2(template2,o.id_olt)" *ngFor="let o of olts | paginate: { id:'olt', itemsPerPage: 8, currentPage: p } ">
+          <th scope="row">{{o.id_olt}}</th>
+          <td>{{o.nombre_olt}}</td>
+          <td>{{o.ip_olt}}</td>
+          <td>{{o.puertos_olt}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="olt" (pageChange)="p = $event"></pagination-controls>
+  </div>
+
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Agregar OLT</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label class="col-form-label" for="inputDefault">Nombre Olt</label>
+    <input [(ngModel)]="olt" type="text" class="form-control">
+    <br>
+    <label class="col-form-label" for="inputDefault">Mk de la Olt</label>
+    <select [(ngModel)]="mk" class="form-control" id="exampleSelect1" required>
+      <option value="0"></option>
+      <option *ngFor="let s of servidores" [value]="s.id_srvidor">{{s.nombre_srvidor}}</option>
+    </select>
+    <br>
+    <label class="col-form-label" for="inputDefault">Puertos Olt</label>
+    <input [(ngModel)]="puertos" type="number" class="form-control">
+    <br>
+    <button *ngIf="olt.length > 4 && mk != 0 && puertos != 0" type="button" class="btn btn-info" (click)="agregarOlt()">
+      Agregar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #template2>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar OLT</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal2()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h6 class="col-form-label" >Nombre Olt:</h6>
+    <input [(ngModel)]="oltSeleccionada.nombre_olt" type="text" class="form-control">
+    <br>
+    <label class="col-form-label" for="inputDefault">Mk de la Olt</label>
+    <select [(ngModel)]="oltSeleccionada.servidor_olt" class="form-control" id="exampleSelect1" required>
+      <option value="0"></option>
+      <option *ngFor="let s of servidores" [value]="s.id_srvidor">{{s.nombre_srvidor}}</option>
+    </select>
+    <br>
+    <label class="col-form-label" for="inputDefault">Puertos Olt</label>
+    <input [(ngModel)]="oltSeleccionada.puertos_olt" type="number" class="form-control">
+    <br>
+    <button type="button" class="btn btn-info" (click)="editarOlt()">
+      Editar
+    </button>
+  </div>
+</ng-template>

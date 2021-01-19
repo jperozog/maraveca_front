@@ -1,0 +1,111 @@
+.con{
+  margin-top: 5%;
+  padding: 10px;
+
+}
+
+
+.formulario{
+width: 20%;
+margin-top: 5%; 
+float: left;
+}
+.primary{
+background-color: #249CC8;
+color: white;
+}
+.boton{
+float: left;
+margin-right:5px;
+}
+
+
+.boton2{
+float: left;
+}
+
+.checkbox{
+margin-left: 50%
+}
+
+tr{
+line-height: 1px;
+min-height: 1px;
+height: 1px;
+}
+
+td{
+line-height: 1px;
+min-height: 1px;
+height: 1px;
+padding: 15px;
+}
+
+.icon{
+font-size: 20px;
+}
+
+
+
+h1{
+color: #2C2C30;
+margin-top: 5%;
+}
+
+.principal input{
+border: 3px solid #2C2C30;
+border-radius: 10px;
+margin-top: 3%;
+}
+
+.principal select {
+border: 3px solid #2C2C30;
+border-radius: 10px;
+margin-top: 3%;
+}
+
+.principal button {
+border-radius: 10px;
+margin-top: 4%;
+background-color: #2C2C30;
+color: white;
+}
+
+
+.tabla{
+margin-top: 1%;
+}
+
+.filtrado{
+   margin-left: 3%;
+}
+
+
+
+.boton2{
+  margin-left: 20%;
+  background-color: #2C2C30;
+  width: 60%;
+  height: 120px;
+  color: white;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 5%;
+}
+
+.boton{
+  background-color: #2C2C30;
+  color: white;
+}
+
+.acciones{
+  text-align: center;
+  justify-content: center;
+}
+
+.filtrado{
+  border-left: 5px solid #2C2C30;
+  outline: none;
+}
+

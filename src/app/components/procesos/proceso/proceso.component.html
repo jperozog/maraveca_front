@@ -1,0 +1,146 @@
+<div class="row zonas">
+  <div class="col-sm-10">
+    <h2 class="titulo">Seleccione un Proceso</h2>
+  </div>
+</div>
+
+<div class="row zonas2">
+  <div class="col-sm-2">
+    <button type="button" (click)="mostrarFacturacion()" class="btn btn-default" style="background-color: #2C2C30; color: white;">Facturacion</button>
+  </div>
+
+  <div class="col-sm-2">
+    <button type="button" (click)="mostrarCorreos()" class="btn btn-default" style="background-color: #2C2C30; color: white;">Correos</button>
+  </div>
+  <div *ngIf="usuario.perm && usuario.perm.includes('gerencia')" class="col-sm-2">
+    <button type="button" (click)="mostrarDescuentos()" class="btn btn-default" style="background-color: #2C2C30; color: white;">Descuentos</button>
+  </div>
+</div>
+
+<div class="row zonas2">
+  <div *ngIf="facturacion == true" class="col-sm-11">
+    <div class="card border-light mb-3">
+      <div class="card-header">Proceso de Facturacion</div>
+      <div class="card-body">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Responsable</th>
+              <th scope="col">Comentario</th>
+              <th scope="col">Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ff of fechasFacturacion">
+              <th scope="row">{{ff.id}}</th>
+              <td *ngIf="ff.responsable == 0">Sistema</td>
+              <td>{{ff.detalle}}</td>
+              <td>{{ff.created_at |date:"shortDate"}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <button *ngIf="cargando == true" class="btn btn-info" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Realizando Proceso...
+        </button>
+
+        <button *ngIf="cargando == false" class="btn btn-info" (click)="hola(template)" type="button">
+          Realizar Proceso
+        </button>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="correos == true" class="col-sm-11">
+    <div class="card border-light mb-3">
+      <div class="card-header">Proceso de Envio de Correos de Facturacion</div>
+      <div class="card-body">
+        <button *ngIf="cargando2 == true" class="btn btn-info" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Realizando Proceso...
+        </button>
+
+        <button *ngIf="cargando2 == false" class="btn btn-info" (click)="enviarCorreo(template3)" type="button">
+          Realizar Proceso
+        </button>
+
+
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="descuentos == true" class="col-sm-11">
+    <div class="card border-light mb-3">
+      <div class="card-header">Lista de Descuentos</div>
+      <div class="card-body">
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Monto</th>
+              <th scope="col">Comentario</th>
+              <th scope="col">Responsable</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="cursor: pointer;" (click)="OperacionesDescuento(d.id_descuento,d.status,template4)" *ngFor="let d of listaDescuentos | paginate: {id:'descuentos', itemsPerPage: 5, currentPage: d }">
+              <th scope="row">{{d.id_descuento}}</th>
+              <td *ngIf="d.kind == 'V' || d.kind == 'E'">{{d.nombre}} {{d.apellido}}</td>
+              <td *ngIf="d.tipo == 1">Dias Sin Servicio</td>
+              <td *ngIf="d.tipo == 2">Intermitencia del servicio</td>
+              <td *ngIf="d.tipo == 3">50% Descuento</td>
+              <td>{{d.monto | number: "1.2" }} $</td>
+              <td>{{d.comentario}}</td>
+              <td>{{d.nombre_user}} {{d.apellido_user}}</td>
+              <td *ngIf="d.status == 1">Aprobado</td>
+              <td *ngIf="d.status == 0">En Proceso</td>
+              <td *ngIf="d.status == 2">Cancelado</td>
+              <td>{{d.created_at |date:"shortDate"}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls previousLabel=" " nextLabel=" " id="descuentos" (pageChange)="d = $event">
+        </pagination-controls>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Desea Realizar El proceso de Facturacion de Este Mes?</p>
+    <button type="button" class="btn btn-success" (click)="confirmar(template2)" >Si</button>
+    <button type="button" class="btn btn-danger" (click)="negar()" >No</button>
+  </div>
+</ng-template>
+
+
+<ng-template #template2>
+  <div class="modal-body text-center">
+    <p>Proceso de Facturacion Realizado con Exito!!</p>
+  </div>
+</ng-template>
+
+<ng-template #template3>
+  <div class="modal-body text-center">
+    <p>Proceso de Envio de Correos Realizado con Exito!!</p>
+  </div>
+</ng-template>
+
+<ng-template #template4>
+  <div class="modal-body text-center">
+    <p>Descuento: {{descuentoIndividual}}</p>
+    <button type="button" class="btn btn-info" (click)="aprobar()" >Aprobar</button>
+    <button type="button" class="btn btn-danger" (click)="cancelar()" >Cancelar</button>
+  </div>
+</ng-template>

@@ -1,4 +1,5 @@
-import {Component, Inject, Pipe, PipeTransform, OnInit, OnDestroy} from '@angular/core';
+import {LOCALE_ID, Component, Inject, Pipe, PipeTransform, OnInit, OnDestroy} from '@angular/core';
+import localeEs from '@angular/common/locales/es';
 import {Http, Response} from '@angular/http';
 import {DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -15,6 +16,9 @@ import 'rxjs/add/operator/takeWhile';
 import {DatePipe, Location} from '@angular/common';
 import { environment } from '../../environments/environment';
 import {DeletePlanDialog, UpdatePlanPricesDialog} from '../planes/planes.component';
+import {ExcelService} from '../services/excel/excel.service';
+import { forEach } from '@angular/router/src/utils/collection';
+import {Facturacion} from '../models/facturacion';
 
 @Component({
   selector: 'app-facturacion',
@@ -34,6 +38,8 @@ export class FacturacionComponent implements OnInit, OnDestroy {
   myService: MyService | null;
   facturacion= [];
   facturacion_t = [];
+  prueba: any = [];
+  dato: Facturacion;
   search: string = '';
   update:boolean=true;
   autoupdate:boolean=true;
@@ -45,13 +51,14 @@ export class FacturacionComponent implements OnInit, OnDestroy {
     public dialog: MdDialog,
     public snackBar:MdSnackBar,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private excelService:ExcelService
   ) {
     this.snackBar.open("Cargando Facturas", null, {
       duration: 2000,
     });
     this.myService = new MyService(http, router);
-    this.http.get(environment.apiEndpoint+'facturas/')
+    this.http.get(environment.apiEndpoint+'facturas1/'+this.usuario.currentUser.id_user)
     .subscribe((data) => {
       this.facturacion = data.json();
       this.facturacion_t = this.facturacion;
@@ -86,7 +93,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
         this.mes= params[0]
         this.year= params[1]
         this.stat=false;
-        this.status='pendiente';
+        this.status=urlParams.status;
         this.fac = urlParams.fac;
       }else{
         this.mes= this.datePipe.transform(Date.now(), 'M')
@@ -113,7 +120,8 @@ export class FacturacionComponent implements OnInit, OnDestroy {
     ]
     this.anos=[
       {year:"2018"},
-      {year:"2019"}
+      {year:"2019"},
+      {year:"2020"}
     ]
     IntervalObservable.create(10000)
     .takeWhile(() => this.autoupdate)
@@ -127,9 +135,10 @@ export class FacturacionComponent implements OnInit, OnDestroy {
 
   refresh(nf){
     this.update=true;
-    this.http.get(environment.apiEndpoint+'facturas/', {params:{month: this.mes, year: this.year, status: this.stat, fac: this.fac}})
+    this.http.get(environment.apiEndpoint+'facturas1/'+this.usuario.currentUser.id_user, {params:{month: this.mes, year: this.year, status: this.stat, fac: this.fac}})
     .subscribe((data) => {
       this.facturacion_t = data.json();
+      console.log(data.json())
       this.update=false
       this.facturacion=this.facturacion_t;
       if (nf){
@@ -138,6 +147,19 @@ export class FacturacionComponent implements OnInit, OnDestroy {
         })
       }
     });
+  }
+  exportAsXLSX():void {
+    this.facturacion_t.forEach(e => {
+      this.dato = {
+        dni: e.dni,
+        cliente: e.cliente,
+        monto: e.monto,
+        pagado: e.pagado,
+        deuda:e.deuda,
+        estado: e.estado};
+      this.prueba.push(this.dato)
+    });
+    this.excelService.exportAsExcelFile(this.prueba, 'Facturacion');
   }
   updatePricesfac(): void {
     let dialogRef = this.dialog.open(UpdatePlanPricesFacDialog, {
@@ -257,6 +279,14 @@ export class FacturacionPagos {
   agregarProducto:boolean=false;
   config = [];
   iva_c: any;
+  fecha_f: any;
+  mes: any;
+  precio_producto: any;
+  tasa_sis: any;
+  data_cofig : any;
+  tasa_generacion:number
+ show:boolean = true;
+ buttonName:any = 'calculo de monto en Bs.S segun la tasa actual';
   constructor(
     private http:Http,
     private fb: FormBuilder,
@@ -266,8 +296,10 @@ export class FacturacionPagos {
     public usuario: AuthGuard,
     private router: Router,
     private _fb: FormBuilder,
-    public dialog: MdDialog
+    public dialog: MdDialog,
+    @Inject(LOCALE_ID) private locale: string
   ){
+    this.fecha_f = row.updated_at;
     this.linea = row;
     //console.log("row")
     //console.log(row);
@@ -277,12 +309,14 @@ export class FacturacionPagos {
     this.address = row.address;
     this.dni = row.dni;
     this.monto = row.monto;
+    this.tasa_generacion = row.tasa_generacion
     this.addPago = this.fb.group({
       fac_id: this.row.id,
       pag_tip: ['',[Validators.required]],
       pag_monto: ['',[Validators.required]],
       pag_comment: ['',[Validators.required]],
-      created_at: ['', [Validators.required]]
+      created_at: ['', [Validators.required]],
+      responsable: this.usuario.currentUser.id_user
     })
     this.addProduct = this.fb.group({
       codigo_factura: this.row.id,
@@ -308,6 +342,22 @@ export class FacturacionPagos {
         this.fac_products = data.json();
         this.iva= this.fac_products[0].IVA;
         this.neto = (100/(+this.iva+100))
+
+        this.precio_producto = this.fac_products.precio_articulo;
+
+
+        let product = 0;
+        for (let i = 0; i < this.fac_products.length; i++) {
+
+
+         product += (+this.fac_products[i].precio_articulo);
+
+         this.precio_producto = product;
+        }
+
+        console.log( this.precio_producto);
+
+
         if(this.fac_products.length <=12){
           this.num_products = 12-this.fac_products.length;
           //this.numbers = Array(5).fill().map((x,i)=>i); // [0,1,2,3,4]
@@ -341,6 +391,27 @@ export class FacturacionPagos {
         //console.log(this.fac_pagos.slice(0,3));
       });
 
+
+    this.http.get(environment.apiEndpoint+'Configuraciones/')
+      .subscribe((data) => {
+        this.data_cofig = data.json();
+        console.log(this.data_cofig);
+        this.tasa_sis = this.data_cofig[0].valor;
+        console.log(this.tasa_sis);
+      });
+
+
+  }
+  toggle() {
+    this.show = !this.show;
+
+    // CHANGE THE NAME OF THE BUTTON.
+    if(this.show) {
+      this.buttonName = "calculo de monto en Bs.S segun la tasa actual";
+
+    }  else{
+      this.buttonName = "Volver a monto en dolares";
+  }
   }
 
   sendmail(){
@@ -380,7 +451,9 @@ export class FacturacionPagos {
       size: A4;
       margin: 0 10px 0 10px;
     }
-
+span{
+font-size: 12px
+}
     table.fac, th.fac, td.fac {
       border:1px solid black;
       font-size: 12px
@@ -408,7 +481,22 @@ export class FacturacionPagos {
     .bobo {
       border-bottom: 1px solid black
     }
+.mensajeBS{
+  border: 1px solid black;
+  width: 60%;
+  font-size: 14px;
+  padding: 5px;
 
+}
+
+.Der{
+  float: Right;
+  margin-top: -5%;
+
+
+}
+
+}
     @media print {
       html, body {
         width: 210mm;
@@ -521,6 +609,7 @@ export class FacturacionPagos {
   agregar(){
     //let body = "fac_id="+this.row.id+"&pag_tip="+this.tipo+"&pag_monto="+this.nada+"&pag_comment="+this.opcion;
     //console.log(body);
+    console.log(this.addPago.value);
     this.sending_p = true
     var url = environment.apiEndpoint+"facpag";
     this.http.post(url, this.addPago.value)
@@ -579,6 +668,7 @@ export class deletepagoDialog {
 
       });
 
+      //this.myService.refresh();
       //this.myService.refresh();
     }
 
@@ -692,6 +782,7 @@ export class ConfirmPagoDialog2 implements OnInit, OnDestroy {
   aprov2(): void{
     this.http.put(environment.apiEndpoint+'balance_in/', this.data)
       .subscribe((data) => {
+        console.log(data)
         this.dialogRef.close();
       })
 

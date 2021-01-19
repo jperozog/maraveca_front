@@ -1,0 +1,28 @@
+.primero{
+    margin-top: 5%;
+    margin-left: 2%;
+}
+.boton{
+    margin-top: 10%;
+}
+
+.separador{
+    margin-top: 1%;
+    margin-left: 4%;
+}
+.separador2{
+    margin-left: 4%;
+}
+.primary{
+    background-color: #249CC8;
+    color: white;
+  }
+  .boton{
+  float: left;
+  margin-right:5px;
+  }
+  
+  
+  .boton2{
+    float: left;
+  }

@@ -1,0 +1,30 @@
+.tabla{
+    margin-top: 1%;
+    margin-left: 5%;
+}
+
+.boton{
+    margin-top: 25%;
+}
+
+.primero{
+    margin-top: 5%;
+    margin-left: 2%;
+}
+
+.segundo{
+    margin-top: 1%;
+    margin-left: 2%;
+}
+
+.boton2{
+    float: left;
+}
+
+.titulo{
+    margin-top: 6%;
+}
+.filtrado{
+    margin-top: 2%;
+    margin-left: -15%;
+}

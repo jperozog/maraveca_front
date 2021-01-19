@@ -1,6 +1,33 @@
+.body{
+  margin: 5%;
+  margin-right: 1%;
+  margin-left: 1%;
+}
 .submenu{
   max-width:100vw;
   padding-top: 60px;
+}
+
+.cliente{
+  text-align: center;
+  border-radius: 10px;
+}
+
+.imagenPerfil{
+  margin-top:10% ;
+}
+
+.nombre{
+  margin-top: 4% ;
+}
+
+.datos{
+  text-align: left;
+  color: black;
+}
+
+.datos p{
+  margin-left: 3%;
 }
 
 
@@ -8,8 +35,8 @@
   position: relative;
   display: block;
   width: 32%;
-  max-width: 32%;
-  min-width: 32%;
+  max-width: 45%;
+  min-width: 45%;
   margin-left: 0.5em;
   margin-bottom: 0.5em ;
   padding: 0 2px 0;
@@ -79,9 +106,7 @@ table.fac, th.fac, td.fac {
   border:1px solid black;
 }
 
-td.montos{
-  text-align: right;
-}
+
 td.hover:hover{
   background-color: rgb(62, 166, 251);
 }
@@ -168,24 +193,23 @@ table{
 
 }
 .btn1 {
-  border: 1px solid black;
-  background-color: white;
+  background-color: #F0FDFF;
   color: black;
 
   cursor: pointer;
 }
 .info1 {
-  border-color: #106cc8;
-  color:#106cc8
+  color:#2C2C30
 }
 
 .info1:hover {
-  background: #106cc8;
+  background: #2C2C30;
+  border-radius: 5px;
   color: white;
 }
 
 .icono1{
-  color:#106cc8;
+  color:#2C2C30;
 padding: 6px 45px;
 }.icono1:hover{
   color: #f3f3f3
@@ -202,3 +226,349 @@ background-color: #106cc8;
 color:white;
 }
 
+.cedula{
+  margin-top: 28px;
+}
+.social{
+  margin-top: -15px;
+}
+
+.acordion{
+  width: 90%;
+}
+
+
+.tr{
+  line-height: 1px;
+  min-height: 1px;
+  height: 1px;
+  cursor: pointer;
+}
+
+.td{
+  line-height: 1px;
+  min-height: 1px;
+  height: 1px;
+  padding: 15px;
+}
+
+.botonNota{
+  margin-top: -21px;
+}
+.modal{
+  padding: 10px;
+}
+
+.nota{
+  border: #545454 2px solid;
+  border-radius: 5px;
+  font-style: italic;
+  font-weight: 900;
+  color: #545454;
+  padding: 5px;
+}
+
+.datos{
+  border-left: #545454 2px solid;
+  padding-left: 1%;
+}
+
+.productos{
+  margin-top: 10px;
+  min-height: 250px;
+}
+.precios{
+    border: #545454 2px solid;
+}
+.subtotal{
+  margin-top: 5px;
+}
+.iva{
+  margin-top: 5px;
+}
+.total{
+  margin-top: 5px;
+  border-left: #545454 2px solid;
+}
+
+.notaCredito{
+  padding: 1%;
+}
+
+.cuerpoNota{
+  min-height:1000px;
+}
+
+tbody{
+  height: 250px;
+}
+
+.GenerarAjusteFacturaPago{
+  background-color:#2C2C30;
+  margin: 5px 10px;
+  cursor: pointer;
+  color: white;
+}
+
+.editarDatos{
+  background-color: #2C2C30;
+  color: white;
+}
+
+.enviarPresupuesto:hover{
+  background-color: #2C2C30;
+  color: white;
+  transition: all .5s ease;
+}
+
+.accordion .contentBx{
+  margin: 10px 20px;
+}
+
+.accordion .contentBx .label{
+  position: relative;
+  padding: 10px;
+  background-color: #103F4B;
+  color: white;
+  cursor: pointer;
+}
+
+.accordion .contentBx .label2{
+  position: relative;
+  padding: 10px;
+  background-color: #430F0F;
+  color: white;
+  cursor: pointer;
+}
+
+.accordion .contentBx .label3{
+  position: relative;
+  padding: 10px;
+  background-color: #260D3E;
+  color: white;
+  cursor: pointer;
+}
+.accordion .contentBx .label4{
+  position: relative;
+  padding: 10px;
+  background-color: #2B2B09;
+  color: white;
+  cursor: pointer;
+}
+
+.accordion .contentBx #label5{
+  position: relative;
+  padding: 10px;
+  background-color: #17340B;
+  color: white;
+  cursor: pointer;
+}
+
+.algo{
+  position: relative;
+  padding: 10px;
+  background-color: #AF2626;
+  color: white;
+  cursor: pointer;
+}
+
+.accordion .contentBx .label::before{
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  font-size: 1.5em;
+}
+
+.accordion .contentBx .label2::before{
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  font-size: 1.5em;
+}
+
+.accordion .contentBx .label3::before{
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  font-size: 1.5em;
+}
+
+.accordion .contentBx .label4::before{
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  font-size: 1.5em;
+}
+
+.accordion .contentBx #label5::before{
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  font-size: 1.5em;
+}
+
+.accordion .contentBx .label4::before{
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  font-size: 1.5em;
+}
+
+.accordion .contentBx #cuerpoServicio{
+  padding: 10px;
+  background-color: #F0FDFF;
+  color: white;
+}
+
+.accordion .contentBx #cuerpoHistorial{
+  padding: 10px;
+  background-color: #FFF0F0;
+  color: white;
+}
+
+.accordion .contentBx #cuerpoRegistroPagos{
+  padding: 10px;
+  background-color: #F6F0FF;
+  color: white;
+}
+
+
+
+.accordion .contentBx #cuerpoTicket{
+  padding: 10px;
+  background-color: #FFFEF0;
+  color: white;
+}
+
+.accordion .contentBx #cuerpoFacturas{
+  padding: 10px;
+  background-color: #F0FFF1;
+  color: white;
+}
+
+
+
+
+
+.botonBalancePago{
+  float:right;
+  background-color:#F6F0FF ;
+  transition:all .5s ease;
+  color: black;
+}
+
+.botonBalancePago:hover{
+  background-color: #260D3E;
+  transition:all .5s ease;
+  border-radius: 5px;
+  color: white;
+}
+
+.botonFacturas{
+  float:right;
+  background-color:#F0FFF1 ;
+  transition:all .5s ease;
+  color: black;
+}
+
+.botonFacturas:hover{
+  background-color: #17340B;
+  transition:all .5s ease;
+  border-radius: 5px;
+  color: white;
+}
+
+.botonPagos{
+  float:right;
+  background-color:#F6F0FF ;
+  transition:all .5s ease;
+  color: black;
+}
+
+.botonPagos:hover{
+  background-color: #260D3E;
+  transition:all .5s ease;
+  border-radius: 5px;
+  color: white;
+}
+
+
+
+
+.statusBalanceP{
+  font-size: 25px;
+  width: 100%;
+  background-color: #f9f9f9;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #4DAF26;
+  border-radius: 5px;
+  transition: all .5s ease;
+}
+
+.statusBalanceP:hover{
+  background-color: #4DAF26;
+  color: white;
+}
+
+
+
+.statusBalanceN{
+  font-size: 25px;
+  width: 100%;
+  background-color: #f9f9f9;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #AF2626;
+  border-radius: 5px;
+  transition: all .5s ease;
+}
+.statusBalanceN:hover{
+  background-color: #AF2626;
+  color: white;
+}
+
+.tipoCliente{
+  font-size: 25px;
+  width: 100%;
+  background-color: #f9f9f9;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #266AAF;
+  border-radius: 5px;
+  transition: all .5s ease;
+}
+
+.tipoCliente:hover{
+  background-color: #266AAF;
+  color: white;
+}
+
+
+.ServiciosContratados{
+  font-size: 25px;
+  width: 100%;
+  background-color: #f9f9f9;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #7926AF;
+  border-radius: 5px;
+  transition: all .5s ease;
+}
+
+.ServiciosContratados:hover{
+  background-color: #7926AF;
+  color: white;
+}

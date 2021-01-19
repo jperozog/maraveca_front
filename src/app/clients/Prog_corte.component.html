@@ -1,104 +1,106 @@
-
-
-
-
-
 <div md-dialog-content>
 
   <div align="center">
     <h3>Programar corte por compromiso de pago</h3>
-  <p>Formulario de programacion de corte por compromiso de pago para el cliente:</p>
-  <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'V'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
-  <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'E'">{{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
-  <p  style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'G'">{{(cliente.social|capitalize)}}</p>
-  <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'J'">{{(cliente.social|capitalize)}}</p>
+    <p>Formulario de programacion de corte por compromiso de pago para el cliente:</p>
+    <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'V'">
+      {{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
+    <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'E'">
+      {{(cliente.nombre|capitalize) + " " + (cliente.apellido|capitalize)}}</p>
+    <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'G'">{{(cliente.social|capitalize)}}</p>
+    <p style="font-weight: bold" *ngIf="cliente.kind.toUpperCase() == 'J'">{{(cliente.social|capitalize)}}</p>
 
+  </div>
 </div>
-</div>
-  <form [formGroup]="progCorte" ng-submit="ok(pre)">
-    <table >
+<form [formGroup]="progCorte" ng-submit="ok(pre)">
+  <table>
 
-      <div align="center" md-dialog-actions>
+    <div align="center" md-dialog-actions>
 
 
-  <!--<td *ngIf=" n_serv == 1"colspan="2">
+      <!--<td *ngIf=" n_serv == 1"colspan="2">
     <md2-select  formControlName="nservicio"  [style.width]="'100%'" placeholder="Seleccione el servicio a facturar" [(ngModel)]="nservicio">
       <md2-option  *ngFor="let i of servicios" [value]="i.id_srv"  > {{i.name_plan}}</md2-option>
     </md2-select>
   </td>-->
-      <div  *ngIf=" nr_serv >= 1" >
+      <div *ngIf=" nr_serv >= 1">
 
-      <td  *ngIf=" nr_serv == 1"  [style.width]="'100%'">
-        <span style="font-weight: bold; text-align: center" [style.width]="'100%'"> Plan: {{name_plan}}</span>
+        <td *ngIf=" nr_serv == 1" [style.width]="'100%'">
+          <span style="font-weight: bold; text-align: center" [style.width]="'100%'"> Plan: {{name_plan}}</span>
 
-      </td>
-
-<td *ngIf=" nr_serv > 1" >
-<p>Seleccione el modo de corte</p>
-    <input type="radio" value="1" formControlName="fac_serv">
-    Corte programado por servicio
-
-
-    <input type="radio" value="2" formControlName="fac_serv">
-  Corte programado para varios servicios
-
-</td>
-      <tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
-      <tr *ngIf=" progCorte.value.fac_serv == 1">
-        <td colspan="2">
-          <md2-select  formControlName="nservicio"  [style.width]="'100%'" placeholder="Seleccione el servicio a facturar" [(ngModel)]="nservicio">
-
-            <md2-option  *ngFor="let i of servi" [value]="i.id_srv"  > {{i.name_plan}}</md2-option>
-          </md2-select>
         </td>
-      </tr>
 
-      <tr *ngIf=" progCorte.value.fac_serv == 2">
-        <td colspan="2" >
+        <td *ngIf=" nr_serv > 1">
+          <p>Seleccione el modo de corte</p>
+          <input type="radio" value="1" formControlName="fac_serv">
+          Corte programado por servicio
 
-          <md2-select  multiple formControlName="nservicio" [style.width]="'100%'" class="example-full-width" placeholder="Seleccione los servicio a facturar" [(ngModel)]="nservicio" > <!--style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"-->
-            <button md-raised-button  class=" b-btn" style="font-size: 13px" type="button"
-                    (click)="onSelectAll()">Seleccionar todo</button>
-            <button md-raised-button color="warn"  style="font-size: 13px" type="button"
-                    (click)="onClearAll()">limpiar seleccion</button>
 
-            <md2-option  style="font-size: 14px" *ngFor="let i of servicios" [value]="i.id_srv"  > {{i.name_plan}}</md2-option>
+          <input type="radio" value="2" formControlName="fac_serv">
+          Corte programado para varios servicios
 
-          </md2-select>
-  </td>
-</tr>
+        </td>
+        <tr>
+          <td colspan="2" [style.height]="'10%'"><br></td>
+        </tr>
+        <tr *ngIf=" progCorte.value.fac_serv == 1">
+          <td colspan="2">
+            <md2-select formControlName="nservicio" [style.width]="'100%'"
+              placeholder="Seleccione el servicio a facturar" [(ngModel)]="nservicio">
+
+              <md2-option *ngFor="let i of servi" [value]="i.id_srv"> {{i.name_plan}}</md2-option>
+            </md2-select>
+          </td>
+        </tr>
+
+        <tr *ngIf=" progCorte.value.fac_serv == 2">
+          <td colspan="2">
+
+            <md2-select multiple formControlName="nservicio" [style.width]="'100%'" class="example-full-width"
+              placeholder="Seleccione los servicio a facturar" [(ngModel)]="nservicio">
+              <!--style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"-->
+              <button md-raised-button class=" b-btn" style="font-size: 13px" type="button"
+                (click)="onSelectAll()">Seleccionar todo</button>
+              <button md-raised-button color="warn" style="font-size: 13px" type="button" (click)="onClearAll()">limpiar
+                seleccion</button>
+
+              <md2-option style="font-size: 14px" *ngFor="let i of servicios" [value]="i.id_srv"> {{i.name_plan}}
+              </md2-option>
+
+            </md2-select>
+          </td>
+        </tr>
       </div>
-<tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
-<tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
-<tr><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
+      <tr>
+        <td colspan="2" [style.height]="'10%'"><br></td>
+      </tr>
+      <tr>
+        <td colspan="2" [style.height]="'10%'"><br></td>
+      </tr>
+      <tr>
+        <td colspan="2" [style.height]="'10%'"><br></td>
+      </tr>
 
-      <tr *ngIf="this.progCorte.value.fac_serv == 1 || this.progCorte.value.fac_serv == 2 || nr_serv == 1" >
-        <td >
-          <my-date-picker class="example-full-width"
-                        name="birthdate"
-                        mdInput
-                        placeholder="A Partir De?"
-                        formControlName="fecha"
-                        required
-                        locale=es
-                        [options]="myDatePickerOptions"
-                        ></my-date-picker>
+      <tr *ngIf="this.progCorte.value.fac_serv == 1 || this.progCorte.value.fac_serv == 2 || nr_serv == 1">
+        <td>
+          <my-date-picker class="example-full-width" name="birthdate" mdInput placeholder="A Partir De?"
+            formControlName="fecha" required locale=es [options]="myDatePickerOptions"></my-date-picker>
         </td>
       </tr>
-        </div>
-    </table>
-  </form>
+    </div>
+  </table>
+</form>
 
 <div align="center" md-dialog-actions>
   <tr>
     <td>
-      <button md-raised-button  class="example-half-width btn btn-primary b-btn" (click)="generate()" tabindex="2" [disabled]="!progCorte.valid">Generar corte</button>
+      <button md-raised-button class="example-half-width btn btn-primary b-btn" (click)="generate()" tabindex="2"
+        >Generar corte</button>
     </td>
     <td>
-      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button" (click)="onNoClick()" tabindex="-1">Cerrar</button>
+      <button md-raised-button color="warn" class="example-half-width btn btn-danger" type="button"
+        (click)="onNoClick()" tabindex="-1">Cerrar</button>
 
     </td>
   </tr>
 </div>
-
-

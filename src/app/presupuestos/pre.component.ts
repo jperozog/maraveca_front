@@ -42,7 +42,7 @@ export class PreComponent implements OnInit{
     this.tipo = datos[1]
     if(this.cliente.kind.toLowerCase == 'v' || this.cliente.kind.toLowerCase == 'e'){
       this.cli = this.cliente.nombre+" "+this.cliente.apellido
-    }else if(this.cliente.kind.toLowerCase == 'j' || this.cliente.kind.toLowerCase == 'g'){
+    }else if(this.cliente.kind.toLowerCase == 'j' || this.cliente.kind.toLowerCase == 'g' || this.cliente.kind.toLowerCase == 'v-'){
       this.cli = this.cliente.social
     }
   }
@@ -99,6 +99,7 @@ enviar(){
   });
 
   this.http.post(url, client).subscribe(data => {
+    console.log(data)
     this.dialogRef.close();
     this.snackBar.open("Presupuesto Enviado", null, {
       duration: 4000,

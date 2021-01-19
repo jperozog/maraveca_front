@@ -1,0 +1,39 @@
+.primero{
+    margin-top: 4%;
+    margin-left: 2%;
+}
+.boton{
+    margin-top: 10%;
+}
+
+.segundo{
+    margin-top: 2%;
+}
+#icono{
+    font-size: 20px;
+}
+#icono2{
+    font-size: 25px;
+}
+
+.titulo{
+    margin-top: 1%;
+}
+
+tr{
+    line-height: 1px;
+    min-height: 1px;
+    height: 1px;
+    cursor: pointer;
+}
+
+td{
+    line-height: 1px;
+    min-height: 1px;
+    height: 1px;
+    padding: 15px;
+}
+
+#icono{
+    font-size: 8px;
+}

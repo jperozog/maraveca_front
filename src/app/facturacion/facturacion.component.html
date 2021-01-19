@@ -52,9 +52,10 @@
     <md-icon [class.updateicon]="update">cached</md-icon>
     Actualizar
   </button>
-  <button  md-raised-button (click)="updatePricesfac()" *ngIf="usuario.perm && usuario.perm.includes('facturacion_mod')">
-    <!--md-icon>cached</md-icon--> Actualizar Precios
-  </button>
+  <button type="button" (click)="exportAsXLSX()" class="btn btn-info btn-sm">Exportar A Excel</button>
+  <!-- <button  md-raised-button (click)="updatePricesfac()" *ngIf="usuario.perm && usuario.perm.includes('facturacion_mod')">
+    &lt;!&ndash;md-icon>cached</md-icon&ndash;&gt; Actualizar Precios
+  </button>-->
   <!--button class="x490 x700" md-raised-button (click)="openDialog()" >
     <md-icon>add_circle_outline</md-icon>
     Agregar

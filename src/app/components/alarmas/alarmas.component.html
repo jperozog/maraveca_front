@@ -1,0 +1,101 @@
+<div class="row primero">
+  <div class="col-sm-5">
+    <h2 class="titulo">Alarmas</h2>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-6">
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">Equipo</th>
+          <th scope="col">Comentario</th>
+          <th scope="col">Responsable</th>
+          <th scope="col">Estatus</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Accion</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor=" let a of alarmas| paginate: {id:'alarmas', itemsPerPage: 5, currentPage: e }">
+          <td>{{a.equipo}}</td>
+          <td>{{a.comentario}}</td>
+          <td>{{a.nombre_user}} {{a.apellido_user}}</td>
+          <td *ngIf="a.estatus == 1">ACTIVADA</td>
+          <td *ngIf="a.estatus == 0">DESACTIVADA</td>
+          <td>{{a.created_at | date: 'dd/M/yy' }}</td>
+          <td *ngIf="a.estatus == 0">
+            <button type="button" (click)="cambiarStatusP(a.id_alarma)" class="btn btn-info btn-sm boton2">
+              <md-icon>done</md-icon>
+            </button>
+          </td>
+          <td *ngIf="a.estatus == 1">
+            <button type="button" (click)="cambiarStatusN(a.id_alarma)" class="btn btn-danger btn-sm boton2">
+              <md-icon>clear</md-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id ="alarmas" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-1"></div>
+  <div class="col-sm-4">
+    <div class="formulario">
+      <div class="card border-light mb-3">
+        <div class="card-header">Crear Alarma</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-5">
+              <label for="exampleSelect1">Seleccione Equipo</label>
+              <select [(ngModel)]="tipoSeleccionado" (change)="traerData($event.target.value)"
+                class="form-control form-control-sm" id="exampleSelect1" #ubicacion required>
+                <option value="0" selected></option>
+                <option value="1">MikroTik</option>
+                <option value="2">Celda</option>
+                <option value="3">Ap</option>
+                <option value="4">Proveedor</option>
+              </select>
+            </div>
+            <div *ngIf="tipoSeleccionado == 1 " class="col-sm-5">
+              <label for="exampleSelect1">MikroTik</label>
+              <select [(ngModel)]="equipoSeleccionado" class="form-control form-control-sm" id="exampleSelect1"
+                required>
+                <option [value]=" " selected></option>
+                <option *ngFor="let m of mks" [value]="m.nombre_srvidor">{{m.nombre_srvidor}}</option>
+              </select>
+            </div>
+
+            <div *ngIf="tipoSeleccionado == 2 " class="col-sm-5">
+              <label for="exampleSelect1">Celda</label>
+              <select [(ngModel)]="equipoSeleccionado" class="form-control form-control-sm" id="exampleSelect1"
+                required>
+                <option [value]=" " selected></option>
+                <option *ngFor="let m of mks" [value]="m.nombre_celda">{{m.nombre_celda}}</option>
+              </select>
+            </div>
+
+            <div *ngIf="tipoSeleccionado == 3 " class="col-sm-5">
+              <label for="exampleSelect1">Ap</label>
+              <select [(ngModel)]="equipoSeleccionado" class="form-control form-control-sm" id="exampleSelect1"
+                required>
+                <option [value]=" " selected></option>
+                <option *ngFor="let m of mks" [value]="m.nombre_ap">{{m.nombre_ap}}</option>
+              </select>
+            </div>
+          </div>
+          <br>
+          <div *ngIf="equipoSeleccionado != '' || tipoSeleccionado == 4" class="form-group">
+            <label for="exampleTextarea">Comentario</label>
+            <textarea [(ngModel)]="Comentario" class="form-control" id="exampleTextarea" rows="3"></textarea>
+          </div>
+          <br>
+          <div *ngIf="(tipoSeleccionado !=0 && equipoSeleccionado != '' && Comentario != '') || (tipoSeleccionado == 4 && Comentario != '')">
+            <button type="button" (click)="guardarData()" class="btn btn-info btn">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

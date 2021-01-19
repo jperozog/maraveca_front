@@ -1,0 +1,171 @@
+html{
+    overflow-x: hidden;
+}
+.tabla{
+    margin-top: 1%;
+}
+
+.form{
+    margin-left: 3%;
+    margin-top: 4%;
+}
+
+.boton{
+    margin-left: 30%;
+}
+.boton2{
+    background-color:#f9f9f9;
+    border-radius: 10px;
+    color:#2C2C30;
+    transition: all .5s ease;
+}
+
+.boton2:hover{
+    background-color:#2C2C30;
+    border-radius: 10px;
+    color:#f9f9f9
+}
+
+
+.paginacion{
+    margin-top: 10%;
+    margin-left: 10%;    
+}
+.filtrado{
+    margin-left: 1%;
+    margin-top: 1%;
+}
+.primero{
+    margin-top: 5%;
+}
+
+
+.indiceProceso{
+    height: 50px;
+    cursor: pointer;
+    background-color:#f9f9f9;
+    border-radius: 5px;
+    color:#2C2C30;
+    transition: all .5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.indiceTotal{
+    height: 50px;
+    cursor: pointer;
+    background-color:#f9f9f9;
+    border-radius: 5px;
+    color:#2C2C30;
+    transition: all .5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.indiceDisponibles{
+    height: 50px;
+    cursor: pointer;
+    background-color:#f9f9f9;
+    border-radius: 5px;
+    color:#2C2C30;
+    transition: all .5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.indiceNoDisponibles{
+    height: 50px;
+    cursor: pointer;
+    background-color:#f9f9f9;
+    border-radius: 5px;
+    color:#2C2C30;
+    transition: all .5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.indiceProceso:hover{
+    background-color:#E4D169;
+    color: white;
+}
+.indiceTotal:hover{
+    background-color:#2C2C30;
+    color: white;
+}
+.indiceDisponibles:hover{
+    background-color:#6FE469;
+    color: white;
+}
+.indiceNoDisponibles:hover{
+    background-color:#E46969;
+    color: white;
+}
+
+#icono{
+    font-size: 20px;
+}
+#icono2{
+    font-size: 25px;
+}
+
+.filtrado{
+    border: #2C2C30 3px solid;
+}
+
+input{
+    border-radius:5px ;
+}
+
+select{
+    border-radius:5px ;
+}
+
+.botonAgregar{
+    background-color: #2C2C30;
+    transition: all .5s ease;
+}
+
+.botonAgregar:hover{
+    background-color: #1F9BCF;
+}
+
+.botonAgregarCola{
+    background-color: #2C2C30;
+    transition: all .5s ease;
+}
+
+.botonAgregarCola:hover{
+    background-color:white;
+    color:#2C2C30;
+}
+
+.botonCategorias{
+    background-color: #2C2C30;
+    border-radius: 50px;
+}
+
+.tabla{
+    margin-top: 2%;
+}
+
+.tabla2{
+    color: white;
+    padding: 10px;
+    height: 420px;
+    margin-top: 2%;
+    background-color: #2C2C30;
+}
+
+.boton3{
+    background-color: #2C2C30;
+    color: white;
+    transition: .5s;
+}
+.boton3:hover{
+    background-color: #1F9BCF;
+    color: white;
+}

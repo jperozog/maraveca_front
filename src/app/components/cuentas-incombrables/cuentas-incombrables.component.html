@@ -1,0 +1,99 @@
+<div class="row primero">
+  <div class="col-sm-3">
+    <h2 class="titulo">Cuentas Incobrables</h2>
+  </div>
+  <div class="col-sm-1">
+    <select [(ngModel)]="anioSeleccionado" class="form-control select" id="exampleSelect2" required>
+      <option [value]='2021' selected> 2021</option>
+      <option [value]='2020' selected> 2020</option>
+      <option [value]='2019' selected> 2019</option>
+      <option [value]='2018' selected> 2018</option>
+    </select>
+  </div>
+  <div class="col-sm-2">
+    <select [(ngModel)]="mesSeleccionado" class="form-control select" id="exampleSelect2" required>
+      <option value='0' selected> Seleccione Mes</option>
+      <option [value]='1' selected> Enero</option>
+      <option [value]='2' selected> Febrero</option>
+      <option [value]='3' selected> Marzo</option>
+      <option [value]='4' selected> Abril</option>
+      <option [value]='5' selected> Mayo</option>
+      <option [value]='6' selected> Junio</option>
+      <option [value]='7' selected> Julio</option>
+      <option [value]='8' selected> Agosto</option>
+      <option [value]='9' selected> Septiembre</option>
+      <option [value]='10' selected> Octubre</option>
+      <option [value]='11' selected> Noviembre</option>
+      <option [value]='12' selected> Diciembre</option>
+    </select>
+  </div>
+  <div *ngIf="anioSeleccionado != 0 && mesSeleccionado != 0" class="col-sm-2">
+    <button style="background-color:#2C2C30; color: white;" type="button" (click)="traerCuentas()" class="btn btn-default ">
+      Buscar
+    </button>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-sm-5">
+    <div  class="tabla">
+      <h5>Registro Ultimos 3 Meses</h5>
+      <canvas baseChart  [datasets]="lineChartDataG2" [labels]="lineChartLabelsG2" [options]="lineChartOptionsG2"
+        [colors]="lineChartColorsG2" [chartType]="lineChartTypeG2"
+       ></canvas>
+    </div>
+    <h4 class="tabla">Clientes Retirados</h4>
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr style="background-color:#2C2C30; color: white;" class="table-defaukt">
+          <th scope="col">Cliente</th>
+          <th scope="col">Factura</th>
+          <th scope="col">Monto</th>
+          <th scope="col">Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor=" let c of cuentas | paginate: { id:'cuentas', itemsPerPage: 5, currentPage: e }">
+          <td *ngIf="c.kind == 'V' || c.kind == 'E'">{{c.nombre}} {{c.apellido}} </td>
+          <td *ngIf="c.kind == 'J' || c.kind == 'V-' || c.kind == 'G'">{{c.social}}</td>
+          <td>{{c.factura}}</td>
+          <td>{{c.monto  | number: "1.2"}} $</td>
+          <td>{{c.created_at | stringToDate | date: 'd/M/yy'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="cuentas" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-1"></div>
+  <div class="col-sm-5">
+    <div  class="tabla">
+      <div class="tickets">
+        <h5>Monto Exonerado</h5>
+        <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"
+           [colors]="pieChartColors"
+          [legend]="pieChartLegend">
+
+        </canvas>
+      </div>
+    </div>
+    <h4 class="tabla">Clientes Exonerados</h4>
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr style="background-color:#2C2C30; color: white;" class="table-defaukt">
+          <th scope="col">Cliente</th>
+          <th scope="col">Plan</th>
+          <th scope="col">Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor=" let c of exonerados | paginate: { id:'exonerados', itemsPerPage: 5, currentPage: p }">
+          <td *ngIf="c.kind == 'V' || c.kind == 'E'">{{c.nombre}} {{c.apellido}} </td>
+          <td *ngIf="c.kind == 'J' || c.kind == 'V-' || c.kind == 'G' ">{{c.social}}</td>
+          <td>{{c.name_plan}}</td>
+          <td>{{c.taza  | number: "1.2"}} $</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="exonerados" (pageChange)="p = $event"></pagination-controls>
+  </div>
+</div>

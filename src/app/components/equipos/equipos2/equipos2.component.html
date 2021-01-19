@@ -1,0 +1,99 @@
+<div class="row primero">
+  <div class="col-sm-2">
+    <h1>EQUIPOS</h1>
+  </div>
+  <div class="col-sm-2">
+    <button type="button" class="btn btn-info btn-sm" (click)="openModal(template)">
+      <md-icon>add_circle_outline</md-icon>
+    </button>
+    <button style="background-color:#1F9BCF;" (click)="traerEquipos()" title="Actualizar Instalaciones" type="button"
+      class="btn btn-info btn-sm ">
+      <md-icon>loop</md-icon>
+    </button>
+    <button style="background-color:#1F9BCF;" (click)="openModal2(template2)" title="Actualizar Instalaciones" type="button"
+    class="btn btn-info btn-sm ">
+    <md-icon>category</md-icon>
+  </button>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-sm-6 tabla">
+    <table class="table table-borderless">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">#</th>
+          <th scope="col">Equipo</th>
+          <th scope="col">Tipo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of equipos | paginate: { id:'equipos', itemsPerPage: 8, currentPage: p } ">
+          <th scope="row">{{e.id_equipo}}</th>
+          <td>{{e.nombre_equipo}}</td>
+          <td>{{e.nombre_tipo_art}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="equipos" (pageChange)="p = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-4 tabla">
+    <table class="table table-borderless">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">#</th>
+          <th scope="col">Categoria</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of tipos | paginate: { id:'categorias', itemsPerPage: 8, currentPage: e } ">
+          <th scope="row">{{t.id_tipo_art}}</th>
+          <td>{{t.nombre_tipo_art}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="categorias" (pageChange)="e = $event"></pagination-controls>
+  </div>
+
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Agregar Equipo</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label class="col-form-label" for="inputDefault">Nombre Equipo</label>
+    <input [(ngModel)]="nombre" type="text" class="form-control">
+    <br>
+    <label  class="col-form-label" for="inputDefault">Tipo de Equipo</label>
+    <select  [(ngModel)]="tipo" class="form-control" id="exampleSelect1" required>
+      <option value="0"></option>
+      <option *ngFor="let t of tipos" [value]="t.id_tipo_art">{{t.nombre_tipo_art}}</option>
+    </select>
+    <br>
+    <button *ngIf="nombre.length > 3 && tipo != 0" type="button" class="btn btn-info" (click)="agregarEquipo()">
+    Agregar
+    </button>
+  </div>
+</ng-template>
+
+
+<ng-template #template2>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Agregar Categoria</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal2()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label class="col-form-label" for="inputDefault">Nombre Categoria</label>
+    <input [(ngModel)]="nombreCategoria" type="text" class="form-control">
+    <br>
+    <button *ngIf="nombreCategoria.length >= 3" type="button" class="btn btn-info" (click)="agregarCategoria()">
+    Agregar
+    </button>
+  </div>
+</ng-template>

@@ -50,14 +50,14 @@
     <tr>
       <td *ngIf=" addPago.value.tipo_pago_comision == 1">
         <md-form-field>
-          <input mdInput type="text" mask="separator.2" thousandSeparator=","  suffix=" Bs.S." placeholder="Monto" class="md2-input" formControlName="monto_comision" [lte]="(recaudo_cm_bs - comisiones_pg_bs)"/>
+          <input mdInput type="text" mask="separator,2" thousandSeparator="."  suffix=" Bs.S." placeholder="Monto" class="md2-input" formControlName="monto_comision" [lte]="(recaudo_cm_bs - comisiones_pg_bs)"/>
           <md-error *ngIf="addPago.get('monto_comision').errors?.lte">El monto ingresado es mayor al recaudado</md-error>
         </md-form-field>
 
       </td>
       <td *ngIf=" addPago.value.tipo_pago_comision == 2">
         <md-form-field>
-          <input mdInput type="text" mask="separator.2" thousandSeparator="," suffix=" $" placeholder="Monto" class="md2-input" formControlName="monto_comision" [lte]="(recaudo_cm_dl - comisiones_pg_dl)"/>
+          <input mdInput type="text" mask="separator,2" thousandSeparator="." suffix=" $" placeholder="Monto" class="md2-input" formControlName="monto_comision" [lte]="(recaudo_cm_dl - comisiones_pg_dl)"/>
           <md-error *ngIf="addPago.get('monto_comision').errors?.lte">El monto ingresado es mayor al recaudado</md-error>
         </md-form-field>
 

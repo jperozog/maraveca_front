@@ -1,0 +1,386 @@
+
+<h1  md-dialog-title>Actualizar Instalacion</h1>
+
+
+<div class="contenido" [class.submenu]="edit">
+  <button style="float: right" md-raised-button class= "anular-btn" (click)="anular()">Anular instalacion</button>
+
+  <div style="width:90%; margin: 0 auto;">
+    <form id="client" name="clientForm" [formGroup]="addplan" ng-submit="ok(clientForm)" novalidate>
+      <table class="example-full-width" cellspacing="2">
+        <tr *ngIf="edit && row">
+          <td colspan="2">
+            <md-chip-list>
+              <md-chip *ngIf="!row.social">Nombre: {{(row.nombre | capitalize)+" "+(row.apellido | capitalize)}}</md-chip>
+              <md-chip *ngIf="row.social">Persona de Contacto: {{(row.nombre | capitalize)+" "+(row.apellido | capitalize)}}</md-chip>
+              <md-chip *ngIf="row.social">Razon Social: {{row.social | capitalize}}</md-chip>
+              <md-chip (click)="openLINK(row.ip_srv)">IP: {{row.ip_srv}}</md-chip>
+              <md-chip>Direccion: {{row.direccion | capitalize}}</md-chip>
+              <md-chip>Plan: {{row.name_plan | capitalize}}</md-chip>
+              <md-chip>Telefono: {{row.phone1}}</md-chip>
+              <md-chip *ngIf="row.phone2">Otros Telefono: {{row.phone2}}</md-chip>
+              <md-chip>AccessPoint: {{row.nombre_ap}}</md-chip>
+            </md-chip-list>
+          </td>
+        </tr>
+
+
+        <!--  comienza el campo de servicios / clientes  -->
+
+        <tr >
+
+          <td colspan="2" >
+            <md2-select name="cliente"
+                      formControlName="servicio_soporte"
+                      placeholder="Clientes"
+                      style="width=100%; min-width: 100%; min-height: 100%;"
+                      mdInput
+                      [disabled]="row"
+                      floatPlaceholder="never"
+                      >
+            <md2-select-header>
+              <input class="search" name="S_servicios"
+                     type="text"
+                     [(ngModel)]="S_servicios"
+                     placeholder="Buscar..."
+                     style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                     formControlName="S_servicios" />
+            </md2-select-header>
+            <md2-option *ngFor="let i of (clientes | dataPipe : {dni: S_servicios, nombre: S_servicios, apellido: S_servicios, social: S_servicios})" [value]="i.id" [tooltip]="i.comment" tooltip-position="below" >
+              <span *ngIf="i.kind.toUpperCase() == 'V'">{{(i.kind | capitalize) + i.dni+' / '+(i.nombre | capitalize) +' '+(i.apellido | capitalize)}}</span>
+              <span *ngIf="i.kind.toUpperCase() == 'E'">{{(i.kind | capitalize) + i.dni+' / '+(i.nombre | capitalize) +' '+(i.apellido | capitalize)}}</span>
+              <span *ngIf="i.kind.toUpperCase() == 'J'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span>
+              <span *ngIf="i.kind.toUpperCase() == 'G'">{{(i.kind | capitalize) + i.dni+' / '+(i.social | capitalize)}}</span><br />
+            </md2-option>
+          </md2-select>
+          </td>
+        </tr>
+
+        <!-- Celdas y equipos para instalaciones -->
+
+        <tr >
+          <td colspan="2">
+            <md2-select name="celda"
+                      formControlName="celda_soporte"
+                      placeholder="Celda"
+                      style="width=100%; min-width: 100%; min-height: 100%;"
+                      mdInput
+                      floatPlaceholder="never"
+                      >
+            <md2-select-header>
+              <input class="search" name="S_celda"
+                     type="text"
+                     [(ngModel)]="S_celda"
+                     placeholder="Buscar..."
+                     style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                     formControlName="S_servicios" />
+            </md2-select-header>
+            <md2-option *ngFor="let i of (celda | dataPipe : {nombre_celda: S_celda})" [value]="i.id_celda">
+              <span>{{(i.nombre_celda | capitalize2)}}</span><br />
+            </md2-option>
+          </md2-select>
+          </td>
+          </tr>
+          <tr >
+            <td colspan="2">
+              <md2-select name="tequip"
+                        formControlName="tipo_equipo_soporte"
+                        placeholder="Tipo de Equipo"
+                        style="width=100%; min-width: 100%; min-height: 100%;"
+                        mdInput
+                        floatPlaceholder="never"
+                        >
+              <md2-option value="1">
+                <span>Equipo</span><br />
+              </md2-option>
+              <md2-option value="2">
+                <span>Radio</span><br />
+              </md2-option>
+            </md2-select>
+              </td>
+            <tr>
+            <td *ngIf=" addplan.value.tipo_equipo_soporte == '1'">
+            <md2-select name="equipo"
+                      formControlName="equipo_soporte"
+                      placeholder="Equipo"
+                      style="width=100%; min-width: 100%; min-height: 100%;"
+                      mdInput
+                      floatPlaceholder="never"
+                      >
+            <md2-select-header>
+              <input class="search" name="S_equipo"
+                     type="text"
+                     [(ngModel)]="S_equipo"
+                     placeholder="Buscar..."
+                     style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                     formControlName="S_servicios" />
+            </md2-select-header>
+            <md2-option *ngFor="let i of (equipos | dataPipe : {name: S_equipo})" [value]="i.id">
+              <span>{{(i.name | capitalize2:true)}}</span><br />
+            </md2-option>
+          </md2-select>
+          </td>
+            <td *ngIf=" addplan.value.tipo_equipo_soporte == '2'">
+              <md2-select name="equipo"
+                          formControlName="equipo_soporte"
+                          placeholder="Radios"
+                          style="width=100%; min-width: 100%; min-height: 100%;"
+                          mdInput
+                          floatPlaceholder="never"
+              >
+                <md2-select-header>
+                  <input class="search" name="S_equipo"
+                         type="text"
+                         [(ngModel)]="S_equipo"
+                         placeholder="Buscar..."
+                         style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                         formControlName="S_servicios" />
+                </md2-select-header>
+                <md2-option *ngFor="let i of (radio | dataPipe : {name: S_equipo})" [value]="i.id">
+                  <span>{{(i.name | capitalize2:true)}}</span><br />
+                </md2-option>
+              </md2-select>
+            </td>
+
+        </tr>
+
+        <tr >
+          <td>
+            <md-form-field class="example-full-width" *ngIf="!EN" floatPlaceholder="never">
+            <input autocomplete="off" mdInput placeholder="Serial De Equipo" class="md2-input" formControlName="seriale" minlength="12" maxlength="12"/>
+              <md-error *ngIf="  addplan.get('seriale').errors?.SerialExists"> Este equipo ya esta siendo utilizado</md-error>
+          </md-form-field>
+          </td>
+          <td>
+          <md-checkbox [(ngModel)]="EN" class="example-margin" formControlName="EN">Equipo Usado</md-checkbox>
+          <button md-icon-button (click)="select()" [disabled]="addplan.value.celda_soporte && addplan.value.celda_soporte == '' && addplan.value.equipo_soporte == ''">
+            <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
+          </button>
+        </td>
+        </tr>
+
+
+<!--=============================================================================================================================================================-->
+       <!-- Agregar planes e IP-->
+        <tr >
+
+          <td colspan="2">
+            <md2-select name="tipo de plan"
+                        formControlName="tipo_plan_srv"
+                        placeholder="Tipo de plan"
+                        style="width=100%; min-width: 100%; min-height: 100%;"
+                        mdInput>
+              <md2-option [value]="1">Planes Antiguos</md2-option>
+              <md2-option [value]="4">Planes Nuevos</md2-option>
+              <md2-option [value]="3">Planes en Dolares</md2-option>
+              <md2-option [value]="5">Planes solo Dedicados</md2-option>
+
+
+            </md2-select>
+          </td>
+
+        </tr>
+        <tr ><td colspan="2" [style.height]="'10%'"><br></td  ></tr>
+        <tr >
+
+          <td colspan="2"  *ngIf="addplan.value.tipo_plan_srv==1">
+            <md2-select name="Plan"
+                        formControlName="plan_srv"
+                        placeholder="Planes"
+                        style="width=100%; min-width: 100%;"
+                        mdInput
+                        floatPlaceholder="never"
+            >
+              <md2-select-header>
+                <input class="search" name="p_search"
+                       type="text"
+                       [(ngModel)]="p_search"
+                       placeholder="Buscar..."
+                       style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                       formControlName="p_search" />
+              </md2-select-header>
+              <md2-option *ngFor="let i of (planes1 | dataPipe : {name_plan: p_search})" [value]="i.id_plan">{{i.name_plan}}</md2-option>
+            </md2-select>
+          </td>
+
+          <td colspan="2"  *ngIf="addplan.value.tipo_plan_srv==4">
+            <md2-select name="Plan"
+                        formControlName="plan_srv"
+                        placeholder="Planes"
+                        style="width=100%; min-width: 100%;"
+                        mdInput
+                        floatPlaceholder="never"
+            >
+              <md2-select-header>
+                <input class="search" name="p_search"
+                       type="text"
+                       [(ngModel)]="p_search"
+                       placeholder="Buscar..."
+                       style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                       formControlName="p_search" />
+              </md2-select-header>
+              <md2-option *ngFor="let i of (planes2 | dataPipe : {name_plan: p_search})" [value]="i.id_plan">{{i.name_plan}}</md2-option>
+            </md2-select>
+          </td>
+
+          <td colspan="2"  *ngIf="addplan.value.tipo_plan_srv==3">
+            <md2-select name="Plan"
+                        formControlName="plan_srv"
+                        placeholder="Planes"
+                        style="width=100%; min-width: 100%;"
+                        mdInput
+                        floatPlaceholder="never"
+            >
+              <md2-select-header>
+                <input class="search" name="p_search"
+                       type="text"
+                       [(ngModel)]="p_search"
+                       placeholder="Buscar..."
+                       style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                       formControlName="p_search" />
+              </md2-select-header>
+              <md2-option *ngFor="let i of (planesd | dataPipe : {name_plan: p_search})" [value]="i.id_plan">{{i.name_plan}}</md2-option>
+            </md2-select>
+          </td>
+
+          <td colspan="2"  *ngIf="addplan.value.tipo_plan_srv==5">
+            <md2-select name="Plan"
+                        formControlName="plan_srv"
+                        placeholder="Planes"
+                        style="width=100%; min-width: 100%;"
+                        mdInput
+                        floatPlaceholder="never"
+            >
+              <md2-select-header>
+                <input class="search" name="p_search"
+                       type="text"
+                       [(ngModel)]="p_search"
+                       placeholder="Buscar..."
+                       style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                       formControlName="p_search" />
+              </md2-select-header>
+              <md2-option *ngFor="let i of (planes3 | dataPipe : {name_plan: p_search})" [value]="i.id_plan">{{i.name_plan}}</md2-option>
+            </md2-select>
+          </td>
+        </tr>
+<tr  >
+  <td colspan="2" >
+    <md-form-field class="example-full-width" floatPlaceholder="never">
+      <input  mdInput formControlName="ip_srv" placeholder="IP" />
+      <md-error *ngIf="addplan.get('ip_srv').errors?.IpExists && row.ip !== addplan.value.ip_srv "> Direccion IP utilizada</md-error>
+      <md-error *ngIf="addplan.get('ip_srv').errors?.IpInstall && row.ip !==addplan.value.ip_srv"> Direccion IP asignada a instalacion</md-error>
+    </md-form-field>
+  </td>
+
+</tr>
+<!--=============================================================================================================================================================-->
+          <!--antennas-->
+
+        <tr ><td colspan="3" style="text-align: center">Requisitos Adicionales</td></tr>
+        <tr >
+          <td colspan="2">
+        <table>
+          <tr *ngFor="let i of requ" (click)=deleter(i)>
+            <td class="bor">
+              {{i.nombre | capitalize}}
+            </td>
+            <td colspan="2" class="bor">
+              {{i.valor}}
+            </td>
+          </tr>
+          <tr *ngIf="addplan.value.nombrer && addplan.value.nombrer=='SerialPTP'">
+            <td colspan="3">
+              <md2-select name="equipo"
+                        formControlName="ptp_equipo"
+                        placeholder="Equipo"
+                        style="width=100%; min-width: 100%; min-height: 100%;"
+                        mdInput
+                        floatPlaceholder="never"
+                        >
+              <md2-select-header>
+                <input class="search" name="S_equipo"
+                       type="text"
+                       [(ngModel)]="S_equipo"
+                       placeholder="Buscar..."
+                       style="width=95%; min-width: 95%; border: none; outline: none; height: 100%; padding: 0;"
+                       formControlName="S_servicios" />
+              </md2-select-header>
+              <md2-option *ngFor="let i of (equipos | dataPipe : {name: S_equipo})" [value]="i.id">
+                <span>{{(i.name | capitalize2:true)}}</span><br />
+              </md2-option>
+            </md2-select>
+            </td>
+            </tr>
+          <tr>
+            <td>
+              <md2-select name="tipo"
+              formControlName="nombrer"
+              placeholder="Adicional"
+              floatPlaceholder="never"
+              value='Tubo'
+              style="width=100%; min-width: 100%; min-height: 100%;"
+              mdInput
+              >
+              <md2-option value="Tubo" [disabled]="row && row.tubo" >
+                Tubo
+              </md2-option>
+              <md2-option value="SerialPTP" >
+                Serial PTP
+              </md2-option>
+              <md2-option value="Router" >
+                Router
+              </md2-option>
+              <md2-option value="Switch" >
+                Switch
+              </md2-option>
+              <md2-option value="Antena" >
+                Antena
+              </md2-option>
+
+            </md2-select>
+            </td>
+            <td>
+              <md-form-field floatPlaceholder="never">
+              <input *ngIf="addplan.value.nombrer=='SerialPTP'|| addplan.value.nombrer=='Router'" mdInput [placeholder]="valorplaceholder" class="md2-input" formControlName="valorr" />
+              <input *ngIf="addplan.value.nombrer!='SerialPTP' && addplan.value.nombrer!='Router'" mdInput [placeholder]="valorplaceholder" class="md2-input" formControlName="valorr" type="number"/>
+              <span *ngIf="addplan.value.nombrer=='Tubo' && addplan.value.valorr != ''" mdSuffix>Metros</span>
+            </md-form-field>
+            </td>
+            <td>
+              <button  md-icon-button (click)="selectptp()" *ngIf="addplan.value.nombrer && addplan.value.nombrer=='SerialPTP'" [disabled]="addplan.value.ptp_equipo && addplan.value.ptp_equipo==''">
+                <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
+              </button>
+              <button  md-icon-button (click)="selectrouter()" *ngIf="addplan.value.nombrer && addplan.value.nombrer=='Router'">
+                <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
+              </button>
+              <button  md-icon-button (click)="selectswitch()" *ngIf="addplan.value.nombrer && addplan.value.nombrer=='Switch'">
+                <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
+              </button>
+              <button  md-icon-button (click)="selectantena()" *ngIf="addplan.value.nombrer && addplan.value.nombrer=='Antena'">
+                <md-icon class="md-24" style="color:#1f96c4;text-shadow: 0px 0px 20px #000000;" aria-label="status">drag_indicator</md-icon>
+              </button>
+              <button md-raised-button class="btn example-half-width" type="button" [disabled]="row && row.status_soporte==2" (click)="addr()">
+                <i class="fa fa-times" aria-hidden="true" ></i>Agregar
+              </button>
+            </td>
+          </tr>
+        </table>
+      </td>
+      </tr>
+        <!--prueba de maquetado -->
+
+        <tr>
+          <td>
+            <button  md-raised-button class="example-full-width btn btn-primary b-btn" [disabled]="!addplan.valid" (click)="Editar()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Editar</button>
+
+          </td>
+          <td>
+            <button  md-raised-button color="warn" class="example-full-width btn btn-danger" type="button" (click)="onNoClick()"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</button>
+          </td>
+
+        </tr>
+
+        </table>
+    </form>
+  </div>
+</div>

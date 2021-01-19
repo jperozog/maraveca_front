@@ -1,45 +1,39 @@
-<!DOCTYPE html>
-<html class="contenido submenu">
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<meta name="keywords" content="Flat Dark Web Login Form Responsive Templates, Iphone Widget Template, Smartphone login forms,Login form, Widget Template, Responsive Templates, a Ipad 404 Templates, Flat Responsive Templates" />
-<!--webfonts-->
-<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic|Oswald:400,300,700' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Exo+2' rel='stylesheet' type='text/css'>
-<!--//webfonts-->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-</head>
-<body>
-<script>$(document).ready(function(c) {
-	$('.close').on('click', function(c){
-		$('.login-form').fadeOut('slow', function(c){
-	  		$('.login-form').remove();
-		});
-	});
-});
-</script>
- <!--SIGN UP-->
- <h1 style="font-weight: bold;text-transform: uppercase;color:#ffffff;"> </h1>
-<div class="login-form">
-<div class="head-info">Sistema Administrativo</div>
-			<div style="background-color:lightpink" *ngIf="error" class="clear"> Error en Usuario Y Contraseña </div>
-	<div class="avtar">
-		<img src="../../assets/images/avtar.png" />
-	</div>
-				<form [formGroup]="log">
-					<input type="text" class="text" placeholder="Usuario" formControlName="username" autocomplete="off" [(ngModel)]="model.username">
-						<div class="key">
-					<input type="password" placeholder="Contraseña" formControlName="password" autocomplete="off" [(ngModel)]="model.password">
-						</div>
-	<div class="signin">
-	  <input type="submit" (click)="login()" value="Ingresar"  >
-	</div>
-</form>
-</div>
- <div class="copy-rights">
-					<p></p>
-			</div>
+<div class="row">
 
-</body>
-</html>
+	<div class="col-sm-9 fondo" [ngStyle]="{'background-image': 'url(' + fondoSeleccionado + ')'}" >
+
+	</div>
+	<div class="col-sm-3 login">
+		<div class="container">
+			<h1 style="font-weight: bold;text-transform: uppercase;color:#ffffff;"> </h1>
+			<div class="login-form">
+				<div class="head-info">
+					<h3>Sistema Administrativo</h3>
+				</div>
+
+				<div *ngIf="error" class="alert alert-dismissible alert-danger">
+					Error en Usuario Y Contraseña
+				</div>
+				<div class="avtar">
+					<img src="../../assets/images/avtar.png" />
+				</div>
+				<form [formGroup]="log">
+					<div class="form-group">
+						<label class="col-form-label" for="inputDefault">Usuario</label>
+						<input type="text" class="form-control" placeholder="Usuario" formControlName="username"
+							autocomplete="off" [(ngModel)]="model.username">
+					</div>
+					<div class="form-group key">
+						<label class="col-form-label" for="inputDefault">Contraseña</label>
+						<input type="password" class="form-control" placeholder="Contraseña" formControlName="password"
+							autocomplete="off" [(ngModel)]="model.password">
+					</div>
+					<div class="signin">
+						<button (click)="login()" value="Ingresar" type="button" class="btn btn-info">Entrar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</div>

@@ -113,7 +113,7 @@
     </tr>
     <tr><td colspan="2" *ngIf="addClient.value.tipo_plan_srv== 4" [style.height]="'10%'"><br></td  ></tr>
     <tr><td colspan="2" *ngIf="addClient.value.tipo_plan_srv== 4">
-      <md2-select  name="modo de pago"  formControlName="modo_pago_srv" class="example-full-width" placeholder="seleccion la modalidad de pago">
+      <md2-select  [disabled]="editable" name="modo de pago"  formControlName="modo_pago_srv" class="example-full-width" placeholder="seleccion la modalidad de pago">
         <md2-option [value]="1" >Moneda local Bs.S</md2-option>
         <md2-option  [value]="2" >Moneda extranjera US$</md2-option>
       </md2-select>
@@ -207,12 +207,12 @@
     <tr>
       <td>
         <md-form-field disabled= true>
-          <input   mdInput formControlName="costo_instalacion_srv" placeholder="Precio de instalacion" [readonly]="true"/>
+          <input  [disabled]="editable" mdInput formControlName="costo_instalacion_srv" placeholder="Precio de instalacion" [readonly]="true"/>
         </md-form-field>
       </td>
       <td>
         <md-form-field>
-          <input mdInput formControlName="credito_srv" placeholder="Dias de credito"  [readonly]="true"/>
+          <input [disabled]="editable" mdInput formControlName="credito_srv" placeholder="Dias de credito"  [readonly]="true"/>
         </md-form-field>
       </td>
     </tr>
@@ -244,6 +244,7 @@
           <md-error *ngIf="addClient.get('ip_srv').errors?.IpInstall && row.ip_srv !== addClient.value.ip_srv"> Direccion IP asignada a instalacion</md-error>
         </md-form-field>
       </td>
+
     </tr>
     <tr>
       <td>

@@ -78,10 +78,10 @@
             <td class="fac pointer hover" style="text-align:center;" (click)="changeTYPE(item)">
               {{fechas[i].fecha}}
             </td>
-            <td class="fac" style="text-align:right; ">
+            <td class="fac  pointer hover" style="text-align:right;" (click)="goTOfacF(item)">
               {{item.facturado | number: "1.2-2"}} Bs.S
             </td>
-            <td class="fac" style="text-align:right; ">
+            <td class="fac  pointer hover" style="text-align:right;" (click)="goTOfacP(item)">
               {{item.pagado | number: "1.2-2"}} Bs.S
             </td>
             <td class="fac pointer hover" style="text-align:right;" (click)="goTOfac(item)">

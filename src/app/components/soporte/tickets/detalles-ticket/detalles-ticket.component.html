@@ -1,0 +1,111 @@
+<div class="row primero">
+  <div class="col-sm-1">
+    <button style="background-color: #2C2C30; color: white;" (click)="atras()" type="button"
+      class="btn btn-default boton">Atras</button>
+  </div>
+  <div class="col-sm-5">
+    <h2 *ngIf="tipoActivo == 1" class="titulo">Ticket</h2>
+    <h2 *ngIf="tipoActivo == 2" class="titulo">Averia</h2>
+    <h2 *ngIf="tipoActivo == 3" class="titulo">Reposicion</h2>
+  </div>
+</div>
+<br>
+<div class="row segundo">
+  <div *ngIf="tipoActivo == 1" class="col-sm-3">
+    <h5>Cliente</h5>
+    <p *ngIf="ticket.kind == 'V' || ticket.kind == 'E'">{{ticket.nombre}}{{ticket.apellido}}</p>
+    <p *ngIf="ticket.kind != 'V' || ticket.kind != 'E'">{{ticket.social}}</p>
+    <h5>Telefono</h5>
+    <p>{{ticket.phone1}}</p>
+    <h5>Email</h5>
+    <p>{{ticket.email}}</p>
+    <h5>Direccion</h5>
+    <p>{{ticket.direccion}}</p>
+    <h5>Celda/Manga:</h5>
+    <p>{{ticket.nombre_celda}}</p>
+    <h5>Mikrotic:</h5>
+    <p>{{ticket.nombre_srvidor}}</p>
+    <h5 *ngIf="ticket.ip_srv != 0">IP</h5>
+    <p *ngIf="ticket.ip_srv != 0">{{ticket.ip_srv}}</p>
+    <h5>Equipo</h5>
+    <p *ngIf="ticket.serial_srv != 0">{{ticket.serial_srv}}</p>
+    <p *ngIf="ticket.serial_srv == 0">Equipo Usado</p>
+    <h5>Resposable Creacion:</h5>
+    <p>{{ticket.nombre_user}} {{ticket.apellido_user}}</p>
+
+    <button *ngIf="ticket.status_soporte == 1 && tipoComentario == 0" style="background-color: #2C2C30; color: white;"
+      (click)="CerrarAveria()" type="button" class="btn btn-default ">Cerrar Ticket</button>
+  </div>
+  <div *ngIf="tipoActivo == 2" class="col-sm-3">
+    <h5>Celda/Manga:</h5>
+    <p>{{averia.nombre_celda}}</p>
+    <h5>Mikrotic:</h5>
+    <p>{{averia.nombre_srvidor}}</p>
+    <h5>Resposable Creacion:</h5>
+    <p>{{averia.nombre_user}} {{averia.apellido_user}}</p>
+
+    <button *ngIf="averia.status_averia == 1 && tipoComentario == 0" style="background-color: #2C2C30; color: white;"
+      (click)="CerrarAveria()" type="button" class="btn btn-default ">Cerrar Averia</button>
+  </div>
+  <div *ngIf="tipoActivo == 3" class="col-sm-3">
+    <h5>Celda/Caja:</h5>
+    <p>{{averia.nombre_celda}}</p>
+    <h5>Mikrotic:</h5>
+    <p>{{averia.nombre_srvidor}}</p>
+    <h5>Equipo:</h5>
+    <p>{{averia.modelo_articulo}}</p>
+    <h5>Serial:</h5>
+    <p>{{averia.serial_articulo}}</p>
+    <h5>Resposable Creacion:</h5>
+    <p>{{averia.nombre_user}} {{averia.apellido_user}}</p>
+
+    <button *ngIf="averia.status_averia == 1 && tipoComentario == 0" style="background-color: #2C2C30; color: white;"
+      (click)="CerrarAveria()" type="button" class="btn btn-default ">Cerrar Averia</button>
+  </div>
+  <div class="col-sm-1"></div>
+  <div class="col-sm-7">
+    <br>
+    <h5>Historial</h5>
+    <table class="table table-borderless">
+      <tbody>
+        <tr *ngFor="let h of historial">
+          <td> {{h.comment}}</td>
+          <td> {{h.created_at| stringToDate | date: 'd/M/yy'}}</td>
+          <td> {{h.nombre_user}} {{h.apellido_user}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <div *ngIf="ticket.status_soporte == 1" class="form-group">
+      <h5 *ngIf="ticket.status_soporte == 1 && tipoComentario == 0">Comentario</h5>
+      <h5 *ngIf="ticket.status_soporte == 1 && tipoComentario == 1">Ultimo Comentario</h5>
+      <textarea style="border-left: 5px solid #2C2C30;" [(ngModel)]="comentarioAgg" class="form-control"
+        id="exampleTextarea" rows="5"></textarea>
+      <br>
+      <button *ngIf="ticket.status_soporte == 1 && tipoComentario == 0" style="background-color: #2C2C30; color: white;"
+        (click)="agregarComentario()" type="button" class="btn btn-default ">Agregar Comentario </button>
+      <button *ngIf="ticket.status_soporte == 1 && tipoComentario == 1" style="background-color: #2C2C30; color: white;"
+        (click)="agregarComentario()" type="button" class="btn btn-default ">Agregar Ultimo Comentario </button>
+    </div>
+    <br>
+    <div *ngIf="averia.status_averia == 1" class="form-group">
+      <h5 *ngIf="averia.status_averia == 1 && tipoComentario == 0">Comentario</h5>
+      <h5 *ngIf="averia.status_averia == 1 && tipoComentario == 1">Ultimo Comentario</h5>
+      <textarea style="border-left: 5px solid #2C2C30;" [(ngModel)]="comentarioAgg" class="form-control"
+        id="exampleTextarea" rows="5"></textarea>
+      <br>
+      <button *ngIf="averia.status_averia == 1 && tipoComentario == 0" style="background-color: #2C2C30; color: white;"
+        (click)="agregarComentario()" type="button" class="btn btn-default ">Agregar Comentario </button>
+      <button *ngIf="averia.status_averia == 1 && tipoComentario == 1" style="background-color: #2C2C30; color: white;"
+        (click)="agregarComentario()" type="button" class="btn btn-default ">Agregar Ultimo Comentario </button>
+    </div>
+
+    <div *ngIf="averia.status_reposicion == 1" class="form-group">
+      <button *ngIf="averia.status_reposicion == 1" (click)="cerrarReposicion(1)" type="button"
+        class="btn btn-info ">Aceptar Reposicion </button>
+      <button *ngIf="averia.status_reposicion == 1" type="button" class="btn btn-danger"
+        (click)="cerrarReposicion(2)">Rechazar Reposicion </button>
+    </div>
+
+  </div>
+</div>
