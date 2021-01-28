@@ -117,7 +117,7 @@
 <md-menu #administracion="mdMenu">
 
 
-  <button *ngIf="usuario.perm && usuario.perm.includes('clientes')" md-menu-item routerLink="/clients">
+  <!--<button *ngIf="usuario.perm && usuario.perm.includes('clientes')" md-menu-item routerLink="/clients">
     <md-icon>supervised_user_circle</md-icon>
     <span>Clientes</span>
   </button>
@@ -125,16 +125,16 @@
     <md-icon>group</md-icon>
     <span>Clientes Potenciales</span>
   </button>
-<!--
+
   <button *ngIf="usuario.perm && usuario.perm.includes('factibilidades')" md-menu-item routerLink="/factibilidades">
     <md-icon>perm_scan_wifi</md-icon>
     <span>Factibilidades</span>
   </button>
--->
+
   <button *ngIf="usuario.perm && usuario.perm.includes('factibilidades')" md-menu-item routerLink="/Factibilidades">
     <md-icon>perm_scan_wifi</md-icon>
     <span>Factibilidades</span>
-  </button>
+  </button>-->
 
 
   <button *ngIf="usuario.perm && usuario.perm.includes('facturacion')" md-menu-item routerLink="/facturacion">
@@ -189,6 +189,24 @@
   </button>
 
 
+</md-menu>
+
+<md-menu #ventas="mdMenu">
+
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('clientes')" md-menu-item routerLink="/clients">
+    <md-icon>supervised_user_circle</md-icon>
+    <span>Clientes</span>
+  </button>
+  <button *ngIf="usuario.perm && usuario.perm.includes('pclientes')" md-menu-item routerLink="/pclients">
+    <md-icon>group</md-icon>
+    <span>Clientes Potenciales</span>
+  </button>
+  <button *ngIf="usuario.perm && usuario.perm.includes('factibilidades')" md-menu-item routerLink="/Factibilidades">
+    <md-icon>perm_scan_wifi</md-icon>
+    <span>Factibilidades</span>
+  </button>
+  
 </md-menu>
 
 <md-menu #stat="mdMenu">
@@ -318,6 +336,11 @@
   <button md-menu-item [mdMenuTriggerFor]="administracion"
     *ngIf="usuario.perm && (usuario.perm.includes('clientes') || usuario.perm.includes('pclientes') || usuario.perm.includes('factibilidades') || usuario.perm.includes('facturacion') || usuario.perm.includes('planes') || usuario.perm.includes('servicios') )">
     <md-icon>poll</md-icon>Administracion
+  </button>
+
+  <button md-menu-item [mdMenuTriggerFor]="ventas"
+    *ngIf="usuario.perm && (usuario.perm.includes('clientes') || usuario.perm.includes('pclientes') || usuario.perm.includes('factibilidades') )">
+    <md-icon>shop</md-icon>Ventas
   </button>
 
   <button md-menu-item [mdMenuTriggerFor]="conf">
