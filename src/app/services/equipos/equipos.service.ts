@@ -19,6 +19,10 @@ export class EquiposService {
     return this.http.post(environment.apiEndpoint+"agregarEquipo2",{nombre,id})
   }
 
+  editarEquipo(datos: any){
+    return this.http.put(environment.apiEndpoint+"editarEquipo",{datos})
+  }
+
   agregarCategoria(nombreCategoria:string){
     return this.http.post(environment.apiEndpoint+"agregarCategoria",{nombreCategoria})
   }

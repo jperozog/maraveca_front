@@ -28,7 +28,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let e of equipos | paginate: { id:'equipos', itemsPerPage: 8, currentPage: p } ">
+        <tr style="cursor: pointer;" (click)="openModal3(template3,e.id_equipo)" *ngFor="let e of equipos | paginate: { id:'equipos', itemsPerPage: 8, currentPage: p } ">
           <th scope="row">{{e.id_equipo}}</th>
           <td>{{e.nombre_equipo}}</td>
           <td>{{e.nombre_tipo_art}}</td>
@@ -94,6 +94,29 @@
     <br>
     <button *ngIf="nombreCategoria.length >= 3" type="button" class="btn btn-info" (click)="agregarCategoria()">
     Agregar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #template3>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar equipo</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal3()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label class="col-form-label" for="inputDefault">Nombre Equipo</label>
+    <input [(ngModel)]="equipoSeleccionado.nombre_equipo" type="text" class="form-control">
+    <br>
+    <label  class="col-form-label" for="inputDefault">Tipo de Equipo</label>
+    <select  [(ngModel)]="equipoSeleccionado.id_tipo_art" class="form-control" id="exampleSelect1" required>
+      <option value="0"></option>
+      <option *ngFor="let t of tipos" [value]="t.id_tipo_art">{{t.nombre_tipo_art}}</option>
+    </select>
+    <br>
+    <button type="button" class="btn btn-info" (click)="editarEquipo()">
+    Editar
     </button>
   </div>
 </ng-template>

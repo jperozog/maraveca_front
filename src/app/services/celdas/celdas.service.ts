@@ -18,4 +18,8 @@ export class CeldasService {
   guardarCelda(celda:string,mk:number){
     return this.http.post(environment.apiEndpoint+"celdas",{celda,mk})
   }
+
+  editarCelda(datos:any){
+    return this.http.put(environment.apiEndpoint+"celdas",{datos})
+  }
 }

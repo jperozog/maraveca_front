@@ -9,6 +9,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
   styleUrls: ['./equipos2.component.css']
 })
 export class Equipos2Component implements OnInit {
+  equipoSeleccionado: any
   equipos:any = []
   tipos:any = []
   nombre:string =""
@@ -18,6 +19,7 @@ export class Equipos2Component implements OnInit {
   e:number = 1
   modalRef: BsModalRef;
   modalRef2: BsModalRef;
+  modalRef3: BsModalRef;
   config = {
     backdrop: true,
     ignoreBackdropClick: true
@@ -42,12 +44,29 @@ export class Equipos2Component implements OnInit {
     this.equiposServices.agregarEquipo(this.nombre,this.tipo).subscribe(res=>{console.log(res),this,this.traerEquipos(),this.closeModal()}, err=>console.log(err))
   }
 
+  editarEquipo(){
+    this.equiposServices.editarEquipo(this.equipoSeleccionado).subscribe(res => {this.modalRef3.hide(),this.ngOnInit()},err => console.log(err))
+    this.closeModal3()
+  }
+
   openModal(template: TemplateRef<any>){
     this.modalRef = this.modalService.show(template,this.config);
   }
 
   openModal2(template2: TemplateRef<any>){
     this.modalRef2 = this.modalService.show(template2,this.config);
+  }
+
+  openModal3(template: TemplateRef<any>, id: number){
+    this.modalRef3 = this.modalService.show(template,this.config);
+     
+    this.equipos.forEach(element => {
+      if (element.id_equipo == id) {
+        this.equipoSeleccionado = element
+      }
+    });
+      
+      console.log(this.equipoSeleccionado)
   }
 
   agregarCategoria(){
@@ -64,6 +83,12 @@ export class Equipos2Component implements OnInit {
   closeModal2(){
     this.modalRef2.hide()
     this.nombreCategoria = ""
+  }
+
+  closeModal3(){
+    this.modalRef3.hide()
+    this.nombre = ""
+    this.tipo = 0
   }
 
 

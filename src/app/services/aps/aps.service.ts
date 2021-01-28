@@ -15,4 +15,8 @@ export class ApsService {
     return this.http.post(environment.apiEndpoint+"aps",{ap,ip,usuario,clave,celda});
   }
 
+  editarAp(datos:any){
+    return this.http.put(environment.apiEndpoint+"aps",{datos})
+  }
+
 }

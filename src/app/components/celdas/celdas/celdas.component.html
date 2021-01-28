@@ -1,4 +1,4 @@
-<div class="row primero">
+  <div class="row primero">
   <div class="col-sm-1">
     <h1>CELDAS</h1>
   </div>
@@ -24,7 +24,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let c of celdas | paginate: { id:'celdas', itemsPerPage: 8, currentPage: p } ">
+        <tr style="cursor: pointer;" (click)="openModal2(template2,c.id_celda)" *ngFor="let c of celdas | paginate: { id:'celdas', itemsPerPage: 8, currentPage: p } ">
           <th scope="row">{{c.id_celda}}</th>
           <td>{{c.nombre_celda}}</td>
           <td>{{c.nombre_srvidor}}</td>
@@ -55,6 +55,29 @@
     <br>
     <button *ngIf="celda.length > 4 && mk != 0" type="button" class="btn btn-info" (click)="agregarCelda()">
     Agregar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #template2>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar celda</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal2()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label class="col-form-label" for="inputDefault">Nombre Celda</label>
+    <input [(ngModel)]="celdaSeleccionada.nombre_celda" type="text" class="form-control">
+    <br>
+    <label  class="col-form-label" for="inputDefault">Mk de la Celda</label>
+    <select  [(ngModel)]="celdaSeleccionada.servidor_celda" class="form-control" id="exampleSelect1" required>
+      <option value="0"></option>
+      <option *ngFor="let s of servidores" [value]="s.id_srvidor">{{s.nombre_srvidor}}</option>
+    </select>
+    <br>
+    <button type="button" class="btn btn-info" (click)="editarCelda()">
+    Editar
     </button>
   </div>
 </ng-template>

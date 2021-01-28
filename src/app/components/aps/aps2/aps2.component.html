@@ -25,7 +25,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let a of aps | paginate: { id:'aps', itemsPerPage: 8, currentPage: p } ">
+        <tr style="cursor: pointer;" (click)="openModal2(template2,a.id)" *ngFor="let a of aps | paginate: { id:'aps', itemsPerPage: 8, currentPage: p } ">
           <th scope="row">{{a.ip_ap}}</th>
           <td>{{a.nombre_ap}}</td>
           <td>{{a.user_ap}}</td>
@@ -78,6 +78,38 @@
     <br>
     <button *ngIf="ap.length > 4 && celda != 0 && ip != '' && usuario != '' && clave != ''" type="button" class="btn btn-info" (click)="agregarAps()">
       Agregar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #template2>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar AP</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal2()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h6 class="col-form-label" >Nombre AP:</h6>
+    <input [(ngModel)]="apSeleccionada.nombre_ap" type="text" class="form-control">
+    <br>
+    <label class="col-form-label" for="inputDefault">IP:</label>
+    <input [(ngModel)]="apSeleccionada.ip_ap" class="form-control" type="text">
+    <br>
+    <label class="col-form-label" for="inputDefault">Usuario:</label>
+    <input [(ngModel)]="apSeleccionada.user_ap" type="text" class="form-control">
+    <br>
+    <label class="col-form-label" for="inputDefault">Password:</label>
+    <input [(ngModel)]="apSeleccionada.password_ap" type="text" class="form-control">
+    <br>
+    <label  class="col-form-label" for="inputDefault">Celda:</label>
+    <select  [(ngModel)]="apSeleccionada.celda_ap" class="form-control" id="exampleSelect1" required>
+      <option value="0"></option>
+      <option *ngFor="let c of celdas" [value]="c.id_celda">{{c.nombre_celda}}</option>
+    </select>
+    <br>
+    <button type="button" class="btn btn-info" (click)="editarAp()">
+      Editar
     </button>
   </div>
 </ng-template>

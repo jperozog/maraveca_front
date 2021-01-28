@@ -11,6 +11,7 @@ import { ClassField } from '@angular/compiler/src/output/output_ast';
   styleUrls: ['./aps2.component.css']
 })
 export class Aps2Component implements OnInit {
+  apSeleccionada: any
   aps: any = []
   ap: string = ""
   celdas: any = []
@@ -20,6 +21,7 @@ export class Aps2Component implements OnInit {
   clave: string = ""
   p: number = 1
   modalRef: BsModalRef;
+  modalRef2: BsModalRef;
   config = {
     backdrop: true,
     ignoreBackdropClick: true
@@ -43,6 +45,19 @@ export class Aps2Component implements OnInit {
     this.modalRef = this.modalService.show(template, this.config);
   }
 
+  openModal2(template: TemplateRef<any>, id: number) {
+    this.modalRef2 = this.modalService.show(template, this.config);
+
+    this.aps.forEach(element => {
+      if (element.id == id) {
+    this.apSeleccionada = element
+  }
+    });
+
+      console.log(this.apSeleccionada)
+    
+  }
+
   agregarAps() {
     this.apsService.guardarAp(this.ap, this.ip, this.usuario, this.clave, this.celda)
       .subscribe(
@@ -53,6 +68,17 @@ export class Aps2Component implements OnInit {
         err => console.log(err))
   }
 
+  editarAp() {
+    this.apsService.editarAp(this.apSeleccionada).subscribe(
+      res => {
+     
+        this.modalRef2.hide()
+        this.ngOnInit()
+      },
+      err => console.log(err))
+
+  }
+
   closeModal() {
     this.ap = ""
     this.ip = ""
@@ -60,6 +86,15 @@ export class Aps2Component implements OnInit {
     this.clave = ""
     this.celda = 0
     this.modalRef.hide()
+  }
+
+  closeModal2(){
+    this.ap = ""
+    this.ip = ""
+    this.usuario = ""
+    this.clave = ""
+    this.celda = 0
+    this.modalRef2.hide()
   }
 
 }
