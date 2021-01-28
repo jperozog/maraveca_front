@@ -256,6 +256,7 @@ export class DetallesUsuarios implements OnInit, OnDestroy {
   routers: boolean = false;
   servicios: boolean = false;
   soporte: boolean = false;
+  pagarI: boolean = false;
   usuarios: boolean = false;
   arqueo: boolean = false;
   ap_w: boolean = false;
@@ -538,6 +539,7 @@ export class DetallesUsuarios implements OnInit, OnDestroy {
           else if (perm == 'servicios') { this.servicios = true }
           else if (perm == 'servicios_w') { this.servicios_w = true }
           else if (perm == 'soporte') { this.soporte = true }
+          else if (perm == 'pagarI') { this.pagarI = true }
           else if (perm == 'soporte_w') { this.soporte_w = true }
           else if (perm == 'soporte_esp') { this.soporte_esp = true }  //26-10-2019
           else if (perm == 'usuarios') { this.usuarios = true }

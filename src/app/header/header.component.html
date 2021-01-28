@@ -300,6 +300,10 @@
     <md-icon>warning</md-icon>
     <span>alarmas</span>
   </button>
+  <button md-menu-item routerLink="/ComisionesInstaladores" *ngIf="usuario.perm && (usuario.perm.includes('pagarI'))">
+    <md-icon>assignment</md-icon>
+    <span>Comisiones Instalador</span>
+  </button>
 <!--  
     <button *ngIf="usuario.perm && usuario.perm.includes('soporte')" md-menu-item routerLink="/Tickets">
       <md-icon>headset_mic</md-icon>
