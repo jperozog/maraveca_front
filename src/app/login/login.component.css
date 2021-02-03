@@ -2,6 +2,7 @@
 	background-size: cover;
 	background-repeat: no-repeat;
 	height: 99vh;
+	width: 100%;
 }
 
 .login{
@@ -10,4 +11,12 @@
 	background-repeat: no-repeat;
 	height: 99vh;
 	width: 100%;
+}
+
+.form{
+	width: 100%;
+}
+
+.full{
+max-width: 100%;
 }

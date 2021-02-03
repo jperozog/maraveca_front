@@ -1,3 +1,4 @@
+<div class="container full">
 <div class="row">
 
 	<div class="col-sm-9 fondo" [ngStyle]="{'background-image': 'url(' + fondoSeleccionado + ')'}" >
@@ -17,7 +18,7 @@
 				<div class="avtar">
 					<img src="../../assets/images/avtar.png" />
 				</div>
-				<form [formGroup]="log">
+				<form [formGroup]="log" class="form">
 					<div class="form-group">
 						<label class="col-form-label" for="inputDefault">Usuario</label>
 						<input type="text" class="form-control" placeholder="Usuario" formControlName="username"
@@ -36,4 +37,5 @@
 		</div>
 	</div>
 
+</div>
 </div>
