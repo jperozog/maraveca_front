@@ -8,6 +8,10 @@ export class ClienteService {
 
   constructor(private http:HttpClient) { }
 
+  traerClientes(id:number){
+      return this.http.get(environment.apiEndpoint+"clientes1/"+id)
+  }
+
   traerDatosCliente(id: number){
     return this.http.get(environment.apiEndpoint+"cliente/"+id)
   }

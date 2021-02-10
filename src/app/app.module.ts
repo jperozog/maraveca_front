@@ -207,6 +207,7 @@ import { DetallesTicketComponent } from './components/soporte/tickets/detalles-t
 import {ConfigAdminService} from './services/config-admin/config-admin.service';
 import { DetallesMigracionComponent } from './components/soporte/instalaciones2/detalles-migracion/detalles-migracion.component';
 import { DetallesMudanzaComponent } from './components/soporte/instalaciones2/detalles-mudanza/detalles-mudanza.component';
+import { ClientesComponent } from './components/clientes/clientes.component';
 
 
 
@@ -389,6 +390,7 @@ import { DetallesMudanzaComponent } from './components/soporte/instalaciones2/de
     DetallesTicketComponent,
     DetallesMigracionComponent,
     DetallesMudanzaComponent,
+    ClientesComponent,
   
    
 

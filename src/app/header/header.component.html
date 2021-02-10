@@ -194,10 +194,11 @@
 <md-menu #ventas="mdMenu">
 
 
-  <button *ngIf="usuario.perm && usuario.perm.includes('clientes')" md-menu-item routerLink="/clients">
+  <button *ngIf="usuario.perm && usuario.perm.includes('clientes')" md-menu-item routerLink="/clientes">
     <md-icon>supervised_user_circle</md-icon>
     <span>Clientes</span>
   </button>
+ 
   <button *ngIf="usuario.perm && usuario.perm.includes('pclientes')" md-menu-item routerLink="/pclients">
     <md-icon>group</md-icon>
     <span>Clientes Potenciales</span>

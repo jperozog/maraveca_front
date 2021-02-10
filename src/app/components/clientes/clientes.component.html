@@ -1,0 +1,233 @@
+<div class="con">
+  <div class="row">
+    <div class="col-sm-3">
+      <h1 *ngIf="FiltroActivo == 1">Clientes ({{clientes.length}}) </h1>
+      <h1 *ngIf="FiltroActivo == 2">Clientes ({{pendientes.length}})</h1>
+    </div>
+    <div class="col-sm-2 filtrado">
+      <select [(ngModel)]="FiltroActivo" class="form-control" id="exampleSelect2" required>
+        <option value="1">Clientes con Servicio</option>
+        <option value="2">Clientes sin Servicio</option>
+      </select>
+    </div>
+    <div class="col-sm-3">
+
+    </div>
+    <div class="col-sm-2">
+
+      <div class="form-group">
+        <input class="form-control form-control-lg" (keyup.backspace)="buscarServicioBackSpace($event.target.value)"
+          (input)="buscarClientes($event.target.value)" type="text" class="form-control" name="filtrado"
+          placeholder="Filtrar" id="inputDefault">
+      </div>
+
+    </div>
+    <div class="col-sm-2">
+      <button style="background-color:#8bcbe6;" (click)="aggCliente(template)" type="button"
+        class="btn btn-info btn-sm">
+        <md-icon class="icon">add_circle_outline</md-icon>
+      </button>
+      <button style="background-color:#8bcbe6;" (click)="actualizarLista()" title="Actualizar Instalaciones"
+        type="button" class="btn btn-info btn-sm">
+        <md-icon class="icon">loop</md-icon>
+      </button>
+      <button style="background-color:#8bcbe6;" (click)="irZonas()" title="Ir a Zonas" type="button"
+        class="btn btn-info btn-sm ">
+        <md-icon>accessibility</md-icon>
+      </button>
+    </div>
+  </div>
+  <div class="tab-pane fade active show" id="home">
+    <table *ngIf="FiltroActivo == 1" class="table table-borderless">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">#</th>
+          <th scope="col">CLIENTE</th>
+          <th scope="col">TELEFONO</th>
+          <th scope="col">CORREO</th>
+          <th scope="col">DIRECCION</th>
+          <th scope="col">ACCIONES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of clientes | paginate: {id:'clientes', itemsPerPage: 12, currentPage: p }">
+          <td> {{s.kind}} {{s.dni}}</td>
+          <td *ngIf="s.kind == 'V' || s.kind == 'E'">{{s.nombre}} {{s.apellido}}</td>
+          <td *ngIf="s.kind == 'V-' || s.kind == 'J' || s.kind == 'G'">{{s.social}}</td>
+          <td>{{s.phone1}}</td>
+          <td>{{s.email}}</td>
+          <td>
+            <div>
+              {{s.direccion}}
+            </div>
+          </td>
+          <td>
+            <md-icon  [routerLink]="['/ClientOverview', s.id]" style="cursor: pointer;" class="icon">search</md-icon>
+            <md-icon style="cursor: pointer;" class="icon">delete
+            </md-icon>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls *ngIf="FiltroActivo == 1" id="clientes" (pageChange)="p = $event"></pagination-controls>
+
+    <table *ngIf="FiltroActivo == 2" class="table table-borderless">
+      <thead>
+        <tr class="table-danger">
+          <th scope="col">#</th>
+          <th scope="col">CLIENTE</th>
+          <th scope="col">TELEFONO</th>
+          <th scope="col">CORREO</th>
+          <th scope="col">DIRECCION</th>
+          <th scope="col">ACCIONES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of pendientes | paginate: {id:'pendientes', itemsPerPage: 12, currentPage: p }">
+          <td> {{s.kind}} {{s.dni}}</td>
+          <td *ngIf="s.kind == 'V' || s.kind == 'E'">{{s.nombre}} {{s.apellido}}</td>
+          <td *ngIf="s.kind == 'V-' || s.kind == 'J' || s.kind == 'G'">{{s.social}}</td>
+          <td>{{s.phone1}}</td>
+          <td>{{s.email}}</td>
+          <td>
+            <div>
+              {{s.direccion}}
+            </div>
+          </td>
+          <td>
+            <md-icon  [routerLink]="['/ClientOverview', s.id]" style="cursor: pointer;" class="icon">search</md-icon>
+            <md-icon style="cursor: pointer;" class="icon">delete
+            </md-icon>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls *ngIf="FiltroActivo == 2" id="pendientes" (pageChange)="e = $event"></pagination-controls>
+
+
+  </div>
+</div>
+
+<ng-template #template>
+
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Agregar Cliente</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="ocultarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="card-body">
+
+
+    <div class="row">
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Nombres</label>
+        <input [(ngModel)]="nombres" type="text" class="form-control" id="inputDefault" required>
+      </div>
+
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Apellidos</label>
+        <input [(ngModel)]="apellidos" type="text" class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+
+    <div *ngIf="nombres.length > 4 && apellidos.length > 4" class="row">
+      <div class="col-sm-4">
+        <label class="control-label" for="disabledInput">Tipo</label>
+        <select [(ngModel)]="kni" class="form-control" id="exampleSelect1" required>
+          <option value="V">V</option>
+          <option value="E">E</option>
+          <option value="J">J</option>
+          <option value="V-">V- Firma Personal</option>
+          <option value="G">G</option>
+        </select>
+      </div>
+
+      <div class="col-sm-8 cedula">
+        <input [(ngModel)]="dni" type="text" placeholder="Cedula/RIF" class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+
+
+    <div *ngIf="kni != '' && dni.length > 6" class="row">
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Fecha de Nacimiento</label>
+        <my-date-picker [(ngModel)]="fecha" class="example-full-width" name="birthdate" mdInput required locale=es
+          [options]="myDatePickerOptions"></my-date-picker>
+      </div>
+
+      <div class="col-sm-6">
+        <label class="col-form-label" for="inputDefault">Telefono</label>
+        <input [(ngModel)]="numero" type="number" class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+    <div *ngIf="numero > 1000000" class="row">
+      <div class="col-sm-12">
+        <label class="col-form-label" for="inputDefault">Correo</label>
+        <input [(ngModel)]="email" type="email" class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+
+    <div *ngIf="email.length > 8" class="row">
+      <div class="col-sm-6">
+        <label class="control-label" for="disabledInput">Estado</label>
+        <select [(ngModel)]="estado" (change)="Municipios()" class="form-control" id="exampleSelect1" required>
+          <option value=""></option>
+          <option *ngFor="let e of estados" [value]="e.id_estado">{{e.estado}}</option>
+        </select>
+      </div>
+
+      <div *ngIf="estado != 0" class="col-sm-6">
+        <label class="control-label" for="disabledInput">Municipio</label>
+        <select [(ngModel)]="municipio" (change)="Parroquias()" class="form-control" id="exampleSelect1" required>
+          <option value=""></option>
+          <option *ngFor="let m of municipios" [value]="m.id_municipio">{{m.municipio}}</option>
+        </select>
+      </div>
+
+    </div>
+    <br>
+
+    <div *ngIf="municipio != 0" class="row">
+      <div class="col-sm-6">
+        <label class="control-label" for="disabledInput">Parroquias</label>
+        <select [(ngModel)]="parroquia" class="form-control" id="exampleSelect1" required>
+          <option value=""></option>
+          <option *ngFor="let p of parroquias" [value]="p.id_parroquia">{{p.parroquia}}</option>
+        </select>
+      </div>
+      <div *ngIf="parroquia != 0 && (kni == 'J' || kni == 'G' || kni == 'V-')" class="col-sm-6 social">
+        <label class="col-form-label" for="inputDefault">Social</label>
+        <input [(ngModel)]="social" type="text" class="form-control" id="inputDefault" required>
+      </div>
+    </div>
+    <br>
+    <div *ngIf="parroquia != 0 && (kni == 'J' || kni == 'G' || kni == 'V-')" class="custom-control custom-checkbox">
+      <input type="checkbox" [(ngModel)]="isChecked" class="custom-control-input" id="customCheck1">
+      <label class="custom-control-label" for="customCheck1">Cliente Facturable</label>
+    </div>
+    <br>
+    <div *ngIf="parroquia != 0" class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label for="exampleTextarea">Direccion</label>
+          <textarea [(ngModel)]="direccion" class="form-control" id="exampleTextarea" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div
+      *ngIf="nombres != '' && apellidos != '' && kni != '' && dni != '' && direccion.length > 5 && estado != 0 && municipio != 0 && parroquia != 0 ">
+      <button (click)="verdatos()" type="button" class="btn btn-info">Guardar</button>
+    </div>
+  </div>
+
+</ng-template>
