@@ -848,7 +848,7 @@ export class Instalaciones2Component implements OnInit {
   }
 
   GuardarData() {
-
+    
     if (this.tipoActivo2 == 1) {
       let desde = 1
 
@@ -931,7 +931,7 @@ export class Instalaciones2Component implements OnInit {
       this.modalRef.hide()
       this.ngOnInit()
     }
-
+    
     if (this.tipoActivo2 == 2) {
       
       this.instalacionesService.ingresarDataMigracion(this.idSelecccionado,this.migracionSelected, this.celdaSeleccionada, this.serialSeleccionado, this.promoSeleccionada, this.tasaCliente, this.planSeleccionado, this.usuario.currentUser.id_user)

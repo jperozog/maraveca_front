@@ -11,8 +11,8 @@ export class DescuentosService {
     return this.http.get(environment.apiEndpoint+"descuentos");
   }
 
-  guardarDescuento(factura:number,tipo:number,dias:number,comentario:string,usuario:number){
-    return this.http.post(environment.apiEndpoint+"guardarDescuento",{factura,tipo,dias,comentario,usuario})
+  guardarDescuento(factura:number,tipo:number,dias:number,comentario:string,monto:number,usuario:number){
+    return this.http.post(environment.apiEndpoint+"guardarDescuento",{factura,tipo,dias,comentario,monto,usuario})
   }
 
   aprobarDescuentos(id:number){

@@ -11,7 +11,8 @@ import { AlertService, AuthenticationService } from '../_services/index';
 })
 export class LoginComponent implements OnInit {
 
-  fondos: any = [{id:1,fondo:"../../assets/images/fondo4.jpg"},{id:2,fondo:"../../assets/images/fondo5.jpg"},{id:3,fondo:"../../assets/images/fondo1.jpg"}]
+ // fondos: any = [{id:1,fondo:"../../assets/images/fondo4.jpg"},{id:2,fondo:"../../assets/images/fondo5.jpg"},{id:3,fondo:"../../assets/images/fondo1.jpg"}]
+  fondos: any = [{id:1,fondo:"../../assets/images/fondoFinal.jpeg"}]
   numero = Math.round(Math.random() * (3 - 1) + 1);
   fondoSeleccionado: string
   model: any = {};
@@ -35,7 +36,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.fondos.forEach(element => {
-      if (element.id == this.numero ) {
+      if (element.id == 1 ) {
           this.fondoSeleccionado = element.fondo
       }
     });

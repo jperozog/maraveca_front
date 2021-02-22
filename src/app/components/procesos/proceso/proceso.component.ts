@@ -4,7 +4,7 @@ import { AuthGuard } from '../../../_guards/index';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { ProcesosService } from '../../../services/procesos/procesos.service';
-import {DescuentosService} from '../../../services/descuentos/descuentos.service'
+import { DescuentosService } from '../../../services/descuentos/descuentos.service'
 import { TemporalType } from '@novalinc/datepicker';
 
 @Component({
@@ -16,7 +16,7 @@ export class ProcesoComponent implements OnInit {
   modalRef: BsModalRef;
   modalRef2: BsModalRef;
   modalRef3: BsModalRef;
-  d:number = 1
+  d: number = 1
   cargando: boolean = false
   cargando2: boolean = false
   fechasFacturacion: any = []
@@ -24,7 +24,7 @@ export class ProcesoComponent implements OnInit {
   correos: boolean = false
   descuentos: boolean = false
   listaDescuentos: any = []
-  descuentoIndividual:number = 0
+  descuentoIndividual: number = 0
   constructor(private procesosService: ProcesosService,
     private descuentosService: DescuentosService,
     public usuario: AuthGuard,
@@ -40,8 +40,8 @@ export class ProcesoComponent implements OnInit {
     this.procesosService.traerDatosFacturacion().subscribe(res => this.fechasFacturacion = res, err => console.log(err))
   }
 
-  traerDescuentos(){
-    this.descuentosService.traerDescuentos().subscribe(res=>{console.log(res),this.listaDescuentos = res},err=>console.log(err))
+  traerDescuentos() {
+    this.descuentosService.traerDescuentos().subscribe(res => { console.log(res), this.listaDescuentos = res }, err => console.log(err))
   }
 
   hola(template: TemplateRef<any>) {
@@ -97,22 +97,30 @@ export class ProcesoComponent implements OnInit {
   }
 
 
-  OperacionesDescuento(id:number,status:number,template4: TemplateRef<any>){
-    if(status == 0){
+  OperacionesDescuento(id: number, status: number, template4: TemplateRef<any>) {
+    if (status == 0) {
       this.descuentoIndividual = id
-    this.modalRef3 = this.modalService.show(template4)
+      this.modalRef3 = this.modalService.show(template4)
     }
   }
 
 
-  aprobar(){
-    this.descuentosService.aprobarDescuentos(this.descuentoIndividual).subscribe(res=>console.log(res),err=>console.log(err))
-   
+  aprobar() {
+    this.descuentosService.aprobarDescuentos(this.descuentoIndividual).subscribe(
+      res => {
+        this.ngOnInit()
+        this.modalRef3.hide()
+      }, err => {
+      console.log(err)
+      this.ngOnInit()
+      this.modalRef3.hide()
+    })
+
   }
 
-  cancelar(){
-    this.descuentosService.cancelarDescuentos(this.descuentoIndividual).subscribe(res=>console.log(res),err=>console.log(err))
-   
+  cancelar() {
+    this.descuentosService.cancelarDescuentos(this.descuentoIndividual).subscribe(res => console.log(res), err => console.log(err))
+
   }
 
 

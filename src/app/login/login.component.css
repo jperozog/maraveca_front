@@ -1,6 +1,7 @@
 .fondo{
 	background-size: cover;
 	background-repeat: no-repeat;
+	background-position: center;
 	height: 99vh;
 	width: 100%;
 }

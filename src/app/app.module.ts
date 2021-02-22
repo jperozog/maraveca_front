@@ -208,6 +208,8 @@ import {ConfigAdminService} from './services/config-admin/config-admin.service';
 import { DetallesMigracionComponent } from './components/soporte/instalaciones2/detalles-migracion/detalles-migracion.component';
 import { DetallesMudanzaComponent } from './components/soporte/instalaciones2/detalles-mudanza/detalles-mudanza.component';
 import { ClientesComponent } from './components/clientes/clientes.component';
+import { VentasComponent } from './components/ventas/ventas.component';
+import {VentasService} from './services/ventas/ventas.service'
 
 
 
@@ -391,6 +393,7 @@ import { ClientesComponent } from './components/clientes/clientes.component';
     DetallesMigracionComponent,
     DetallesMudanzaComponent,
     ClientesComponent,
+    VentasComponent,
   
    
 
@@ -496,6 +499,7 @@ import { ClientesComponent } from './components/clientes/clientes.component';
     DescuentosService,
     NotificacionesService,
     ConfigAdminService,
+    VentasService,
     { provide: APP_CONFIG, useValue: AppConfig },
     { provide: LOCALE_ID, useValue: 'es' }
   ],

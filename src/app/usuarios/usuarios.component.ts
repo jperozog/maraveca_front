@@ -289,6 +289,9 @@ export class DetallesUsuarios implements OnInit, OnDestroy {
   soporte_esp: boolean = false;
   seniat: boolean = false
   gerencia: boolean = false
+  ventas: boolean = false;
+  ventas_w: boolean = false
+  ventas_esp: boolean = false
   //zonas
   editzona: FormGroup;
   zonas = [];
@@ -565,6 +568,9 @@ export class DetallesUsuarios implements OnInit, OnDestroy {
           else if (perm == 'inventarios_esp') { this.inventarios_esp = true }
           else if (perm == 'seniat') { this.seniat = true }
           else if (perm == 'gerencia') { this.gerencia = true }
+          else if (perm == 'ventas') { this.gerencia = true }
+          else if (perm == 'ventas_w') { this.gerencia = true }
+          else if (perm == 'ventas_esp') { this.gerencia = true }
         })
       });
 

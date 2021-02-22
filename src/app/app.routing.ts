@@ -65,6 +65,7 @@ import {DetallesTicketComponent} from './components/soporte/tickets/detalles-tic
 import {DetallesMigracionComponent} from './components/soporte/instalaciones2/detalles-migracion/detalles-migracion.component';
 import {DetallesMudanzaComponent} from './components/soporte/instalaciones2/detalles-mudanza/detalles-mudanza.component';
 import {ClientesComponent} from './components/clientes/clientes.component'
+import {VentasComponent} from './components/ventas/ventas.component'
 
 
 const appRoutes: Routes = [
@@ -221,6 +222,7 @@ const appRoutes: Routes = [
   {path: 'CuentasIncobrables',component: CuentasIncombrablesComponent, canActivate: [AuthGuard]},
   {path: 'detallesTicket/:id/:tipo', component: DetallesTicketComponent, canActivate: [AuthGuard]},
   {path: 'clientes', component: ClientesComponent, canActivate: [AuthGuard]},
+  {path: 'ventas', component: VentasComponent, canActivate: [AuthGuard]},
   
 ]
 

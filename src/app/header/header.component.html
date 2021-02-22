@@ -116,11 +116,11 @@
 
 <md-menu #administracion="mdMenu">
 
-
-  <!--<button *ngIf="usuario.perm && usuario.perm.includes('clientes')" md-menu-item routerLink="/clients">
+  <button *ngIf="usuario.perm && usuario.perm.includes('clientes')" md-menu-item routerLink="/clientes">
     <md-icon>supervised_user_circle</md-icon>
     <span>Clientes</span>
   </button>
+  <!--
   <button *ngIf="usuario.perm && usuario.perm.includes('pclientes')" md-menu-item routerLink="/pclients">
     <md-icon>group</md-icon>
     <span>Clientes Potenciales</span>
@@ -193,6 +193,11 @@
 
 <md-menu #ventas="mdMenu">
 
+
+  <button *ngIf="usuario.perm && usuario.perm.includes('ventas')" md-menu-item routerLink="/ventas">
+    <md-icon>shop</md-icon>
+    <span>Ventas</span>
+  </button>
 
   <button *ngIf="usuario.perm && usuario.perm.includes('clientes')" md-menu-item routerLink="/clientes">
     <md-icon>supervised_user_circle</md-icon>
@@ -344,7 +349,7 @@
   </button>
 
   <button md-menu-item [mdMenuTriggerFor]="ventas"
-    *ngIf="usuario.perm && (usuario.perm.includes('clientes') || usuario.perm.includes('pclientes') || usuario.perm.includes('factibilidades') )">
+    *ngIf="usuario.perm && (usuario.perm.includes('ventas') || usuario.perm.includes('ventas') || usuario.perm.includes('ventas') )">
     <md-icon>shop</md-icon>Ventas
   </button>
 

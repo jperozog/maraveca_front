@@ -39,6 +39,7 @@ import { FactibilidadesService } from '../services/factibilidades/factibilidades
 import { ClienteService } from '../services/cliente/cliente.service';
 import { PclienteService } from '../services/pcliente/pcliente.service';
 import { PromocionesService } from '../services/promociones/promociones.service';
+import {VentasService} from '../services/ventas/ventas.service'
 
 
 
@@ -108,34 +109,7 @@ export class PClientsComponent {
   celdas: any = [];
   equipos: any = [];
 
-  isCheckedE: boolean = false
-  visualizarDivPlanes:boolean = false
-  visualizarDisponible:boolean = false
-  disponibles: any = []
-  disponibles2:any = []
-  isChecked: boolean = false
-  serialSeleccionado: string = ' '
-  promociones:any = []
-  promoSeleccionada: number =0
-  isCheckedP2:boolean = false
-  tipoPlanSeleccionado:number = 0
-  planSeleccionado:number = 0
-  visualizarPlan:boolean = false
-  visualizarDivGuardar:boolean = false
-  instalacionSelected:number= 0
-  planes:any = []
-  listaips:any = []
-  visualizarIp:boolean = false
-  check:number
-  isCheckedP:boolean = false
-  idSelecccionado: number = 0
-  ipSeleccionada: string = ""
-  serial2Seleccionado: string = ""
-  equipoSeleccionado:string = ""
-
-  tipoPagoSelected:number = 0
-  tasaCliente:number = 0
-
+ 
 
 
 
@@ -157,9 +131,7 @@ export class PClientsComponent {
     private factibilidadService: FactibilidadesService,
     private clienteService: ClienteService,
     private pclienteService: PclienteService,
-    private instalacionesService: IntalacionesService,
-    private articuloService: ArticuloService,
-    private promocionesService: PromocionesService,
+    private ventaService:VentasService
   ) {
     this.snackBar.open("Cargando Clientes", null, {
       duration: 2000,
@@ -179,31 +151,15 @@ export class PClientsComponent {
   ngOnInit() {
     this.traerEstados()
     this.traerPClientes()
-    this.traerCeldas();
-    this.traerEquipos();
-
-  }
-
-  traerCeldas() {
-    this.instalacionesService.traerCeldaPractica()
-      .subscribe(res => { console.log(res), this.celdas = res }, err => console.log(err))
-  }
-
-  traerEquipos() {
-    this.instalacionesService.traerEquiposPractica()
-      .subscribe(res => { this.equipos = res, console.log(res) }, err => console.log(err))
-  }
-
-  traerPromociones() {
-    this.promocionesService.promociones().subscribe(res => { this.promociones = res, console.log(res) }, err => console.log(err))
   }
 
 
+
+ 
   openModal(id: number, template2: TemplateRef<any>) {
     this.pClientes.forEach(e => { if (e["id"] == id) this.pClienteSeleccionado = e });
     this.modalRef = this.modalService.show(template2, this.config);
     this.pclienteService.traerFactibilidad(id).subscribe(res =>{console.log(res), this.detallesFactibilidad = res}, err => console.log(err))
-    this.traerPromociones()
   }
 
   openModal4(id:number,template4: TemplateRef<any>) {
@@ -333,9 +289,6 @@ export class PClientsComponent {
   }
 
 
-  cambioTipoPago(){
-    this.tasaCliente = 0
-  }
 
 
   actualizarP() {
@@ -390,339 +343,23 @@ export class PClientsComponent {
       this.modalRef3 = this.modalService.show(template3,this.config)
 
       this.detallesFactibilidad.forEach(element => {if (element.id == id) this.factbilidadSeleccionada = element});
-      console.log(this.factbilidadSeleccionada)
-  }
-
-  hola() {
-    if (this.factbilidadSeleccionada.idCelda == 16 ||
-      this.factbilidadSeleccionada.idCelda == 17 ||
-      this.factbilidadSeleccionada.idCelda == 30 ||
-      this.factbilidadSeleccionada.idCelda == 19 ||
-      this.factbilidadSeleccionada.idCelda == 20 ||
-      this.factbilidadSeleccionada.idCelda == 37 ||
-      this.factbilidadSeleccionada.idCelda == 18 ||
-      this.factbilidadSeleccionada.idCelda == 22 ||
-      this.factbilidadSeleccionada.idCelda == 34 ||
-      this.factbilidadSeleccionada.idCelda == 21 ||
-      this.factbilidadSeleccionada.idCelda == 32) {
-
-      this.zoneSeleccionada = 1;
-      console.log(this.zoneSeleccionada)
-    }
-
-    if (this.factbilidadSeleccionada.idCelda == 9 ||
-      this.factbilidadSeleccionada.idCelda == 12 ||
-      this.factbilidadSeleccionada.idCelda == 3 ||
-      this.factbilidadSeleccionada.idCelda == 6 ||
-      this.factbilidadSeleccionada.idCelda == 7 ||
-      this.factbilidadSeleccionada.idCelda == 8 ||
-      this.factbilidadSeleccionada.idCelda == 28 ||
-      this.factbilidadSeleccionada.idCelda == 10 ||
-      this.factbilidadSeleccionada.idCelda == 11 ||
-      this.factbilidadSeleccionada.idCelda == 15) {
-
-      this.zoneSeleccionada = 3;
-      console.log(this.zoneSeleccionada)
-    }
-
-    if (
-      this.factbilidadSeleccionada.idCelda == 14 ||
-      this.factbilidadSeleccionada.idCelda == 24 ||
-      this.factbilidadSeleccionada.idCelda == 25 ||
-      this.factbilidadSeleccionada.idCelda == 29) {
-
-      this.zoneSeleccionada = 2;
-      console.log(this.zoneSeleccionada)
-    }
-
-    if (this.factbilidadSeleccionada.idCelda == 2 ||
-      this.factbilidadSeleccionada.idCelda == 4 ||
-      this.factbilidadSeleccionada.idCelda == 5 ||
-      this.factbilidadSeleccionada.idCelda == 13 ||
-      this.factbilidadSeleccionada.idCelda == 31 ||
-      this.factbilidadSeleccionada.idCelda == 40 ||
-      this.factbilidadSeleccionada.idCelda == 41) {
-
-      this.zoneSeleccionada = 4;
-      console.log(this.zoneSeleccionada)
-    }
-
-    if (this.factbilidadSeleccionada.idCelda == 35 ||
-      this.factbilidadSeleccionada.idCelda == 36 ||
-      this.factbilidadSeleccionada.idCelda == 41 ||
-        this.factbilidadSeleccionada.idCelda == 42 ||
-        this.factbilidadSeleccionada.idCelda == 43 ||
-        this.factbilidadSeleccionada.idCelda == 44 ||
-      this.factbilidadSeleccionada.idCelda == 39) {
-      this.zoneSeleccionada = 5;
-      console.log(this.zoneSeleccionada)
-    }
-
-    if (this.factbilidadSeleccionada.idCelda == 38) {
-      this.zoneSeleccionada = 6;
-      console.log(this.zoneSeleccionada)
-    }
-
-
-
-    if (this.isCheckedE) {
-      this.articuloService.obtenerDataEquiposPorModelo3(this.zoneSeleccionada, this.factbilidadSeleccionada.nombreEquipo)
-        .subscribe(
-          res => {
-            this.disponibles = res,
-              console.log(this.disponibles)
-            this.visualizarDisponible = true
-          },
-          err => console.log(err))
-
-      this.visualizarDivPlanes = true;
-    } else {
-      this.articuloService.obtenerDataEquiposPorModelo2(this.zoneSeleccionada, this.factbilidadSeleccionada.nombreEquipo)
-        .subscribe(
-          res => {
-            this.disponibles = res,
-              console.log(this.disponibles)
-            this.visualizarDisponible = true
-          },
-          err => console.log(err))
-
-      this.visualizarDivPlanes = true;
-    }
-
 
   }
 
-  hola2() {
-    if (this.factbilidadSeleccionada.idCelda == 16 ||
-      this.factbilidadSeleccionada.idCelda == 17 ||
-      this.factbilidadSeleccionada.idCelda == 30 ||
-      this.factbilidadSeleccionada.idCelda == 19 ||
-      this.factbilidadSeleccionada.idCelda == 20 ||
-      this.factbilidadSeleccionada.idCelda == 37 ||
-      this.factbilidadSeleccionada.idCelda == 18 ||
-      this.factbilidadSeleccionada.idCelda == 22 ||
-      this.factbilidadSeleccionada.idCelda == 34 ||
-      this.factbilidadSeleccionada.idCelda == 21 ||
-      this.factbilidadSeleccionada.idCelda == 32) {
-
-      this.zoneSeleccionada = 1;
-      console.log(this.zoneSeleccionada)
-    }
-
-    if (this.factbilidadSeleccionada.idCelda == 9 ||
-      this.factbilidadSeleccionada.idCelda == 12 ||
-      this.factbilidadSeleccionada.idCelda == 3 ||
-      this.factbilidadSeleccionada.idCelda == 6 ||
-      this.factbilidadSeleccionada.idCelda == 7 ||
-      this.factbilidadSeleccionada.idCelda == 8 ||
-      this.factbilidadSeleccionada.idCelda == 28 ||
-      this.factbilidadSeleccionada.idCelda == 10 ||
-      this.factbilidadSeleccionada.idCelda == 11 ||
-      this.factbilidadSeleccionada.idCelda == 15) {
-
-      this.zoneSeleccionada = 3;
-      console.log(this.zoneSeleccionada)
-    }
-
-    if (
-      this.factbilidadSeleccionada.idCelda == 14 ||
-      this.factbilidadSeleccionada.idCelda == 24 ||
-      this.factbilidadSeleccionada.idCelda == 25 ||
-      this.factbilidadSeleccionada.idCelda == 29) {
-
-      this.zoneSeleccionada = 2;
-      console.log(this.zoneSeleccionada)
-    }
-
-    if (this.factbilidadSeleccionada.idCelda == 2 ||
-      this.factbilidadSeleccionada.idCelda == 4 ||
-      this.factbilidadSeleccionada.idCelda == 5 ||
-      this.factbilidadSeleccionada.idCelda == 13 ||
-      this.factbilidadSeleccionada.idCelda == 31 ||
-      this.factbilidadSeleccionada.idCelda == 40 ||
-      this.factbilidadSeleccionada.idCelda == 41) {
-
-      this.zoneSeleccionada = 4;
-      console.log(this.zoneSeleccionada)
-    }
-
-    if (this.factbilidadSeleccionada.idCelda == 35 ||
-      this.factbilidadSeleccionada.idCelda == 36 ||
-      this.factbilidadSeleccionada.idCelda == 39) {
-      this.zoneSeleccionada = 5;
-      console.log(this.zoneSeleccionada)
-    }
-
-    if (this.factbilidadSeleccionada.idCelda == 38) {
-      this.zoneSeleccionada = 6;
-      console.log(this.zoneSeleccionada)
-    }
-
-    
-    this.articuloService.obtenerDataEquiposPorModelo2(this.zoneSeleccionada, this.equipoSeleccionado)
-      .subscribe(
-        res => {
-          this.disponibles2 = res,
-            console.log(this.disponibles2)
-        },
-        err => console.log(err))
-
-    this.visualizarDivPlanes = true;
-        
-  }
-
-  cambiarEdificio() {
-    if (this.isCheckedE) {
-
-    } else {
-      this.disponibles = []
-     
-    }
-  }
-
-  revisarAdicional() {
-    this.promociones.forEach(element => {
-      if (element["id_promocion"] == this.promoSeleccionada) {
-        if (element["equipoAdi"] != 0) {
-          this.isCheckedP2 = true
-        } else {
-          this.isCheckedP2 = false
-        }
-      }
-    });
-  }
-
-  cambioInstalacion() {
-    this.tipoPlanSeleccionado = 0;
-    this.visualizarPlan = false;
-    this.planSeleccionado = 0;
-    this.visualizarDivGuardar = false;
-
-    if (this.instalacionSelected == 2) {
-      this.instalacionesService.traerPlanesPractica(7)
-        .subscribe(
-          res => {
-            this.planes = res;
-            this.visualizarPlan = true
-          },
-
-          err => console.log(err))
-    } else {
-      this.instalacionesService.traerPlanesPractica(this.tipoPlanSeleccionado)
-        .subscribe(
-          res => {
-            this.planes = res;
-            this.visualizarPlan = true
-          },
-
-          err => console.log(err))
-    }
-  }
-  onChange() {
-    this.instalacionesService.traerPlanesPractica(this.tipoPlanSeleccionado)
-      .subscribe(
-        res => {
-          this.planes = res;
-          this.visualizarPlan = true
-        },
-
-        err => console.log(err))
-  }
-
-  onSearchIp(searchValue: string): void {
-    console.log(searchValue);
-    this.instalacionesService.listaip(searchValue)
-      .subscribe(
-        res => {
-          this.listaips = res,
-            console.log(res)
-          if (this.listaips.length > 0) {
-            this.visualizarIp = true;
-          } else {
-            this.visualizarIp = false;
-            this.visualizarDivGuardar = true;
-          }
-          console.log(this.listaips.length)
-          console.log(this.visualizarIp)
-        }
-        ,
-        err => console.log(err))
-  }
-
-
-  GuardarData() {
   
-    let desde = 2
 
-    if (this.instalacionSelected == 2) {
-      this.tipoPlanSeleccionado = 7
-    }
-
-    if (this.isChecked == false) {
-      this.check = 0;
-    } else {
-      this.check = 1;
-    }
-
-    if (this.isCheckedP) {
-      this.instalacionesService.ingresarDataInstalaciones(
-        this.usuario.currentUser.id_user,
-        this.factbilidadSeleccionada.id_pot,
-        this.factbilidadSeleccionada.idCelda,
-        this.ipSeleccionada,
-        this.planSeleccionado,
-        this.tipoPlanSeleccionado,
-        this.serialSeleccionado,
-        this.serial2Seleccionado,
-       this.factbilidadSeleccionada.nombreEquipo,
-        this.equipoSeleccionado,
-        this.check,
-        this.instalacionSelected,
-        this.promoSeleccionada,
-        desde,
-        this.tasaCliente
-      ).subscribe(
-        res => {
-          console.log(res)
-          this.modalRef3.hide()
-        }
-        , err => console.log(err))
-    } else {
-      this.instalacionesService.ingresarDataInstalaciones(
-        this.usuario.currentUser.id_user,
-       this.factbilidadSeleccionada.id_pot,
-        this.factbilidadSeleccionada.idCelda,
-        this.ipSeleccionada,
-        this.planSeleccionado,
-        this.tipoPlanSeleccionado,
-        this.serialSeleccionado,
-        "0",
-       this.factbilidadSeleccionada.nombreEquipo,
-        "0",
-        this.check,
-        this.instalacionSelected,
-        0,
-        desde,
-        this.tasaCliente
-      ).subscribe(res => {
-        console.log(res)
-        this.modalRef3.hide()
-      }
-        , err => console.log(err))
-    }
-    
+  aceptarVenta(){
+    this.ventaService.guardarVenta(this.factbilidadSeleccionada.id_pot,this.usuario.currentUser.id_user).subscribe(res=>console.log(res),err=>console.log(err))
   }
+
+  NegarVenta(){
+    this,this.closeModal3()
+  }
+ 
 
   closeModal3() {
-    this.tipoPlanSeleccionado = 0;
-    this.visualizarPlan = false;
-    this.visualizarDisponible = false;
-    this.serialSeleccionado = " ";
-    this.ipSeleccionada = "1";
-    this.planSeleccionado = 0;
-    this.visualizarDivGuardar = false;
-    this.isChecked = false;
     this.modalRef3.hide()
+    this.ngOnInit()
   }
 
   editarCliente(){

@@ -954,6 +954,7 @@ export class ClientOverview implements OnInit {
   tipoDescuentoSeleccionado: number = 0
   diasSinServicio: number = 0
   comentarioDescuento: string = ""
+  montoDescuento:number = 0
   /*Descuentos*/
 
 
@@ -2329,12 +2330,9 @@ export class ClientOverview implements OnInit {
   }
 
   guardarDescuento() {
-    console.log(this.facturaDescuentoSeleccionada)
-    console.log(this.tipoDescuentoSeleccionado)
-    console.log(this.diasSinServicio)
-    console.log(this.comentarioDescuento)
 
-    this.descuentoService.guardarDescuento(this.facturaDescuentoSeleccionada, this.tipoDescuentoSeleccionado, this.diasSinServicio, this.comentarioDescuento, this.usuario.currentUser.id_user).subscribe(res => console.log(res), err => console.log(err))
+
+    this.descuentoService.guardarDescuento(this.facturaDescuentoSeleccionada, this.tipoDescuentoSeleccionado, this.diasSinServicio, this.comentarioDescuento,this.montoDescuento, this.usuario.currentUser.id_user).subscribe(res => console.log(res), err => console.log(err))
 
     this.closeModal10()
   }
@@ -2344,6 +2342,7 @@ export class ClientOverview implements OnInit {
     this.tipoDescuentoSeleccionado = 0
     this.diasSinServicio = 0
     this.comentarioDescuento = ""
+    this.montoDescuento = 0
     this.modalRef10.hide()
   }
 

@@ -1,0 +1,281 @@
+<div class="row primero">
+  <div class="col-sm-2">
+    <h2 class="titulo">Ventas</h2>
+  </div>
+  <div class="col-sm-3 filtrado">
+    <input (input)="buscarVentas($event.target.value)" (keyup.backspace)="buscarVentasBackSpace($event.target.value)"
+      type="text" class="form-control" name="filtrado" placeholder="Filtrar" id="inputDefault">
+  </div>
+  <div class="col-sm-3">
+  </div>
+  <div class="col-sm-2">
+    <button style="background-color:#8bcbe6;" (click)="aggVenta()" type="button"
+      class="btn btn-info btn-sm">
+      <md-icon class="icon">add_circle_outline</md-icon>
+    </button>
+    <button style="background-color:#8bcbe6;" (click)="traerVentas()" title="Actualizar Ventas"
+      type="button" class="btn btn-info btn-sm">
+      <md-icon class="icon">loop</md-icon>
+    </button>
+
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-8">
+
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">#</th>
+          <th scope="col">Nombre Cliente</th>
+          <th scope="col">status</th>
+          <th scope="col">tipo</th>
+          <th scope="col">Promocion</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor=" let venta of ventas | paginate: { id:'ventas', itemsPerPage: 6, currentPage: p }">
+          <th>{{venta.id_venta}}</th>
+          <th *ngIf='venta.social == null '>{{venta.nombre}} {{venta.apellido}}</th>
+          <th *ngIf='venta.social != null'>{{venta.social}}</th>
+          <th *ngIf="venta.status_venta == 1">En espera de Agenda</th>
+          <th *ngIf="venta.status_venta == 2">Instalacion Agendada</th>
+          <th *ngIf="venta.status_venta == 3">Instalacion Cerrada</th>
+          <th *ngIf="venta.tasa_venta > 1">Bs</th>
+          <th *ngIf="venta.tasa_venta == 1">No Definido</th>
+          <th *ngIf="venta.tasa_venta == 0">$</th>
+          <th *ngIf="venta.promo_venta == 0">No posee Promocion</th>
+          <th *ngIf="venta.promo_venta != 0">{{venta.nombre_promocion}}</th>
+          <th>{{venta.created_at | stringToDate | date: 'dd/M/yy'}}</th>
+          <td *ngIf="venta.status_venta == 1" style="cursor: pointer;">
+            <md-icon *ngIf="venta.tasa_venta != 1" id="icono" (click)="openModal(venta.cliente_venta,template)"
+              class="md-24" aria-label="Editar Potencial">create</md-icon>
+            <md-icon id="icono" (click)="agregarPromocion(venta.id_venta)" class="md-24" aria-label="Editar Potencial">
+              star</md-icon>
+            <md-icon id="icono" (click)="agregartipo(venta.id_venta)" class="md-24" aria-label="Editar Potencial">
+              shopping_cart</md-icon>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="ventas" (pageChange)="p = $event"></pagination-controls>
+  </div>
+
+  <div class="col-sm-3 form">
+    <div *ngIf="form_promo" class="formulario_promo">
+      <div class="card border-light mb-3">
+        <div class="card-header">Agregar Promocion</div>
+
+        <div class="card-body">
+          <div>
+            <label for="">Seleccionar Promocion</label>
+            <select [(ngModel)]="promoSeleccionada" class="form-control form-control-sm" required>
+              <option value="0"></option>
+              <option *ngFor="let promo of promociones" [value]="promo.id_promocion">{{promo.nombre_promocion}}</option>
+            </select>
+          </div>
+          <br>
+
+          <div *ngIf="promoSeleccionada != 0">
+            <button type="button" (click)="GuardarPromo()" class="btn btn-info btn">Guardar Promocion</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div *ngIf="form_tipo" class="formulario_promo">
+      <div class="card border-light mb-3">
+        <div class="card-header">Agregar tipo de Venta</div>
+
+        <div class="card-body">
+          <div>
+            <label for="">Seleccionar Tipo de Venta</label>
+            <select [(ngModel)]="tipoSeleccionado" class="form-control form-control-sm" required>
+              <option value="0"></option>
+              <option value="1">$</option>
+              <option value="2">Bs</option>
+            </select>
+          </div>
+          <br>
+
+          <div *ngIf="tipoSeleccionado == 2">
+            <label for="">Ingresar Tasa de Cambio</label>
+            <input type="number" thousandSeparator="." mask="separator,2" [(ngModel)]="tasaSeleccionada"
+              class="form-control form-control-sm">
+          </div>
+          <br>
+
+          <div *ngIf="tipoSeleccionado == 1 || tipoSeleccionado == 2 && tasaSeleccionada > 1000">
+            <button type="button" (click)="GuardarTipo()" class="btn btn-info btn">Guardar Tipo de Venta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="row numerosSoporte">
+          <div class="col-12">
+            <p class="cantidadSoporte">{{ventasEnEspera}}</p>
+            <p>Ventas no Agendadas</p>
+           </div>
+           <hr>
+           <div class="col-12">
+             <p class="cantidadSoporte">{{ventasAgendadas}}</p>
+            <p>Ventas Instalacion Agendada</p>
+           </div>
+           <div class="col-12">
+            <p class="cantidadSoporte">{{ventasTotales}}</p>
+           <p>Ventas Totales</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Nueva Instalacion</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <label for="exampleSelect1">Tipo de Instalacion</label>
+        <select [(ngModel)]="instalacionSelected" (change)="cambioInstalacion()" class="form-control form-control-sm"
+          id="exampleSelect1" #ubicacion required>
+          <option value="0"></option>
+          <option [value]="1">Inalambrica</option>
+          <option [value]="2">Fibra Optica</option>
+        </select>
+        <br>
+      </div>
+    </div>
+    <div *ngIf="instalacionSelected != 0" class="row">
+      <div class="col-sm-5">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" [(ngModel)]="isChecked" class="custom-control-input" id="customCheck1">
+          <label class="custom-control-label" for="customCheck1">Equipo Usado</label>
+        </div>
+      </div>
+      <div class="col-sm-5">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" [(ngModel)]="isCheckedE" (change)="cambiarEdificio()" class="custom-control-input"
+            id="customCheck10">
+          <label class="custom-control-label" for="customCheck10">Instalacion Grupal</label>
+        </div>
+      </div>
+
+      <div *ngIf="instalacionSelected == 1" class="col-sm-5">
+        <label for="exampleSelect1">Celdas</label>
+        <select [(ngModel)]="celdaSeleccionada" class="form-control form-control-sm" id="exampleSelect1" required>
+          <option value="0" selected></option>
+          <option *ngFor="let celda of celdas" [value]="celda.id_celda">{{celda.nombre_celda}}</option>
+        </select>
+      </div>
+      <div *ngIf="instalacionSelected == 2" class="col-sm-5">
+        <label for="exampleSelect1">Cajas</label>
+        <select [(ngModel)]="celdaSeleccionada" class="form-control form-control-sm" id="exampleSelect1" required>
+          <option value="0" selected></option>
+          <option *ngFor="let caja of cajas" [value]="caja.id_caja">{{caja.nombre_caja}}</option>
+        </select>
+      </div>
+      <div class="col-sm-5">
+        <label for="exampleSelect1">Tipo de Equipo</label>
+        <select [(ngModel)]="equipoSeleccionado" class="form-control form-control-sm" id="exampleSelect1" required>
+          <option value="0"></option>
+          <option *ngFor="let equipo of equipos" [value]="equipo.nombre_equipo">[{{equipo.nombre_tipo_art}}]
+            {{equipo.nombre_equipo}}</option>
+        </select>
+      </div>
+      <div class="col-sm-1">
+        <label for="exampleSelect1">Accion</label>
+        <button *ngIf="isChecked == false" type="button" (click)="buscarEquipos()" class="btn btn-info btn-sm boton2"><i
+            id="icono" class="fa fa-search"></i></button>
+      </div>
+    </div>
+
+    
+
+    <div *ngIf="visualizarDisponible" class="row primero">
+      <div class="col-sm-9">
+        <div *ngIf="isChecked == false">
+          <label for="exampleSelect1">Disponibles</label>
+          <select [(ngModel)]="serialSeleccionado" class="form-control form-control-sm" id="exampleSelect1" #ubicacion required>
+            <option [value]=" " selected></option>
+            <option *ngFor="let d of disponibles" [value]="d.serial_articulo">{{d.modelo_articulo}} -
+              {{d.serial_articulo}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <div *ngIf="serialSeleccionado != ' ' || isChecked">
+      <div *ngIf="instalacionSelected == 1">
+        <label for="exampleSelect1">Tipode Plan</label>
+        <select [(ngModel)]="tipoPlanSeleccionado" (change)="onChange()" class="form-control form-control-sm"
+          id="exampleSelect1" #ubicacion required>
+          <option [value]="0" selected></option>
+          <option [value]="1">Planes Antiguos</option>
+          <option [value]="4">Planes Nuevos</option>
+          <option [value]="3">Planes en dolares</option>
+          <option [value]="5">Planes solo Dedicados</option>
+          <option [value]="6">Planes Zulia</option>
+          <option [value]="7">Planes Fibra</option>
+        </select>
+
+        <label *ngIf="visualizarPlan == true && tipoPlanSeleccionado != 0" for="exampleSelect1">Planes
+          Disponibles</label>
+        <select *ngIf="visualizarPlan == true && tipoPlanSeleccionado != 0" [(ngModel)]="planSeleccionado"
+          class="form-control form-control-sm" id="exampleSelect1" #ubicacion required>
+          <option [value]="0"></option>
+          <option *ngFor="let plan of planes" [value]="plan.id_plan">{{plan.name_plan}}</option>
+        </select>
+        <div *ngIf="planSeleccionado != 0">
+          <label class="col-form-label" for="inputDefault">IP</label>
+          <span *ngIf="visualizarIp == true" class="badge badge-pill badge-danger"> Disculpe, pero la Ip ya esta
+            en
+            Uso!!</span>
+          <input [(ngModel)]="ipSeleccionada" (input)="onSearchIp($event.target.value)" type="text"
+            class="form-control form-control-sm" placeholder="IP" id="inputDefault" required>
+          <br>
+        </div>
+      </div>
+      <div *ngIf="instalacionSelected == 2">
+        <label 
+          for="exampleSelect1">Perfiles Disponibles</label>
+        <select [(ngModel)]="planSeleccionado" class="form-control form-control-sm" id="exampleSelect1" #ubicacion required>
+          <option [value]="0"></option>
+          <option *ngFor="let plan of planes" [value]="plan.id_plan">{{plan.name_plan}}</option>
+        </select>
+      </div>
+    </div>
+    <div
+      *ngIf=" instalacionSelected == 2 && planSeleccionado != 0 ||visualizarIp == false  && visualizarDivGuardar == true ">
+      <br>
+      <button type="button" (click)="GuardarData()" class="btn btn-info btn-sm">Guardar Instalacion</button>
+    </div>
+  </div>
+</ng-template>
+
+-->

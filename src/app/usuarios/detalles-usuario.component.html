@@ -224,6 +224,23 @@
               </tr>
               <tr>
                 <td>
+                  Ventas
+                </td>
+                <td>
+                  <md-checkbox [(ngModel)]="ventas"
+                    (change)="listToglePermisos('ventas', ventas)"></md-checkbox>
+                </td>
+                <td>
+                  <md-checkbox [(ngModel)]="ventas_w"
+                    (change)="listToglePermisos('ventas_w', ventas_w)"></md-checkbox>
+                </td>
+                <td>
+                  <md-checkbox [(ngModel)]="ventas_Esp"
+                    (change)="listToglePermisos('ventas_Esp', ventas_Esp)"></md-checkbox>
+                </td>
+              </tr>
+              <tr>
+                <td>
                   Facturacion
                 </td>
                 <td>

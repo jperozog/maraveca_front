@@ -2081,17 +2081,23 @@
                   <option value="1">Descuento Dias sin Servicio</option>
                   <option value="2">Descuento Intermitencia del servicio</option>
                   <option value="3">Descuento 50%</option>
+                  <option value="4">Otro Descuento</option>
                 </select>
                 <br />
               </div>
-              <div *ngIf="tipoDescuentoSeleccionado != 3 && tipoDescuentoSeleccionado != 0">
+              <div *ngIf="tipoDescuentoSeleccionado != 3 && tipoDescuentoSeleccionado != 0 && tipoDescuentoSeleccionado != 4">
                 <label class="control-label" for="disabledInput">Dias Sin Servicio</label>
                 <input [(ngModel)]="diasSinServicio" type="number" class="form-control" />
                 <br />
               </div>
+              <div *ngIf="tipoDescuentoSeleccionado == 4">
+                <label class="control-label" for="disabledInput">Monto de Descuento</label>
+                <input [(ngModel)]="montoDescuento" type="number" class="form-control" />
+                <br />
+              </div>
 
               <div
-                *ngIf=" (tipoDescuentoSeleccionado != 3 && tipoDescuentoSeleccionado != 0 && diasSinServicio != 0) || tipoDescuentoSeleccionado == 3">
+                *ngIf=" (tipoDescuentoSeleccionado != 3 && tipoDescuentoSeleccionado != 0 && diasSinServicio != 0) || tipoDescuentoSeleccionado == 3 || (tipoDescuentoSeleccionado == 4 && montoDescuento >= 1)">
                 <label class="control-label" for="disabledInput">Comentario</label>
                 <textarea [(ngModel)]="comentarioDescuento" class="form-control" id="exampleTextarea"
                   rows="3"></textarea>
@@ -2100,7 +2106,7 @@
             </div>
             <div>
               <button
-                *ngIf="(facturaDescuentoSeleccionada != 0 && diasSinServicio != 0 && comentarioDescuento.length > 5) || facturaDescuentoSeleccionada != 0 && tipoDescuentoSeleccionado == 3 && comentarioDescuento.length > 5"
+                *ngIf="(facturaDescuentoSeleccionada != 0 && diasSinServicio != 0 && comentarioDescuento.length > 5) || facturaDescuentoSeleccionada != 0 && tipoDescuentoSeleccionado == 3 && comentarioDescuento.length > 5 || facturaDescuentoSeleccionada != 0 && tipoDescuentoSeleccionado == 4 && montoDescuento >= 1 &&  comentarioDescuento.length > 5"
                 (click)="guardarDescuento()" type="button" class="btn btn-info">
                 Guardar
               </button>
