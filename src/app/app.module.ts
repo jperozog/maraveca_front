@@ -39,6 +39,7 @@ import {
   MdCheckboxModule,
   MdExpansionModule,
   MatToolbarModule,
+  MatDialogModule,
   MatTabsModule,
   MatButtonModule,
   MatIconModule,
@@ -207,6 +208,7 @@ import { DetallesTicketComponent } from './components/soporte/tickets/detalles-t
 import {ConfigAdminService} from './services/config-admin/config-admin.service';
 import { DetallesMigracionComponent } from './components/soporte/instalaciones2/detalles-migracion/detalles-migracion.component';
 import { DetallesMudanzaComponent } from './components/soporte/instalaciones2/detalles-mudanza/detalles-mudanza.component';
+import { FacturacionNComponent } from './facturacion-n/facturacion-n.component';
 
 
 
@@ -389,6 +391,7 @@ import { DetallesMudanzaComponent } from './components/soporte/instalaciones2/de
     DetallesTicketComponent,
     DetallesMigracionComponent,
     DetallesMudanzaComponent,
+    FacturacionNComponent,
   
    
 
@@ -399,6 +402,7 @@ import { DetallesMudanzaComponent } from './components/soporte/instalaciones2/de
     FormsModule,
   MatToolbarModule,
     NgxMaskModule.forRoot(options),
+    MatDialogModule,
   MatTableModule,
     MatTabsModule,
     MatButtonModule,
