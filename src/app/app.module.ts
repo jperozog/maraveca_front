@@ -15,6 +15,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 // importing @angular/material and @angular/animations
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import {
   MdButtonModule,
   MdCardModule,

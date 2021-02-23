@@ -131,6 +131,7 @@ export class FacturacionNComponent implements OnInit {
     event.stopPropagation();
     // console.log("Clicked!");
   }
+  
 
   show(row){
     //console.log(row);

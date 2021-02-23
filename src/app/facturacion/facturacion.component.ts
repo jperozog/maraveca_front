@@ -635,6 +635,7 @@ font-size: 12px
 
 }
 
+
 @Component({
   selector: 'delete-dialog',
   templateUrl: 'confirm-delete-pago.html',
