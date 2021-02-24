@@ -55,7 +55,14 @@ export class VentasComponent implements OnInit {
   visualizarIp: boolean = false
   visualizarDivGuardar: boolean = false
   check: number = 0
-  constructor(private usuario: AuthGuard,
+  listacliente:any = []
+  idSelecccionado:number = 0
+  clienteSeleccionadoVenta: boolean = false
+  cedulaSeleccionado: string = ""
+  nombreSeleccionado:string = ""
+  apellidoSeleccionado:string = ""
+
+   constructor(private usuario: AuthGuard,
     private ventasService: VentasService,
     private promocionService: PromocionesService,
     private modalService: BsModalService,
@@ -67,12 +74,56 @@ export class VentasComponent implements OnInit {
     this.traerVentas()
   }
 
-  aggVenta() {
+  aggVenta(template: TemplateRef<any>) {
+      this.modalRef = this.modalService.show(template, this.config);
+  }
+
+  onSearchCliente(searchValue: string): void {
+    console.log(searchValue);
+    this.instalacionesService.practica(searchValue)
+      .subscribe(
+        res => {
+          this.listacliente = res
+        }
+        ,
+        err => console.log(err))
 
   }
 
-  traerVentas() {
+  SeleccionCliente(id: number, dni: string, nombre: string, apellido: string) {
+  
+      this.idSelecccionado = id;
+      this.clienteSeleccionadoVenta = true;
+      this.cedulaSeleccionado = dni;
+      this.nombreSeleccionado = nombre;
+      this.apellidoSeleccionado = apellido;
+    
+  }
 
+  deseleccionarCliente() {
+    this.clienteSeleccionadoVenta = false;
+    this.cedulaSeleccionado = "";
+    this.nombreSeleccionado = "";
+    this.apellidoSeleccionado = "";
+    this.listacliente = [];
+    this.celdaSeleccionada = 0;
+  }
+
+  GuardarVentaNueva(){
+    this.ventasService.guardarVenta(this.idSelecccionado,this.usuario.currentUser.id_user,2)
+    .subscribe(
+      res=>{
+        console.log(res)
+        this.closeModal2()
+        this.ngOnInit()
+      },
+        err=>console.log(err))
+  }
+
+  traerVentas() {
+    this.ventasTotales = 0
+    this.ventasAgendadas = 0
+    this.ventasEnEspera = 0
     if (this.usuario.perm.includes("ventas_Esp")) {
       this.ventasService.traerVentas(1)
         .subscribe(
@@ -82,7 +133,7 @@ export class VentasComponent implements OnInit {
             this.ventas2 = res
             this.ventas.forEach(element => {
               this.ventasTotales = this.ventasTotales + 1
-              if (element.status_venta = 2) {
+              if (element.status_venta == 2) {
                 this.ventasAgendadas = this.ventasAgendadas + 1
               } else {
                 this.ventasEnEspera = this.ventasEnEspera + 1
@@ -99,7 +150,7 @@ export class VentasComponent implements OnInit {
 
             this.ventas.forEach(element => {
               this.ventasTotales = this.ventasTotales + 1
-              if (element.status_venta = 2) {
+              if (element.status_venta == 2) {
                 this.ventasAgendadas = this.ventasAgendadas + 1
               } else {
                 this.ventasEnEspera = this.ventasEnEspera + 1
@@ -370,6 +421,11 @@ export class VentasComponent implements OnInit {
     this.promoSeleccionada = 0
     this.modalRef.hide()
     this.ngOnInit()
+  }
+
+  closeModal2() {
+    this.deseleccionarCliente()
+    this.modalRef.hide()
   }
 
 

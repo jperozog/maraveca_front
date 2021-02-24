@@ -9,12 +9,11 @@
   <div class="col-sm-3">
   </div>
   <div class="col-sm-2">
-    <button style="background-color:#8bcbe6;" (click)="aggVenta()" type="button"
-      class="btn btn-info btn-sm">
+    <button style="background-color:#8bcbe6;" (click)="aggVenta(template2)" type="button" class="btn btn-info btn-sm">
       <md-icon class="icon">add_circle_outline</md-icon>
     </button>
-    <button style="background-color:#8bcbe6;" (click)="traerVentas()" title="Actualizar Ventas"
-      type="button" class="btn btn-info btn-sm">
+    <button style="background-color:#8bcbe6;" (click)="traerVentas()" title="Actualizar Ventas" type="button"
+      class="btn btn-info btn-sm">
       <md-icon class="icon">loop</md-icon>
     </button>
 
@@ -48,7 +47,7 @@
           <th *ngIf="venta.tasa_venta == 0">$</th>
           <th *ngIf="venta.promo_venta == 0">No posee Promocion</th>
           <th *ngIf="venta.promo_venta != 0">{{venta.nombre_promocion}}</th>
-          <th>{{venta.created_at | stringToDate | date: 'dd/M/yy'}}</th>
+          <th>{{venta.fecha_venta | stringToDate | date: 'dd/M/yy'}}</th>
           <td *ngIf="venta.status_venta == 1" style="cursor: pointer;">
             <md-icon *ngIf="venta.tasa_venta != 1" id="icono" (click)="openModal(venta.cliente_venta,template)"
               class="md-24" aria-label="Editar Potencial">create</md-icon>
@@ -119,15 +118,15 @@
           <div class="col-12">
             <p class="cantidadSoporte">{{ventasEnEspera}}</p>
             <p>Ventas no Agendadas</p>
-           </div>
-           <hr>
-           <div class="col-12">
-             <p class="cantidadSoporte">{{ventasAgendadas}}</p>
+          </div>
+          <hr>
+          <div class="col-12">
+            <p class="cantidadSoporte">{{ventasAgendadas}}</p>
             <p>Ventas Instalacion Agendada</p>
-           </div>
-           <div class="col-12">
+          </div>
+          <div class="col-12">
             <p class="cantidadSoporte">{{ventasTotales}}</p>
-           <p>Ventas Totales</p>
+            <p>Ventas Totales</p>
           </div>
         </div>
       </div>
@@ -213,13 +212,14 @@
       </div>
     </div>
 
-    
+
 
     <div *ngIf="visualizarDisponible" class="row primero">
       <div class="col-sm-9">
         <div *ngIf="isChecked == false">
           <label for="exampleSelect1">Disponibles</label>
-          <select [(ngModel)]="serialSeleccionado" class="form-control form-control-sm" id="exampleSelect1" #ubicacion required>
+          <select [(ngModel)]="serialSeleccionado" class="form-control form-control-sm" id="exampleSelect1" #ubicacion
+            required>
             <option [value]=" " selected></option>
             <option *ngFor="let d of disponibles" [value]="d.serial_articulo">{{d.modelo_articulo}} -
               {{d.serial_articulo}}
@@ -262,9 +262,9 @@
         </div>
       </div>
       <div *ngIf="instalacionSelected == 2">
-        <label 
-          for="exampleSelect1">Perfiles Disponibles</label>
-        <select [(ngModel)]="planSeleccionado" class="form-control form-control-sm" id="exampleSelect1" #ubicacion required>
+        <label for="exampleSelect1">Perfiles Disponibles</label>
+        <select [(ngModel)]="planSeleccionado" class="form-control form-control-sm" id="exampleSelect1" #ubicacion
+          required>
           <option [value]="0"></option>
           <option *ngFor="let plan of planes" [value]="plan.id_plan">{{plan.name_plan}}</option>
         </select>
@@ -278,4 +278,33 @@
   </div>
 </ng-template>
 
--->
+<ng-template #template2>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Nueva Venta</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal2()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label for="">Cliente</label>
+    <div *ngIf="clienteSeleccionadoVenta == false">
+      <input type="text" class="form-control form-control-sm" (input)="onSearchCliente($event.target.value)">
+      <br>
+      <div *ngFor=" let cliente of listacliente">
+        <button type="button" (click)="SeleccionCliente(cliente.id,cliente.dni, cliente.nombre, cliente.apellido)"
+          class="btn btn-info btn-sm boton"><i id="icono" class="fa fa-check"></i></button>
+        <p>{{cliente.kind}}{{cliente.dni}} || {{cliente.nombre}} {{cliente.apellido}}</p>
+      </div>
+    </div>
+
+    <div *ngIf="clienteSeleccionadoVenta == true">
+      <button type="button" (click)="deseleccionarCliente()" class="btn btn-info btn-sm boton"><i id="icono"
+          class="fa fa-times"></i></button>
+      <p>{{cedulaSeleccionado}} || {{nombreSeleccionado}} {{apellidoSeleccionado}}</p>
+      <br>
+      <button type="button" (click)="GuardarVentaNueva()" class="btn btn-info">Guardar Venta</button>
+    </div>
+
+
+  </div>
+</ng-template>

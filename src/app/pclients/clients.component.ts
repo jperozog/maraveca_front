@@ -349,7 +349,7 @@ export class PClientsComponent {
   
 
   aceptarVenta(){
-    this.ventaService.guardarVenta(this.factbilidadSeleccionada.id_pot,this.usuario.currentUser.id_user).subscribe(res=>console.log(res),err=>console.log(err))
+    this.ventaService.guardarVenta(this.factbilidadSeleccionada.id_pot,this.usuario.currentUser.id_user,1).subscribe(res=>console.log(res),err=>console.log(err))
   }
 
   NegarVenta(){

@@ -3,10 +3,6 @@
     margin-left: 5%;
 }
 
-.boton{
-    margin-top: 20%;
-}
-
 .primero{
     margin-top: 5%;
     margin-left: 2%;
@@ -42,3 +38,99 @@
     color: #71BBEC;
     margin-top: 5%;
   }
+
+
+
+  .con{
+    margin-top: 5%;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+
+.formulario{
+  width: 20%;
+  margin-top: 5%; 
+  float: left;
+}
+.primary{
+  background-color: #249CC8;
+  color: white;
+}
+.boton{
+float: left;
+margin-right:5px;
+}
+
+
+.boton2{
+  float: left;
+}
+
+.checkbox{
+  margin-left: 50%
+}
+
+tr{
+  line-height: 1px;
+  min-height: 1px;
+  height: 1px;
+}
+
+td{
+  line-height: 1px;
+  min-height: 1px;
+  height: 1px;
+  padding: 15px;
+}
+
+.icon{
+  font-size: 20px;
+}
+
+
+
+h1{
+  color: #2C2C30;
+  margin-top: 5%;
+}
+
+.principal input{
+  border-left: 5px solid #2C2C30;
+  margin-top: 3%;
+}
+
+.principal select {
+  border-left: 5px solid #2C2C30;
+  margin-top: 3%;
+}
+
+.principal button {
+  margin-top: 4%;
+  background-color: #2C2C30;
+  color: white;
+}
+
+
+.tabla{
+  margin-top: 1%;
+}
+
+.acciones{
+  text-align: center;
+  justify-content: center;
+}
+
+
+.boton2{
+  margin-top: 10%;
+  margin-left: 20%;
+  background-color: #2C2C30;
+  width: 60%;
+  height: 120px;
+  color: white;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 5%;
+}

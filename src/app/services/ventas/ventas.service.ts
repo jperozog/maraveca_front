@@ -12,8 +12,8 @@ export class VentasService {
     return this.http.post(environment.apiEndpoint+"traerVentas",{user})
   }
 
-  guardarVenta(cliente:number,user:number){
-    return this.http.post(environment.apiEndpoint+"guardarVenta",{cliente,user});
+  guardarVenta(cliente:number,user:number,desde:number){
+    return this.http.post(environment.apiEndpoint+"guardarVenta",{cliente,user,desde});
   }
 
   guardarPromo(venta:number,promo:number){
