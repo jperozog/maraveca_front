@@ -8,6 +8,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import {MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar} from '@angular/material';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, ActivatedRoute} from '@angular/router';
 import { AuthGuard } from '../_guards/index';
@@ -180,7 +181,7 @@ export class FacturacionComponent implements OnInit, OnDestroy {
     //this.selectedRowIndex = row.id;
     let dialogRef = this.dialog.open(FacturacionPagos, {
       width: '75%',
-      data: row
+      data: row  
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -633,6 +634,7 @@ font-size: 12px
   }
 
 }
+
 
 @Component({
   selector: 'delete-dialog',
@@ -1156,10 +1158,6 @@ export class balance_bs  {
   Close(){this.location.back();}
   }
 
-
-
-
-
 @Component({
   templateUrl: 'balance_dl.component.html',
   styleUrls: ['./facturacion.component.css']
@@ -1219,7 +1217,6 @@ export class balance_dl  {
 
   Close(){this.location.back();}
 }
-
 
 @Component({
   templateUrl: 'editar_ref_bs.html',
@@ -1285,7 +1282,6 @@ this.user = this.usuario.currentUser.id_user;
 
 }
 }
-
 
 @Component({
   templateUrl: 'editar_ref_dl.html',

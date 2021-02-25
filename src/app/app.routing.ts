@@ -66,7 +66,7 @@ import {DetallesMigracionComponent} from './components/soporte/instalaciones2/de
 import {DetallesMudanzaComponent} from './components/soporte/instalaciones2/detalles-mudanza/detalles-mudanza.component';
 import {ClientesComponent} from './components/clientes/clientes.component'
 import {VentasComponent} from './components/ventas/ventas.component'
-
+import { FacturacionNComponent } from './facturacion-n/facturacion-n.component';
 
 const appRoutes: Routes = [
   {path: '', component: LayoutComponent, canActivate: [AuthGuard]},
@@ -223,8 +223,9 @@ const appRoutes: Routes = [
   {path: 'detallesTicket/:id/:tipo', component: DetallesTicketComponent, canActivate: [AuthGuard]},
   {path: 'clientes', component: ClientesComponent, canActivate: [AuthGuard]},
   {path: 'ventas', component: VentasComponent, canActivate: [AuthGuard]},
-  
+  {path: 'facturacion-n', component: FacturacionNComponent, canActivate: [AuthGuard]}  
 ]
 
 
 export const routing = RouterModule.forRoot(appRoutes, {useHash: true});
+

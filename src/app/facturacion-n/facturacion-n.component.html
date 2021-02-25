@@ -1,0 +1,98 @@
+<div class="zonas">
+  <br />
+  <div class="row">
+    <div class="col-sm-3">
+      <h2 class="titulo">Facturacion</h2>
+    </div>
+    <div class="col-sm-2"></div>
+    <div class="col-sm-2">
+      <md-select class="example-full-width" [(ngModel)]="status" (click)="stopPropagation($event)" >
+        <md-option value=''>
+          Todas
+        </md-option>
+        <md-option value='pendiente'>
+          Pendientes
+        </md-option>
+        <md-option value='pagado'>
+          Pagadas
+        </md-option>
+      </md-select>
+    </div>
+    <div class="col-sm-1"></div>
+
+    <div class="col-sm-2 filtrado">
+      <input (input)="stopPropagation($event)" (keyup.backspace)="stopPropagation($event)"
+        type="text" class="form-control" name="filtrado" placeholder="Filtrar" id="inputDefault" [(ngModel)]="search">
+      </div>
+      <div class="col-sm-2 filtrado">
+          <button style="background-color:#1F9BCF;"  (click)="stopPropagation($event)" (click)="notify()" title="Enviar recordatorios de pago" type="button"
+        class="btn btn-info btn-sm ">
+        <md-icon>snooze</md-icon>
+      </button>
+      <button style="background-color:#1F9BCF;" (click)="refresh(true)" title="Actualizar"
+        type="button" class="btn btn-info btn-sm ">
+        <md-icon>refresh</md-icon>
+      </button>
+      <button style="background-color:#1F9BCF;" (click)="exportAsXLSX()" title="Descargar en archivo Excel" type="button"
+        class="btn btn-info btn-sm ">
+        <md-icon>file_download</md-icon>
+      </button>
+    </div>
+  </div>
+  <br />
+
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table table-borderless tabla" [md2Data]="facturacion | dataPipe: {cliente: search, id: search} | dataPipe: {estado:status}" #md2="md2DataTable" [rowsPerPage]="10">
+        <thead>
+          <tr class="table-info">
+            <th scope="col">N</th>
+            <th scope="col">CLIENTE</th>
+            <th scope="col">ESTADO</th>
+            <th scope="col">MONTO FACTURADO</th>
+            <th scope="col">MONTO ADEUDADO</th>
+            <th scope="col">FECHA</th>
+            <th scope="col">ACCIONES</th>
+          </tr>
+          
+        </thead>
+        <tbody class="cuerpo">
+          <tr class="hover" *ngFor="let t of md2.data" (click)='show(t)'>
+            <td style="width: 10%; margin: 0 1em;">{{t.id}}</td>
+
+            <td style="width: 20%">{{t.cliente | capitalize2:true}}</td>
+
+
+            <td *ngIf="t.fac_status == 1 && (t.pagado < t.monto || t.pagado == null)" style="width: 15%"><font color="#d10512">{{t.estado | capitalize2:true}}</font></td>
+            <td *ngIf="t.fac_status == 1 && (t.pagado >= t.monto)" style="width: 15%"><font color="#00c402">{{t.estado | capitalize2:true}}</font></td>
+            <td *ngIf="t.fac_status == 2" style="width: 15%">Anulado</td>
+
+            <td style="width: 15%">{{t.monto | number : '1.0-2'}}{{t.denominacion}}</td>
+            <td style="width: 15%">{{t.deuda | number : '1.0-2'}}{{t.denominacion}}</td>
+
+            <td style="width: 15%">{{t.created_at | stringToDate | date: 'd/M/yy'}}</td>
+
+            <td style="width: 15%">
+              <button md-icon-button style="color:#106cc8" (click)="openLINK(t.id_soporte)">
+                <md-icon class="md-24" aria-label="Editar AP" >rate_review</md-icon>
+              </button>
+              <!--button md-icon-button color="warn"(click)="delete(i.id_srvidor)">
+              <button md-icon-button color="warn"(click)="deleteDialog(i)">
+              <md-icon class="md-24" aria-label="Eliminar AP">delete</md-icon>
+            </button-->
+
+
+          </td>
+        </tr>
+      </tbody>
+      <tr>
+        <td colspan="5">
+          <md2-pagination paginationLabel="Filas por pagina"></md2-pagination>
+        </td>
+      </tr>
+        
+      </table>
+    </div>
+  </div>
+
+</div>

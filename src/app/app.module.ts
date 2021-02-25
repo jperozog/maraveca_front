@@ -15,6 +15,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 // importing @angular/material and @angular/animations
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import {
   MdButtonModule,
   MdCardModule,
@@ -39,6 +40,7 @@ import {
   MdCheckboxModule,
   MdExpansionModule,
   MatToolbarModule,
+  MatDialogModule,
   MatTabsModule,
   MatButtonModule,
   MatIconModule,
@@ -210,7 +212,7 @@ import { DetallesMudanzaComponent } from './components/soporte/instalaciones2/de
 import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import {VentasService} from './services/ventas/ventas.service'
-
+import { FacturacionNComponent } from './facturacion-n/facturacion-n.component';
 
 
 //registerLocaleData(localeEs);
@@ -394,16 +396,14 @@ import {VentasService} from './services/ventas/ventas.service'
     DetallesMudanzaComponent,
     ClientesComponent,
     VentasComponent,
-  
-   
-
-
+    FacturacionNComponent
   ],
   imports: [
     CustomFormsModule,
     FormsModule,
   MatToolbarModule,
     NgxMaskModule.forRoot(options),
+    MatDialogModule,
   MatTableModule,
     MatTabsModule,
     MatButtonModule,

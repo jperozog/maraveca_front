@@ -6,7 +6,7 @@
 
 
 
-  <span class="example-spacer" style="text-align: center;">Facturacion</span>
+  <span class="example-spacer" style="text-align: center;">Facturacion Nuevo</span>
   <md-menu #filtros="mdMenu">
 
       <input mdInput class="md2-input" style="width:93%" floatPlaceholder="never" (click)="stopPropagation($event)" placeholder="Filtrar" [(ngModel)]="search" />
@@ -91,13 +91,13 @@
             </td>
           </tr>
           <tr>
-            <th style="width: 15%; margin: 0 1em;">N</th>
-            <th style="width: 15%" md2SortBy="cliente">Cliente</th>
-            <th style="width: 15%" md2SortBy="estado">Estado</th>
-            <th style="width: 15%" md2SortBy="monto">Monto Facturado</th>
-            <th style="width: 15%" md2SortBy="deuda">Monto Adeudado</th>
-            <th style="width: 15%">Fecha</th>
-            <th style="width: 10%">Acciones</th>
+            <th>N</th>
+            <th md2SortBy="cliente">Cliente</th>
+            <th md2SortBy="estado">Estado</th>
+            <th md2SortBy="monto">Monto Facturado</th>
+            <th md2SortBy="deuda">Monto Adeudado</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody class="cuerpo">
@@ -136,3 +136,4 @@
   </div>
 </div>
 </md-sidenav-container>
+
