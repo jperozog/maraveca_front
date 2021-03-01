@@ -1,7 +1,39 @@
 <div class="con">
   <div class="row principal">
-    <div class="col-sm-2">
+    <div class="col-sm-3">
       <h1>INSTALACIONES</h1>
+    </div>
+    <div class="col-sm-3">
+      <md-select class="example-full-width">
+        <md-option value='' (click)="cambiarActivo(1)">
+          Instalaciones
+        </md-option>
+        <md-option value='pendiente' (click)="cambiarActivo(2)">
+          Migraciones
+        </md-option>
+        <md-option value='pagado' (click)="cambiarActivo(3)">
+          Mudanzas
+        </md-option>
+      </md-select>
+    </div>
+    <div class="col-sm-4"></div>
+    <div style="margin-top:5px;" class="col-sm-2 botones">
+      <button *ngIf="usuario.perm && usuario.perm.includes('instalaciones')" (click)="openModal(template)"
+        title="Agregar Nueva Instalacion" type="button" class="btn btn-default btn-sm">
+        <md-icon class="icon">add_circle_outline</md-icon>
+      </button>
+      <button (click)="actualizarLista()" title="Actualizar Instalaciones" type="button" class="btn btn-default btn-sm">
+        <md-icon class="icon">loop</md-icon>
+      </button>
+      <button (click)="exportAsXLSX()" title="Descargar en archivo Excel" type="button"
+      class="btn btn-default btn-sm">
+        <md-icon class="icon">file_download</md-icon>
+      </button>
+    </div>
+  </div>
+  <div class="row filtros">
+    <div class="col-sm-2 sub">
+      <h3>filtrar</h3>
     </div>
     <div *ngIf="tipoActivo2 == 1" class="col-sm-2 filtrado">
       <select [(ngModel)]="tipoActivo" (change)="ngOnInit()" class="form-control" id="exampleSelect2" required>
@@ -17,15 +49,13 @@
     </div>
     <div *ngIf="tipoActivo2 != 1" class="col-sm-2 filtrado">
     </div>
+    <br>
     <div class="col-sm-2 filtrado">
       <select *ngIf="this.usuario.perm && this.usuario.perm.includes('instalaciones_w') && tipoActivo == 2"
         [(ngModel)]="CajaDisSeleccionada" (change)="traerDatos()" class="form-control" id="exampleSelect2" required>
         <option value="0" selected>TODAS</option>
         <option *ngFor="let c of cajas" [value]="c.id_caja">{{c.nombre_caja}}</option>
       </select>
-    </div>
-    <div class="col-sm-1">
-
     </div>
     <div class="col-sm-2">
 
@@ -36,39 +66,34 @@
       </div>
 
     </div>
-    <div style="margin-top:5px;" class="col-sm-1">
-      <button *ngIf="usuario.perm && usuario.perm.includes('instalaciones')" (click)="openModal(template)"
-        title="Agregar Nueva Instalacion" type="button" class="btn btn-default btn-sm">
-        <md-icon class="icon">add_circle_outline</md-icon>
-      </button>
-      <button (click)="actualizarLista()" title="Actualizar Instalaciones" type="button" class="btn btn-default btn-sm">
-        <md-icon class="icon">loop</md-icon>
-      </button>
-    </div>
+    <div class="col-sm-1"></div>
+    
+  </div>
 
-    <div class="col-sm-2 acciones">
+    <!--div class="col-sm-2 acciones">
       <div (click)="cambiarActivo(1)" class="boton2">
-        <md-icon style="font-size: 25px; margin-top: 20px;">insert_invitation</md-icon>
+        <md-icon style="font-size: 20px; margin-top: 20px;">insert_invitation</md-icon>
         <p>Instalaciones</p>
       </div>
       <br>
       <div
         *ngIf="(usuario.perm && usuario.perm.includes('soporte_esp')) ||(usuario.perm && usuario.perm.includes('instalaciones_w'))"
         (click)="cambiarActivo(2)" class="boton2">
-        <md-icon style="font-size: 25px; margin-top: 20px;">repeat</md-icon>
+        <md-icon style="font-size: 20px; margin-top: 20px;">repeat</md-icon>
         <p>Migraciones</p>
       </div>
       <br>
       <div
         *ngIf="(usuario.perm && usuario.perm.includes('soporte_esp')) ||(usuario.perm && usuario.perm.includes('instalaciones_w'))"
         (click)="cambiarActivo(3)" class="boton2">
-        <md-icon style="font-size: 25px; margin-top: 20px;">swap_horiz</md-icon>
+        <md-icon style="font-size: 20px; margin-top: 20px;">swap_horiz</md-icon>
         <p>Mudanza</p>
       </div>
+    </div-->
+  
 
-    </div>
-
-    <div class="col-sm-10">
+  <div class="row">
+    <div class="col-sm-12">
       <div *ngIf="tipoActivo2 == 1" class="tab-pane fade active show" id="home">
         <table class="table table-borderless tabla">
           <thead>
@@ -81,12 +106,13 @@
               <th scope="col">IP INSTALACION</th>
               <th scope="col">SERIAL</th>
               <th scope="col">USUARIO</th>
-              <th scope="col">FECHA</th>
+              <th scope="col">VENTA</th>
+              <th scope="col">AGENDADA</th>
               <th scope="col">ACCIONES</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let t of instalaciones | paginate: {id:'Instalaciones', itemsPerPage: 12, currentPage: p }">
+            <tr *ngFor="let t of instalaciones | paginate: {id:'Instalaciones', itemsPerPage: 10, currentPage: p }">
 
               <td *ngIf="t.kind == 'V' || t.kind == 'E'">{{t.nombre}} {{t.apellido}}</td>
               <td *ngIf="t.kind == 'V-' || t.kind == 'J' || t.kind == 'G'">{{t.social}}</td>
@@ -111,7 +137,8 @@
               <td *ngIf="t.serial_det == '0'">Equipo Usado</td>
               <td *ngIf="t.serial_det != '0'">{{t.serial_det}}</td>
               <td>{{t.nombre_user}} {{t.apellido_user}}</td>
-              <td tooltip=" Fecha de Venta: {{t.fechaVenta  | date: 'dd/M/yy'}}">{{t.created_at | date: 'dd/M/yy'}}</td>
+              <td>{{t.fechaVenta  | date: 'dd/M/yy'}}</td>
+              <td>{{t.created_at | date: 'dd/M/yy'}}</td>
               <td>
                 <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
                   (click)="irAInstalacion(t.id_insta)" style="cursor: pointer;" class="icon">assignment_late
@@ -143,7 +170,7 @@
           <tbody>
             <tr *ngFor="let t of migraciones | paginate: {id:'migraciones', itemsPerPage: 12, currentPage: e }">
 
-              <td *ngIf="t.kind == 'V' || t.kind == 'E'">{{t.nombre}} {{t.apellido}}</td>
+              <td style="width: 20%" *ngIf="t.kind == 'V' || t.kind == 'E'">{{t.nombre}} {{t.apellido}}</td>
               <td *ngIf="t.kind == 'V-' || t.kind == 'J' || t.kind == 'G'">{{t.social}}</td>
               <td>{{t.nombre_caja}}</td>
               <td>{{t.nombre_srvidor}}</td>

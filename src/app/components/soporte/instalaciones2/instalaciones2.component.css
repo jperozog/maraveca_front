@@ -18,6 +18,9 @@
 float: left;
 margin-right:5px;
 }
+.example-full-width {
+  width: 100%;
+}
 
 
 .boton2{
@@ -38,7 +41,7 @@ td{
   line-height: 1px;
   min-height: 1px;
   height: 1px;
-  padding: 15px;
+  
 }
 
 .icon{
@@ -63,9 +66,12 @@ h1{
 }
 
 .principal button {
-  margin-top: 4%;
   background-color: #2C2C30;
   color: white;
+}
+
+.principal{
+  margin-left: 2%;
 }
 
 
@@ -81,7 +87,7 @@ h1{
 
 .boton2{
   margin-top: 10%;
-  margin-left: 20%;
+  margin-left: 10%;
   background-color: #2C2C30;
   width: 60%;
   height: 120px;
@@ -90,4 +96,15 @@ h1{
   justify-content: center;
   cursor: pointer;
   margin-bottom: 5%;
+}
+.botones{
+  display: inline;
+}
+
+.filtros{
+  margin-top: 3%;
+}
+
+.sub{
+  text-align: right;
 }

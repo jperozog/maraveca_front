@@ -17,6 +17,9 @@ import { ArticuloService } from '../../../services/Inventario/articulo.service';
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 import { CajaDistribucionService } from '../../../services/caja-distribucion/caja-distribucion.service';
 import { ServiciosService } from '../../../services/servicios/servicios.service';
+import { Instalacion } from '../../../models/instalacion';
+import { ExcelService } from '../../../services/excel/excel.service';
+
 
 @Component({
   selector: 'app-instalaciones2',
@@ -36,6 +39,9 @@ export class Instalaciones2Component implements OnInit {
   instalaciones2: any = []
   instalacionesActivos: any = []
   p: number = 1
+  instalaciones_t:any = [];
+  dato: Instalacion;
+  prueba: any = [];
 
   zonas: any = [];
   agregarZona: FormGroup;
@@ -128,6 +134,7 @@ export class Instalaciones2Component implements OnInit {
     private promocionesService: PromocionesService,
     private modalService: BsModalService,
     private cajaServices: CajaDistribucionService,
+    private excelService:ExcelService,
     private serviciosServices: ServiciosService) { }
 
   ngOnInit() {
@@ -145,6 +152,26 @@ export class Instalaciones2Component implements OnInit {
     this.traerMK();
     this.traerCajasDistribucion();
 
+  }
+
+  exportAsXLSX():void {
+    this.instalaciones_t.forEach(e => {
+      this.dato = {
+        cliente: e.nombre+" "+e.apellido,
+        tipo: e.social,
+        zona: e.nombre_celda,
+        router: e.nombre_srvidor,
+        estado:e.status_insta,
+        ip: e.ipP_det,
+        serial: e.serial_det,
+        usuario: e.nombre_user+" "+e.apellido_user,
+        f_venta:e.fechaVenta,
+        f_agenda: e.created_at};
+      this.prueba.push(this.dato)
+    });
+
+    
+    this.excelService.exportAsExcelFile(this.prueba, 'instalacion');
   }
 
   actualizarLista() {
@@ -199,6 +226,7 @@ export class Instalaciones2Component implements OnInit {
         res => {
           this.instalaciones = res,
             this.instalaciones2 = res,
+            this.instalaciones_t = res,
             console.log(res),
             this.snackBar.open("Instalaciones Cargadas", null, {
               duration: 2000,
@@ -242,6 +270,7 @@ export class Instalaciones2Component implements OnInit {
         res => {
           this.instalaciones = res,
             this.instalaciones2 = res,
+            this.instalaciones_t = res
             console.log(res),
             this.snackBar.open("Instalaciones Cargadas", null, {
               duration: 2000,
