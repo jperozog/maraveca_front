@@ -3,12 +3,14 @@
     <div class="col-sm-3">
       <h1>INSTALACIONES</h1>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-3">
       <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-secondary" (click)="cambiarActivo(1)">Instalaciones</button>
+        <button  type="button" class="btn btn-secondary" (click)="cambiarActivo(1)">Instalaciones</button>
         <button type="button" class="btn btn-secondary" (click)="cambiarActivo(2)">Migraciones</button>
         <button type="button" class="btn btn-secondary" (click)="cambiarActivo(3)">Mudanzas</button>
       </div>
+
       <!--md-select class="example-full-width">
         <md-option value='' (click)="cambiarActivo(1)">
           Instalaciones
@@ -22,6 +24,7 @@
       </md-select-->
     </div>
     <div class="col-sm-3"></div>
+ 
     <div style="margin-top:5px;" class="col-sm-2 botones">
       <button *ngIf="usuario.perm && usuario.perm.includes('instalaciones')" (click)="openModal(template)"
         title="Agregar Nueva Instalacion" type="button" class="btn btn-default btn-sm">
