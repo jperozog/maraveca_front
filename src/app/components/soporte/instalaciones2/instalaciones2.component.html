@@ -3,20 +3,25 @@
     <div class="col-sm-3">
       <h1>INSTALACIONES</h1>
     </div>
-    <div class="col-sm-3">
-      <md-select class="example-full-width">
+    <div class="col-sm-4">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary" (click)="cambiarActivo(1)">Instalaciones</button>
+        <button type="button" class="btn btn-secondary" (click)="cambiarActivo(2)">Migraciones</button>
+        <button type="button" class="btn btn-secondary" (click)="cambiarActivo(3)">Mudanzas</button>
+      </div>
+      <!--md-select class="example-full-width">
         <md-option value='' (click)="cambiarActivo(1)">
           Instalaciones
         </md-option>
-        <md-option value='pendiente' (click)="cambiarActivo(2)">
+        <md-option (click)="cambiarActivo(2)">
           Migraciones
         </md-option>
-        <md-option value='pagado' (click)="cambiarActivo(3)">
+        <md-option (click)="cambiarActivo(3)">
           Mudanzas
         </md-option>
-      </md-select>
+      </md-select-->
     </div>
-    <div class="col-sm-4"></div>
+    <div class="col-sm-3"></div>
     <div style="margin-top:5px;" class="col-sm-2 botones">
       <button *ngIf="usuario.perm && usuario.perm.includes('instalaciones')" (click)="openModal(template)"
         title="Agregar Nueva Instalacion" type="button" class="btn btn-default btn-sm">
@@ -62,7 +67,7 @@
       <div class="form-group">
         <input class="form-control form-control-lg" (keyup.backspace)="buscarInstalacionBackSpace($event.target.value)"
           (input)="buscarInstalacion($event.target.value)" type="text" class="form-control" name="filtrado"
-          placeholder="Filtrar" id="inputDefault">
+          placeholder="Buscar" id="inputDefault">
       </div>
 
     </div>
