@@ -18,6 +18,10 @@ export class InstalacionesService {
   traerMudanzas(id:number,nivel:number,tipo:number,mk:number,caja:number){
     return this.http.post(environment.apiEndpoint+"traerMudanzas",{id,nivel,tipo,mk,caja});
   }
+
+  traerCuposActivos(){
+    return this.http.get(environment.apiEndpoint+"traerCuposActivos");
+  }
   
   traerInstalacionesActivos(){
     return this.http.get(environment.apiEndpoint+"instalacionesActivas/");

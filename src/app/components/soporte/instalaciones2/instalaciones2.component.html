@@ -4,17 +4,12 @@
       <h1>INSTALACIONES</h1>
     </div>
     <div class="col-sm-3">
-      <md-select class="example-full-width">
-        <md-option value='' (click)="cambiarActivo(1)">
-          Instalaciones
-        </md-option>
-        <md-option value='pendiente' (click)="cambiarActivo(2)">
-          Migraciones
-        </md-option>
-        <md-option value='pagado' (click)="cambiarActivo(3)">
-          Mudanzas
-        </md-option>
-      </md-select>
+      <select [(ngModel)]="tipoActivo2" class="form-control" id="exampleSelect2" required>
+        <option value="1">Instalaciones</option>
+        <option value="2">Migraciones</option>
+        <option value="3">Mudanzas</option>
+        <option value="4"> Cupos Instalaciones</option>
+      </select>
     </div>
     <div class="col-sm-4"></div>
     <div style="margin-top:5px;" class="col-sm-2 botones">
@@ -25,13 +20,12 @@
       <button (click)="actualizarLista()" title="Actualizar Instalaciones" type="button" class="btn btn-default btn-sm">
         <md-icon class="icon">loop</md-icon>
       </button>
-      <button (click)="exportAsXLSX()" title="Descargar en archivo Excel" type="button"
-      class="btn btn-default btn-sm">
+      <button (click)="exportAsXLSX()" title="Descargar en archivo Excel" type="button" class="btn btn-default btn-sm">
         <md-icon class="icon">file_download</md-icon>
       </button>
     </div>
   </div>
-  <div class="row filtros">
+  <div *ngIf="tipoActivo2 != 4" class="row filtros">
     <div class="col-sm-2 sub">
       <h3>filtrar</h3>
     </div>
@@ -67,10 +61,10 @@
 
     </div>
     <div class="col-sm-1"></div>
-    
+
   </div>
 
-    <!--div class="col-sm-2 acciones">
+  <!--div class="col-sm-2 acciones">
       <div (click)="cambiarActivo(1)" class="boton2">
         <md-icon style="font-size: 20px; margin-top: 20px;">insert_invitation</md-icon>
         <p>Instalaciones</p>
@@ -90,66 +84,69 @@
         <p>Mudanza</p>
       </div>
     </div-->
-  
+
 
   <div class="row">
     <div class="col-sm-12">
       <div *ngIf="tipoActivo2 == 1" class="tab-pane fade active show" id="home">
-        <table class="table table-borderless tabla">
-          <thead>
-            <tr style="background-color: #2C2C30; color: white;" class="table-default">
-              <th scope="col">CLIENTE</th>
-              <th scope="col">TIPO</th>
-              <th scope="col">ZONA</th>
-              <th scope="col">ROUTER</th>
-              <th scope="col">ESTADO</th>
-              <th scope="col">IP INSTALACION</th>
-              <th scope="col">SERIAL</th>
-              <th scope="col">USUARIO</th>
-              <th scope="col">VENTA</th>
-              <th scope="col">AGENDADA</th>
-              <th scope="col">ACCIONES</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let t of instalaciones | paginate: {id:'Instalaciones', itemsPerPage: 10, currentPage: p }">
-
-              <td *ngIf="t.kind == 'V' || t.kind == 'E'">{{t.nombre}} {{t.apellido}}</td>
-              <td *ngIf="t.kind == 'V-' || t.kind == 'J' || t.kind == 'G'">{{t.social}}</td>
-              <td *ngIf="t.tipo_insta == 1">Inalambrica</td>
-              <td *ngIf="t.tipo_insta == 2">F.Optica</td>
-              <td>{{t.nombre_celda}}</td>
-              <td>{{t.nombre_srvidor}}</td>
-              <td *ngIf="t.status_insta == 1">
-                <p class="text-success">Abierto.</p>
-              </td>
-              <td *ngIf="t.status_insta == 2">
-                <p class="text-danger">Cerrada(S_P).</p>
-              </td>
-              <td *ngIf="t.status_insta == 3 ">
-                <p class="text-primary">Anulada.</p>
-              </td>
-              <td *ngIf="t.status_insta == 4">
-                <p class="text-danger">Cerrada.</p>
-              </td>
-              <td *ngIf="t.tipo_insta == 2">No Necesario</td>
-              <td *ngIf="t.tipo_insta == 1">{{t.ipP_det}}</td>
-              <td *ngIf="t.serial_det == '0'">Equipo Usado</td>
-              <td *ngIf="t.serial_det != '0'">{{t.serial_det}}</td>
-              <td>{{t.nombre_user}} {{t.apellido_user}}</td>
-              <td>{{t.fechaVenta  | date: 'dd/M/yy'}}</td>
-              <td>{{t.created_at | date: 'dd/M/yy'}}</td>
-              <td>
-                <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
-                  (click)="irAInstalacion(t.id_insta)" style="cursor: pointer;" class="icon">assignment_late
-                </md-icon>
-                <md-icon
-                  *ngIf="t.status_insta == 1 && (usuario.perm && usuario.perm.includes('instalaciones_w') || t.user_insta == usuario.currentUser.id_user )"
-                  (click)="openModal2(template2,t.id_insta)" style="cursor: pointer;" class="icon">create</md-icon>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-borderless tabla">
+            <thead>
+              <tr style="background-color: #2C2C30; color: white;" class="table-default">
+                <th scope="col">#</th>
+                <th scope="col">CLIENTE</th>
+                <th scope="col">TIPO</th>
+                <th scope="col">ZONA</th>
+                <th scope="col">ROUTER</th>
+                <th scope="col">ESTADO</th>
+                <th scope="col">IP INSTALACION</th>
+                <th scope="col">SERIAL</th>
+                <th scope="col">USUARIO</th>
+                <th scope="col">VENTA</th>
+                <th scope="col">AGENDADA</th>
+                <th scope="col">ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let t of instalaciones | paginate: {id:'Instalaciones', itemsPerPage: 10, currentPage: p }">
+                <td>{{t.id_insta}}</td>
+                <td *ngIf="t.kind == 'V' || t.kind == 'E'">{{t.nombre}} {{t.apellido}}</td>
+                <td *ngIf="t.kind == 'V-' || t.kind == 'J' || t.kind == 'G'">{{t.social}}</td>
+                <td *ngIf="t.tipo_insta == 1">Inalambrica</td>
+                <td *ngIf="t.tipo_insta == 2">F.Optica</td>
+                <td>{{t.nombre_celda}}</td>
+                <td>{{t.nombre_srvidor}}</td>
+                <td *ngIf="t.status_insta == 1">
+                  <p class="text-success">Abierto.</p>
+                </td>
+                <td *ngIf="t.status_insta == 2">
+                  <p class="text-danger">Cerrada(S_P).</p>
+                </td>
+                <td *ngIf="t.status_insta == 3 ">
+                  <p class="text-primary">Anulada.</p>
+                </td>
+                <td *ngIf="t.status_insta == 4">
+                  <p class="text-danger">Cerrada.</p>
+                </td>
+                <td *ngIf="t.tipo_insta == 2">No Necesario</td>
+                <td *ngIf="t.tipo_insta == 1">{{t.ipP_det}}</td>
+                <td *ngIf="t.serial_det == '0'">Equipo Usado</td>
+                <td *ngIf="t.serial_det != '0'">{{t.serial_det}}</td>
+                <td>{{t.nombre_user}} {{t.apellido_user}}</td>
+                <td>{{t.fechaVenta | date: 'dd/M/yy'}}</td>
+                <td>{{t.created_at | date: 'dd/M/yy'}}</td>
+                <td>
+                  <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
+                    (click)="irAInstalacion(t.id_insta)" style="cursor: pointer;" class="icon">assignment_late
+                  </md-icon>
+                  <md-icon
+                    *ngIf="t.status_insta == 1 && (usuario.perm && usuario.perm.includes('instalaciones_w') || t.user_insta == usuario.currentUser.id_user )"
+                    (click)="openModal2(template2,t.id_insta)" style="cursor: pointer;" class="icon">create</md-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <pagination-controls id="Instalaciones" (pageChange)="p = $event"></pagination-controls>
       </div>
 
@@ -188,14 +185,14 @@
               <td>{{t.nombre_user}} {{t.apellido_user}}</td>
               <td tooltip="Fecha de Venta: {{t.fechaVenta  | date: 'dd/M/yy'}}">{{t.created_at | date: 'dd/M/yy'}}</td>
               <td>
-                
+
                 <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
                   (click)="irAMigracion(t.id_migracion)" style="cursor: pointer;" class="icon">assignment_late
                 </md-icon>
                 <md-icon
                   *ngIf="t.status_insta == 1 && (usuario.perm && usuario.perm.includes('instalaciones_w') || t.user_insta == usuario.currentUser.id_user )"
                   (click)="openModal2(template2,t.id_insta)" style="cursor: pointer;" class="icon">create</md-icon>
-                 
+
               </td>
             </tr>
           </tbody>
@@ -234,19 +231,77 @@
               <td>{{t.nombre_user}} {{t.apellido_user}}</td>
               <td>{{t.created_at | date: 'dd/M/yy'}}</td>
               <td>
-                
+
                 <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
                   (click)="irAMudanza(t.id_mudanza)" style="cursor: pointer;" class="icon">assignment_late
                 </md-icon>
                 <md-icon
                   *ngIf="t.status_insta == 1 && (usuario.perm && usuario.perm.includes('instalaciones_w') || t.user_insta == usuario.currentUser.id_user )"
                   (click)="openModal2(template2,t.id_insta)" style="cursor: pointer;" class="icon">create</md-icon>
-                  
+
               </td>
             </tr>
           </tbody>
         </table>
         <pagination-controls id="mudanzas" (pageChange)="m = $event"></pagination-controls>
+      </div>
+
+
+      <div *ngIf="tipoActivo2 == 4" class="tab-pane fade active show" id="home">
+        <div class="row divDias">
+              <div *ngFor="let c of cupos" class="col-sm-2 dias">
+                <h3>{{c.diaSemana}}</h3>
+                <h6>Punto Fijo</h6>
+                <div *ngFor="let cliente of c.cuposPF" class="row">
+                  <div class="col-sm-10">
+                    <p *ngIf="cliente.kind == 'V' || cliente.kind == 'E' ">{{cliente.nombre}} {{cliente.apellido}}</p>
+                    <p *ngIf="cliente.kind != 'V' || cliente.kind != 'E' ">{{cliente.social}}</p>
+                  </div>
+                  <div class="col-sm-2">
+                    <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
+                      (click)="irAInstalacion(cliente.id_insta)" style="cursor: pointer;" class="icon">assignment_late
+                    </md-icon>
+                  </div>
+                </div>
+                <h6>Coro</h6>
+                <div *ngFor="let cliente of c.cuposC" class="row">
+                  <div class="col-sm-10">
+                    <p *ngIf="cliente.kind == 'V' || cliente.kind == 'E' ">{{cliente.nombre}} {{cliente.apellido}}</p>
+                    <p *ngIf="cliente.kind != 'V' || cliente.kind != 'E' ">{{cliente.social}}</p>
+                  </div>
+                  <div class="col-sm-2">
+                    <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
+                      (click)="irAInstalacion(cliente.id_insta)" style="cursor: pointer;" class="icon">assignment_late
+                    </md-icon>
+                  </div>
+                </div>
+              </div>
+        </div>
+        <!--
+        <table class="table table-borderless tabla">
+          <thead>
+            <tr style="background-color: #2C2C30; color: white;" class="table-default">
+              <th scope="col">#</th>
+              <th scope="col"># INSTALACION</th>
+              <th scope="col">TIPO INSTALACION</th>
+              <th scope="col">CLIENTE</th>
+              <th scope="col">FECHA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of cupos | paginate: {id:'cupos', itemsPerPage: 12, currentPage: c }">
+              <td>{{c.id_cupo}}</td>
+              <td>{{c.id_insta}}</td>
+              <td *ngIf="c.tipo_insta == 1">Inalambrica</td>
+              <td *ngIf="c.tipo_insta == 2">Fibra Optica</td>
+              <td *ngIf="c.kind == 'V' || c.kind == 'E'">{{c.nombre}} {{c.apellido}}</td>
+              <td *ngIf="c.kind == 'V-' || c.kind == 'J' || c.kind == 'G'">{{c.social}}</td>
+              <td>{{c.fecha_cupo | date: 'dd/M/yy'}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="cupos" (pageChange)="c = $event"></pagination-controls>
+        -->
       </div>
 
     </div>

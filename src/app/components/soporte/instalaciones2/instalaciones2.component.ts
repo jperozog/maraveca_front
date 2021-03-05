@@ -122,6 +122,13 @@ export class Instalaciones2Component implements OnInit {
   /*Mudanzas*/
 
 
+  /*Cupos Instalaciones*/
+  c:number = 1
+  cupos: any = []
+  cupos2: any = []
+    /*Cupos Instalaciones*/
+
+
   tipoActivo2: number = 1
 
 
@@ -138,15 +145,7 @@ export class Instalaciones2Component implements OnInit {
     private serviciosServices: ServiciosService) { }
 
   ngOnInit() {
-    if (this.usuario.perm && this.usuario.perm.includes('instalaciones_w')) {
-      this.traerInstalaciones();
-      this.traerMigraciones();
-      this.traerMudanzas();
-    } else {
-      this.traerInstalaciones2();
-      this.traerMigraciones2();
-      this.traerMudanzas2();
-    }
+    this.traerDatos()
     this.instalacionesAbiertas();
     this.traerCeldas();
     this.traerMK();
@@ -176,13 +175,14 @@ export class Instalaciones2Component implements OnInit {
 
   actualizarLista() {
     if (this.usuario.perm && this.usuario.perm.includes('instalaciones_w')) {
-      this.traerInstalaciones();
       this.traerMigraciones();
       this.traerMudanzas();
+      this.traerCuposActivos()
+      this.traerInstalaciones();
     } else {
-      this.traerInstalaciones2();
       this.traerMigraciones2();
       this.traerMudanzas2();
+      this.traerInstalaciones2();
     }
     this.instalacionesAbiertas();
 
@@ -191,13 +191,14 @@ export class Instalaciones2Component implements OnInit {
 
   traerDatos(){
     if (this.usuario.perm && this.usuario.perm.includes('instalaciones_w')) {
-      this.traerInstalaciones();
       this.traerMigraciones();
       this.traerMudanzas();
+      this.traerCuposActivos()
+      this.traerInstalaciones();
     } else {
-      this.traerInstalaciones2();
       this.traerMigraciones2();
       this.traerMudanzas2();
+      this.traerInstalaciones2();
     }
   }
 
@@ -214,7 +215,7 @@ export class Instalaciones2Component implements OnInit {
       const result = this.instalaciones.filter((i) =>
         i.dni.includes(e)
       );
-      console.log(result)
+    
       this.instalaciones = result;
     }
 
@@ -227,7 +228,7 @@ export class Instalaciones2Component implements OnInit {
           this.instalaciones = res,
             this.instalaciones2 = res,
             this.instalaciones_t = res,
-            console.log(res),
+         
             this.snackBar.open("Instalaciones Cargadas", null, {
               duration: 2000,
             });
@@ -241,7 +242,7 @@ export class Instalaciones2Component implements OnInit {
         res => {
           this.migraciones = res,
             this.migraciones2 = res,
-            console.log(res),
+          
             this.snackBar.open("Migraciones Cargadas", null, {
               duration: 2000,
             });
@@ -255,8 +256,22 @@ export class Instalaciones2Component implements OnInit {
         res => {
           this.mudanzas = res,
             this.mudanzas2 = res,
-            console.log(res),
+         
             this.snackBar.open("Mudanzas Cargadas", null, {
+              duration: 2000,
+            });
+        },
+        err => console.log(err))
+  }
+
+  traerCuposActivos() {
+    this.instalacionesService.traerCuposActivos()
+      .subscribe(
+        res => {
+            this.cupos = res,
+            
+            console.log(res),
+            this.snackBar.open("Cupos Diponibles Cargados", null, {
               duration: 2000,
             });
         },
@@ -271,7 +286,7 @@ export class Instalaciones2Component implements OnInit {
           this.instalaciones = res,
             this.instalaciones2 = res,
             this.instalaciones_t = res
-            console.log(res),
+          
             this.snackBar.open("Instalaciones Cargadas", null, {
               duration: 2000,
             });
@@ -285,7 +300,7 @@ export class Instalaciones2Component implements OnInit {
         res => {
           this.migraciones = res,
             this.migraciones2 = res,
-            console.log(res),
+           
             this.snackBar.open("Migraciones Cargadas", null, {
               duration: 2000,
             });
@@ -299,7 +314,7 @@ export class Instalaciones2Component implements OnInit {
         res => {
           this.mudanzas = res,
             this.mudanzas = res,
-            console.log(res),
+           
             this.snackBar.open("Mudanzas Cargadas", null, {
               duration: 2000,
             });
