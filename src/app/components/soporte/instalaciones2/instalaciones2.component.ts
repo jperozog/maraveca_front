@@ -124,9 +124,15 @@ export class Instalaciones2Component implements OnInit {
 
   /*Cupos Instalaciones*/
   c:number = 1
+  ct:number = 1
+  cuposTotales:any = []
   cupos: any = []
   cupos2: any = []
-    /*Cupos Instalaciones*/
+  id_insta_cupo:number = 0
+  nombre_cupo:string = ""
+  apellido_cupo:string = ""
+  fecha_nueva_cupo:string = ""
+  /*Cupos Instalaciones*/
 
 
   tipoActivo2: number = 1
@@ -178,6 +184,7 @@ export class Instalaciones2Component implements OnInit {
       this.traerMigraciones();
       this.traerMudanzas();
       this.traerCuposActivos()
+      this.traerTodosCuposActivos()
       this.traerInstalaciones();
     } else {
       this.traerMigraciones2();
@@ -194,6 +201,7 @@ export class Instalaciones2Component implements OnInit {
       this.traerMigraciones();
       this.traerMudanzas();
       this.traerCuposActivos()
+      this.traerTodosCuposActivos()
       this.traerInstalaciones();
     } else {
       this.traerMigraciones2();
@@ -274,6 +282,18 @@ export class Instalaciones2Component implements OnInit {
             this.snackBar.open("Cupos Diponibles Cargados", null, {
               duration: 2000,
             });
+        },
+        err => console.log(err))
+  }
+
+  traerTodosCuposActivos() {
+    this.instalacionesService.traerTodosCuposActivos()
+      .subscribe(
+        res => {
+            this.cuposTotales = res,
+            this.cuposTotales.forEach(e => {
+              e.apellido = e.apellido.substring(0, 1)+"...";
+          });
         },
         err => console.log(err))
   }
@@ -1226,6 +1246,30 @@ export class Instalaciones2Component implements OnInit {
     this.promoSeleccionada = 0
     this.disponibles = []
 
+  }
+
+  cambiarFechaCupo(id_insta:number,template: TemplateRef<any>){
+    console.log(id_insta)
+      this.modalRef.hide()
+      this.id_insta_cupo = id_insta
+      this.modalRef = this.modalService.show(template, this.config);
+  }
+
+  editarFechaCupo(){
+
+   this.instalacionesService.editarFechaCupo(this.id_insta_cupo,this.fecha_nueva_cupo).subscribe(
+     res=>{
+       this.closeModal3()
+       this.traerDatos()
+       this.tipoActivo2 = 4
+     },
+     err=>console.log(err)
+     )
+  }
+
+  closeModal3(){
+    this.modalRef.hide()
+    this.fecha_nueva_cupo = ""
   }
 
   irAInstalacion(id: number) {

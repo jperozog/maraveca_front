@@ -22,6 +22,10 @@ export class InstalacionesService {
   traerCuposActivos(){
     return this.http.get(environment.apiEndpoint+"traerCuposActivos");
   }
+
+  traerTodosCuposActivos(){
+    return this.http.get(environment.apiEndpoint+"traerTodosCuposActivos");
+  }
   
   traerInstalacionesActivos(){
     return this.http.get(environment.apiEndpoint+"instalacionesActivas/");
@@ -134,6 +138,10 @@ busqueda(id:string){
 
   cerrarMudanzaF(id:number,instaladores:any,ap:number,celda:number,plan:number,id_exterior:number, cexterior:number, id_interior:number,cinterior:number,id_conector:number,cconector:number,id_zona:number,base:number,grapa:number,alambre:number,tipo_insta:number,id_user:number){
     return this.http.post(environment.apiEndpoint+"cerrarMudanza/"+id,{instaladores,ap,celda, plan,id_exterior,cexterior,id_interior,cinterior,id_conector,cconector,id_zona,base,grapa,alambre,tipo_insta,id_user})
+  }
+
+  editarFechaCupo(id:number,fecha:string){
+    return this.http.post(environment.apiEndpoint+"cambiarFechaCupo",{id,fecha})
   }
 
 }

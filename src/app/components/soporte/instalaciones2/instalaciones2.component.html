@@ -249,59 +249,55 @@
 
       <div *ngIf="tipoActivo2 == 4" class="tab-pane fade active show" id="home">
         <div class="row divDias">
-              <div *ngFor="let c of cupos" class="col-sm-2 dias">
-                <h3>{{c.diaSemana}}</h3>
-                <h6>Punto Fijo</h6>
-                <div *ngFor="let cliente of c.cuposPF" class="row">
-                  <div class="col-sm-10">
-                    <p *ngIf="cliente.kind == 'V' || cliente.kind == 'E' ">{{cliente.nombre}} {{cliente.apellido}}</p>
-                    <p *ngIf="cliente.kind != 'V' || cliente.kind != 'E' ">{{cliente.social}}</p>
-                  </div>
-                  <div class="col-sm-2">
+          <div *ngFor="let c of cupos" class="col-sm-2 dias">
+            <h3>{{c.diaSemana}}</h3>
+            <h6>Punto Fijo</h6>
+            <div *ngFor="let cliente of c.cuposPF" class="row">
+              <div class="col-sm-9">
+                <p *ngIf="cliente.kind == 'V' || cliente.kind == 'E' ">{{cliente.nombre}} {{cliente.apellido}}</p>
+                <p *ngIf="cliente.kind != 'V' || cliente.kind != 'E' ">{{cliente.social}}</p>
+              </div>
+              <div class="col-sm-3">
+                <div class="row">
+                  <div class="col-sm-5">
                     <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
-                      (click)="irAInstalacion(cliente.id_insta)" style="cursor: pointer;" class="icon">assignment_late
+                      (click)="cambiarFechaCupo(cliente.id_insta,cliente.nombre,cliente.apellido,template3)"
+                      style="cursor: pointer;" class="icon">loop
                     </md-icon>
                   </div>
-                </div>
-                <h6>Coro</h6>
-                <div *ngFor="let cliente of c.cuposC" class="row">
-                  <div class="col-sm-10">
-                    <p *ngIf="cliente.kind == 'V' || cliente.kind == 'E' ">{{cliente.nombre}} {{cliente.apellido}}</p>
-                    <p *ngIf="cliente.kind != 'V' || cliente.kind != 'E' ">{{cliente.social}}</p>
-                  </div>
-                  <div class="col-sm-2">
+                  <div class="col-sm-5">
                     <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
                       (click)="irAInstalacion(cliente.id_insta)" style="cursor: pointer;" class="icon">assignment_late
                     </md-icon>
                   </div>
                 </div>
               </div>
+            </div>
+            <h6>Coro</h6>
+            <div *ngFor="let cliente of c.cuposC" class="row">
+              <div class="col-sm-9">
+                <p *ngIf="cliente.kind == 'V' || cliente.kind == 'E' ">{{cliente.nombre}} {{cliente.apellido}}</p>
+                <p *ngIf="cliente.kind != 'V' || cliente.kind != 'E' ">{{cliente.social}}</p>
+              </div>
+              <div class="col-sm-3">
+                <div class="row">
+                  <div class="col-sm-5">
+                    <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
+                      (click)="cambiarFechaCupo(cliente.id_insta,template3)"
+                      style="cursor: pointer;" class="icon">loop
+                    </md-icon>
+                  </div>
+                  <div class="col-sm-5">
+                    <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
+                      (click)="irAInstalacion(cliente.id_insta)" style="cursor: pointer;" class="icon">assignment_late
+                    </md-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <!--
-        <table class="table table-borderless tabla">
-          <thead>
-            <tr style="background-color: #2C2C30; color: white;" class="table-default">
-              <th scope="col">#</th>
-              <th scope="col"># INSTALACION</th>
-              <th scope="col">TIPO INSTALACION</th>
-              <th scope="col">CLIENTE</th>
-              <th scope="col">FECHA</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let c of cupos | paginate: {id:'cupos', itemsPerPage: 12, currentPage: c }">
-              <td>{{c.id_cupo}}</td>
-              <td>{{c.id_insta}}</td>
-              <td *ngIf="c.tipo_insta == 1">Inalambrica</td>
-              <td *ngIf="c.tipo_insta == 2">Fibra Optica</td>
-              <td *ngIf="c.kind == 'V' || c.kind == 'E'">{{c.nombre}} {{c.apellido}}</td>
-              <td *ngIf="c.kind == 'V-' || c.kind == 'J' || c.kind == 'G'">{{c.social}}</td>
-              <td>{{c.fecha_cupo | date: 'dd/M/yy'}}</td>
-            </tr>
-          </tbody>
-        </table>
-        <pagination-controls id="cupos" (pageChange)="c = $event"></pagination-controls>
-        -->
+
       </div>
 
     </div>
@@ -316,6 +312,7 @@
     <h4 *ngIf="tipoActivo2 == 1" class="modal-title pull-left">Nueva Instalacion</h4>
     <h4 *ngIf="tipoActivo2 == 2" class="modal-title pull-left">Nueva Migracion</h4>
     <h4 *ngIf="tipoActivo2 == 3" class="modal-title pull-left">Nueva Mudanza</h4>
+    <h4 *ngIf="tipoActivo2 == 4" class="modal-title pull-left">Lista de Cupos Disponible</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -806,6 +803,35 @@
       </div>
     </div>
 
+    <div *ngIf="tipoActivo2 == 4">
+      <table class="table table-borderless tabla">
+        <thead>
+          <tr style="background-color: #2C2C30; color: white;" class="table-default">
+            <th scope="col">CLIENTE</th>
+            <th scope="col">FECHA</th>
+            <th scope="col">ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of cuposTotales | paginate: {id:'cuposTotales', itemsPerPage: 10, currentPage: ct }">
+
+            <td *ngIf="c.kind == 'V' || c.kind == 'E'">{{c.nombre}} {{c.apellido}}</td>
+            <td *ngIf="c.kind == 'V-' || c.kind == 'J' || c.kind == 'G'">{{c.social}}</td>
+            <td>{{c.fecha_cupo | date: 'dd/M/yy'}}</td>
+            <td>
+              <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
+                (click)="cambiarFechaCupo(c.id_insta,template3)"
+                style="cursor: pointer;" class="icon">loop
+              </md-icon>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination-controls id="cuposTotales" (pageChange)="ct = $event"></pagination-controls>
+
+    </div>
+
   </div>
 </ng-template>
 
@@ -939,6 +965,23 @@
       <div *ngIf="visualizarIp == false">
         <button type="button" (click)="EditarData()" class="btn btn-info btn-sm">Editar Instalacion</button>
       </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #template3>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Cambiar Fecha Cupo</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal3()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <input class="form-control" [(ngModel)]="fecha_nueva_cupo" type="date" />
+      <br>
+      <button type="button" (click)="editarFechaCupo()" *ngIf="fecha_nueva_cupo != ''" class="btn btn-info">Cambiar
+        Fecha</button>
     </div>
   </div>
 </ng-template>
