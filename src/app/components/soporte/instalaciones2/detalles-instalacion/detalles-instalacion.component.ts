@@ -14,6 +14,7 @@ import { AuthGuard } from '../../../../_guards';
 export class DetallesInstalacionComponent implements OnInit {
   id: number
   instalacion: any = []
+  user: any = []
   historial: any = []
   cierreI: boolean = false
   cierreF: boolean = false
@@ -109,11 +110,18 @@ export class DetallesInstalacionComponent implements OnInit {
     this.cierreF = false
     this.cierreI = false
     this.traerDatos()
+    this.traerDatosHistorial()
   }
 
   traerDatos() {
-    this.instalacionesService.traerDatosInstalacion(this.id).subscribe(res => { console.log(res), this.instalacion = res, this.historial = res["historial"] }, err => console.log(err))
+    this.instalacionesService.traerDatosInstalacion(this.id).subscribe(res => { console.log(res), this.instalacion = res}, (err: any) => console.log(err))
   }
+
+  traerDatosHistorial(){
+    this.instalacionesService.traerHistorial(this.id).subscribe(res => { console.log(res), this.historial = res}, err => console.log(err))
+  }
+
+  
 
   CerrarInstalacion() {
     if (this.instalacion["tipo_insta"] == 1) {

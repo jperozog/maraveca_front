@@ -104,6 +104,10 @@ busqueda(id:string){
     return this.http.get(environment.apiEndpoint+"datosMudanza/"+id)
   }
 
+  traerHistorial(id:number){
+    return this.http.get(environment.apiEndpoint+"traerHistories/"+id)
+  }
+
   editarData(datos:any){
     return this.http.post(environment.apiEndpoint+"editarInstalacion",{datos})
   }
