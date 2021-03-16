@@ -125,9 +125,11 @@ export class Instalaciones2Component implements OnInit {
   /*Cupos Instalaciones*/
   c:number = 1
   ct:number = 1
+  a:number = 1
   cuposTotales:any = []
   cupos: any = []
   cupos2: any = []
+  cuposAnteriores:any = []
   id_insta_cupo:number = 0
   nombre_cupo:string = ""
   apellido_cupo:string = ""
@@ -1265,6 +1267,18 @@ export class Instalaciones2Component implements OnInit {
      },
      err=>console.log(err)
      )
+  }
+
+  abrirCuposAnteriores(lgModal){
+    lgModal.show()
+
+    this.instalacionesService.traerCuposAnteriores().subscribe(
+        res=>{
+        console.log(res),
+        this.cuposAnteriores = res
+        },
+        err=>console.log(err)
+        )
   }
 
   closeModal3(){

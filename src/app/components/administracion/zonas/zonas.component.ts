@@ -38,7 +38,7 @@ export class ZonasComponent implements OnInit {
   ultimoCierre: string
   responsable: string
 
-  constructor(private zonasAdminstrativa: ZonasAdministrativasService, private router: Router, private modalService: BsModalService, private usuario: AuthGuard) { }
+  constructor(private zonasAdminstrativa: ZonasAdministrativasService, private router: Router, private modalService: BsModalService, public usuario: AuthGuard) { }
 
   ngOnInit() {
     this.id_user_actual = this.usuario.currentUser.id_user

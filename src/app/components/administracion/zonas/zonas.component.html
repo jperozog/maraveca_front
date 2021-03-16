@@ -18,7 +18,7 @@
   </div>
 
   <div class="col-sm-2">
-    <button *ngIf="id_user_actual == 87 || id_user_actual == 10 || id_user_actual == 3 " type="button" (click)="irA()"
+    <button *ngIf="usuario.perm && usuario.perm.includes('arqueo_w')" type="button" (click)="irA()"
       class="btn btn-secondary">Cierres De Caja</button>
 
   </div>

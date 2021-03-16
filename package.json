@@ -50,7 +50,7 @@
     "ngx-mask": "^8.1.6",
     "ngx-pagination": "^3.3.1",
     "ngx.leaflet.components": "^1.4.2",
-    "node-sass": "^4.13.1",
+    "node-sass": "^5.0.0",
     "portfinder": "^1.0.25",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^5.5.12",

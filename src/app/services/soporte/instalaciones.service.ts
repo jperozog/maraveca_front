@@ -112,6 +112,10 @@ busqueda(id:string){
     return this.http.get(environment.apiEndpoint+"datosMudanza/"+id)
   }
 
+  traerHistorial(id:number){
+    return this.http.get(environment.apiEndpoint+"traerHistories/"+id)
+  }
+
   editarData(datos:any){
     return this.http.post(environment.apiEndpoint+"editarInstalacion",{datos})
   }
@@ -142,6 +146,10 @@ busqueda(id:string){
 
   editarFechaCupo(id:number,fecha:string){
     return this.http.post(environment.apiEndpoint+"cambiarFechaCupo",{id,fecha})
+  }
+
+  traerCuposAnteriores(){
+    return this.http.get(environment.apiEndpoint+"cuposAnteriores")
   }
 
 }

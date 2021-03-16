@@ -261,6 +261,7 @@
     <td class="fac" *ngIf="p.pag_tip==15">Efectivo Bs</td>
     <td class="fac" *ngIf="p.pag_tip==18">Banesco Panama</td>
     <td class="fac" *ngIf="p.pag_tip==20">Descuento</td>
+    <td class="fac" *ngIf="p.pag_tip==21">Devolucion</td>
 
     <td class="fac">{{p.pag_comment | capitalize2:true}}</td>
     <td class="fac">{{p.pag_monto | number : '1.2-2'}} {{row.denominacion}}</td>

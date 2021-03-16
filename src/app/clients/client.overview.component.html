@@ -94,7 +94,7 @@
         <div class="statusBalanceN">
           <p style="font-size:15px ;">Estatus de balance</p>
           <p *ngIf=" (facturado + MontoNotadeDebito ) > (pagado + MontoNotadeCredito)" style="text-align: right;"> {{
-            (facturado + MontoNotadeDebito ) - (pagado + MontoNotadeCredito) | number: "1.2-2"
+            (facturado ) - (pagado ) | number: "1.2-2"
             }}
             Bs</p>
           <p *ngIf=" (facturado + MontoNotadeDebito ) < (pagado + MontoNotadeCredito)" style="text-align: right;"> {{
@@ -113,7 +113,7 @@
           <span>
             <p style="font-size:15px ;">Estatus de balance</p>
             <p *ngIf="(pagado + MontoNotadeCredito) > (facturado + MontoNotadeDebito )" style="text-align: right;">{{
-              (pagado + MontoNotadeCredito) - (facturado + MontoNotadeDebito ) | number: "1.2-2" }} Bs</p>
+              (pagado) - (facturado) | number: "1.2-2" }} Bs</p>
             <p *ngIf="(pagado + MontoNotadeCredito) < (facturado + MontoNotadeDebito )" style="text-align: right;">{{ 0
               | number: "1.2-2" }} Bs</p>
               <p *ngIf="(pagado + MontoNotadeCredito) == (facturado + MontoNotadeDebito )" style="text-align: right;">{{ 0
@@ -1333,8 +1333,11 @@
                     <td class="fac" colspan="3">
                       RIF :{{ notaDeCredito.kind }}-{{ notaDeCredito.dni }}
                     </td>
-                    <td class="fac" colspan="2" style="text-align: center">
+                    <td *ngIf="notaActiva && notaDeCredito.tipo_nota == 1" class="fac" colspan="2" style="text-align: center">
                       Nota de Debito: 000{{ notaDeCredito.id_nota }}
+                    </td>
+                    <td *ngIf="notaActiva && notaDeCredito.tipo_nota == 2" class="fac" colspan="2" style="text-align: center">
+                      Nota de Credito: 000{{ notaDeCredito.id_nota }}
                     </td>
                     <td class="fac" colspan="2" style="text-align: center">
                       Serie: B
@@ -1455,12 +1458,12 @@
             <div>
               <h6>
                 APLICA A LA FACTURA {{ notaDeCredito.fac_num }} FECHA
-                {{ notaDeCredito.created_at | stringToDate | date: "dd/MM/yyyy" }}
+                {{ notaDeCredito.fecha_factura | stringToDate | date: "dd/MM/yyyy" }}
                 MONTO TOTAL BS.{{ notaDeCredito.monto | number: "1.2" }}
               </h6>
-              <p class="text-danger">Deuda Nota: {{deudaNota | number: "1.2"}} Bs</p>
             </div>
           </div>
+          <p class="text-danger">Deuda Nota: {{deudaNota | number: "1.2"}} Bs</p>
           <br />
           <div id="pago" name="PagoForm" [formGroup]="pagoAjustesFactura" ng-submit="ok(clientForm)" novalidate *ngIf="
             usuario.perm && usuario.perm.includes('facturacion_w') && notaActiva

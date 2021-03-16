@@ -94,9 +94,11 @@
             <tr style="cursor: pointer;" (click)="OperacionesDescuento(d.id_descuento,d.status,template4)" *ngFor="let d of listaDescuentos | paginate: {id:'descuentos', itemsPerPage: 5, currentPage: d }">
               <th scope="row">{{d.id_descuento}}</th>
               <td *ngIf="d.kind == 'V' || d.kind == 'E'">{{d.nombre}} {{d.apellido}}</td>
+              <td *ngIf="d.kind != 'V' || d.kind != 'E'">{{d.social}}</td>
               <td *ngIf="d.tipo == 1">Dias Sin Servicio</td>
               <td *ngIf="d.tipo == 2">Intermitencia del servicio</td>
               <td *ngIf="d.tipo == 3">50% Descuento</td>
+              <td *ngIf="d.tipo == 4">Descuento Especial</td>
               <td>{{d.monto | number: "1.2" }} $</td>
               <td>{{d.comentario}}</td>
               <td>{{d.nombre_user}} {{d.apellido_user}}</td>

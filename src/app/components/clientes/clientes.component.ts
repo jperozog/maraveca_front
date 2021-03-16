@@ -133,8 +133,8 @@ export class ClientesComponent implements OnInit {
     if (e == "") {
       this.traerClientes()
     } else {
-      const result = this.clientes.filter((el) => {
-        if (el.kind == "V" || el.kind == "E") {
+      this.clientes.filter((el) => {
+        if (el.social === null || el.social === "null") {
           if (el["nombre"].toUpperCase().includes(e.toUpperCase()) || el["apellido"].toUpperCase().includes(e.toUpperCase()) || el["dni"].toUpperCase().includes(e)) {
             clientesNuevos.push(el)
           }

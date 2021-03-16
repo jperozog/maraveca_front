@@ -3,15 +3,28 @@
     <div class="col-sm-3">
       <h1>INSTALACIONES</h1>
     </div>
-    <div class="col-sm-3">
-      <select [(ngModel)]="tipoActivo2" class="form-control" id="exampleSelect2" required>
-        <option value="1">Instalaciones</option>
-        <option value="2">Migraciones</option>
-        <option value="3">Mudanzas</option>
-        <option value="4"> Cupos Instalaciones</option>
-      </select>
+    <div class="col-sm-6">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary" (click)="cambiarActivo(1)">Instalaciones</button>
+        <button type="button" class="btn btn-secondary" (click)="cambiarActivo(2)">Migraciones</button>
+        <button type="button" class="btn btn-secondary" (click)="cambiarActivo(3)">Mudanzas</button>
+        <button type="button" class="btn btn-secondary" (click)="cambiarActivo(4)">Cupos Disp.</button>
+      </div>
+
+      <!--md-select class="example-full-width">
+        <md-option value='' (click)="cambiarActivo(1)">
+          Instalaciones
+        </md-option>
+        <md-option (click)="cambiarActivo(2)">
+          Migraciones
+        </md-option>
+        <md-option (click)="cambiarActivo(3)">
+          Mudanzas
+        </md-option>
+      </md-select-->
     </div>
-    <div class="col-sm-4"></div>
+    <div class="col-sm-1"></div>
+
     <div style="margin-top:5px;" class="col-sm-2 botones">
       <button *ngIf="usuario.perm && usuario.perm.includes('instalaciones')" (click)="openModal(template)"
         title="Agregar Nueva Instalacion" type="button" class="btn btn-default btn-sm">
@@ -56,7 +69,7 @@
       <div class="form-group">
         <input class="form-control form-control-lg" (keyup.backspace)="buscarInstalacionBackSpace($event.target.value)"
           (input)="buscarInstalacion($event.target.value)" type="text" class="form-control" name="filtrado"
-          placeholder="Filtrar" id="inputDefault">
+          placeholder="Buscar" id="inputDefault">
       </div>
 
     </div>
@@ -249,8 +262,12 @@
 
       <div *ngIf="tipoActivo2 == 4" class="tab-pane fade active show" id="home">
         <div class="row divDias">
+          <div class="col-sm-2 dias2">
+            <h5>Dias Anteriores</h5>
+            <button type="button" class="btn btn-secondary" (click)="abrirCuposAnteriores(lgModal)">Revisar</button>
+          </div>
           <div *ngFor="let c of cupos" class="col-sm-2 dias">
-            <h3>{{c.diaSemana}}</h3>
+            <h5>{{c.diaSemana}} ({{c.fecha_cupo | date: 'dd/M/yy'}})</h5>
             <h6>Punto Fijo</h6>
             <div *ngFor="let cliente of c.cuposPF" class="row">
               <div class="col-sm-9">
@@ -283,8 +300,7 @@
                 <div class="row">
                   <div class="col-sm-5">
                     <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
-                      (click)="cambiarFechaCupo(cliente.id_insta,template3)"
-                      style="cursor: pointer;" class="icon">loop
+                      (click)="cambiarFechaCupo(cliente.id_insta,template3)" style="cursor: pointer;" class="icon">loop
                     </md-icon>
                   </div>
                   <div class="col-sm-5">
@@ -820,8 +836,7 @@
             <td>{{c.fecha_cupo | date: 'dd/M/yy'}}</td>
             <td>
               <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
-                (click)="cambiarFechaCupo(c.id_insta,template3)"
-                style="cursor: pointer;" class="icon">loop
+                (click)="cambiarFechaCupo(c.id_insta,template3)" style="cursor: pointer;" class="icon">loop
               </md-icon>
 
             </td>
@@ -985,3 +1000,42 @@
     </div>
   </div>
 </ng-template>
+
+
+<div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="card-header">Cupos Disponibles Anteriores Abiertos</div>
+      <div class="card-body">
+        <table class="table table-borderless tabla">
+          <thead>
+            <tr style="background-color: #2C2C30; color: white;" class="table-default">
+              <th scope="col">CLIENTE</th>
+              <th scope="col">ZONA</th>
+              <th scope="col">FECHA</th>
+              <th scope="col">ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of cuposAnteriores | paginate: {id:'anteriores', itemsPerPage: 10, currentPage: a }">
+              <td *ngIf="t.kind == 'V' || t.kind == 'E'">{{t.nombre}} {{t.apellido}}</td>
+              <td *ngIf="t.kind == 'V-' || t.kind == 'J' || t.kind == 'G'">{{t.social}}</td>
+              <td *ngIf="t.lugar_cupo == 2">Coro</td>
+              <td *ngIf="t.lugar_cupo != 2">Punto Fijo</td>
+              <td>{{t.fecha_cupo | date: 'dd/M/yy'}}</td>
+              <td>
+                <md-icon *ngIf="usuario.perm && usuario.perm.includes('instalaciones_w')"
+                  (click)="irAInstalacion(t.id_insta)" style="cursor: pointer;" class="icon">assignment_late
+                </md-icon>
+                <md-icon
+                  *ngIf="t.status_insta == 1 && (usuario.perm && usuario.perm.includes('instalaciones_w') || t.user_insta == usuario.currentUser.id_user )"
+                  (click)="openModal2(template2,t.id_insta)" style="cursor: pointer;" class="icon">create</md-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="anteriores" (pageChange)="a = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

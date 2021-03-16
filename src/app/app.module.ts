@@ -214,7 +214,6 @@ import { VentasComponent } from './components/ventas/ventas.component';
 import {VentasService} from './services/ventas/ventas.service'
 import { FacturacionNComponent } from './facturacion-n/facturacion-n.component';
 
-
 //registerLocaleData(localeEs);
 
 
@@ -396,7 +395,7 @@ import { FacturacionNComponent } from './facturacion-n/facturacion-n.component';
     DetallesMudanzaComponent,
     ClientesComponent,
     VentasComponent,
-    FacturacionNComponent
+    FacturacionNComponent,
   ],
   imports: [
     CustomFormsModule,
