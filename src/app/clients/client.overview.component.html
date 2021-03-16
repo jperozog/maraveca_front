@@ -21,8 +21,22 @@
       <p *ngIf="editarCliente == false">
         {{ (clienteSeleccionado.kind | capitalize) + clienteSeleccionado.dni }}
       </p>
+        <select id="elemento2" style="display:none;" [(ngModel)]="clienteSeleccionado.kind" [value]="clienteSeleccionado.kind" class="form-select form-control" for="inputState">
+          <option value="V">Venezolano</option>
+          <option value="E">Extranjero</option>
+          <option value="V-">Firma personal</option>
+          <option value="J">Juridico</option>
+          <option value="G">Gubernamental</option>
+        </select>
+        <br />
       <input *ngIf="editarCliente" [(ngModel)]="clienteSeleccionado.dni" [value]="clienteSeleccionado.dni"
         class="form-control form-control-sm" type="text" placeholder=".form-control-sm" id="inputSmall" />
+        <br />
+        <select id="elemento" style="display:none;" [(ngModel)]="clienteSeleccionado.serie" [value]="clienteSeleccionado.serie" class="form-select form-control" for="inputState">
+          <option value="0">no facturable</option>
+          <option value="1">factutable</option>
+          
+        </select>
       <h6>Correo:</h6>
       <p *ngIf="editarCliente == false">{{ clienteSeleccionado.email }}</p>
       <input *ngIf="editarCliente" [(ngModel)]="clienteSeleccionado.email" [value]="clienteSeleccionado.email"

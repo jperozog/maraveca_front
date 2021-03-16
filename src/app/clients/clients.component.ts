@@ -1461,12 +1461,15 @@ export class ClientOverview implements OnInit {
   /*Cliente*/
 
   editarEstatusDatosClientes() {
+    document.getElementById("elemento").style.display = "block";
+    document.getElementById("elemento2").style.display = "block";
     this.editarCliente = !this.editarCliente
-
   }
 
   editarDatosClientes() {
     this.clienteService.editarDatosCliente(this.clienteSeleccionado).subscribe(res => { this.editarCliente = false, this.ngOnInit() }, err => console.log(err))
+    document.getElementById("elemento").style.display = "none";
+    document.getElementById("elemento2").style.display = "none";
   }
 
 
