@@ -36,7 +36,7 @@
     <div class="x700" *ngIf="modouno == 1">
 
       <table class="addClient x700"
-        [md2Data]="clientes | dataPipe: { nombre: search, apellido: search, email:search, dni: search, phone1:search, social:search }"
+        [md2Data]="clientes | dataPipe: { nombre: search, apellido: search, dni: search, social:search, direccion:search }"
         #md2="md2DataTable" [rowsPerPage]="10">
         <thead>
           <tr>
