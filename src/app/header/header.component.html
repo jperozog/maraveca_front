@@ -46,28 +46,16 @@
   </ng-container>
 
   <ng-container *ngIf="(instalaciones > 0)">
-    <button md-menu-item routerLink="/instalaciones">
+    <button md-menu-item routerLink="/Instalaciones2">
       <md-icon>assignment</md-icon>
       <span>{{instalaciones}} Instalaciones</span>
     </button>
   </ng-container>
 
-  <ng-container *ngIf="(otrost > 0)">
-    <button md-menu-item routerLink="/soporte">
-      <md-icon>assignment</md-icon>
-      <span>{{otrost}} Otros trabajos e instalaciones</span>
-    </button>
-  </ng-container>
   <ng-container *ngIf="(tickets > 0)">
-    <button md-menu-item routerLink="/soporte">
+    <button md-menu-item routerLink="/Tickets">
       <md-icon>headset_mic</md-icon>
       <span>{{tickets}} Tickets</span>
-    </button>
-  </ng-container>
-  <ng-container *ngIf="(averias > 0)">
-    <button md-menu-item routerLink="/soporte">
-      <md-icon>headset_mic</md-icon>
-      <span>{{averias}} Averias</span>
     </button>
   </ng-container>
   <ng-container *ngIf="(factibilidades > 0)">
@@ -183,7 +171,7 @@
     <span>pagos en moneda nacional</span>
   </button>
 
-  <button md-menu-item routerLink="balance_mod_inter">
+  <button md-menu-item routerLink="config_balances">
     <md-icon>monetization_on</md-icon>
     <span>pagos en moneda int</span>
   </button>

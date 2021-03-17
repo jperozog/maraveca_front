@@ -1,373 +1,3 @@
-<!--<script src="../../../dist/main.c12c04aa696a3186a553.bundle.js"></script>
-<md-toolbar class="submenu">
-  <md-form-field floatPlaceholder="never">
-    <input mdInput placeholder="Filtrar" class="md2-input" [(ngModel)]="search" />
-  </md-form-field>
-  <span class="example-spacer" style="text-align: center;">Pagos de clientes</span>
-  <button md-raised-button class="btn" (click)="Close()">Atras</button>
-
-
-</md-toolbar>
-<md-accordion>
-  <md-expansion-panel hideToggle="true" expanded="true" (opened)="this.modouno==1">
-    <md-expansion-panel-header>
-      <md-panel-title>
-        {{ pendienteB}} Pagos pendientes en moneda nacional
-      </md-panel-title>
-      <md-panel-description>
-        Pagos en moneda nacional
-      </md-panel-description>
-    </md-expansion-panel-header>
-    <div class="x700" *ngIf="modouno == 1">
-
-      <table class="addClient x700"
-        [md2Data]="balanceb| dataPipe: { id_bal: search, nombre: search, apellido: search, social:search, bal_comment:search, bal_comment_mod:search, bal_monto:search }"
-        #md2="md2DataTable" [rowsPerPage]="10">
-        <thead>
-          <tr>
-            <td colspan="7">
-              <md2-pagination></md2-pagination>
-            </td>
-          </tr>
-          <tr>
-            <td style="width: 7%;   text-align: center">
-              Nº
-            </td>
-            <td style="width: 7%;   text-align: center">
-              Cliente
-            </td>
-            <td style="width: 10%;  text-align: center">
-              Banco
-            </td>
-            <td style="width: 7%;  text-align: center">
-              Origen
-            </td>
-            <td style="width: 7%;  text-align: center">
-              Monto
-            </td>
-            <td style="width: 7%;  text-align: center">
-              Referencia / Titular
-            </td>
-            <td style="width: 7%;  text-align: center">
-              Referencia mod.
-            </td>
-            <td style="width: 7%;  text-align: center">
-              Estado
-            </td>
-            <td style="width: 7%;  text-align: center">
-              Fecha
-            </td>
-            <td style="width: 7%; text-align: center">
-              Fecha mod.
-            </td>
-            <td style="width: 7%;  text-align: center">
-              Usuario mod
-            </td>
-            <td style="width: 7%; text-align: center">
-              Acciones
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-
-          <tr *ngFor="let i of md2.data">
-            <td style="text-align: center; width: 7%">
-              {{i.id_bal}}
-            </td>
-            <td style="width: 14%; text-align: center" *ngIf="i.kind.toUpperCase() == 'V'">
-              {{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-            <td style="width: 14%; text-align: center" *ngIf="i.kind.toUpperCase() == 'E'">
-              {{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</td>
-            <td style="width: 14%; text-align: center" *ngIf="i.kind.toUpperCase() == 'G'">{{(i.social|capitalize)}}
-            </td>
-            <td style="width: 14%; text-align: center" *ngIf="i.kind.toUpperCase() == 'J'">{{(i.social|capitalize)}}
-            </td>
-
-            <td style="width: 10%; text-align: center" *ngIf="i.bal_tip==2">Transferencia Banesco</td>
-            <td style="width: 10%; text-align: center" *ngIf="i.bal_tip==6">Transferencia Bicentenario</td>
-            <td style="width: 10%; text-align: center" *ngIf="i.bal_tip==1">Transferencia BOD</td>
-            <td style="width: 10%; text-align: center" *ngIf="i.bal_tip==3">Transferencia Venezuela</td>
-            <td style="width: 10%; text-align: center" *ngIf="i.bal_tip==4">Retencion ISLR</td>
-            <td style="width: 10%; text-align: center" *ngIf="i.bal_tip==5">Retencion IVA</td>
-            <td style="width: 10%; text-align: center" *ngIf="i.pag_tip==17">Otras Retenciones</td>
-            <td style="width: 10%; text-align: center" *ngIf="i.bal_tip==7">Exonerado</td>
-            <td style="width: 10%; text-align: center" *ngIf="i.bal_tip==8">Moneda Extranjera</td>
-            <td style="width: 10%; text-align: center" *ngIf="i.bal_tip==9">Zelle</td>
-            <td style="width: 10%; text-align: center" *ngIf="i.bal_tip==10">Wire Transfer</td>
-            <td style="width: 10%; text-align: center" *ngIf="i.bal_tip==11">Efectivo $</td>
-            <td style="width: 10%; text-align: center" *ngIf="i.bal_tip==15">Efectivo en Bs.S.</td>
-
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==1">Mismo Banco</td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==2">Otro Banco</td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==5">Maracaibo</td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==4">Coro</td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==6">Taquilla Dabajuro</td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==12">otros bancos (Venezuela)</td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==13">otros bancos (Bicentenario)</td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==14">otros bancos (BNC)</td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==15">otros bancos (Provincial)</td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==16">otros bancos (Mercantil)</td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==17">otros bancos (Banco del tesoro)</td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==18">otros bancos (Banco Venezolano de credito)
-            </td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==19">otros bancos (Banplus)</td>
-            <td style="width: 10% text-align: center" *ngIf="i.bal_from==20">otros bancos (BFC)</td>
-            <td style=" width: 7%; text-align: center;">
-              <span *ngIf="i.bal_tip!=8 && i.bal_tip!=9 && i.bal_tip!=10 && i.bal_tip!=11">
-                {{i.bal_monto  | number : '1.0-3'}} Bs.S.
-              </span>
-              <span *ngIf="i.bal_tip==8 || i.bal_tip==9 || i.bal_tip==10 || i.bal_tip==11">
-                {{i.bal_monto  | number : '1.0-3'}} US$.
-              </span>
-            </td>
-            <td style=" width: 14%; text-align: center ">
-              {{i.bal_comment}}
-            </td>
-            <td style=" width: 7%; text-align: center">
-              <span style="  color: #FF6C00" *ngIf="i.bal_comment_mod">
-                {{i.bal_comment_mod}}
-              </span>
-              <span style=" color: #FF6C00; font-weight: bold;"
-                *ngIf="i.bal_comment_mod == null || i.bal_comment_mod =='' ">
-                <md-icon class="md-24" aria-label="N/A">minimize</md-icon>
-              </span>
-            </td>
-            <td style=" width: 7%; text-align: center">
-              <span *ngIf="i.bal_stat == 1">
-                Aprobada
-              </span>
-              <span *ngIf="i.bal_stat == 2">
-                Pendiente
-              </span>
-              <span *ngIf="i.bal_stat == 0">
-                Rechazada
-              </span>
-            </td>
-            <td style=" width: 7%; text-align: center">
-              {{i.created_at | stringToDate | date: 'dd/M/yy'}}
-            </td>
-            <td style=" width: 7%; text-align: center">
-              <span style="color: #FF6C00" *ngIf="i.bal_fecha_mod"> {{i.bal_fecha_mod | stringToDate | date: 'dd/M/yy'}}
-              </span>
-
-              <span style=" color: #FF6C00; font-weight: bold;" *ngIf="i.bal_fecha_mod == null || i.bal_fecha_mod ==''">
-                <md-icon class="md-24" aria-label="N/A">minimize</md-icon>
-              </span>
-            </td>
-            <td style=" width: 7%; text-align: center">
-              <span style=" color: #FF6C00" *ngIf="i.user_bal_mod">
-                {{i.nombre_user|capitalize}}
-              </span>
-              <span style=" color: #FF6C00; font-weight: bold;"
-                *ngIf="i.user_bal_mod == null || i.user_bal_mod ==''|| i.user_bal_mod ==0">
-                <md-icon class="md-24" aria-label="N/A">minimize</md-icon>
-              </span>
-            </td>
-            <td style="width: 7%;" *ngIf="usuario.perm && usuario.perm.includes('reportes_w')">
-              <div *ngIf="i.bal_stat == 2">
-                <button md-icon-button style="color:#106cc8" (click)="Edit_ref_bs(i)">
-                  <md-icon class="md-24" aria-label="Editar Balance">mode_edit</md-icon>
-                </button>
-                <button md-icon-button color="warn" (click)="anular_pag_bs(i)">
-                  <md-icon class="md-24" aria-label="Eliminar Balance">block</md-icon>
-                </button>
-              </div>
-              <div *ngIf="i.bal_stat !== 2">
-                <button md-icon-button [disabled]="i.bal_stat !== 2">
-                  <md-icon class="md-24" aria-label="Editar Balance">mode_edit</md-icon>
-                </button>
-                <button md-icon-button color="warn" (click)="anular_pag_bs(i)">
-                  <md-icon class="md-24" aria-label="Eliminar Balance">block</md-icon>
-                </button>
-              </div>
-            </td>
-
-
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </md-expansion-panel>
- 
-  <md-expansion-panel hideToggle="true" (opened)=" this.mododos==2">
-    <md-expansion-panel-header style="background-color: #145318;">
-      <md-panel-title>
-        <span style="color: white "> {{ pendienteD}} Pagos pendientes en moneda extranjera </span>
-      </md-panel-title>
-      <md-panel-description>
-        <span style="color: white "> Pagos en moneda extranjera</span>
-      </md-panel-description>
-    </md-expansion-panel-header>
-    <div class="x700" *ngIf="mododos == 2">
-
-      <table class="addClient x700"
-        [md2Data]="balanced| dataPipe: { id_bal_in: search, nombre: search, apellido: search, social:search, bal_comment_in:search, bal_comment_mod_in:search, bal_monto_in:search }"
-        #md2="md2DataTable" [rowsPerPage]="10">
-        <thead>
-          <tr>
-            <td colspan="7">
-              <md2-pagination></md2-pagination>
-            </td>
-          </tr>
-          <tr>
-            <td style="width: 7%; text-align: center">
-              Nº
-            </td>
-            <td style="width: 7%; text-align: center">
-              Cliente
-            </td>
-            <td style="width: 7%; text-align: center">
-              Banco
-            </td>
-            <td style="width: 7%; text-align: center">
-              Origen
-            </td>
-            <td style="width: 7%; text-align: center">
-              Monto
-            </td>
-            <td style="width: 7%; text-align: center">
-              Referencia / Titular
-            </td>
-            <td style="width: 7%; text-align: center">
-              Referencia mod.
-            </td>
-            <td style="width: 7%; text-align: center">
-              Estado
-            </td>
-            <td style="width: 7%; text-align: center">
-              Fecha
-            </td>
-            <td style="width: 7%; text-align: center">
-              Fecha mod.
-            </td>
-            <td style="width: 7%; text-align: center">
-              Usuario mod
-            </td>
-            <td style="width: 7%; text-align: center">
-              Acciones
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-
-          <tr *ngFor="let i of md2.data">
-            <td style="text-align: center; width: 7%">
-              {{i.id_bal_in}}
-            </td>
-            <td style="width: 14%; text-align: center">
-              <span *ngIf="i.kind.toUpperCase() == 'V'">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</span>
-              <span *ngIf="i.kind.toUpperCase() == 'E'">{{(i.nombre|capitalize) + " " + (i.apellido|capitalize)}}</span>
-              <span *ngIf="i.kind.toUpperCase() == 'G'">{{(i.social|capitalize)}}</span>
-              <span *ngIf="i.kind.toUpperCase() == 'J'">{{(i.social|capitalize)}}</span>
-            </td>
-            <td style="width: 7%; text-align: center">
-              <span *ngIf="i.bal_tip_in==12">Zelle</span>
-              <span *ngIf="i.bal_tip_in==13">Wire Transfer</span>
-              <span *ngIf="i.bal_tip_in==14">Efectivo $</span>
-              <span *ngIf="i.bal_tip_in==16">Exonerado</span>
-              <span *ngIf="i.bal_tip_in==2">Transferencia Banesco</span>
-              <span *ngIf="i.bal_tip_in==6">Transferencia Bicentenario</span>
-              <span *ngIf="i.bal_tip_in==1">Transferencia BOD</span>
-              <span *ngIf="i.bal_tip_in==3">Transferencia Venezuela</span>
-              <span *ngIf="i.bal_tip_in==15">Efectivo en Bs.S.</span>
-            </td>
-            <td style="width: 7%; text-align: center">
-              <span *ngIf="i.bal_from_in==1">Mismo Banco</span>
-              <span *ngIf="i.bal_from_in==2">Otro Banco</span>
-              <span *ngIf="i.bal_from_in==3">Deposito Bancario</span>
-              <span *ngIf="i.bal_from_in==5">Maracaibo</span>
-              <span *ngIf="i.bal_from_in==4">Coro</span>
-              <span *ngIf="i.bal_from_in==6">Taquilla Dabajuro</span>
-            </td>
-            <td>
-
-
-              <span style=" width: 7%; text-align: left;"
-                *ngIf="i.bal_tip_in!=12 && i.bal_tip_in!=13 && i.bal_tip_in!=14 && i.bal_tip_in!=16">
-                {{i.bal_monto_in | number : '1.2-2'}} Bs.S
-              </span>
-              <span style=" width: 7%; text-align: left;"
-                *ngIf=" i.bal_tip_in==12 || i.bal_tip_in==13 || i.bal_tip_in==14 || i.bal_tip_in==16">
-                {{i.bal_monto_in | number : '1.2'}} US$
-              </span>
-            </td>
-            <td style=" width: 14%; text-align: center ">
-              {{i.bal_comment_in}}
-            </td>
-            <td style=" width: 7%; text-align: center">
-              <span style=" color: #FF6C00" *ngIf="i.bal_comment_mod_in">
-                {{i.bal_comment_mod_in}}
-              </span>
-              <span style="color: #FF6C00; font-weight: bold;"
-                *ngIf="i.bal_comment_mod_in == null || i.bal_comment_mod_in =='' ">
-                <md-icon class="md-24" aria-label="N/A">minimize</md-icon>
-              </span>
-            </td>
-            <td style=" width: 7%; text-align: center">
-              <span style=" color: #00c402" *ngIf="i.bal_stat_in == 1">
-                Aprobada
-              </span>
-              <span style="  color: #7a8018" *ngIf="i.bal_stat_in == 2">
-                Pendiente
-              </span>
-              <span style=" color: #c4092b" *ngIf="i.bal_stat_in == 0">
-                Rechazada
-              </span>
-            </td>
-            <td style=" width: 7%; text-align: center">
-              {{i.created_at | stringToDate | date: 'dd/M/yy'}}
-            </td>
-            <td style=" width: 7%; text-align: center">
-              <span style="  color: #FF6C00" *ngIf="i.bal_fecha_mod_in">
-                {{i.bal_fecha_mod_in | stringToDate | date: 'dd/M/yy'}} </span>
-
-              <span style=" color: #FF6C00; font-weight: bold;"
-                *ngIf="i.bal_fecha_mod_in == null || i.bal_fecha_mod_in ==''">
-                <md-icon class="md-24" aria-label="N/A">minimize</md-icon>
-              </span>
-            </td>
-            <td style=" width: 7%; text-align: center; color: #FF6C00">
-              <span style=" color: #FF6C00" *ngIf="i.user_bal_mod_in">
-                {{i.nombre_user|capitalize}}
-              </span>
-              <span style="  color: #FF6C00; font-weight: bold;"
-                *ngIf="i.user_bal_mod_in == null || i.user_bal_mod_in ==''|| i.user_bal_mod_in ==0">
-                <md-icon class="md-24" aria-label="N/A">minimize</md-icon>
-              </span>
-            </td>
-            <td style="width: 7%; text-align:center" *ngIf="usuario.perm && usuario.perm.includes('reportes_w')">
-              <div *ngIf="i.bal_stat_in == 2">
-                <button md-icon-button style="color:#106cc8" (click)="Edit_ref_dl(i)">
-                  <md-icon class="md-24" aria-label="Editar Balance">mode_edit</md-icon>
-                </button>
-
-                <button md-icon-button color="warn" (click)="anular_pag_dl(i)">
-                  <md-icon class="md-24" aria-label="Eliminar Balance">block</md-icon>
-                </button>
-              </div>
-              <div *ngIf="i.bal_stat_in !== 2">
-                <button md-icon-button [disabled]="i.bal_stat_in !== 2">
-                  <md-icon class="md-24" aria-label="Editar Balance">mode_edit</md-icon>
-                </button>
-
-                <button md-icon-button color="warn" (click)="anular_pag_dl(i)">
-                  <md-icon class="md-24" aria-label="Eliminar Balance">block</md-icon>
-                </button>
-              </div>
-            </td>
-
-
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </md-expansion-panel>
-</md-accordion>
--->
-
-
-
-
 <div class="con">
 
   <div class="row principal">
@@ -439,10 +69,12 @@
             <td *ngIf="b.bal_tip_in==13">Wire Transfer</td>
             <td *ngIf="b.bal_tip_in==14">Efectivo $</td>
             <td *ngIf="
-                            b.bal_tip_in != 12 &&
-                            b.bal_tip_in != 13 &&
-                            b.bal_tip_in != 14 &&
-                            b.bal_tip_in != 16
+                            b.bal_tip_in == 1 ||
+                            b.bal_tip_in == 2 ||
+                            b.bal_tip_in == 3 ||
+                            b.bal_tip_in == 4 ||
+                            b.bal_tip_in == 5 ||
+                            b.bal_tip_in == 6
                           ">
               {{ b.conversion | number: "1.2-2" }} Bs
             </td>
@@ -558,17 +190,17 @@
     </button>
   </div>
   <div class="modal-body">
-    <div *ngIf="pagoSeleccionado.bal_stat_in == 1 && tipoActivo == 1 || tipoActivo == 2 ">
+    <div *ngIf="pagoSeleccionado.bal_stat_in == 1 && tipoActivo == 1 && usuario.perm && usuario.perm.includes('reportes_w') || tipoActivo == 2 && usuario.perm && usuario.perm.includes('reportes_w') ">
 
       <h5>¿Desea Eliminar Pago?</h5>
       <button (click)="GuardarData()" title="Eliminar pago" type="button" class="btn btn-danger btn-block btn-sm ">
         <md-icon class="icon">done</md-icon>
       </button>
     </div>
-    <div *ngIf="pagoSeleccionado.bal_stat_in == 2 && tipoActivo == 1">
+    <div *ngIf="pagoSeleccionado.bal_stat_in == 2 && tipoActivo == 1 && usuario.perm.includes('reportes_r') ">
 
-      <label for="exampleSelect1">Banco</label>
-      <select [(ngModel)]="pagoSeleccionado.bal_tip_in" class="form-control" id="exampleSelect1" #ubicacion required>
+      <label *ngIf="usuario.perm.includes('reportes_w')" for="exampleSelect1">Banco</label>
+      <select *ngIf="usuario.perm.includes('reportes_w')" [(ngModel)]="pagoSeleccionado.bal_tip_in" class="form-control" id="exampleSelect1" #ubicacion required>
         <option [value]="2">Transferencia Banesco</option>
         <option [value]="6">Transferencia Bicentenario</option>
         <option [value]="1">Transferencia BOD</option>
@@ -581,8 +213,12 @@
       </select>
       <br>
 
-      <label for="customCheck2">Referencia</label>
-      <input type="text" [(ngModel)]="pagoSeleccionado.bal_comment_in" class="form-control" id="customCheck2">
+      <label *ngIf="usuario.perm.includes('reportes_w')" for="customCheck2">Referencia</label>
+      <input *ngIf="usuario.perm.includes('reportes_w')" type="text" [(ngModel)]="pagoSeleccionado.bal_comment_in" class="form-control" id="customCheck2">
+      <br>
+
+      <label for="customCheck2">Referencia Modificada</label>
+      <input type="text" [(ngModel)]="pagoSeleccionado.bal_comment_mod_in" class="form-control" id="customCheck2">
       <br>
 
       <div *ngIf="
@@ -592,8 +228,8 @@
       pagoSeleccionado.bal_tip_in != 16 &&
       pagoSeleccionado.bal_tip_in != 18
                           ">
-        <label for="customCheck2">Monto</label>
-        <input type="text" [(ngModel)]="pagoSeleccionado.conversion" class="form-control" id="customCheck2">
+        <label *ngIf="usuario.perm.includes('reportes_w')" for="customCheck2">Monto</label>
+        <input *ngIf="usuario.perm.includes('reportes_w')" type="text" [(ngModel)]="pagoSeleccionado.conversion" class="form-control" id="customCheck2">
       </div>
       <td *ngIf="
       pagoSeleccionado.bal_tip_in == 12 ||
@@ -602,9 +238,9 @@
       pagoSeleccionado.bal_tip_in == 16 ||
       pagoSeleccionado.bal_tip_in == 18
                           ">
-        <label for="customCheck2">Monto
+        <label *ngIf="usuario.perm.includes('reportes_w')" for="customCheck2">Monto
         </label>
-        <input type="text" [(ngModel)]="pagoSeleccionado.bal_monto_in" class="form-control" id="customCheck2">
+        <input *ngIf="usuario.perm.includes('reportes_w')" type="text" [(ngModel)]="pagoSeleccionado.bal_monto_in" class="form-control" id="customCheck2">
       </td>
       <br>
 

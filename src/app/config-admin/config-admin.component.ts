@@ -965,60 +965,9 @@ export class edit_balances implements OnInit, OnDestroy {
 
 
   }
-  /*
-  refresh() {
-
-
-    this.http.get(environment.apiEndpoint + 'balances/')
-      .subscribe((data) => {
-        this.balance_t = data.json();
-        this.balanced = data.json().balanced;
-        this.balanceb = data.json().balanceb;
-        //console.log(this.dash);
-        console.log(this.balance_t);
-
-        let bs = 0;
-        for (let i = 0; i < this.balanceb.length; i++) {
-
-          if (this.balanceb[i].bal_stat === 2) {
-            bs++
-
-          }
-
-
-        }
-        this.pendienteB = bs;
-
-
-        let dl = 0;
-        for (let i = 0; i < this.balanced.length; i++) {
-
-          if (this.balanced[i].bal_stat_in === 2) {
-
-            dl++
-
-          }
-
-
-        }
-        this.pendienteD = dl;
-
-
-
-      });
-
-  }
-  */
+ 
   ngOnInit() {
 
-    /*
-    IntervalObservable.create(10000)
-      .takeWhile(() => this.autoupdate)
-      .subscribe(() => {
-        this.refresh();
-      });
-      */
-    //this.refresh()
     this.cargarPagosService.traerRegistroDePagos()
       .subscribe(
         res => {
