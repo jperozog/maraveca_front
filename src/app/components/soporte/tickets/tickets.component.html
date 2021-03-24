@@ -73,6 +73,10 @@
             type="button" class="btn btn-default btn-sm">
             <md-icon class="icon">loop</md-icon>
           </button>
+          <button style="background-color: #2C2C30; color: white;" (click)="exportAsXLSX()" title="Descargar en archivo Excel" type="button"
+          class="btn btn-default btn-sm">
+        <md-icon class="icon">file_download</md-icon>
+      </button>
         </div>
         <div *ngIf="tipoActivo == 1" class="col-sm-12">
           <table class="table table-borderless tabla">

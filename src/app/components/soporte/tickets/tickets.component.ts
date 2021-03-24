@@ -18,6 +18,8 @@ import { ServiciosService } from '../../../services/servicios/servicios.service'
 import { CajaDistribucionService } from '../../../services/caja-distribucion/caja-distribucion.service';
 import { EquiposService } from '../../../services/equipos/equipos.service';
 import { InstalacionesService } from '../../../services/soporte/instalaciones.service';
+import {Tickets} from '../../../models/ticket';
+import { ExcelService } from '../../../services/excel/excel.service';
 
 
 
@@ -27,6 +29,7 @@ import { InstalacionesService } from '../../../services/soporte/instalaciones.se
   styleUrls: ['./tickets.component.css']
 })
 export class TicketsComponent implements OnInit {
+  [x: string]: any;
   modalRef: BsModalRef;
   config = {
     backdrop: true,
@@ -41,6 +44,8 @@ export class TicketsComponent implements OnInit {
   ticketsActivos: number 
   averiasActivas: number
   repoActivas: number
+  dato: Tickets;
+  prueba: any = [];
 
   p: number = 1
 
@@ -95,6 +100,7 @@ export class TicketsComponent implements OnInit {
     private ServiciosService: ServiciosService,
     private cajaServices: CajaDistribucionService,
     private equiposService: EquiposService,
+    private excelService:ExcelService,
     private instalacionService: InstalacionesService) { }
 
   ngOnInit() {
@@ -103,6 +109,22 @@ export class TicketsComponent implements OnInit {
     this.traerCeldas();
     this.traerMangas();
     this.traerCajas()
+  }
+
+  exportAsXLSX():void {
+    this.tickets.forEach(e => {
+      this.dato = {
+        numero: e.id_soporte,
+        cliente: e.nombre+" "+e.apellido,
+        celda_olt: e.nombre_celda,
+        router: e.nombre_srvidor,
+        estado: e.status_soporte,
+        usuario: e.nombre_user+" "+e.apellido_user,
+        fecha: e.created_at
+      };
+      this.prueba.push(this.dato)
+    });
+    this.excelService.exportAsExcelFile(this.prueba, 'Tickets');
   }
 
   cambiarActivo(activo: number) {
