@@ -112,8 +112,6 @@
                 <th scope="col">ZONA</th>
                 <th scope="col">ROUTER</th>
                 <th scope="col">ESTADO</th>
-                <th scope="col">IP INSTALACION</th>
-                <th scope="col">SERIAL</th>
                 <th scope="col">USUARIO</th>
                 <th scope="col">VENTA</th>
                 <th scope="col">AGENDADA</th>
@@ -123,7 +121,7 @@
             <tbody>
               <tr *ngFor="let t of instalaciones | paginate: {id:'Instalaciones', itemsPerPage: 10, currentPage: p }">
                 <td>{{t.id_insta}}</td>
-                <td *ngIf="t.kind == 'V' || t.kind == 'E'">{{t.nombre}} {{t.apellido}}</td>
+                <td *ngIf="t.kind == 'V' || t.kind == 'E'">{{t.nombre}}{{t.apellido}}</td>
                 <td *ngIf="t.kind == 'V-' || t.kind == 'J' || t.kind == 'G'">{{t.social}}</td>
                 <td *ngIf="t.tipo_insta == 1">Inalambrica</td>
                 <td *ngIf="t.tipo_insta == 2">F.Optica</td>
@@ -141,11 +139,7 @@
                 <td *ngIf="t.status_insta == 4">
                   <p class="text-danger">Cerrada.</p>
                 </td>
-                <td *ngIf="t.tipo_insta == 2">No Necesario</td>
-                <td *ngIf="t.tipo_insta == 1">{{t.ipP_det}}</td>
-                <td *ngIf="t.serial_det == '0'">Equipo Usado</td>
-                <td *ngIf="t.serial_det != '0'">{{t.serial_det}}</td>
-                <td>{{t.nombre_user}} {{t.apellido_user}}</td>
+                <td><p>{{t.nombre_user}}</p><p>{{t.apellido_user}}</p></td>
                 <td>{{t.fechaVenta | date: 'dd/M/yy'}}</td>
                 <td>{{t.created_at | date: 'dd/M/yy'}}</td>
                 <td>
