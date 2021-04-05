@@ -165,7 +165,9 @@ export class Instalaciones2Component implements OnInit {
     this.instalaciones_t.forEach(e => {
       this.dato = {
         cliente: e.nombre+" "+e.apellido,
-        tipo: e.social,
+        direccion: e.direccion,
+        telefono: e.phone1,
+        tipo: e.tipo_insta,
         zona: e.nombre_celda,
         router: e.nombre_srvidor,
         estado:e.status_insta,

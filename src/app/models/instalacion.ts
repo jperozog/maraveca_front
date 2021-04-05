@@ -1,5 +1,7 @@
 export interface Instalacion {
     cliente: string,
+    direccion: string,
+    telefono: string,
     tipo: string,
     zona: string,
     router: string,
