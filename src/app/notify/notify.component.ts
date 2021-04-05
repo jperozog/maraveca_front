@@ -161,6 +161,19 @@ export class NotifyComponent implements OnInit {
         this.notify.get('message').updateValueAndValidity();
       }
     );
+
+    this.traerListaFallas()
+    this.DatosSeleccionados = []
+    this.busqueda = []
+    this.tipoNotificacion = 0
+    this.tipoGrupo = 0
+    this.messaje = ""
+
+  }
+
+
+  traerListaFallas() {
+    this.notificacionesService.traerListaFallas().subscribe(res => this.mensajes = res, err => console.log(err))
   }
 
   onSearchDatos(e: string) {
@@ -255,7 +268,9 @@ export class NotifyComponent implements OnInit {
 
     this.notificacionesService.enviarNotificacion(this.usuario.currentUser.id_user, this.tipoGrupo, this.DatosSeleccionados, this.messaje)
       .subscribe(
-        res => console.log(res),
+        res => {
+          console.log(res),
+          this.ngOnInit()},
         err => console.log(err)
       )
 
@@ -274,6 +289,8 @@ export class NotifyComponent implements OnInit {
 
     });
     //});
+
+   
   }
   onKey(event) {
     this.contador = event.target.value.length;

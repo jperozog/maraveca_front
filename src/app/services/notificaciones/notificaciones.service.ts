@@ -11,6 +11,10 @@ export class NotificacionesService {
     return this.http.get(environment.apiEndpoint+"traerLista")
   }
 
+  traerListaFallas(){
+    return this.http.get(environment.apiEndpoint+"traerListaFallas")
+  }
+
   enviarMensajeDeuda(responsable:number,tipo_sms:number,mensaje:string){
     return this.http.post(environment.apiEndpoint+"env_sms_morosos",{responsable,tipo_sms,mensaje})
   }

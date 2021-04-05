@@ -508,6 +508,7 @@ export class Pagar_comisones_Component {
   anioSeleccionado: number = 0
   instalaciones: any = []
   instalaciones2: any = []
+  instalaciones3: any = []
   instalacionesPagos: any = []
   ninstalaciones:any = []
   pendientes: any = []
@@ -587,6 +588,7 @@ export class Pagar_comisones_Component {
           console.log(res),
             this.instalaciones = res['facturas'],
             this.instalaciones2 = res['facturas'],
+            this.instalaciones3 = res['facturas'],
             this.comisionesdl = res['comisionesdl'],
             this.comisionesConversion = res['comisionesConversion'],
             this.comisionesbs = res['comisionesbs'],
@@ -610,6 +612,7 @@ export class Pagar_comisones_Component {
           console.log(res),
             this.instalaciones = res['facturas'],
             this.instalaciones2 = res['facturas'],
+            this.instalaciones3 = res['facturas'],
             this.comisionesdl = res['comisionesdl'],
             this.comisionesConversion = res['comisionesConversion'],
             this.comisionesbs = res['comisionesbs'],
@@ -704,7 +707,7 @@ export class Pagar_comisones_Component {
   onSearchComision(e: string): void {
     console.log(e)
     if (e == "") {
-      this.instalaciones = this.instalaciones2
+      this.instalaciones = this.instalaciones3
     } else {
 
       const result = this.instalaciones.filter((el) =>
@@ -727,6 +730,9 @@ export class Pagar_comisones_Component {
   }
 
   comisionBackSpace(e) {
+    if (e == "") {
+      this.instalaciones = this.instalaciones3
+    } else {
     const algo = this.instalaciones2
     const result = algo.filter((el) =>
       el.nombre.toUpperCase().includes(e.toUpperCase())
@@ -738,6 +744,7 @@ export class Pagar_comisones_Component {
     //const result5 = result4.concat(result3)
 
     this.instalaciones = result4;
+  }
   }
 
   openModal2(template: TemplateRef<any>) {

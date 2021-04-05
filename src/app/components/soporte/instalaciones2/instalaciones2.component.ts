@@ -238,7 +238,7 @@ export class Instalaciones2Component implements OnInit {
           this.instalaciones = res,
             this.instalaciones2 = res,
             this.instalaciones_t = res,
-         
+            console.log(res)
             this.snackBar.open("Instalaciones Cargadas", null, {
               duration: 2000,
             });

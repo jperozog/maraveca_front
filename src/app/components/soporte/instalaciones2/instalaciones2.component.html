@@ -121,7 +121,7 @@
             <tbody>
               <tr *ngFor="let t of instalaciones | paginate: {id:'Instalaciones', itemsPerPage: 10, currentPage: p }">
                 <td>{{t.id_insta}}</td>
-                <td *ngIf="t.kind == 'V' || t.kind == 'E'">{{t.nombre}}{{t.apellido}}</td>
+                <td *ngIf="t.kind == 'V' || t.kind == 'E'">{{t.nombre}} {{t.apellido}}</td>
                 <td *ngIf="t.kind == 'V-' || t.kind == 'J' || t.kind == 'G'">{{t.social}}</td>
                 <td *ngIf="t.tipo_insta == 1">Inalambrica</td>
                 <td *ngIf="t.tipo_insta == 2">F.Optica</td>

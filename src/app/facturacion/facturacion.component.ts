@@ -750,7 +750,7 @@ export class deletepagoDialog {
           this.dialogRef.close();
         })
 
-        this.snackBar.open("aprovando pago: Por favor espere", null, {
+        this.snackBar.open("aprobando pago: Por favor espere", null, {
           duration: 4000,
         });
         this.dialogRef.close();

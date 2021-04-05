@@ -11,6 +11,7 @@ import 'rxjs/add/operator/startWith';
 import { AuthGuard } from '../_guards/index';
 import {Router} from '@angular/router';
 import { environment } from '../../environments/environment'
+import {PresupuestosService} from '../services/presupuestos/presupuestos.service'
 
 @Component({
   selector: 'app-planes',
@@ -28,6 +29,9 @@ export class PreComponent implements OnInit{
   nofac:any
   fac:any
   answer:any = 1
+  tipoServicio: number = 0
+  costoInstalacion: number = 0
+  moneda:string = " "
   constructor(
     public usuario: AuthGuard,
     private http: Http,
@@ -37,6 +41,7 @@ export class PreComponent implements OnInit{
     public snackBar:MdSnackBar,
     public router: Router,
     private fb: FormBuilder,
+    private presupuestosService: PresupuestosService
   ){
     this.cliente=datos[0]
     this.tipo = datos[1]
@@ -98,21 +103,19 @@ enviar(){
     duration: 2000,
   });
 
-  this.http.post(url, client).subscribe(data => {
-    console.log(data)
-    this.dialogRef.close();
-    this.snackBar.open("Presupuesto Enviado", null, {
-      duration: 4000,
-    });
-    this.dialogRef.close();
-  }, error => {
-  });
-  {
-    this.dialogRef.close();
-  }
-  //this.myService.refresh();
 
-  //this.router.navigate(['/clientes']);
+  this.presupuestosService.enviarPresupuesto(this.tipoServicio,this.costoInstalacion,this.moneda,this.cliente,this.usuario.currentUser.id_user)
+  .subscribe(
+    res=>{
+      console.log(res),
+      this.snackBar.open("Presupuesto Enviado", null, {
+        duration: 4000,
+      });
+      },
+    err=>console.log(err)
+    )  
+
+    this.dialogRef.close();
 
 }
   onNoClick(): void {

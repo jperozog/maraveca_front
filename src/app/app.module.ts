@@ -213,6 +213,7 @@ import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import {VentasService} from './services/ventas/ventas.service'
 import { FacturacionNComponent } from './facturacion-n/facturacion-n.component';
+import {PresupuestosService} from './services/presupuestos/presupuestos.service'
 
 //registerLocaleData(localeEs);
 
@@ -499,6 +500,7 @@ import { FacturacionNComponent } from './facturacion-n/facturacion-n.component';
     NotificacionesService,
     ConfigAdminService,
     VentasService,
+    PresupuestosService,
     { provide: APP_CONFIG, useValue: AppConfig },
     { provide: LOCALE_ID, useValue: 'es' }
   ],
