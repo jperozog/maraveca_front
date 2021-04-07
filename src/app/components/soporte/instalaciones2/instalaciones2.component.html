@@ -26,10 +26,10 @@
     <div class="col-sm-1"></div>
 
     <div style="margin-top:5px;" class="col-sm-2 botones">
-      <!--button *ngIf="usuario.perm && usuario.perm.includes('instalaciones')" (click)="openModal(template)"
-        title="Agregar Nueva Instalacion" type="button" class="btn btn-default btn-sm">
+      <button *ngIf="tipoActivo2 != 1 && usuario.perm && usuario.perm.includes('instalaciones')" (click)="openModal(template)"
+        title="Agregar Nueva Instalacion" type="button" class="fade active show btn btn-default btn-sm">
         <md-icon class="icon">add_circle_outline</md-icon>
-      </button-->
+      </button>
       <button (click)="actualizarLista()" title="Actualizar Instalaciones" type="button" class="btn btn-default btn-sm">
         <md-icon class="icon">loop</md-icon>
       </button>
