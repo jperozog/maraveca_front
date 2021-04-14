@@ -116,6 +116,11 @@ busqueda(id:string){
     return this.http.get(environment.apiEndpoint+"traerHistories/"+id)
   }
 
+
+  traerInstaladoresEncargados(id:number){
+    return this.http.get(environment.apiEndpoint+"traerInstaladoresEncargados/"+id)
+  }
+
   editarData(datos:any){
     return this.http.post(environment.apiEndpoint+"editarInstalacion",{datos})
   }

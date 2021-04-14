@@ -1,0 +1,137 @@
+<div class="row primero">
+  <div class="col-sm-7">
+    <h2 class="titulo">Carga de Pagos Masiva</h2>
+  </div>
+  <!--
+  <div class="col-sm-3 filtrado">
+    <input (input)="BuscarVenta($event.target.value)" (keyup.backspace)="BuscarVentaBackSpace($event.target.value)"
+      type="text" class="form-control" name="filtrado" placeholder="Filtrar" id="inputDefault">
+  </div>
+-->
+</div>
+<div class="row">
+  <div class="col-sm-7">
+    <table class="table table-borderless tabla">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">Cliente</th>
+          <th scope="col">Monto</th>
+          <th scope="col">Comentario</th>
+          <th scope="col">Responsable</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor=" let p of pagos | paginate: { id:'pagos', itemsPerPage: 6, currentPage: e }">
+          <td>{{p.nombre}} {{p.apellido}}</td>
+          <td *ngIf="p.bal_tip_in === 1 || p.bal_tip_in === 2 || p.bal_tip_in === 3 || p.bal_tip_in === 6">
+            {{p.conversion | number: "1.2-2"}}Bs</td>
+          <td *ngIf="p.bal_tip_in !== 1 || p.bal_tip_in !== 2 || p.bal_tip_in !== 3 || p.bal_tip_in !== 6">
+            {{p.bal_monto_in | number: "1.2-2"}} $</td>
+          <td>{{p.bal_comment_in}}</td>
+          <td>{{p.nombre_user}} {{p.apellido_user}}</td>
+        </tr>
+      </tbody>
+
+    </table>
+    <pagination-controls id="pagos" (pageChange)="e = $event"></pagination-controls>
+  </div>
+  <div class="col-sm-4 form">
+    <div class="formulario">
+      <div class="card border-light mb-3">
+        <div class="card-header">Agregar Pago</div>
+
+        <div class="card-body">
+          <div>
+            <label class="col-form-label" for="inputDefault">Clientes</label>
+            <input type="text" [(ngModel)]="busquedaCliente" class="form-control form-control-sm"
+              (input)="onSearchDatos($event.target.value)">
+            <br>
+            <div class="row">
+              <div *ngIf="DatosSeleccionados.length < 1" class="col-sm-12">
+                <h6>Lista Clientes</h6>
+                <table class="table table-borderless tabla">
+                  <tbody>
+                    <tr (click)="agregarDatosLista(c)" class="tr" style="cursor: pointer;"
+                      *ngFor=" let c of busqueda | paginate: { id:'clientes', itemsPerPage: 3, currentPage: e }">
+                      <td class="td">{{c.nombre}}</td>
+                      <td class="td">{{c.apellido}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <pagination-controls id="clientes" (pageChange)="e = $event"></pagination-controls>
+              </div>
+              <div *ngIf="DatosSeleccionados.length > 0" class="col-sm-12">
+                <h6>Cliente Seleccionado</h6>
+                <table class="table table-borderless tabla">
+                  <tbody>
+                    <tr (click)="DeseleccionarCliente(i)" class="tr" style="cursor: pointer;"
+                      *ngFor=" let b of DatosSeleccionados | paginate: { id:'clientesS', itemsPerPage: 3, currentPage: e }; let i = index">
+                      <td class="td">{{b.nombre}}</td>
+                      <td class="td">{{b.apellido}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <pagination-controls id="clientesS" (pageChange)="e = $event"></pagination-controls>
+              </div>
+            </div>
+          </div>
+          <label class="control-label" for="disabledInput">Metodo de Pago</label>
+          <select [(ngModel)]="MetodoSelected" class="form-control" id="exampleSelect1" required>
+            <option *ngFor="let m of metodos" [value]="m.id_metodo">
+              {{ m.nombre_metodo }}
+            </option>
+          </select>
+          <div *ngIf="MetodoSelected != 0">
+            <label class="col-form-label" for="inputDefault">Referencia</label>
+            <input [(ngModel)]="Referencia" type="text" class="form-control" placeholder="Referencia" id="inputDefault"
+              #cedula required />
+
+            <label class="col-form-label" for="inputDefault">Fecha Pago</label>
+            <my-date-picker [(ngModel)]="fecha" class="example-full-width" name="birthdate" mdInput required locale="es"
+              [options]="myDatePickerOptions"></my-date-picker>
+          </div>
+
+          <div *ngIf="fecha != 0 && Referencia != ' '">
+            <div class="form-group">
+              <label class="control-label">Monto</label>
+              <div class="form-group">
+                <div class="input-group mb-3">
+                  <input (input)="hacerConversion($event.target.value)" [(ngModel)]="Monto" type="text"
+                    class="form-control" aria-label="Amount (to the nearest dollar)" />
+                  <div class="input-group-append">
+                    <span class="input-group-text">.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p *ngIf="
+            fecha != 0 &&
+            Referencia != ' ' &&
+            (MetodoSelected == 1 ||
+              MetodoSelected == 2 ||
+              MetodoSelected == 3 ||
+              MetodoSelected == 6)
+          " class="text-success">
+            Conversion: {{ conversion | number: "1.2-2" }}$
+          </p>
+          <div *ngIf="pagoCargado" class="alert alert-dismissible alert-danger">
+            El Pago ya esta Registrado en el Sistema, Chequee Porfavor la Seccion de Pagos!
+          </div>
+          <div *ngIf="Monto != 0">
+            <button (click)="registrarPago()" type="button" class="btn btn-info">
+              Cargar Pago
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="pagos.length >= 1" class="row boton">
+        <button type="button" (click)="cargaMasivaPagos()" class="btn btn-info btn-block">
+          Carga Masiva de Pagos
+        </button>
+    </div>
+  </div>
+  
+</div>

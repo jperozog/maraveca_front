@@ -58,7 +58,7 @@ export class ClientesComponent implements OnInit {
   traerClientes() {
     const id = this.usuario.currentUser.id_user;
 
-    this.cliente.traerClientes(id)
+    this.cliente.traerClientes1(id,this.FiltroActivo)
       .subscribe(
         res => {
           console.log(res),

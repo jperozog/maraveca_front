@@ -532,6 +532,7 @@ export class Pagar_comisones_Component {
   tipoSeleccionado: string = ''
   referencia: string = ""
   monto: number = 0
+  tasaCambio:number = 0
   comisionFinal: number = 0
   tipoComision: string = ''
   listaPagos: any = []
@@ -812,7 +813,7 @@ export class Pagar_comisones_Component {
     if (this.pago$) {
       this.comisionFinal = this.comisionDisponibleDl
       this.tipoComision = "$"
-      this.pagoComisiones.guardarData(this.monto, this.tipoComision, this.emisorSeleccionado, this.receptorSeleccionado, this.tipoSeleccionado, this.userSeleccionado, this.usuario.currentUser.id_user, this.referencia, this.mesSeleccionado, this.anioSeleccionado,this.fechaPago)
+      this.pagoComisiones.guardarData(this.monto,this.tasaCambio, this.tipoComision, this.emisorSeleccionado, this.receptorSeleccionado, this.tipoSeleccionado, this.userSeleccionado, this.usuario.currentUser.id_user, this.referencia, this.mesSeleccionado, this.anioSeleccionado,this.fechaPago)
         .subscribe(
           res => {
             this.modalRef.hide()
@@ -824,6 +825,7 @@ export class Pagar_comisones_Component {
             this.referencia = ""
             this.fechaPago = ""
             this.monto = 0
+            this.tasaCambio = 0
             this.pago$ = false
             this.pagoBs = false
             console.log(res)
@@ -833,7 +835,7 @@ export class Pagar_comisones_Component {
     } else {
       this.comisionFinal = this.comisionDisponibleConversion + this.comisionDisponibleBs
       this.tipoComision = "Bs.S"
-      this.pagoComisiones.guardarData(this.monto, this.tipoComision, this.emisorSeleccionado, this.receptorSeleccionado, this.tipoSeleccionado, this.userSeleccionado, this.usuario.currentUser.id_user, this.referencia, this.mesSeleccionado, this.anioSeleccionado,this.fechaPago)
+      this.pagoComisiones.guardarData(this.monto,this.tasaCambio, this.tipoComision, this.emisorSeleccionado, this.receptorSeleccionado, this.tipoSeleccionado, this.userSeleccionado, this.usuario.currentUser.id_user, this.referencia, this.mesSeleccionado, this.anioSeleccionado,this.fechaPago)
         .subscribe(
           res => {
             this.modalRef.hide()
@@ -844,7 +846,8 @@ export class Pagar_comisones_Component {
             this.tipoSeleccionado = ""
             this.referencia = ""
             this.fechaPago = ""
-            this.monto = 0
+            this.monto = 0,
+            this.tasaCambio = 0
             this.pago$ = false
             this.pagoBs = false
             console.log(res)

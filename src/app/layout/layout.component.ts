@@ -265,7 +265,7 @@ export class LayoutComponent implements OnInit {
       this.traerDatosGraficaTickets()
       this.traerDatosGraficaInstalaciones()
       this.traerDatosGraficaCuentasBs()
-      this.traerDatosGraficaCuentasDl()
+      //this.traerDatosGraficaCuentasDl()
     }
     if (this.usuario.currentUser.departamento == 'Soporte') {
       this.traerDatosGraficaTickets()
@@ -334,14 +334,14 @@ export class LayoutComponent implements OnInit {
         err => console.log(err)
       )
   }
-
+  /*
   traerDatosGraficaCuentasDl() {
     this.dashboardService.datosGraficaCuentasDl()
       .subscribe(
         res => this.MontoTotalDl = res,
         err => console.log(err))
   }
-
+  */
   traerDatosGraficaCuentasBs() {
     this.dashboardService.datosGraficaCuentasBs()
       .subscribe(

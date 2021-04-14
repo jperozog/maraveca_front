@@ -67,6 +67,7 @@ import {DetallesMudanzaComponent} from './components/soporte/instalaciones2/deta
 import {ClientesComponent} from './components/clientes/clientes.component'
 import {VentasComponent} from './components/ventas/ventas.component'
 import { FacturacionNComponent } from './facturacion-n/facturacion-n.component';
+import {CargaPagosMasivaComponent} from './components/carga-pagos-masiva/carga-pagos-masiva.component'
 
 const appRoutes: Routes = [
   {path: '', component: LayoutComponent, canActivate: [AuthGuard]},
@@ -209,6 +210,7 @@ const appRoutes: Routes = [
   {path: 'soporteTraslado', component: SoporteTrasladoComponent, canActivate: [AuthGuard]},
   {path: 'pdfTraslado/:id_traslado', component: PdfTrasladoComponent, canActivate: [AuthGuard]},
   {path: 'Promociones', component: PromocionesComponent, canActivate: [AuthGuard]},
+  {path: 'CargaPagosMasiva', component: CargaPagosMasivaComponent, canActivate: [AuthGuard]},
   {path: 'Servicios', component: Servicios2Component, canActivate: [AuthGuard]},
   {path: 'ComisionesVendedores', component: ComisionesVendedoresComponent, canActivate: [AuthGuard]},
   {path: 'ComisionesInstaladores', component: ComisionesInstaladoresComponent, canActivate: [AuthGuard]},

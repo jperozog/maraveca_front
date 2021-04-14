@@ -1254,7 +1254,7 @@ export class Instalaciones2Component implements OnInit {
 
   cambiarFechaCupo(id_insta:number,template: TemplateRef<any>){
     console.log(id_insta)
-      this.modalRef.hide()
+     // this.modalRef.hide()
       this.id_insta_cupo = id_insta
       this.modalRef = this.modalService.show(template, this.config);
   }

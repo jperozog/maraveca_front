@@ -12,6 +12,11 @@ export class ClienteService {
       return this.http.get(environment.apiEndpoint+"clientes1/"+id)
   }
 
+  traerClientes1(id:number,tipo:number){
+    return this.http.post(environment.apiEndpoint+"clientes2/",{id,tipo})
+    }
+
+
   traerDatosCliente(id: number){
     return this.http.get(environment.apiEndpoint+"cliente/"+id)
   }

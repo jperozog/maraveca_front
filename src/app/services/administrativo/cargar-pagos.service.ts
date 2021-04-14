@@ -7,6 +7,13 @@ export class CargarPagosService {
 
   constructor(private http: HttpClient) { }
 
+  traerPagosPendientes(){
+    return this.http.get(environment.apiEndpoint+"traerPagosPendientes");
+  }
+
+  cargaPagosMasivos(){
+    return this.http.get(environment.apiEndpoint+"cargaPagosMasivos");
+  }
 
   traerMetodos(){
     return this.http.get(environment.apiEndpoint+"traerMetodos");
@@ -18,6 +25,10 @@ export class CargarPagosService {
 
   registrarPago(metodo:number, referencia:string, fecha:string, conversion:number, monto:number,usuario:number,cliente:number){
     return this.http.post(environment.apiEndpoint+"registrarPago",{metodo,referencia,fecha,conversion,monto,usuario,cliente})
+  }
+
+  registrarPagoMasivo(metodo:number, referencia:string, fecha:string, conversion:number, monto:number,usuario:number,cliente:number){
+    return this.http.post(environment.apiEndpoint+"registrarPagoMasivo",{metodo,referencia,fecha,conversion,monto,usuario,cliente})
   }
 
   editarPago(datos:any,tipo:number){

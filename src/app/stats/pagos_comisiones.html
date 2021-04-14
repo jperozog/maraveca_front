@@ -289,7 +289,8 @@
               <th scope="row">{{l.id_pago}}</th>
               <th scope="row">{{l.emisor}}</th>
               <th scope="row">{{l.receptor}}</th>
-              <th scope="row">{{l.monto | number : '1.2-2'}}{{l.tipo_comision}}</th>
+              <th *ngIf="l.tasaCambio == 0" scope="row">{{l.monto | number : '1.2-2'}}{{l.tipo_comision}}</th>
+              <th *ngIf="l.tasaCambio != 0" scope="row">{{l.monto | number : '1.2-2'}}{{l.tipo_comision}} (Tasa: {{l.tasaCambio | number : '1.2-2'}})</th>
               <th scope="row">{{l.referencia}}</th>
               <th scope="row">{{l.responsable}}</th>
               <th scope="row">{{l.created_at | date: 'dd/M/yy'}}</th>
@@ -369,21 +370,6 @@
     </div>
     <br>
     <div *ngIf="pago$ == true">
-      <div class="col-sm-11">
-        <table class="table table-borderless">
-          <tbody>
-            <tr class="tr" (click)="agregarNinstalacion(ins.id_srv, o)"
-              *ngFor=" let ins of instalacionesPagos | paginate: { id: 'respuesta', itemsPerPage: 3, currentPage: e }; let o = index">
-              <th *ngIf="ins.estatus == 1 && ins.estado == 'pagado'" class="table-default td">{{ ins.nombre }}
-                {{ ins.apellido}}</th>
-              <th *ngIf="ins.estatus == 2 && ins.estado == 'pagado'" class="table-success td">{{ ins.nombre }}
-                {{ ins.apellido}}</th>
-            </tr>
-          </tbody>
-        </table>
-        <pagination-controls previousLabel=" " nextLabel=" " id="respuesta" (pageChange)="e = $event">
-        </pagination-controls>
-      </div>
       <h5>Pagos De Comisiones $</h5>
       <div class="row">
         <div class="col-sm-6">
@@ -393,6 +379,7 @@
               <option value=""></option>
               <option value="Efectivo $">Efectivo $</option>
               <option value="Zelle">Zelle</option>
+              <option value="Bs">Bolivares</option>
             </select>
           </div>
         </div>
@@ -403,6 +390,7 @@
               <option value=""></option>
               <option value="Efectivo $">Efectivo $</option>
               <option value="Zelle">Zelle</option>
+              <option value="Bs">Bolivares</option>
             </select>
           </div>
         </div>
@@ -423,11 +411,22 @@
       </div>
       <div *ngIf="receptorSeleccionado != '' && emisorSeleccionado != '' && referencia != '' && tipoSeleccionado != ''">
         <div class="form-group">
+          <label class="col-form-label" for="inputDefault">Fecha de Pago</label>
+          <input [(ngModel)]="fechaPago" type="date" class="form-control" id="inputDefault">
+        </div>
+      </div>
+      <div *ngIf="receptorSeleccionado != '' && emisorSeleccionado != '' && referencia != '' && tipoSeleccionado != '' && fechaPago != ''">
+        <div class="form-group">
           <label class="col-form-label" for="inputDefault">Monto a Pagar</label>
           <input [(ngModel)]="monto" type="text" class="form-control" id="inputDefault">
         </div>
+
+        <div *ngIf="emisorSeleccionado == 'Bs'" class="form-group">
+          <label class="col-form-label" for="inputDefault">Tasa de Cambio</label>
+          <input [(ngModel)]="tasaCambio" type="text" class="form-control" id="inputDefault">
+        </div>
       </div>
-      <button *ngIf=" monto > 1 && monto <= comisionDisponibleDl" type="button" (click)="guardarData()"
+      <button *ngIf=" (emisorSeleccionado != 'Bs' &&  monto > 1 && monto <= comisionDisponibleDl) || (emisorSeleccionado == 'Bs' && tasaCambio > 1 &&  monto > 1 && monto) " type="button" (click)="guardarData()"
         class="btn btn-info ">
         Pagar Comisiones
       </button>

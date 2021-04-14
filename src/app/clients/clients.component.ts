@@ -1021,11 +1021,7 @@ export class ClientOverview implements OnInit {
     this.pagadoin = 0;
     this.facturadoin = 0;
 
-    IntervalObservable.create(20000)
-      .takeWhile(() => this.autoupdate)
-      .subscribe(() => {
-        this.refresh();
-      });
+   
     this.cargarPagos.traerMetodos().subscribe(res => this.metodos = res, err => console.log(err))
     this.cargarPagos.traerTaza().subscribe(res => { this.taza = res[0].valor, console.log(res) }, err => console.log(err))
   }
@@ -1374,6 +1370,7 @@ export class ClientOverview implements OnInit {
           });
         });
     })
+    this.refresh();
   }
   edit() {
     this.editclient = true
@@ -1390,7 +1387,7 @@ export class ClientOverview implements OnInit {
       this.ngOnInit();
       console.log('The dialog was AddClient closed');
     });
-
+    this.refresh();
   }
 
   show(row) {
@@ -1405,6 +1402,7 @@ export class ClientOverview implements OnInit {
       console.log('The dialog was AddClient closed');
     });
     //this.myService.refresh();
+    this.refresh();
   }
 
   cort_prog() {
@@ -1418,7 +1416,7 @@ export class ClientOverview implements OnInit {
       this.ngOnInit();
       console.log('The dialog was AddClient closed');
     });
-
+    this.refresh();
   }
 
   abono() {
@@ -1436,6 +1434,7 @@ export class ClientOverview implements OnInit {
         })
       }
     });
+    this.refresh();
   }
 
   abonod() {
@@ -1455,7 +1454,7 @@ export class ClientOverview implements OnInit {
         })
       }
     });
-
+    this.refresh();
   }
 
   /*Cliente*/
@@ -1464,12 +1463,14 @@ export class ClientOverview implements OnInit {
     document.getElementById("elemento").style.display = "block";
     document.getElementById("elemento2").style.display = "block";
     this.editarCliente = !this.editarCliente
+    this.refresh();
   }
 
   editarDatosClientes() {
     this.clienteService.editarDatosCliente(this.clienteSeleccionado).subscribe(res => { this.editarCliente = false, this.ngOnInit() }, err => console.log(err))
     document.getElementById("elemento").style.display = "none";
     document.getElementById("elemento2").style.display = "none";
+    this.refresh();
   }
 
 
@@ -1479,6 +1480,7 @@ export class ClientOverview implements OnInit {
 
   mostrarCuerpoRegistroPago() {
     this.bodyRegistroPagos = !this.bodyRegistroPagos
+    
   }
 
 
@@ -1521,7 +1523,7 @@ export class ClientOverview implements OnInit {
 
       this.ocultarModal()
     }
-
+    this.refresh();
   }
 
   ocultarModal() {
@@ -1590,6 +1592,7 @@ export class ClientOverview implements OnInit {
     this.planPromo = 0
     this.tipoServicioPromo = 0
     this.modalRef.hide();
+    this.refresh();
 
   }
 
@@ -1838,6 +1841,7 @@ export class ClientOverview implements OnInit {
         }
       }
     }
+    this.refresh();
   }
 
   anularfactura(i, template7: TemplateRef<any>) {
@@ -1856,7 +1860,7 @@ export class ClientOverview implements OnInit {
           }
         },
         err => console.log(err))
-
+        this.refresh();
   }
 
   closeModal7() {
@@ -1867,6 +1871,7 @@ export class ClientOverview implements OnInit {
 
   generarAnulacionFactura() {
     this.facturacionService.anularFactura(this.facturaAnulacion, this.usuario.currentUser.id_user, this.RazonAnulacion).subscribe(res => console.log(res), err => console.log(err))
+    this.refresh();
   }
 
   /*Generacion de Factura*/
@@ -1912,7 +1917,12 @@ export class ClientOverview implements OnInit {
 
 
     if (this.tipoNotaSeleccionada == 1) {
-
+      this.productos.forEach(element => {
+        if (this.productoSeleccionado == element.id) {
+          let precioNota = element.precio_bs
+          this.notaService.guardarNota(this.tipoAjusteSeleccionado, this.id, this.notaSeleccionada, this.productoSeleccionado, precioNota).subscribe(res => this.closeCerrarNota(), err => console.log(err))
+        }
+      });
     } else {
       if (this.tipoNotaParcial == 1) {
         let calculo = this.porcentaje / 100
@@ -1942,7 +1952,7 @@ export class ClientOverview implements OnInit {
         this.notaService.guardarNota(this.tipoAjusteSeleccionado, this.id, this.notaSeleccionada, this.productoSeleccionado, precioNota).subscribe(res => this.closeCerrarNota(), err => console.log(err))
       }
     }
-
+    this.refresh();
   }
 
   closeCerrarNota() {
@@ -2190,6 +2200,7 @@ export class ClientOverview implements OnInit {
           },
           err => console.log(err))
     }
+    this.refresh();
   }
 
   EditarData() {
@@ -2250,6 +2261,7 @@ export class ClientOverview implements OnInit {
           this.closeModal6()
         },
         err => console.log(err))
+        this.refresh();
   }
 
   verificarCompromisoServicio(servicio: number) {
@@ -2260,6 +2272,7 @@ export class ClientOverview implements OnInit {
             this.compromisosServicios = res
         },
         err => console.log(err))
+        this.refresh();
   }
 
   EliminarCompromisoServicio(compromiso: number, servicio: number) {
@@ -2271,6 +2284,7 @@ export class ClientOverview implements OnInit {
             this.closeModal6()
         },
         err => console.log(err))
+        this.refresh();
   }
 
   EditarCompromisoServicio(compromiso: number, servicio: number) {
@@ -2281,6 +2295,7 @@ export class ClientOverview implements OnInit {
           console.log(res)
         },
         err => console.log(err))
+        this.refresh();
   }
 
   activarEdicion() {
@@ -2314,6 +2329,7 @@ export class ClientOverview implements OnInit {
 
     this.servicioService.generarCompromisoCorte(this.id, this.servicioCorteProgSeleccionado, this.usuario.currentUser.id_user, this.fechaCorteProgSeleccionado)
       .subscribe(res => this.closeModal8(), err => console.log(err))
+      this.refresh();
   }
 
   closeModal8() {
@@ -2338,6 +2354,7 @@ export class ClientOverview implements OnInit {
     this.descuentoService.guardarDescuento(this.facturaDescuentoSeleccionada, this.tipoDescuentoSeleccionado, this.diasSinServicio, this.comentarioDescuento,this.montoDescuento, this.usuario.currentUser.id_user).subscribe(res => console.log(res), err => console.log(err))
 
     this.closeModal10()
+    this.refresh();
   }
 
   closeModal10() {
@@ -2382,7 +2399,7 @@ export class ClientOverview implements OnInit {
           });
         });
     });
-
+    this.refresh();
   }
 
   status(row) {
@@ -2421,7 +2438,7 @@ export class ClientOverview implements OnInit {
         });
     });
     //this.myService.refresh();
-
+    this.refresh();
   }
 
   print(): void {

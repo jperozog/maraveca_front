@@ -93,6 +93,7 @@ export class DetallesInstalacionComponent implements OnInit {
   fconnector: number = 0
   busqueda:any = []
   DatosSeleccionados:any = []
+  instaladoresEncargados: any = []
 
 
 
@@ -111,6 +112,7 @@ export class DetallesInstalacionComponent implements OnInit {
     this.cierreI = false
     this.traerDatos()
     this.traerDatosHistorial()
+    this.traerInstaladoresEncargados()
   }
 
   traerDatos() {
@@ -119,6 +121,9 @@ export class DetallesInstalacionComponent implements OnInit {
 
   traerDatosHistorial(){
     this.instalacionesService.traerHistorial(this.id).subscribe(res => { console.log(res), this.historial = res}, err => console.log(err))
+  }
+  traerInstaladoresEncargados(){
+    this.instalacionesService.traerInstaladoresEncargados(this.id).subscribe(res =>  {console.log(res), this.instaladoresEncargados = res}, err => console.log(err))
   }
 
   
