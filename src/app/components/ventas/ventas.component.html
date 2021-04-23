@@ -20,7 +20,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-sm-8">
+  <div class="col-sm-9">
 
     <table class="table table-borderless tabla">
       <thead>
@@ -53,8 +53,10 @@
               class="md-24" aria-label="Editar Potencial">create</md-icon>
             <md-icon id="icono" (click)="agregarPromocion(venta.id_venta)" class="md-24" aria-label="Editar Potencial">
               star</md-icon>
-            <md-icon id="icono" (click)="agregartipo(venta.id_venta)" class="md-24" aria-label="Editar Potencial">
+            <md-icon id="icono" (click)="agregartipo(venta.id_venta,venta.cliente_venta)" class="md-24" aria-label="Editar Potencial">
               shopping_cart</md-icon>
+              <md-icon id="icono" (click)="agregarMensualidad(venta.id_venta,venta.id)" class="md-24" aria-label="Editar Potencial">
+                monetization_on</md-icon>
           </td>
         </tr>
       </tbody>
@@ -62,7 +64,7 @@
     <pagination-controls id="ventas" (pageChange)="p = $event"></pagination-controls>
   </div>
 
-  <div class="col-sm-3 form">
+  <div class="col-sm-2 form">
     <div *ngIf="form_promo" class="formulario_promo">
       <div class="card border-light mb-3">
         <div class="card-header">Agregar Promocion</div>
@@ -84,6 +86,7 @@
         </div>
       </div>
     </div>
+    
     <div *ngIf="form_tipo" class="formulario_promo">
       <div class="card border-light mb-3">
         <div class="card-header">Agregar tipo de Venta</div>
@@ -103,31 +106,143 @@
             <label for="">Ingresar Tasa de Cambio</label>
             <input type="number"  [(ngModel)]="tasaSeleccionada"
               class="form-control form-control-sm">
+              
           </div>
           <br>
 
-          <div *ngIf="tipoSeleccionado == 1 || tipoSeleccionado == 2 && tasaSeleccionada > 1000">
+
+          <!--div *ngIf="tipoSeleccionado == 1 || tipoSeleccionado == 2 && tasaSeleccionada > 1000">
             <button type="button" (click)="GuardarTipo()" class="btn btn-info btn">Guardar Tipo de Venta</button>
-          </div>
+          </div-->
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="row numerosSoporte">
-          <div class="col-12">
-            <p class="cantidadSoporte">{{ventasEnEspera}}</p>
-            <p>Ventas no Agendadas</p>
+    <div *ngIf="form_tipo" class="formulario_promo">
+      <div class="card border-light mb-3">
+        <div class="card-header">Agregar pago de instalación</div>
+        <div  class="card-body">
+
+          <div>
+            <label for="">Seleccionar Tipo</label>
+            <select [(ngModel)]="conceptoSeleccionado" class="form-control form-control-sm" required>
+              <option value="0"></option>
+              <option value="1">Instalacion inalambrica</option>
+              <option value="2">Instalacion de fibra</option>
+            </select>
           </div>
-          <hr>
-          <div class="col-12">
-            <p class="cantidadSoporte">{{ventasAgendadas}}</p>
-            <p>Ventas Instalacion Agendada</p>
+          <br>
+
+          <div>
+            <label for="">Ingresar monto $</label>
+            <input type="number"  [(ngModel)]="montoSeleccionado"
+              class="form-control form-control-sm">
           </div>
-          <div class="col-12">
-            <p class="cantidadSoporte">{{ventasTotales}}</p>
-            <p>Ventas Totales</p>
+          <br>
+          <label class="control-label" for="disabledInput">Metodo de Pago</label>
+          <select [(ngModel)]="tipoPagoSeleccionado" class="form-control" id="exampleSelect1" required>
+            <option *ngFor="let m of metodos" [value]="m.id_metodo">
+              {{ m.nombre_metodo }}
+            </option>
+          </select>
+          <div *ngIf="tipoPagoSeleccionado != 0">
+            <label class="col-form-label" for="inputDefault">Referencia</label>
+            <input [(ngModel)]="referenciaPago" type="text" class="form-control" placeholder="Referencia" id="inputDefault"
+              #cedula required />
+
+              <div *ngIf="tipoPagoSeleccionado == 1 || tipoPagoSeleccionado ==2 || tipoPagoSeleccionado == 3 || tipoPagoSeleccionado == 6">
+                <label class="col-form-label" for="inputDefault">Monto en BS</label>
+                <input [(ngModel)]="monto_bs" type="text" class="form-control" placeholder="Referencia" id="inputDefault"
+                  #cedula required />
+            <!--label class="col-form-label" for="inputDefault">Fecha Pago</label>
+            <my-date-picker [(ngModel)]="fechaPago" class="example-full-width" name="birthdate" mdInput required locale="es"
+              [options]="myDatePickerOptions"></my-date-picker-->
           </div>
+          <br>
+          <br>
+
+          <div *ngIf="tipoSeleccionado > 0  && conceptoSeleccionado > 0 && montoSeleccionado > 100">
+            <button type="button" (click)="GuardarDatosVenta()" class="btn btn-info btn">Guardar datos de venta</button>
+      </div>
+        </div>
+        
+      </div>
+      
+    </div>
+    
+    
+  </div>
+  <div *ngIf="form_abono" class="formulario_promo">
+    <div class="card border-light mb-3">
+      <div class="card-header">Agregar pago de Mensualidad</div>
+
+      <div class="card-body">
+        <label class="control-label" for="disabledInput">Metodo de Pago</label>
+        <select [(ngModel)]="MetodoSelected" class="form-control" id="exampleSelect1" required>
+          <option *ngFor="let m of metodos" [value]="m.id_metodo">
+            {{ m.nombre_metodo }}
+          </option>
+        </select>
+        <div *ngIf="MetodoSelected != 0">
+          <label class="col-form-label" for="inputDefault">Referencia</label>
+          <input [(ngModel)]="Referencia" type="text" class="form-control" placeholder="Referencia" id="inputDefault"
+            #cedula required />
+
+          <label class="col-form-label" for="inputDefault">Fecha Pago</label>
+          <my-date-picker [(ngModel)]="fecha" class="example-full-width" name="birthdate" mdInput required locale="es"
+            [options]="myDatePickerOptions"></my-date-picker>
+        </div>
+
+        <div *ngIf="fecha != 0 && Referencia != ' '">
+          <div class="form-group">
+            <label class="control-label">Monto</label>
+            <div class="form-group">
+              <div class="input-group mb-3">
+                <input (input)="hacerConversion($event.target.value)" [(ngModel)]="Monto" type="text"
+                  class="form-control" aria-label="Amount (to the nearest dollar)" />
+                <div class="input-group-append">
+                  <span class="input-group-text">.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p *ngIf="
+            fecha != 0 &&
+            Referencia != ' ' &&
+            (MetodoSelected == 1 ||
+              MetodoSelected == 2 ||
+              MetodoSelected == 3 ||
+              MetodoSelected == 6)
+          " class="text-success">
+          Conversion: {{ conversion | number: "1.2-2" }}$
+        </p>
+        <div *ngIf="pagoCargado" class="alert alert-dismissible alert-danger">
+          El Pago ya esta Registrado en el Sistema, Chequee Porfavor la Seccion de Pagos!, cliente con referencia:
+          {{referenciaCliente}}
+        </div>
+        <div *ngIf="Monto != 0">
+          <button (click)="registrarPago()" type="button" class="btn btn-info">
+            Cargar Pago
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="row numerosSoporte">
+        <div class="col-12">
+          <p class="cantidadSoporte">{{ventasEnEspera}}</p>
+          <p>Ventas no Agendadas</p>
+        </div>
+        <hr>
+        <div class="col-12">
+          <p class="cantidadSoporte">{{ventasAgendadas}}</p>
+          <p>Ventas Instalacion Agendada</p>
+        </div>
+        <div class="col-12">
+          <p class="cantidadSoporte">{{ventasTotales}}</p>
+          <p>Ventas Totales</p>
         </div>
       </div>
     </div>

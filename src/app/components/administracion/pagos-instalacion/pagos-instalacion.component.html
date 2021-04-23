@@ -1,0 +1,53 @@
+<div class="container-fluid">
+  <div class="row cont">
+    <div class="col-md-6 ">
+      <h3>Pagos de instalaciones</h3>
+    </div>
+    <div class="col-md-6">
+
+    </div>
+    <div class="col-md-12 tab-pane">
+      <table class="table table-borderless">
+        <thead class="table-dark">
+          <tr class="table-info">
+          <th scope="col">#</th>
+          <th scope="col">CLIENTE</th>
+          <th scope="col">CONCEPTO</th>
+          <th scope="col">MONTO</th>
+          <th scope="col">MONTO BS</th>
+          <th scope="col">VENDEDOR</th>
+          <th scope="col">TIPO</th>
+          <th scope="col">REFERENCIA</th>
+          <th scope="col">FECHA</th>
+          <th scope="col">ESTATUS</th>
+          <th scope="col">PROCESADO POR</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr style="cursor: pointer;" (click)="downloadPDF()" *ngFor="let s of pagosInsta | paginate: {id:'pagosInsta', itemsPerPage: 12, currentPage: p }"> 
+            <td>{{s.id}}</td>
+            <!--td *ngIf="s.kind == 'V' || s.kind == 'E'">{{s.nombre}} {{s.apellido}}</td>
+            <td *ngIf="s.kind == 'V-' || s.kind == 'J' || s.kind == 'G'">{{s.social}}</td-->
+            <td *ngIf='pagosInsta.social == null '>{{s.nombre}} {{s.apellido}}</td>
+            <td *ngIf='pagosInsta.social != null '>{{s.social}}</td>
+            <td *ngIf='s.concepto == 1'>Instalacion inalambrica</td>
+            <td *ngIf='s.concepto == 2'>Instalacion de fibra</td>
+
+            <td>{{s.monto}} $</td>
+            <td>{{s.total_bs}}</td>
+            <td>{{s.nombre_user}} {{s.apellido_user}}</td>
+            <td>{{s.nombre_metodo}}</td>
+            <td>{{s.ref}}</td>
+            <td>{{s.created_at}}</td>
+            <td *ngIf='s.estatus == 0' style="background-color: darkslategrey; color: floralwhite;">Por confirmar</td>
+            <td *ngIf='s.estatus == 1' style="background-color:deepskyblue; color: floralwhite;">Confirmada</td>
+            <td *ngIf='s.estatus == 2' style="background-color:red; color: floralwhite;">Negado</td>
+            <td *ngIf='s.estatus == 3' style="background-color:silver; color: floralwhite;">Exonerado</td>
+            <td *ngIf='s.user_adm == 0'>-</td>
+            <td *ngIf='s.user_adm != 0'>{{s.nombre}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
