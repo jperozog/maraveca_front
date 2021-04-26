@@ -10,7 +10,7 @@ import jsPDF from 'jspdf';
   styleUrls: ['./pagos-instalacion.component.css']
 })
 export class PagosInstalacionComponent implements OnInit {
-
+  p: number = 1
   pagosInsta: any = []
 
   constructor(

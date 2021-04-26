@@ -157,7 +157,9 @@ export class FacturacionComponent implements OnInit, OnDestroy {
         monto: e.monto,
         pagado: e.pagado,
         deuda:e.deuda,
-        estado: e.estado};
+        estado: e.estado,
+        tipo_servicio: e.tipoServicio,
+        creacion:e.created_at};
       this.prueba.push(this.dato)
     });
     this.excelService.exportAsExcelFile(this.prueba, 'Facturacion');

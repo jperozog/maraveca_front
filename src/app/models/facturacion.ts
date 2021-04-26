@@ -4,5 +4,7 @@ export interface Facturacion {
     monto:number,
     pagado:number,
     deuda:number,
-    estado:number
+    estado:number,
+    tipo_servicio: string,
+    creacion: string
 }

@@ -56,6 +56,7 @@ export class FacturacionNComponent implements OnInit {
     .subscribe((data) => {
       this.facturacion = data.json();
       this.facturacion_t = this.facturacion;
+      console.log(this.facturacion_t)
       this.update=false;
     // console.log(this.facturacion );
     });
@@ -115,7 +116,9 @@ export class FacturacionNComponent implements OnInit {
         monto: e.monto,
         pagado: e.pagado,
         deuda:e.deuda,
-        estado: e.estado};
+        estado: e.estado,
+        tipo_servicio: e.tipoServicio,
+        creacion:e.created_at};
       this.prueba.push(this.dato)
     });
     this.excelService.exportAsExcelFile(this.prueba, 'Facturacion');
