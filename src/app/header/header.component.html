@@ -140,6 +140,11 @@
     <span>Carga de Pagos Masiva</span>
   </button>
 
+  <button *ngIf="usuario.perm && usuario.perm.includes('clientes_w')" md-menu-item routerLink="/pagos-instalacion">
+    <md-icon>monetization_on</md-icon>
+    <span>Pagos de instalaciones</span>
+  </button>
+
   <button *ngIf="usuario.perm && usuario.perm.includes('inventarios')" md-menu-item routerLink="/zonas2">
     <md-icon>format_list_numbered</md-icon>
     <span>Inventario</span>

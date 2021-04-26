@@ -1,0 +1,28 @@
+.cont{
+    margin-top: 100px;
+    color: black;
+}
+
+.contenedor{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+th{
+    text-align: center;
+    color: black;
+}
+
+tr{
+    line-height: 1px;
+    min-height: 1px;
+    height: 1px;
+  }
+  
+td{
+    line-height: 1px;
+    min-height: 1px;
+    height: 1px;
+    padding: 15px;
+    text-align: center;
+  }
