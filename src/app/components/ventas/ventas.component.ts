@@ -8,6 +8,7 @@ import { CajaDistribucionService } from '../../services/caja-distribucion/caja-d
 import { ArticuloService } from '../../services/Inventario/articulo.service'
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { CargarPagosService } from '../../services/administrativo/cargar-pagos.service';
 
 @Component({
   selector: 'app-ventas',
@@ -15,6 +16,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
   styleUrls: ['./ventas.component.css']
 })
 export class VentasComponent implements OnInit {
+
+  /* ventas */
   ventas: any = []
   ventas2: any = []
   ventaSeleccionada: number = 0
@@ -62,16 +65,53 @@ export class VentasComponent implements OnInit {
   nombreSeleccionado:string = ""
   apellidoSeleccionado:string = ""
 
+  /* ventas*/
+  
+  /* pagos */
+  pagos:any = []
+  balance_in: any;
+  balance_in2: any;
+  busqueda:any
+  busquedaCliente:string = ""
+  r: number = 1;
+  e: number = 1;
+  bodyRegistroPagos: boolean = true
+  
+  config2 = {
+    backdrop: true,
+    ignoreBackdropClick: true,
+    class: 'gray modal-lg'
+  };
+  metodos: any = [];
+  Referencia: string = " ";
+  fechaDesde: any = 0;
+  fecha: any = 0;
+  MetodoSelected: number = 0;
+  Monto: number = 0
+  taza: number = 0
+  conversion: number = 0
+  pagoCargado: boolean = false
+  pagosExoneraciones:boolean = true
+  DatosSeleccionados: any = []
+  cargado:boolean = false
+  referenciaCliente:string = " "
+  clientePago:number
+  /* pagos */
+
    constructor(private usuario: AuthGuard,
     private ventasService: VentasService,
     private promocionService: PromocionesService,
     private modalService: BsModalService,
     private instalacionesService: InstalacionesService,
     private articuloService: ArticuloService,
+    private cargarPagos: CargarPagosService,
     private cajaServices: CajaDistribucionService) { }
 
   ngOnInit() {
     this.traerVentas()
+    this.procesosPagos()
+    this.form_promo = false
+    this.form_tipo = false
   }
 
   aggVenta(template: TemplateRef<any>) {
@@ -183,8 +223,9 @@ export class VentasComponent implements OnInit {
     this.ngOnInit()
   }
 
-  agregartipo(venta: number) {
+  agregartipo(venta: number,cliente:number) {
     this.ventaSeleccionada = venta
+    this.clientePago = cliente
     this.form_tipo = true
     this.tipoSeleccionado = 0
     this.tasaSeleccionada = 0
@@ -426,6 +467,75 @@ export class VentasComponent implements OnInit {
   closeModal2() {
     this.deseleccionarCliente()
     this.modalRef.hide()
+  }
+
+  procesosPagos(){
+    this.cargarPagos.traerPagosPendientes().subscribe(
+      res => 
+      {
+        console.log(res),
+        this.pagos = res
+      },
+       err => console.log(err))
+    this.cargarPagos.traerMetodos().subscribe(res => this.metodos = res, err => console.log(err))
+    this.cargarPagos.traerTaza().subscribe(res => { this.taza = res[0].valor, console.log(res) }, err => console.log(err))
+    this.cargarPagos.traerRegistroDePagos()
+      .subscribe(
+        res => {
+          console.log(res),
+         
+          this.balance_in = res["balanced"];
+          this.balance_in2 = res["balanced"];
+        },
+        err => console.log(err)
+      )
+  }
+
+
+  hacerConversion(e) {
+    this.conversion = this.Monto / this.taza
+  }
+  
+  registrarPago() {
+    this.pagoCargado = false
+    if(this.Referencia.charAt(0) == " "){
+      this.Referencia = this.Referencia.substring(1)
+    }
+
+    this.balance_in.forEach(e => {
+      if ((e.bal_comment_in == this.Referencia || e.bal_comment_mod_in_ == this.Referencia) ) {
+        this.pagoCargado = true
+        this.referenciaCliente = e.nombre +" "+e.apellido;
+      }
+    });
+
+    if (this.pagoCargado) {   
+    
+    }else{
+      this.cargarPagos.registrarPagoMasivo(
+        this.MetodoSelected,
+        this.Referencia,
+        this.fecha.epoc,
+        this.conversion,
+        this.Monto,
+        this.usuario.currentUser.id_user,
+        this.clientePago)
+        .subscribe(
+          res =>  {console.log(res),this.ocultar()},
+          err => console.log(err)
+        )
+
+    }
+
+  }
+
+  ocultar() {
+    this.Referencia = " ";
+    this.fecha = 0;
+    this.MetodoSelected = 0;
+    this.Monto = 0
+    this.pagoCargado= false
+    this.ngOnInit()
   }
 
 

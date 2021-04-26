@@ -15,7 +15,7 @@
 
   <div class="card" *ngIf="datos">
 
-    <!-- card de graficos -->
+    <!-- card de graficos-->
     <md-card class="example-card card-body text-center">
       <md-card-header>
         <md-card-title><h4>{{tittle}}</h4></md-card-title>
@@ -41,6 +41,7 @@
       </div>
     </md-card-content>
   </md-card>
+   
 </div>
 
 
@@ -49,7 +50,7 @@
   <!-- card de Tabla -->
   <md-card class="example-card card-body text-center">
     <md-card-header>
-      <md-card-title><h4>Tabla de estado a 4 meses</h4></md-card-title>
+      <md-card-title><h4>Tabla de estado a 3 meses</h4></md-card-title>
       <span class="example-spacer" style="text-align: center;"></span>
     </md-card-header>
 
@@ -74,7 +75,7 @@
         </thead>
         <tbody>
 
-          <tr *ngFor="let item of data; let i =index">
+          <tr *ngFor="let item of arrayObjetos; let i =index">
             <td class="fac pointer hover" style="text-align:center;" (click)="changeTYPE(item)">
               {{fechas[i].fecha}}
             </td>
@@ -93,6 +94,7 @@
 
     </md-card-content>
   </md-card>
+
 </div>
 
 </div>

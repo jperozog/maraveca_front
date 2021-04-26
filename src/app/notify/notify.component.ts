@@ -340,7 +340,7 @@ export class sms_morosoComponent {
         console.log(this.txt);
         console.log(this.txt.mensaje);
         console.log(this.txt.tipo_sms);
-        this.messaje = this.txt.mensaje;
+        this.messaje = this.messaje;
         console.log(this.messaje);
       });
     /*this.notify = this.fb.group({

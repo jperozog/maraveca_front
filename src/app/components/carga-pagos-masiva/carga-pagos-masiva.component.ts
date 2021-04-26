@@ -43,6 +43,8 @@ export class CargaPagosMasivaComponent implements OnInit {
   pagoCargado: boolean = false
   pagosExoneraciones:boolean = true
   DatosSeleccionados: any = []
+  cargado:boolean = false
+  referenciaCliente:string = " "
   constructor(
       private modalService: BsModalService,
       private cargarPagos: CargarPagosService,
@@ -94,7 +96,8 @@ export class CargaPagosMasivaComponent implements OnInit {
         res => {
           console.log(res),
             this.clientes = res["clientes"],
-            this.clientes2 = res["clientes"]
+            this.clientes2 = res["clientes"],
+            this.cargado = true
         }
         ,
         err => console.log(err))
@@ -103,11 +106,16 @@ export class CargaPagosMasivaComponent implements OnInit {
   onSearchDatos(e: string) {
    
       this.busqueda = []
-      this.clientes.filter(el => {
-        if (el["nombre"].toUpperCase().includes(e.toUpperCase()) || el["apellido"].toUpperCase().includes(e.toUpperCase()) || el["dni"].includes(e)) {
-          this.busqueda.push(el)
-        }
-      });
+      if(e == " "){
+        this.busqueda = []
+      }else{
+        this.clientes.filter(el => {
+          if (el["nombre"].toUpperCase().includes(e.toUpperCase()) || el["apellido"].toUpperCase().includes(e.toUpperCase()) || el["dni"].includes(e)) {
+            this.busqueda.push(el)
+          }
+        });
+      }
+     
   }
 
 
@@ -127,14 +135,15 @@ export class CargaPagosMasivaComponent implements OnInit {
   }
   
   registrarPago() {
-
+    this.pagoCargado = false
     if(this.Referencia.charAt(0) == " "){
       this.Referencia = this.Referencia.substring(1)
     }
 
     this.balance_in.forEach(e => {
-      if ((e.bal_comment_in == this.Referencia || e.bal_comment_mod_in_ == this.Referencia) && e.bal_stat_in == 1 ) {
+      if ((e.bal_comment_in == this.Referencia || e.bal_comment_mod_in_ == this.Referencia) ) {
         this.pagoCargado = true
+        this.referenciaCliente = e.nombre +" "+e.apellido;
       }
     });
 

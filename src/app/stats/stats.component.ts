@@ -20,6 +20,7 @@ import { CustomValidators } from 'ngx-custom-validators';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { PagoComisionesService } from '../services/pago-comisiones/pago-comisiones.service';
+import {StatsService} from '../services/stats/stats.service';
 
 
 
@@ -215,17 +216,24 @@ export class StatsdlComponent {
   chart: BaseChartDirective;
   data: any = null;
   fechas: any = null;
+  datosFacturas: any = []
   search: string = '';
   pagado = [];
-  tittle = "Grafico Comparativo 4 meses"
+  tittle = "Grafico Comparativo 3 meses"
   facturado = [];
   numero_pagos = [];
   monto_pagos = [];
   dias_pagos = [];
+  facturadoMes: any
+  pagadoMes:any
   _chartData: any;
+  arrayObjetos:any = []
+    
   datos: boolean = false
   lineChartType: string = 'line';
-  constructor(private http: Http, public usuario: AuthGuard, public dialog: MdDialog, public snackBar: MdSnackBar, public router: Router) {
+  listaFacturas:any = []
+  constructor(private http: Http, public usuario: AuthGuard, public dialog: MdDialog, public snackBar: MdSnackBar, public router: Router,private statsService:StatsService) {
+    /*
     this.snackBar.open("Cargando AccessPoints", null, {
       duration: 2000,
     });
@@ -255,6 +263,55 @@ export class StatsdlComponent {
     this.snackBar.open("AccessPoints Cargados", null, {
       duration: 2000,
     });
+    */
+  }
+
+  ngOnInit(){
+    this.statsService.traerData().subscribe(
+      res=>{
+        console.log(res)
+        this.fechas = res["fechas"]
+        this.datosFacturas =  res["datos"]
+        this.labels = [this.fechas[2].fecha, this.fechas[1].fecha, this.fechas[0].fecha]
+
+        this.datosFacturas.forEach(e => {
+          let contadorFacturado = 0
+          let contadorPagado = 0
+          e.forEach(el => {
+            contadorFacturado = contadorFacturado + el.monto;
+            contadorPagado = contadorPagado + el.pagado;
+          });
+          this.facturado.push(contadorFacturado)
+          this.pagado.push(contadorPagado)
+
+           let objeto = {
+            facturado: contadorFacturado,
+            pagado: contadorPagado
+          }
+  
+          this.arrayObjetos.push(objeto)
+        });
+        console.log(this.facturado)
+        console.log(this.pagado)
+        console.log(this.arrayObjetos)
+        
+        let _chartData = [
+          {
+            label: 'Facturado',
+            data: [this.facturado[2], this.facturado[1], this.facturado[0]]
+          },
+          {
+            label: 'Pagado',
+            data: [this.pagado[2], this.pagado[1], this.pagado[0]]
+          },
+        ]
+        this.datos = true
+        this.chartData = _chartData;
+        
+      },
+      err=>console.log(err))
+
+
   }
 
   // ADD CHART OPTIONS.

@@ -186,10 +186,10 @@
           (click)="openModal8(template8,id_transferencia)" class="btn btn-info">
           <i id="icono" class="fa fa-user-circle"></i>
         </button>
-        <button *ngIf="(responsable != usuario.currentUser.id_user) && estatus == 1 && visualizar2 == false"
+        <button *ngIf=" estatus == 1 && visualizar2 == false"
           (click)="openModal(template)" type="button" class="btn btn-info">Confirmar Traslado Exitoso!
         </button>
-        <button *ngIf="(responsable != usuario.currentUser.id_user) && estatus == 1 && visualizar2 == false"
+        <button *ngIf=" estatus == 1 && visualizar2 == false"
           (click)="openModal2(template2)" type="button" class="btn btn-warning">
           Confirmar Traslado con Problemas!
         </button>

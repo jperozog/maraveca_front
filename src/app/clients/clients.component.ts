@@ -751,7 +751,7 @@ export class ClientOverview implements OnInit {
   historial: any
   balance_in: any;
   exoneraciones_in: any;
-  exoneraciones:any;
+  exoneraciones: any;
   adicionales: any;
   srv_cli: any;
   myDatePickerOptions: IMyDpOptions = {
@@ -810,7 +810,7 @@ export class ClientOverview implements OnInit {
   taza: number = 0
   conversion: number = 0
   pagoCargado: boolean = false
-  pagosExoneraciones:boolean = true
+  pagosExoneraciones: boolean = true
   /*Registro de Pago*/
 
   /*Promociones*/
@@ -954,7 +954,7 @@ export class ClientOverview implements OnInit {
   tipoDescuentoSeleccionado: number = 0
   diasSinServicio: number = 0
   comentarioDescuento: string = ""
-  montoDescuento:number = 0
+  montoDescuento: number = 0
   /*Descuentos*/
 
 
@@ -1021,7 +1021,7 @@ export class ClientOverview implements OnInit {
     this.pagadoin = 0;
     this.facturadoin = 0;
 
-   
+
     this.cargarPagos.traerMetodos().subscribe(res => this.metodos = res, err => console.log(err))
     this.cargarPagos.traerTaza().subscribe(res => { this.taza = res[0].valor, console.log(res) }, err => console.log(err))
   }
@@ -1178,7 +1178,7 @@ export class ClientOverview implements OnInit {
 
         })
 
-      
+
 
 
 
@@ -1480,7 +1480,7 @@ export class ClientOverview implements OnInit {
 
   mostrarCuerpoRegistroPago() {
     this.bodyRegistroPagos = !this.bodyRegistroPagos
-    
+
   }
 
 
@@ -1495,19 +1495,20 @@ export class ClientOverview implements OnInit {
   }
   registrarPago() {
 
-    if(this.Referencia.charAt(0) == " "){
+    if (this.Referencia.charAt(0) == " ") {
       this.Referencia = this.Referencia.substring(1)
     }
 
     this.balance_in.forEach(e => {
-      if ((e.bal_comment_in == this.Referencia || e.bal_comment_mod_in_ == this.Referencia) && e.bal_stat_in == 1 ) {
+      if (e.bal_comment_in == this.Referencia || e.bal_comment_mod_in_ == this.Referencia) {
         this.pagoCargado = true
       }
     });
 
-    if (this.pagoCargado) {   
-    
-    }else{
+    if (this.pagoCargado) {
+
+    } else {
+        
       this.cargarPagos.registrarPago(
         this.MetodoSelected,
         this.Referencia,
@@ -1517,13 +1518,11 @@ export class ClientOverview implements OnInit {
         this.usuario.currentUser.id_user,
         this.cliente.id)
         .subscribe(
-          res => console.log(res),
-          err => console.log(err)
+          res => { console.log(res), this.ocultarModal() },
+          err => { console.log(err), this.ocultarModal() }
         )
-
-      this.ocultarModal()
+        this.ocultarModal()
     }
-    this.refresh();
   }
 
   ocultarModal() {
@@ -1531,9 +1530,9 @@ export class ClientOverview implements OnInit {
     this.fecha = 0;
     this.MetodoSelected = 0;
     this.Monto = 0
-    this.pagoCargado= false
+    this.pagoCargado = false
     this.modalRef.hide();
-
+    this.ngOnInit()
   }
 
   cambiarPagosExoneraciones() {
@@ -1573,27 +1572,25 @@ export class ClientOverview implements OnInit {
 
 
   RealizarPromocion() {
-    console.log(this.id)
-    console.log(this.fecha.epoc);
-    console.log(this.usuario.currentUser.id_user)
-    console.log(this.comentario)
-    console.log(this.planPromo)
-    console.log(this.servicioPromo)
 
     this.FacPromoService.guardarDataPromo(this.id, this.servicioPromo, this.planPromo, this.fecha.epoc, this.usuario.currentUser.id_user, this.comentario)
       .subscribe(
-        res => console.log(res),
-        err => console.log(err)
+        res => { console.log(res), this.closeModalPromocion() },
+        err => { console.log(err), this.closeModalPromocion() }
       )
 
+
+
+  }
+
+  closeModalPromocion() {
     this.comentario = 0
     this.fecha = 0
     this.servicioPromo = 0
     this.planPromo = 0
     this.tipoServicioPromo = 0
     this.modalRef.hide();
-    this.refresh();
-
+    this.ngOnInit();
   }
 
   verificarPromo(id) {
@@ -1643,7 +1640,7 @@ export class ClientOverview implements OnInit {
     this.modalRef.hide();
     this.facBlanco = 0
     this.facBlancoTipo = 0
-
+    this.ngOnInit()
   }
 
   servicioCliente() {
@@ -1704,27 +1701,26 @@ export class ClientOverview implements OnInit {
       if (this.FacturaSeleccionada == 2) {
         this.facturacionService.generarFactura(this.id, "", "", "", this.ServiciosClientes[0].id_srv, this.FacturaSeleccionada, this.usuario.currentUser.id_user)
           .subscribe(
-            res => console.log(res),
-            err => console.log(err)
+            res => { console.log(res), this.ocultarModal3() },
+            err => { console.log(err), this.ocultarModal3() }
           )
-        this.ocultarModal3()
       }
       if (this.FacturaSeleccionada == 1 || this.FacturaSeleccionada == 4) {
         this.facturacionService.generarFactura(this.id, "", this.fechaFDesde.formatted, this.fechaFHasta.formatted, this.ServiciosClientes[0].id_srv, this.FacturaSeleccionada, this.usuario.currentUser.id_user)
           .subscribe(
-            res => console.log(res),
-            err => console.log(err)
+            res => { console.log(res), this.ocultarModal3() },
+            err => { console.log(err), this.ocultarModal3() }
           )
-        this.ocultarModal3()
+
       }
 
       if (this.FacturaSeleccionada == 3) {
         this.facturacionService.generarFactura(this.id, "", this.fechaFDesde.formatted, this.fechaFDesde.formatted, this.ServiciosClientes[0].id_srv, this.FacturaSeleccionada, this.usuario.currentUser.id_user)
           .subscribe(
-            res => console.log(res),
-            err => console.log(err)
+            res => { console.log(res), this.ocultarModal3() },
+            err => { console.log(err), this.ocultarModal3() }
           )
-        this.ocultarModal3()
+
       }
 
       if (this.FacturaSeleccionada == 5) {
@@ -1732,17 +1728,17 @@ export class ClientOverview implements OnInit {
         if (this.facBlanco == 2) {
           this.facturacionService.generarFacturaBlanco(this.id, "", this.FacturaSeleccionada, this.facBlanco, 2, this.usuario.currentUser.id_user)
             .subscribe(
-              res => console.log(res),
-              err => console.log(err)
+              res => { console.log(res), this.ocultarModal3() },
+              err => { console.log(err), this.ocultarModal3() }
             )
-          this.ocultarModal3()
+
         } else {
           this.facturacionService.generarFacturaBlanco(this.id, "", this.FacturaSeleccionada, this.facBlanco, this.facBlancoTipo, this.usuario.currentUser.id_user)
             .subscribe(
-              res => console.log(res),
-              err => console.log(err)
+              res => { console.log(res), this.ocultarModal3() },
+              err => { console.log(err), this.ocultarModal3() }
             )
-          this.ocultarModal3()
+
         }
       }
 
@@ -1752,27 +1748,27 @@ export class ClientOverview implements OnInit {
         if (this.FacturaSeleccionada == 2) {
           this.facturacionService.generarFactura(this.id, "", "", "", this.ServicioSeleccionado, this.FacturaSeleccionada, this.usuario.currentUser.id_user)
             .subscribe(
-              res => console.log(res),
-              err => console.log(err)
+              res => { console.log(res), this.ocultarModal3() },
+              err => { console.log(err), this.ocultarModal3() }
             )
-          this.ocultarModal3()
+
         }
         if (this.FacturaSeleccionada == 1 || this.FacturaSeleccionada == 4) {
           this.facturacionService.generarFactura(this.id, "", this.fechaFDesde.formatted, this.fechaFHasta.formatted, this.nservicio, this.FacturaSeleccionada, this.usuario.currentUser.id_user)
             .subscribe(
-              res => console.log(res),
-              err => console.log(err)
+              res => { console.log(res), this.ocultarModal3() },
+              err => { console.log(err), this.ocultarModal3() }
             )
-          this.ocultarModal3()
+
         }
 
         if (this.FacturaSeleccionada == 3) {
           this.facturacionService.generarFactura(this.id, "", this.fechaFDesde.formatted, this.fechaFDesde.formatted, this.ServicioSeleccionado, this.FacturaSeleccionada, this.usuario.currentUser.id_user)
             .subscribe(
-              res => console.log(res),
-              err => console.log(err)
+              res => { console.log(res), this.ocultarModal3() },
+              err => { console.log(err), this.ocultarModal3() }
             )
-          this.ocultarModal3()
+
         }
 
         if (this.FacturaSeleccionada == 5) {
@@ -1780,17 +1776,17 @@ export class ClientOverview implements OnInit {
           if (this.facBlanco == 2) {
             this.facturacionService.generarFacturaBlanco(this.id, "", this.FacturaSeleccionada, this.facBlanco, 2, this.usuario.currentUser.id_user)
               .subscribe(
-                res => console.log(res),
-                err => console.log(err)
+                res => { console.log(res), this.ocultarModal3() },
+                err => { console.log(err), this.ocultarModal3() }
               )
-            this.ocultarModal3()
+
           } else {
             this.facturacionService.generarFacturaBlanco(this.id, "", this.FacturaSeleccionada, this.facBlanco, this.facBlancoTipo, this.usuario.currentUser.id_user)
               .subscribe(
-                res => console.log(res),
-                err => console.log(err)
+                res => { console.log(res), this.ocultarModal3() },
+                err => { console.log(err), this.ocultarModal3() }
               )
-            this.ocultarModal3()
+
           }
         }
 
@@ -1798,27 +1794,27 @@ export class ClientOverview implements OnInit {
         if (this.FacturaSeleccionada == 2) {
           this.facturacionService.generarFactura(this.id, "", "", "", this.nservicio, this.FacturaSeleccionada, this.usuario.currentUser.id_user)
             .subscribe(
-              res => console.log(res),
-              err => console.log(err)
+              res => { console.log(res), this.ocultarModal3() },
+              err => { console.log(err), this.ocultarModal3() }
             )
-          this.ocultarModal3()
+
         }
         if (this.FacturaSeleccionada == 1 || this.FacturaSeleccionada == 4) {
           this.facturacionService.generarFactura(this.id, "", this.fechaFDesde.formatted, this.fechaFHasta.formatted, this.nservicio, this.FacturaSeleccionada, this.usuario.currentUser.id_user)
             .subscribe(
-              res => console.log(res),
-              err => console.log(err)
+              res => { console.log(res), this.ocultarModal3() },
+              err => { console.log(err), this.ocultarModal3() }
             )
-          this.ocultarModal3()
+
         }
 
         if (this.FacturaSeleccionada == 3) {
           this.facturacionService.generarFactura(this.id, "", this.fechaFDesde.formatted, this.fechaFDesde.formatted, this.nservicio, this.FacturaSeleccionada, this.usuario.currentUser.id_user)
             .subscribe(
-              res => console.log(res),
-              err => console.log(err)
+              res => { console.log(res), this.ocultarModal3() },
+              err => { console.log(err), this.ocultarModal3() }
             )
-          this.ocultarModal3()
+
         }
 
         if (this.FacturaSeleccionada == 5) {
@@ -1826,22 +1822,22 @@ export class ClientOverview implements OnInit {
           if (this.facBlanco == 2) {
             this.facturacionService.generarFacturaBlanco(this.id, "", this.FacturaSeleccionada, this.facBlanco, 2, this.usuario.currentUser.id_user)
               .subscribe(
-                res => console.log(res),
-                err => console.log(err)
+                res => { console.log(res), this.ocultarModal3() },
+                err => { console.log(err), this.ocultarModal3() }
               )
-            this.ocultarModal3()
+
           } else {
             this.facturacionService.generarFacturaBlanco(this.id, "", this.FacturaSeleccionada, this.facBlanco, this.facBlancoTipo, this.usuario.currentUser.id_user)
               .subscribe(
-                res => console.log(res),
-                err => console.log(err)
+                res => { console.log(res), this.ocultarModal3() },
+                err => { console.log(err), this.ocultarModal3() }
               )
-            this.ocultarModal3()
+
           }
         }
       }
     }
-    this.refresh();
+
   }
 
   anularfactura(i, template7: TemplateRef<any>) {
@@ -1860,18 +1856,18 @@ export class ClientOverview implements OnInit {
           }
         },
         err => console.log(err))
-        this.refresh();
+    this.refresh();
   }
 
   closeModal7() {
     this.modalRef7.hide()
     this.RazonAnulacion = ""
+    this.ngOnInit()
 
   }
 
   generarAnulacionFactura() {
-    this.facturacionService.anularFactura(this.facturaAnulacion, this.usuario.currentUser.id_user, this.RazonAnulacion).subscribe(res => console.log(res), err => console.log(err))
-    this.refresh();
+    this.facturacionService.anularFactura(this.facturaAnulacion, this.usuario.currentUser.id_user, this.RazonAnulacion).subscribe(res => {console.log(res),this.closeModal7()}, err => {console.log(err),this.closeModal7()})
   }
 
   /*Generacion de Factura*/
@@ -1952,7 +1948,6 @@ export class ClientOverview implements OnInit {
         this.notaService.guardarNota(this.tipoAjusteSeleccionado, this.id, this.notaSeleccionada, this.productoSeleccionado, precioNota).subscribe(res => this.closeCerrarNota(), err => console.log(err))
       }
     }
-    this.refresh();
   }
 
   closeCerrarNota() {
@@ -1964,6 +1959,7 @@ export class ClientOverview implements OnInit {
     this.dias = 0
     this.montoNota = 0
     this.modalRef.hide()
+    this.ngOnInit()
 
   }
 
@@ -2205,7 +2201,7 @@ export class ClientOverview implements OnInit {
 
   EditarData() {
     this.servicioEditable["id_usuario"] = this.usuario.currentUser.id_user
-    this.servicioService.editarData(this.servicioEditable).subscribe(res => { console.log(res), this.closeModal2() }, err => console.log(err))
+    this.servicioService.editarData(this.servicioEditable).subscribe(res => { console.log(res), this.closeModal2() }, err => { console.log(err), this.closeModal2() })
   }
 
   closeModal2() {
@@ -2213,6 +2209,7 @@ export class ClientOverview implements OnInit {
     this.planSeleccionado = 0
     this.isCheckedS = false
     this.modalRef.hide()
+    this.ngOnInit()
   }
 
   openModal9(template9: TemplateRef<any>, id: number) {
@@ -2227,9 +2224,8 @@ export class ClientOverview implements OnInit {
 
   guardarFacturaPro() {
     this.servicioService.generarFacturaProrateada(this.usuario.currentUser.id_user, this.id, this.servicioProSeleccionado, this.facturaProSeleccionada, this.tipoPlanProSeleccionado, this.planProSeleccionado)
-      .subscribe(res => console.log(res), err => console.log(err))
+      .subscribe(res => { console.log(res), this.closeModal9() }, err => { console.log(err), this.closeModal9() })
 
-    this.closeModal9()
   }
 
   closeModal9() {
@@ -2238,6 +2234,7 @@ export class ClientOverview implements OnInit {
     this.tipoPlanProSeleccionado = 0
     this.planProSeleccionado = 0
     this.modalRef9.hide()
+    this.ngOnInit()
 
   }
 
@@ -2260,8 +2257,10 @@ export class ClientOverview implements OnInit {
           console.log(res)
           this.closeModal6()
         },
-        err => console.log(err))
-        this.refresh();
+        err => {
+          console.log(err),
+            this.closeModal6()
+        })
   }
 
   verificarCompromisoServicio(servicio: number) {
@@ -2270,9 +2269,9 @@ export class ClientOverview implements OnInit {
         res => {
           console.log(res),
             this.compromisosServicios = res
+          this.closeModal6()
         },
         err => console.log(err))
-        this.refresh();
   }
 
   EliminarCompromisoServicio(compromiso: number, servicio: number) {
@@ -2284,7 +2283,7 @@ export class ClientOverview implements OnInit {
             this.closeModal6()
         },
         err => console.log(err))
-        this.refresh();
+    this.refresh();
   }
 
   EditarCompromisoServicio(compromiso: number, servicio: number) {
@@ -2293,9 +2292,10 @@ export class ClientOverview implements OnInit {
       .subscribe(
         res => {
           console.log(res)
+          this.closeModal6()
         },
         err => console.log(err))
-        this.refresh();
+    this.refresh();
   }
 
   activarEdicion() {
@@ -2309,6 +2309,7 @@ export class ClientOverview implements OnInit {
     this.fechaLimiteCompromisoServicio = "",
       this.compromisosServicios = []
     this.modalRef6.hide()
+    this.ngOnInit()
 
   }
 
@@ -2322,20 +2323,16 @@ export class ClientOverview implements OnInit {
 
 
   generarCorteProgramado() {
-    console.log(this.servicioCorteProgSeleccionado)
-    console.log(this.fechaCorteProgSeleccionado)
-    console.log(this.id)
-    console.log(this.usuario.currentUser.id_user)
 
     this.servicioService.generarCompromisoCorte(this.id, this.servicioCorteProgSeleccionado, this.usuario.currentUser.id_user, this.fechaCorteProgSeleccionado)
-      .subscribe(res => this.closeModal8(), err => console.log(err))
-      this.refresh();
+      .subscribe(res => this.closeModal8(), err => { console.log(err), this.closeModal8() })
   }
 
   closeModal8() {
     this.servicioCorteProgSeleccionado = 0
     this.fechaCorteProgSeleccionado = ""
     this.modalRef8.hide()
+    this.ngOnInit()
 
   }
   /*Cortes Programados*/
@@ -2351,10 +2348,11 @@ export class ClientOverview implements OnInit {
   guardarDescuento() {
 
 
-    this.descuentoService.guardarDescuento(this.facturaDescuentoSeleccionada, this.tipoDescuentoSeleccionado, this.diasSinServicio, this.comentarioDescuento,this.montoDescuento, this.usuario.currentUser.id_user).subscribe(res => console.log(res), err => console.log(err))
+    this.descuentoService.guardarDescuento(this.facturaDescuentoSeleccionada, this.tipoDescuentoSeleccionado, this.diasSinServicio, this.comentarioDescuento, this.montoDescuento, this.usuario.currentUser.id_user)
+      .subscribe(
+        res => { console.log(res), this.closeModal10() },
+        err => { console.log(err), this.closeModal10() })
 
-    this.closeModal10()
-    this.refresh();
   }
 
   closeModal10() {
@@ -2364,6 +2362,7 @@ export class ClientOverview implements OnInit {
     this.comentarioDescuento = ""
     this.montoDescuento = 0
     this.modalRef10.hide()
+    this.ngOnInit()
   }
 
   /*Descuentos*/
@@ -3272,7 +3271,7 @@ export class Anularprog_cort {
     this.http.put(environment.apiEndpoint + "cortes_prog/anular/" + this.data.id_prog, this.datat).subscribe((data) => {
       this.dialogRef.close();
     })
-    //this.myService.refresh();
+
   }
 
   onNoClick(): void {
