@@ -30,6 +30,12 @@ export class VentasComponent implements OnInit {
   promociones: any = []
   promoSeleccionada: number = 0
   tipoSeleccionado: number = 0
+  conceptoSeleccionado: number = 0
+  montoSeleccionado: number = 0
+  monto_bs: number = 0
+  tipoPagoSeleccionado: number = 0
+  estatusPagoInst: number = 0
+  referenciaPago: string = " ";
   tasaSeleccionada: number = 0
   modalRef: BsModalRef;
   config = {
@@ -96,6 +102,7 @@ export class VentasComponent implements OnInit {
   cargado:boolean = false
   referenciaCliente:string = " "
   clientePago:number
+  form_abono: boolean = false
   /* pagos */
 
    constructor(private usuario: AuthGuard,
@@ -112,6 +119,7 @@ export class VentasComponent implements OnInit {
     this.procesosPagos()
     this.form_promo = false
     this.form_tipo = false
+    this.form_abono = false
   }
 
   aggVenta(template: TemplateRef<any>) {
@@ -128,6 +136,28 @@ export class VentasComponent implements OnInit {
         ,
         err => console.log(err))
 
+  }
+  GuardarDatosVenta(){
+    this.GuardarTipo()
+    this.GuardarPagoInstalacion()
+    this.ngOnInit()
+  }
+
+  GuardarPagoInstalacion(){
+
+    if( this.tipoPagoSeleccionado == 14){
+      this.estatusPagoInst = 1
+    }else{
+      this.estatusPagoInst = 0
+    }
+
+    this.ventasService.guardarPagoInstalacion(this.ventaSeleccionada, this.clientePago, this.conceptoSeleccionado, this.montoSeleccionado,this.monto_bs, this.usuario.currentUser.id_user, this.tipoPagoSeleccionado, this.referenciaPago, this.estatusPagoInst).subscribe(res => console.log(res), err => console.log(err))
+    this.conceptoSeleccionado = 0
+    this.montoSeleccionado = 0
+    this.monto_bs = 0
+    this.tipoSeleccionado = 0
+    this.tipoPagoSeleccionado = 0
+    this.referenciaPago = ""
   }
 
   SeleccionCliente(id: number, dni: string, nombre: string, apellido: string) {
@@ -227,6 +257,14 @@ export class VentasComponent implements OnInit {
     this.ventaSeleccionada = venta
     this.clientePago = cliente
     this.form_tipo = true
+    this.tipoSeleccionado = 0
+    this.tasaSeleccionada = 0
+  }
+
+  agregarMensualidad(venta: number, cliente: number){
+    this.ventaSeleccionada = venta
+    this.clientePago = cliente
+    this.form_abono = true
     this.tipoSeleccionado = 0
     this.tasaSeleccionada = 0
   }
