@@ -24,7 +24,7 @@
         </tr>
         </thead>
         <tbody>
-          <tr style="cursor: pointer;" (click)="downloadPDF()" *ngFor="let s of pagosInsta | paginate: {id:'pagosInsta', itemsPerPage: 12, currentPage: p }"> 
+          <tr style="cursor: pointer;" (click)="opciones(s.id,s.estatus,template)" *ngFor="let s of pagosInsta | paginate: {id:'pagosInsta', itemsPerPage: 12, currentPage: p }"> 
             <td>{{s.id}}</td>
             <!--td *ngIf="s.kind == 'V' || s.kind == 'E'">{{s.nombre}} {{s.apellido}}</td>
             <td *ngIf="s.kind == 'V-' || s.kind == 'J' || s.kind == 'G'">{{s.social}}</td-->
@@ -51,3 +51,18 @@
     </div>
   </div>
 </div>
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Pago numero: {{id_pago}}</p>
+    <div *ngIf='estatus == 1 || estatus == 2 || estatus == 3'><p>Ya este pago fue procesado</p></div>
+    <div *ngIf='estatus == 0'>
+    <button type="button" class="btn btn-info" (click)="procesarPago(id_pago,1)">Aprobar</button>
+    <button type="button" class="btn btn-danger" (click)="procesarPago(id_pago,2)">Negar</button>
+    <button type="button" class="btn btn-success" (click)="procesarPago(id_pago,3)">Exonerar</button>
+  </div>
+  <br>
+  <button type="button" class="btn btn-dark" (click)="downloadPDF()">Descargar soporte de pago</button>
+    
+  </div>
+</ng-template>

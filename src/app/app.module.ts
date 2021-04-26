@@ -215,8 +215,8 @@ import {VentasService} from './services/ventas/ventas.service'
 import { FacturacionNComponent } from './facturacion-n/facturacion-n.component';
 import {PresupuestosService} from './services/presupuestos/presupuestos.service';
 import { CargaPagosMasivaComponent } from './components/carga-pagos-masiva/carga-pagos-masiva.component'
-import {StatsService} from './services/stats/stats.service'
-import {PagosInstalacionComponent} from './components/administracion/pagos-instalacion/pagos-instalacion.component'
+import {StatsService} from './services/stats/stats.service';
+import { PagosInstalacionComponent } from './components/administracion/pagos-instalacion/pagos-instalacion.component'
 
 //registerLocaleData(localeEs);
 
@@ -401,7 +401,7 @@ import {PagosInstalacionComponent} from './components/administracion/pagos-insta
     VentasComponent,
     FacturacionNComponent,
     CargaPagosMasivaComponent,
-    PagosInstalacionComponent
+    PagosInstalacionComponent,
   ],
   imports: [
     CustomFormsModule,

@@ -32,6 +32,10 @@ export class VentasService {
     return this.http.post(environment.apiEndpoint+"guardarPagoInstalacion",{venta,cliente,concepto,monto,monto_bs,user,tipo,ref,estatus})
   }
 
+  updatePagoInstalacion(id:number,estatus:number){
+    return this.http.post(environment.apiEndpoint+"updatePagoInstalacion",{id,estatus})
+  }
+
   ventaInstalacion(
     id_user:number,
      id_cliente:number,
