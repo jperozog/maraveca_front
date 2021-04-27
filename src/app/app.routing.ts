@@ -70,6 +70,7 @@ import { FacturacionNComponent } from './facturacion-n/facturacion-n.component';
 import {CargaPagosMasivaComponent} from './components/carga-pagos-masiva/carga-pagos-masiva.component'
 import {PagosInstalacionComponent} from './components/administracion/pagos-instalacion/pagos-instalacion.component';
 
+
 const appRoutes: Routes = [
   {path: '', component: LayoutComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
@@ -174,7 +175,7 @@ const appRoutes: Routes = [
   {path: 'Anular_cort_prog', component: Anularprog_cort},
   {path: 'program_corte', component: program_corte},
   {path: 'cortes_programados', component: cortes_programados},
-  {path: 'admin', component: ConfigAdminComponent, canActivate: [AuthGuard]},
+  {path: 'config_admin', component: ConfigAdminComponent, canActivate: [AuthGuard]},
   {path: 'fac', component: Facturacionconfig, canActivate: [AuthGuard] },
   {path: 'prod_pagos_fac', component: prod_pagos_fac_component },
   {path: 'edit_prod_fac', component: EditFacProdComponent  },
@@ -182,7 +183,7 @@ const appRoutes: Routes = [
   {path: 'delete_fac_prog', component: eliminar_prod_pag },
   {path: 'edit_adm', component: edit_conf_adm },
   {path: 'edit_install', component: Edit_InstallComponent},
-  {path: '', component: edit_balances, canActivate: [AuthGuard]},
+  {path: 'config_balances', component: edit_balances, canActivate: [AuthGuard]},
   {path: 'Edit_pago_bs', component: EditPagoBs},
   {path: 'Edit_pago_dl', component: EditPagoDl},
   {path: 'confirm_edit_pagos', component: confirm_edit_bal_pagos},
