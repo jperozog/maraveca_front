@@ -182,7 +182,7 @@ const appRoutes: Routes = [
   {path: 'delete_fac_prog', component: eliminar_prod_pag },
   {path: 'edit_adm', component: edit_conf_adm },
   {path: 'edit_install', component: Edit_InstallComponent},
-  {path: '', component: edit_balances, canActivate: [AuthGuard]},
+  {path: 'config_balances', component: edit_balances, canActivate: [AuthGuard]},
   {path: 'Edit_pago_bs', component: EditPagoBs},
   {path: 'Edit_pago_dl', component: EditPagoDl},
   {path: 'confirm_edit_pagos', component: confirm_edit_bal_pagos},
