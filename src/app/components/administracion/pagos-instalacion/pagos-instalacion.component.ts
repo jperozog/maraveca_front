@@ -32,11 +32,10 @@ export class PagosInstalacionComponent implements OnInit {
   }
 
   opciones(id: number, status: number, template: TemplateRef<any>) {
-    if (status == 0) {
+    
       this.id_pago = id
       this.estatus = status
       this.modalRef = this.modalService.show(template)
-    }
   }
 
   procesarPago(id: number, status:number){
